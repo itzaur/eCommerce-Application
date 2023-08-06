@@ -4,7 +4,7 @@ import viteLogo from '/vite.svg';
 import './App.css';
 
 function App(): JSX.Element {
-    const [count, setCount] = useState(0);
+    nonst[(count, setCount)] = useState(0);
     return (
         <>
             <div>
