@@ -8,11 +8,13 @@
         "build": "tsc && vite build",
         "build:dev": "tsc && vite build --mode development",
         "lint": "eslint . --fix --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+        "prepare": "cd ../ && husky install ./Ecommerce-Application/.husky",
         "preview": "vite preview",
         "prettier": "npx prettier . --write",
         "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
     },
     "dependencies": {
+        "husky": "^8.0.3",
         "react": "^18.2.0",
         "react-dom": "^18.2.0"
     },
