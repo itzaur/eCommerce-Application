@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-# cd ./Ecommerce-Application && npm run lint  && npm run prettier && git add .
+# cd ./Ecommerce-Application && npm run lint && npm run prettier && git add .
