@@ -15,3 +15,41 @@ You will be able to visit places you have not dreamed of even in your wildest fa
 [![SCSS](https://img.shields.io/badge/-SCSS-CC6699?style=flat&logo=sass&logoColor=ffffff)](https://sass-lang.com/)
 [![Vite](https://img.shields.io/badge/-Vite-%23646CFF?style=flat&logo=Vite&logoColor=ffffff)](https://vitejs.dev/)
 [![Jest](https://img.shields.io/badge/-Jest-%23C21325?style=flat&logo=jest&logoColor=ffffff)](https://jestjs.io/)
+
+## How to run locally
+
+#### Requirements
+
+- Node.js
+- NPM
+
+Simply clone this project to user's machine, navigate to project's folder under a terminal of his/her choice and then run the following commands:
+
+```bash
+# Install dependencies
+npm install
+
+# Run local server
+npm run dev
+
+# Run in production mode
+npm run build
+
+# Run in development mode
+npm run build:dev
+```
+
+## Available scripts
+
+For running ESLint, Prettier, and Jest tests run the following commands:
+
+```bash
+# Run ESLint
+npm run lint
+
+# Run Prettier
+npm run prettier
+
+# Run Jest tests
+npm run test
+```
