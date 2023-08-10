@@ -10,7 +10,7 @@ function LoginForm(): JSX.Element {
     const [errorMessagePassword, setErrorMessagePassword] = useState('');
     const [passwordView, setPasswordView] = useState('password');
 
-    let changePasswordView = () => {
+    const changePasswordView = () => {
         setPasswordView(passwordView === 'password' ? 'text' : 'password');
     };
     return (
