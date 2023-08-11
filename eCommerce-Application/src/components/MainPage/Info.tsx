@@ -1,4 +1,4 @@
-// import Button from '@mui/joy/Button';
+import { Link, Outlet } from 'react-router-dom';
 import slide1 from '../../assets/images/slide1.png';
 
 function Info(): JSX.Element {
@@ -7,16 +7,16 @@ function Info(): JSX.Element {
             <div className="home__info">
                 <div className="home__btns">
                     <button className="btn" type="button">
-                        <a href="/">Войти</a>
+                        <Link to="/login">Войти</Link>
                     </button>
                     <button className="btn" type="button">
-                        <a href="/">Регистрация</a>
+                        <Link to="/registration">Регистрация</Link>
                     </button>
                     <button className="btn" type="button">
-                        <a href="/">Перейти в магазин</a>
+                        <Link to="/store">Перейти в магазин</Link>
                     </button>
                     <button className="btn" type="button">
-                        <a href="/">О нас</a>
+                        <Link to="/about">О нас</Link>
                     </button>
                 </div>
                 <div className="home__text">
@@ -54,6 +54,7 @@ function Info(): JSX.Element {
                     </p>
                 </div>
             </div>
+            <Outlet />
         </>
     );
 }
