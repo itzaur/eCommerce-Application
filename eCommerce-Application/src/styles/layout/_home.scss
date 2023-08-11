@@ -56,6 +56,13 @@
                 height: 100%;
                 border: 0.3rem solid var(--color-primary);
 
+                filter: drop-shadow(
+                        0.1rem 0.1rem 0.5rem var(--color-primary-alpha)
+                    )
+                    drop-shadow(
+                        -0.1rem -0.1rem 0.5rem var(--color-primary-alpha)
+                    );
+
                 @include mixins.respond-to('desktop') {
                     width: 5rem;
                     border: 0.5rem solid var(--color-primary);
@@ -96,14 +103,14 @@
     &__btns {
         --gap: 1rem;
         @include mixins.flex(column, center, center);
+        align-self: stretch;
 
         font-family: var(--ff-secondary);
         font-size: var(--fs-small);
+
         text-align: left;
 
         @include mixins.respond-to('tablet') {
-            --gap: 2.2rem;
-
             justify-content: flex-start;
             align-items: flex-start;
         }

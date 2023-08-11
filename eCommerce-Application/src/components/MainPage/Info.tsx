@@ -1,5 +1,6 @@
 import { Link, Outlet } from 'react-router-dom';
 import slide1 from '../../assets/images/slide1.png';
+import arrow from '../../assets/images/arrow.png';
 
 function Info(): JSX.Element {
     return (
@@ -18,6 +19,9 @@ function Info(): JSX.Element {
                     <button className="btn" type="button">
                         <Link to="/about">О нас</Link>
                     </button>
+                    <figcaption className="arrow">
+                        <img src={arrow} alt="arrow" />
+                    </figcaption>
                 </div>
                 <div className="home__text">
                     <h2 className="home__text-title">Кто мы?</h2>
