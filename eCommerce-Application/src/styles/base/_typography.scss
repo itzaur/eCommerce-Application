@@ -1,0 +1,38 @@
+@font-face {
+    font-family: 'Project Space';
+    src: url(../assets/fonts/project-space-font/ProjectSpace.otf);
+}
+
+@font-face {
+    font-family: 'Bowler';
+    src: url(../assets/fonts/bowler/BOWLER.otf);
+}
+
+@font-face {
+    font-family: 'neuropol';
+    src: url(../assets/fonts/neuropol/neuropol.ttf);
+}
+
+.home__text {
+    font-family: var(--ff-secondary);
+    font-size: var(--fs-medium);
+    text-align: left;
+    letter-spacing: 0.06em;
+    line-height: 1.4;
+
+    color: var(--color-white);
+
+    &-title {
+        font-size: var(--fs-big);
+
+        color: var(--color-primary);
+    }
+
+    &-accent {
+        color: var(--color-primary);
+
+        & > * {
+            color: var(--color-white);
+        }
+    }
+}

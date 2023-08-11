@@ -1,0 +1,16 @@
+html {
+    font-size: 62.5%;
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100dvh;
+
+    font-family: var(--ff-title);
+
+    background-image: url('../assets/images/backround2.png'),
+        url('../assets/images/background.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: top;
+}
