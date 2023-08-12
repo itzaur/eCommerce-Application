@@ -3,7 +3,7 @@ export const checkIncorrectEmail = (
         | React.FocusEvent<HTMLInputElement, Element>
         | React.ChangeEvent<HTMLInputElement>,
     removeError?: boolean
-) => {
+): boolean => {
     if (removeError || e.target.value === '') {
         e.target.classList.remove('authorization__input_invalid');
         return false;

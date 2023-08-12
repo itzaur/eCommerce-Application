@@ -1,0 +1,186 @@
+@font-face {
+    font-family: 'Neuropol';
+    src: url(../../assets/fonts/neuropol.ttf);
+}
+@font-face {
+    font-family: 'Bowler';
+    src: url(../../assets/fonts/bowler.ttf);
+}
+body,
+section,
+div,
+h1,
+h2,
+div,
+p,
+button {
+    margin: 0;
+    padding: 0;
+}
+:root {
+    --color-dark-l: #5e5971;
+    --color-dark-m: #5e597180;
+    --color-primary: #fff;
+    --color-primary-opacity: #f5f5f5cc;
+    --main-font: 'Neuropol';
+    --second-font: 'Bowler';
+    --color-button: #4de1e3;
+}
+
+html {
+    font-size: 10px;
+}
+body {
+    display: flex;
+    align-items: center;
+
+    background-image: url('../src/assets/img/DreamShaper_v7_A_comet_flying_in_outer_space_0\ 7.png');
+    background-size: cover;
+
+    font-family: 'Neuropol', sans-serif;
+}
+#root {
+    width: 100%;
+}
+.login {
+    width: 47.4%;
+    margin: 0 auto;
+
+    font-family: 'Neuropol', sans-serif;
+}
+.logo-big {
+    display: block;
+    width: 26%;
+    margin: 0 auto;
+}
+.form {
+    border-radius: 2px;
+}
+.form__content {
+    background-color: var(--color-primary-opacity);
+}
+.form__title {
+    background-color: var(--color-dark-l);
+    color: var(--color-primary);
+}
+.form__content {
+    padding: 5.8% 9.3% 7.14% 10%;
+}
+.form__title {
+    padding: 2.9% 0;
+
+    font-size: clamp(1rem, 1.5vw, 2.8rem);
+    text-align: center;
+    line-height: 92%;
+}
+.form__question {
+    margin-bottom: 7%;
+
+    color: var(--color-dark-l);
+
+    font-size: clamp(1rem, 1.04vw, 2rem);
+    line-height: 92%;
+    a {
+        color: var(--color-dark-l);
+        border-bottom: dotted #5e5971;
+    }
+}
+
+.form__inputs {
+    display: flex;
+    flex-direction: column;
+}
+
+.placeinput input:invalid + .place_holder {
+    display: inline;
+}
+
+.placeinput {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 5rem;
+    input {
+        position: absolute;
+        z-index: 2;
+
+        width: 97%;
+        padding: 1rem 0 1rem 1rem;
+
+        background-color: transparent;
+        color: var(--color-dark-m);
+        border: 1px solid var(--color-dark-l);
+        outline: none;
+
+        font-size: clamp(1rem, 1.04vw, 2rem);
+        font-family: 'Bowler', sans-serif;
+        &:focus {
+            background-color: var(--color-primary);
+            color: #000;
+        }
+    }
+}
+
+.place_holder {
+    display: none;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+
+    padding: 1rem;
+
+    cursor: text;
+
+    color: var(--color-dark-m);
+    font-size: clamp(1rem, 1.04vw, 2rem);
+    span {
+        color: var(--color-button);
+    }
+}
+
+.button-action {
+    align-self: center;
+    padding: 2rem 7.5rem;
+    border-radius: 2px;
+
+    background-color: var(--color-button);
+
+    font-size: clamp(1rem, 1.04vw, 2rem);
+    font-family: 'Bowler', sans-serif;
+}
+.password-view,
+.password-view:focus-visible,
+.password-view:focus {
+    position: absolute;
+    right: 4%;
+    height: inherit;
+    z-index: 3;
+
+    background-color: transparent;
+    border: none;
+    outline: none;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+.password-view_text {
+    width: 4.1rem;
+    top: 0.7rem;
+
+    background-image: url('../../assets/img/eye-closed.png');
+}
+.password-view_password {
+    width: 3.9rem;
+    top: 1.02rem;
+
+    background-image: url('../../assets/img/eyes-open.png');
+}
+
+.error-message {
+    margin-bottom: 4.6rem;
+    height: 1rem;
+
+    color: rgb(255, 54, 54);
+    font-size: 1.3rem;
+}

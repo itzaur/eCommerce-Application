@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import logo from '../../assets/img/logo.png';
-import '../../LoginForm.scss';
+import './LoginForm.scss';
 import { checkIncorrectEmail } from '../../utils/validation/checkCorrectEmail';
 import { checkIncorrectPassword } from '../../utils/validation/checkPassword';
 
@@ -10,84 +10,89 @@ function LoginForm(): JSX.Element {
     const [errorMessagePassword, setErrorMessagePassword] = useState('');
     const [passwordView, setPasswordView] = useState('password');
 
-    const changePasswordView = () => {
+    const changePasswordView = (): void => {
         setPasswordView(passwordView === 'password' ? 'text' : 'password');
     };
     return (
-        <section className="authorization login">
-            <img src={logo} alt="logo" />
-            <div className="authorization__div">
-                <header className="authorization__header">
-                    <h1 className="authorization__h1">
-                        Добро пожаловать на борт космической одиссеи!
-                    </h1>
-                </header>
-                <h2 className="authorization__h2">
-                    Путешествуете с нами впервые?{' '}
-                    <a href="#">Зарегистрируйтесь!</a>
+        <>
+            <img className="logo-big" src={logo} alt="logo" />
+            <section className="form login">
+                <h2 className="form__title">
+                    Добро пожаловать <br /> На Борт Космической Одиссеи!
                 </h2>
-                <form
-                    className="authorization__form"
-                    onSubmit={(e) => e.preventDefault()}
-                >
-                    <div className="authorization__div__input">
-                        <input
-                            className="authorization__input authorization__input_login"
-                            type="text"
-                            placeholder="Email"
-                            onBlur={(e) =>
-                                setErrorEmail(checkIncorrectEmail(e))
-                            }
-                            onChange={(e) =>
-                                setErrorEmail(checkIncorrectEmail(e, true))
-                            }
-                        />
-                        {errorEmail && (
-                            <p className="error-message">
-                                Введите правильный e-mail.
-                            </p>
-                        )}
+                <div className="form__content">
+                    <div className="form__question">
+                        Путешествуете с нами впервые?&nbsp;
+                        <a href="##">Зарегистрируйтесь!</a>
                     </div>
-                    <div className="authorization__div__input">
-                        <input
-                            className="authorization__input authorization__input_password"
-                            type={passwordView}
-                            placeholder="Password"
-                            onBlur={(e) => {
-                                setErrorPassword(
-                                    checkIncorrectPassword(e).incorrect
-                                );
-                                setErrorMessagePassword(
-                                    checkIncorrectPassword(e).message
-                                );
-                            }}
-                            onChange={(e) => {
-                                setErrorPassword(
-                                    checkIncorrectPassword(e, true).incorrect
-                                );
-                                setErrorMessagePassword(
-                                    checkIncorrectPassword(e, true).message
-                                );
-                            }}
-                        />
-                        <button
-                            className="authorization__btn_eye"
-                            onClick={() => changePasswordView()}
-                        >
-                            Глаз
+                    <form
+                        className="form__inputs"
+                        onSubmit={(e): void => e.preventDefault()}
+                    >
+                        <div className="placeinput">
+                            <input
+                                className="form__input"
+                                type="text"
+                                required
+                                onBlur={(e): void =>
+                                    setErrorEmail(checkIncorrectEmail(e))
+                                }
+                                onChange={(e): void =>
+                                    setErrorEmail(checkIncorrectEmail(e, true))
+                                }
+                            />
+                            <div className="place_holder">
+                                Email<span>*</span>
+                            </div>
+                        </div>
+                        <p className="error-message">
+                            {errorEmail ? 'Введите правильный e-mail.' : ''}
+                        </p>
+                        <div className="placeinput">
+                            <input
+                                className="form__input"
+                                type={passwordView}
+                                required
+                                onBlur={(e): void => {
+                                    setErrorPassword(
+                                        checkIncorrectPassword(e).incorrect
+                                    );
+                                    setErrorMessagePassword(
+                                        checkIncorrectPassword(e).message
+                                    );
+                                }}
+                                onChange={(e): void => {
+                                    setErrorPassword(
+                                        checkIncorrectPassword(e, true)
+                                            .incorrect
+                                    );
+                                    setErrorMessagePassword(
+                                        checkIncorrectPassword(e, true).message
+                                    );
+                                }}
+                            />
+                            <div className="place_holder">
+                                Password<span>*</span>
+                            </div>
+                            <button
+                                type="button"
+                                className={`password-view password-view_${passwordView}`}
+                                onClick={(): void => changePasswordView()}
+                                onKeyDown={(): void => changePasswordView()}
+                            >
+                                &nbsp;
+                            </button>
+                        </div>
+                        <p className="error-message">
+                            {errorPassword ? errorMessagePassword : ''}
+                        </p>
+                        <button className="button-action" type="submit">
+                            Войти
                         </button>
-                        {errorPassword && (
-                            <p className="error-message">
-                                {errorMessagePassword}
-                            </p>
-                        )}
-                    </div>
-                    <button className="authorization__btn_submit" type="submit">
-                        Войти
-                    </button>
-                </form>
-            </div>
-        </section>
+                    </form>
+                </div>
+            </section>
+        </>
     );
 }
 

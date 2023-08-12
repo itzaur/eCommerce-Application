@@ -3,7 +3,7 @@ export const checkIncorrectPassword = (
         | React.FocusEvent<HTMLInputElement, Element>
         | React.ChangeEvent<HTMLInputElement>,
     removeError?: boolean
-) => {
+): { incorrect: boolean; message: string } => {
     if (removeError || e.target.value === '') {
         e.target.classList.remove('authorization__input_invalid');
         return { incorrect: false, message: '' };
