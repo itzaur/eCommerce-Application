@@ -1,6 +1,10 @@
 @use '../abstracts/mixins';
 
 .home {
+    @include mixins.respond-to('desktop') {
+        padding-bottom: 8rem;
+    }
+
     & > * {
         max-width: 96rem;
         margin: auto;

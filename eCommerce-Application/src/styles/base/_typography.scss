@@ -9,7 +9,7 @@
 }
 
 @font-face {
-    font-family: 'neuropol';
+    font-family: 'Neuropol';
     src: url(../assets/fonts/neuropol/neuropol.ttf);
 }
 
@@ -34,5 +34,17 @@
         & > * {
             color: var(--color-white);
         }
+    }
+}
+
+.attainment {
+    &__title {
+        font-family: var(--ff-secondary);
+        font-size: var(--fs-big);
+    }
+
+    &__item p {
+        font-family: var(--ff-primary);
+        font-size: var(--fs-paragraph);
     }
 }

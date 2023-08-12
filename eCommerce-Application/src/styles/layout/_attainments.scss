@@ -1,0 +1,59 @@
+@use '../abstracts/mixins';
+
+.attainment {
+    @include mixins.flex(column, null, null);
+
+    padding-block: 3rem;
+
+    color: var(--color-secondary);
+    background-color: var(--color-primary);
+
+    box-shadow: 0 0 0 100vmax var(--color-primary);
+    clip-path: inset(0 -100vmax);
+
+    @include mixins.respond-to('tablet') {
+        padding-block: 6rem;
+    }
+
+    & > * + * {
+        @include mixins.respond-to('tablet') {
+            margin-top: 5rem;
+        }
+    }
+
+    &__container {
+        --gap: 2rem;
+        @include mixins.flex(null, center, center);
+        flex-wrap: wrap;
+
+        @include mixins.respond-to('tablet') {
+            --gap: 4rem;
+        }
+
+        & > * {
+            --flow: 15rem;
+            flex: 1 1 var(--flow);
+        }
+    }
+
+    &__item {
+        --gap: 1rem;
+        @include mixins.flex(column, center, center);
+
+        @include mixins.respond-to('tablet') {
+            --gap: 4rem;
+        }
+
+        svg {
+            height: 5rem;
+
+            @include mixins.respond-to('tablet') {
+                height: max(5vw, 9rem);
+            }
+        }
+
+        p {
+            width: min(100%, 28rem);
+        }
+    }
+}
