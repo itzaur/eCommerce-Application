@@ -146,9 +146,18 @@ body {
     border-radius: 2px;
 
     background-color: var(--color-button);
+    border: 2px solid var(--color-button);
 
     font-size: clamp(1rem, 1.04vw, 2rem);
     font-family: 'Bowler', sans-serif;
+    &:focus {
+        outline: none;
+        border: 2px solid var(--color-button);
+    }
+    &:hover {
+        border: none;
+        border: 2px solid var(--color-button);
+    }
 }
 .password-view,
 .password-view:focus-visible,
