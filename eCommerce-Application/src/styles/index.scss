@@ -4,6 +4,7 @@
 @use './base/base';
 @use './base/reset';
 @use './base/typography';
+
 @use './components/logo';
 @use './components/buttons';
 @use './components/modal';
@@ -15,3 +16,12 @@
 @use './layout/footer';
 @use './pages/main';
 @use './pages/login';
+@use './components/form';
+@use './components/placeholder';
+@use './components/errors';
+
+@use './layout/header';
+@use './layout/home';
+
+@use './pages/main';
+@use './pages/registration';

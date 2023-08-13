@@ -86,4 +86,17 @@
     margin-top: auto;
     padding: 0.8em 1em;
     border: 0.1rem solid var(--color-primary);
+
+    &_action {
+        display: block;
+        margin: 0 auto;
+        padding: 2rem 0;
+
+        font-family: var(--ff-secondary);
+
+        width: 230px;
+        text-align: center;
+        background-color: var(--color-primary);
+        cursor: pointer;
+    }
 }
