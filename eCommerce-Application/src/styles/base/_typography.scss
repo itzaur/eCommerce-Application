@@ -84,3 +84,22 @@
         }
     }
 }
+
+.catalog {
+    &__title {
+        font-family: var(--ff-secondary);
+        font-size: var(--fs-big);
+        letter-spacing: 0.04em;
+        text-align: left;
+    }
+
+    &__item-title {
+        font-family: var(--ff-primary);
+        font-size: var(--fs-paragraph);
+        text-align: left;
+
+        @include mixins.respond-to('tablet') {
+            font-size: var(--fs-small);
+        }
+    }
+}
