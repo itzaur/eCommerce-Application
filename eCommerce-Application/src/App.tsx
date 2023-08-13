@@ -6,17 +6,29 @@ import {
     RegistrationPage,
     AboutPage,
     Store,
+    NotFound,
 } from './components';
-import { getProject } from './commercetools/Client';
+// import { getProject } from './commercetools/Client';
 
 function App(): JSX.Element {
-    getProject().then(console.log).catch(console.error);
+    // getProject().then(console.log).catch(console.error);
 
     const location = useLocation();
+    const root = document.querySelector('main');
+    const paths = ['login', 'registration', 'store', 'about'];
+    const path = location.pathname.slice(1);
 
     useEffect(() => {
         console.log('Current location is ', location);
     }, [location]);
+
+    if (paths.includes(path)) {
+        root?.setAttribute('id', path);
+    } else if (path === '') {
+        root?.setAttribute('id', 'main');
+    } else {
+        root?.setAttribute('id', 'error-page');
+    }
 
     return (
         <Routes>
@@ -25,6 +37,7 @@ function App(): JSX.Element {
             <Route path="/registration" element={<RegistrationPage />} />
             <Route path="/store" element={<Store />} />
             <Route path="/about" element={<AboutPage />} />
+            <Route path="*" element={<NotFound />} />
         </Routes>
     );
 }

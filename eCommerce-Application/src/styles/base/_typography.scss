@@ -1,3 +1,5 @@
+@use '../abstracts/mixins';
+
 @font-face {
     font-family: 'Project Space';
     src: url(../assets/fonts/project-space-font/ProjectSpace.otf);
@@ -10,7 +12,7 @@
 
 @font-face {
     font-family: 'Neuropol';
-    src: url(../assets/fonts/neuropol/neuropol.ttf);
+    src: url(../assets/fonts/neuropol/neuropol.otf);
 }
 
 .home__text {
@@ -46,5 +48,39 @@
     &__item p {
         font-family: var(--ff-primary);
         font-size: var(--fs-paragraph);
+    }
+}
+
+.fail {
+    &__inscription {
+        font-size: var(--fs-big);
+    }
+
+    &__subinscription {
+        font-size: var(--fs-paragraph);
+    }
+
+    &__subtitle {
+        h2 {
+            font-size: var(--fs-medium);
+            text-transform: uppercase;
+
+            @include mixins.respond-to('tablet') {
+                font-size: var(--fs-paragraph);
+            }
+        }
+
+        p {
+            font-size: var(--fs-medium);
+        }
+    }
+
+    &__links {
+        font-size: var(--fs-medium);
+        text-align: center;
+
+        @include mixins.respond-to('desktop') {
+            font-size: var(--fs-small);
+        }
     }
 }
