@@ -7,15 +7,15 @@ import {
     AboutPage,
     Store,
 } from './components';
-import { getProject } from './commercetools/Client';
+// import { getProject } from './commercetools/Client';
 
 function App(): JSX.Element {
-    getProject().then(console.log).catch(console.error);
+    // getProject().then(console.log).catch(console.error);
 
     const location = useLocation();
 
     useEffect(() => {
-        console.log('Current location is ', location);
+        // console.log('Current location is ', location);
     }, [location]);
 
     return (

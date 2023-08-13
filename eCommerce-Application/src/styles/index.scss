@@ -1,10 +1,18 @@
 @use './abstracts/mixins';
 @use './abstracts/variables';
+
 @use './base/base';
 @use './base/reset';
 @use './base/typography';
+
 @use './components/logo';
 @use './components/buttons';
+@use './components/form';
+@use './components/placeholder';
+@use './components/errors';
+
 @use './layout/header';
 @use './layout/home';
+
 @use './pages/main';
+@use './pages/registration';

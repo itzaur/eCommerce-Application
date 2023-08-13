@@ -4,4 +4,16 @@
     &:link {
         color: var(--color-white);
     }
+    &_action {
+        display: block;
+        margin: 0 auto;
+        padding: 2rem 0;
+
+        font-family: var(--ff-secondary);
+
+        width: 230px;
+        text-align: center;
+        background-color: var(--color-primary);
+        cursor: pointer;
+    }
 }

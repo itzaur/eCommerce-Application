@@ -107,3 +107,12 @@ meter {
 :where(dialog:modal) {
     all: revert;
 }
+
+/*Custom rules for checkbox */
+input[type='checkbox'] {
+    -webkit-appearance: checkbox;
+    -moz-appearance: checkbox;
+    -ms-appearance: checkbox;
+    -o-appearance: checkbox;
+    appearance: checkbox;
+}
