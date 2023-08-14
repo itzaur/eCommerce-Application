@@ -2,6 +2,7 @@ import {
     ClientResponse,
     CustomerSignInResult,
 } from '@commercetools/platform-sdk';
+
 import { constructClientPasswordFlow } from './PasswordClient';
 import { apiRoot } from './Client';
 
