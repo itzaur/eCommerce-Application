@@ -4,9 +4,11 @@ export const checkIncorrectPassword = (
         | React.ChangeEvent<HTMLInputElement>,
     removeError?: boolean
 ): { incorrect: boolean; message: string } => {
-    if (removeError || e.target.value === '') {
-        e.target.classList.remove('authorization__input_invalid');
+    if (removeError) {
         return { incorrect: false, message: '' };
+    }
+    if (e.target.value === '') {
+        return { incorrect: true, message: 'Это обязательное поле' };
     }
     const { value } = e.target;
     if (value.length < 8) {
@@ -31,10 +33,10 @@ export const checkIncorrectPassword = (
     if (!/\d/.test(value)) {
         return { incorrect: true, message: 'Пароль должен содержать цифру' };
     }
-    if (!/[!@#$%^&*]/.test(value)) {
+    if (!/[!@#$%^&*+]/.test(value)) {
         return {
             incorrect: true,
-            message: 'Пароль должен содержать специальный символ !@#$%^&*',
+            message: 'Пароль должен содержать специальный символ !@#$%^&*+',
         };
     }
     if (/^\s/.test(value) || /\s$/.test(value)) {

@@ -119,6 +119,9 @@ body {
             color: #000;
         }
     }
+    .form__input_invalid {
+        border: 1px solid rgb(255, 54, 54);
+    }
 }
 
 .place_holder {
