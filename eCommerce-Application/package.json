@@ -8,7 +8,7 @@
         "build": "tsc && vite build",
         "build:dev": "tsc && vite build --mode development",
         "lint": "eslint . --fix --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-        "prepare": "cd ../ && husky install ./Ecommerce-Application/.husky",
+        "prepare": "cd ../ && husky install ./eCommerce-Application/.husky",
         "preview": "vite preview",
         "prettier": "npx prettier . --write",
         "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
