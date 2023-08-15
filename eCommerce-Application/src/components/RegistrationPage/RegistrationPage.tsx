@@ -9,7 +9,6 @@ import {
     checkIncorrectBirthDay,
     checkIncorrectBirthMonth,
     checkIncorrectBirthYear,
-    // getAge,
 } from '../../utils/validation/checkFullYears';
 
 import logo from '../../assets/images/logo.png';
@@ -20,6 +19,8 @@ import {
 } from '../../utils/validation/checkAddress';
 import { checkIncorrectAddressIndex } from '../../utils/validation/checkIndex';
 import { checkIncorrectFormLife } from '../../utils/validation/checkFormLife';
+import { checkIncorrectShippingCountry } from '../../utils/validation/checkShippingCountry';
+import { checkIncorrectBillingCountry } from '../../utils/validation/checkBillingCountry';
 
 const countries = ['Выберите страну*', 'Россия', 'Беларусь', 'Польша'];
 
@@ -49,14 +50,10 @@ function RegistrationDetail(): JSX.Element {
     const [errorMessageEmail, setErrorMessageEmail] = useState('');
     const [email, setEmail] = useState('');
 
-    const [countryShipping, setShippingCountry] = useState(countries[0]);
-    const [countryBilling, setBillingCountry] = useState(countries[0]);
-
-    // const [countryShippingValue, setCountryShippingValue] = useState('');
-    // const [shippingAddressValue, setShippingAddressValue] = useState('');
-
-    const shippingAddress: string = countryShipping;
-    const billingAddress: string = countryBilling;
+    const [errorCountryShipping, setErrorCountryShipping] = useState(false);
+    const [errorMessageCountryShipping, setErrorMessageCountryShipping] =
+        useState('');
+    const [countryShipping, setCountryShipping] = useState(countries[0]);
 
     const [errorShippingRegion, setErrorShippingRegion] = useState(false);
     const [errorMessageShippingRegion, setErrorMessageShippingRegion] =
@@ -77,6 +74,11 @@ function RegistrationDetail(): JSX.Element {
     const [errorMessageShippingStreet, setErrorMessageShippingStreet] =
         useState('');
     const [shippingStreetValue, setShippingStreetValue] = useState('');
+
+    const [errorCountryBilling, setErrorCountryBilling] = useState(false);
+    const [errorMessageCountryBilling, setErrorMessageCountryBilling] =
+        useState('');
+    const [countryBilling, setCountryBilling] = useState(countries[0]);
 
     const [errorBillingRegion, setErrorBillingRegion] = useState(false);
     const [errorMessageBillingRegion, setErrorMessageBillingRegion] =
@@ -115,7 +117,6 @@ function RegistrationDetail(): JSX.Element {
 
     const [errorAge, setErrorAge] = useState(false);
     const [errorMessageAge, setErrorMessageAge] = useState('');
-    // const [errorAgeValue, setErrorAgeValue] = useState('');
 
     return (
         <>
@@ -138,7 +139,11 @@ function RegistrationDetail(): JSX.Element {
                                     required
                                     type="text"
                                     id="user-name"
-                                    className="form__input"
+                                    className={
+                                        errorUserName
+                                            ? 'form__input form__input_invalid'
+                                            : 'form__input'
+                                    }
                                     onBlur={(e): void => {
                                         setErrorUserName(
                                             checkIncorrectUserName(e).incorrect
@@ -175,7 +180,11 @@ function RegistrationDetail(): JSX.Element {
                                         required
                                         type="text"
                                         id="name"
-                                        className="form__input"
+                                        className={
+                                            errorName
+                                                ? 'form__input form__input_invalid'
+                                                : 'form__input'
+                                        }
                                         onBlur={(e): void => {
                                             setErrorName(
                                                 checkIncorrectName(e).incorrect
@@ -213,7 +222,11 @@ function RegistrationDetail(): JSX.Element {
                                         required
                                         type="text"
                                         id="surname"
-                                        className="form__input"
+                                        className={
+                                            errorSurname
+                                                ? 'form__input form__input_invalid'
+                                                : 'form__input'
+                                        }
                                         onBlur={(e): void => {
                                             setErrorSurname(
                                                 checkIncorrectSurname(e)
@@ -256,7 +269,11 @@ function RegistrationDetail(): JSX.Element {
                                     required
                                     type="password"
                                     id="user-password"
-                                    className="form__input form__password"
+                                    className={
+                                        errorPassword
+                                            ? 'form__input form__input_invalid form__password'
+                                            : 'form__input'
+                                    }
                                     onBlur={(e): void => {
                                         setErrorPassword(
                                             checkIncorrectPassword(e).incorrect
@@ -280,6 +297,7 @@ function RegistrationDetail(): JSX.Element {
                                 <div className="placeholder__input">
                                     создайте пароль<span>*</span>
                                 </div>
+
                                 <p className="error-message">
                                     {errorPassword ? errorMessagePassword : ''}
                                 </p>
@@ -294,7 +312,11 @@ function RegistrationDetail(): JSX.Element {
                                     required
                                     type="password"
                                     id="user-password-repeat"
-                                    className="form__input form__password"
+                                    className={
+                                        errorPasswordRepeat
+                                            ? 'form__input form__input_invalid'
+                                            : 'form__input'
+                                    }
                                     onBlur={(e): void => {
                                         setErrorPasswordRepeat(
                                             checkIncorrectPassword(e).incorrect
@@ -331,7 +353,11 @@ function RegistrationDetail(): JSX.Element {
                                     required
                                     type="text"
                                     id="user-email"
-                                    className="form__input user-email"
+                                    className={
+                                        errorEmail
+                                            ? 'form__input form__input_invalid user-email'
+                                            : 'form__input'
+                                    }
                                     onBlur={(e): void => {
                                         setErrorEmail(
                                             checkIncorrectEmail(e).incorrect
@@ -366,12 +392,26 @@ function RegistrationDetail(): JSX.Element {
                             <div className="form__input-pair">
                                 <div className="form__inputs-wrapper">
                                     <select
-                                        className="form__select"
+                                        className={
+                                            errorCountryShipping
+                                                ? 'form__input form__input_invalid form__select'
+                                                : 'form__input'
+                                        }
                                         defaultValue={countryShipping}
                                         onChange={(e): void => {
-                                            setShippingCountry(
-                                                () => e.target.value
+                                            setErrorCountryShipping(
+                                                checkIncorrectShippingCountry(
+                                                    e,
+                                                    true
+                                                ).incorrect
                                             );
+                                            setErrorMessageCountryShipping(
+                                                checkIncorrectShippingCountry(
+                                                    e,
+                                                    true
+                                                ).message
+                                            );
+                                            setCountryShipping(e.target.value);
                                         }}
                                     >
                                         {countries.map((c, index) =>
@@ -390,6 +430,11 @@ function RegistrationDetail(): JSX.Element {
                                             )
                                         )}
                                     </select>
+                                    <p className="error-message">
+                                        {errorCountryShipping
+                                            ? errorMessageCountryShipping
+                                            : ''}
+                                    </p>
                                 </div>
                                 <div className="form__inputs-wrapper">
                                     <label
@@ -400,7 +445,11 @@ function RegistrationDetail(): JSX.Element {
                                             required
                                             type="text"
                                             id="shipping-address-region"
-                                            className="form__input"
+                                            className={
+                                                errorShippingRegion
+                                                    ? 'form__input form__input_invalid'
+                                                    : 'form__input'
+                                            }
                                             onBlur={(e): void => {
                                                 setErrorShippingRegion(
                                                     checkIncorrectAddressRegion(
@@ -452,7 +501,11 @@ function RegistrationDetail(): JSX.Element {
                                             required
                                             type="text"
                                             id="shipping-address-city"
-                                            className="form__input"
+                                            className={
+                                                errorShippingCity
+                                                    ? 'form__input form__input_invalid'
+                                                    : 'form__input'
+                                            }
                                             onBlur={(e): void => {
                                                 setErrorShippingCity(
                                                     checkIncorrectAddressCity(e)
@@ -500,18 +553,22 @@ function RegistrationDetail(): JSX.Element {
                                             required
                                             type="text"
                                             id="shipping-address-index"
-                                            className="form__input"
+                                            className={
+                                                errorShippingIndex
+                                                    ? 'form__input form__input_invalid'
+                                                    : 'form__input'
+                                            }
                                             onBlur={(e): void => {
                                                 setErrorShippingIndex(
                                                     checkIncorrectAddressIndex(
                                                         e,
-                                                        shippingAddress
+                                                        countryShipping
                                                     ).incorrect
                                                 );
                                                 setErrorMessageShippingIndex(
                                                     checkIncorrectAddressIndex(
                                                         e,
-                                                        shippingAddress
+                                                        countryShipping
                                                     ).message
                                                 );
                                             }}
@@ -519,14 +576,14 @@ function RegistrationDetail(): JSX.Element {
                                                 setErrorShippingIndex(
                                                     checkIncorrectAddressIndex(
                                                         e,
-                                                        shippingAddress,
+                                                        countryShipping,
                                                         true
                                                     ).incorrect
                                                 );
                                                 setErrorMessageShippingIndex(
                                                     checkIncorrectAddressIndex(
                                                         e,
-                                                        shippingAddress,
+                                                        countryShipping,
                                                         true
                                                     ).message
                                                 );
@@ -555,7 +612,11 @@ function RegistrationDetail(): JSX.Element {
                                         required
                                         type="text"
                                         id="shipping-address"
-                                        className="form__input"
+                                        className={
+                                            errorShippingStreet
+                                                ? 'form__input form__input_invalid'
+                                                : 'form__input'
+                                        }
                                         onBlur={(e): void => {
                                             setErrorShippingStreet(
                                                 checkIncorrectAddressStreet(e)
@@ -614,12 +675,26 @@ function RegistrationDetail(): JSX.Element {
                             <div className="form__input-pair">
                                 <div className="form__inputs-wrapper">
                                     <select
-                                        className="form__select"
+                                        className={
+                                            errorCountryBilling
+                                                ? 'form__input form__input_invalid form__select'
+                                                : 'form__input'
+                                        }
                                         defaultValue={countryBilling}
                                         onChange={(e): void => {
-                                            setBillingCountry(
-                                                () => e.target.value
+                                            setErrorCountryBilling(
+                                                checkIncorrectBillingCountry(
+                                                    e,
+                                                    true
+                                                ).incorrect
                                             );
+                                            setErrorMessageCountryBilling(
+                                                checkIncorrectBillingCountry(
+                                                    e,
+                                                    true
+                                                ).message
+                                            );
+                                            setCountryBilling(e.target.value);
                                         }}
                                     >
                                         {countries.map((c, index) =>
@@ -638,6 +713,11 @@ function RegistrationDetail(): JSX.Element {
                                             )
                                         )}
                                     </select>
+                                    <p className="error-message">
+                                        {errorCountryBilling
+                                            ? errorMessageCountryBilling
+                                            : ''}
+                                    </p>
                                 </div>
                                 <div className="form__inputs-wrapper">
                                     <label
@@ -648,7 +728,11 @@ function RegistrationDetail(): JSX.Element {
                                             required
                                             type="text"
                                             id="billing-address-region"
-                                            className="form__input"
+                                            className={
+                                                errorBillingRegion
+                                                    ? 'form__input form__input_invalid'
+                                                    : 'form__input'
+                                            }
                                             onBlur={(e): void => {
                                                 setErrorBillingRegion(
                                                     checkIncorrectAddressRegion(
@@ -700,7 +784,11 @@ function RegistrationDetail(): JSX.Element {
                                             required
                                             type="text"
                                             id="billing-address-city"
-                                            className="form__input"
+                                            className={
+                                                errorBillingCity
+                                                    ? 'form__input form__input_invalid'
+                                                    : 'form__input'
+                                            }
                                             onBlur={(e): void => {
                                                 setErrorBillingCity(
                                                     checkIncorrectAddressCity(e)
@@ -748,18 +836,22 @@ function RegistrationDetail(): JSX.Element {
                                             required
                                             type="text"
                                             id="billing-address-index"
-                                            className="form__input"
+                                            className={
+                                                errorBillingIndex
+                                                    ? 'form__input form__input_invalid'
+                                                    : 'form__input'
+                                            }
                                             onBlur={(e): void => {
                                                 setErrorBillingIndex(
                                                     checkIncorrectAddressIndex(
                                                         e,
-                                                        billingAddress
+                                                        countryBilling
                                                     ).incorrect
                                                 );
                                                 setErrorMessageBillingIndex(
                                                     checkIncorrectAddressIndex(
                                                         e,
-                                                        billingAddress
+                                                        countryBilling
                                                     ).message
                                                 );
                                             }}
@@ -767,14 +859,14 @@ function RegistrationDetail(): JSX.Element {
                                                 setErrorBillingIndex(
                                                     checkIncorrectAddressIndex(
                                                         e,
-                                                        billingAddress,
+                                                        countryBilling,
                                                         true
                                                     ).incorrect
                                                 );
                                                 setErrorMessageBillingIndex(
                                                     checkIncorrectAddressIndex(
                                                         e,
-                                                        billingAddress,
+                                                        countryBilling,
                                                         true
                                                     ).message
                                                 );
@@ -803,7 +895,11 @@ function RegistrationDetail(): JSX.Element {
                                         required
                                         type="text"
                                         id="billing-address"
-                                        className="form__input"
+                                        className={
+                                            errorBillingStreet
+                                                ? 'form__input form__input_invalid'
+                                                : 'form__input'
+                                        }
                                         onBlur={(e): void => {
                                             setErrorBillingStreet(
                                                 checkIncorrectAddressStreet(e)
@@ -866,7 +962,11 @@ function RegistrationDetail(): JSX.Element {
                                         required
                                         type="text"
                                         id="birth-day"
-                                        className="form__input"
+                                        className={
+                                            errorBirthDay
+                                                ? 'form__input form__input_invalid'
+                                                : 'form__input'
+                                        }
                                         onBlur={(e): void => {
                                             setErrorBirthDay(
                                                 checkIncorrectBirthDay(e)
@@ -908,7 +1008,11 @@ function RegistrationDetail(): JSX.Element {
                                         required
                                         type="text"
                                         id="birth-month"
-                                        className="form__input"
+                                        className={
+                                            errorBirthMonth
+                                                ? 'form__input form__input_invalid'
+                                                : 'form__input'
+                                        }
                                         onBlur={(e): void => {
                                             setErrorBirthMonth(
                                                 checkIncorrectBirthMonth(e)
@@ -954,7 +1058,11 @@ function RegistrationDetail(): JSX.Element {
                                         required
                                         type="text"
                                         id="birth-year"
-                                        className="form__input"
+                                        className={
+                                            errorBirthYear
+                                                ? 'form__input form__input_invalid'
+                                                : 'form__input'
+                                        }
                                         onBlur={(e): void => {
                                             setErrorBirthYear(
                                                 checkIncorrectBirthYear(e)
@@ -994,7 +1102,11 @@ function RegistrationDetail(): JSX.Element {
                                     required
                                     type="text"
                                     id="life-form"
-                                    className="form__input"
+                                    className={
+                                        errorFormLife
+                                            ? 'form__input form__input_invalid'
+                                            : 'form__input'
+                                    }
                                     onBlur={(e): void => {
                                         setErrorFormLife(
                                             checkIncorrectFormLife(e).incorrect
@@ -1043,6 +1155,8 @@ function RegistrationDetail(): JSX.Element {
                             type="submit"
                             onClick={(e): void => {
                                 e.preventDefault();
+                                setErrorAge(checkIncorrectAge().incorrect);
+                                setErrorMessageAge(checkIncorrectAge().message);
                                 if (!userName) {
                                     setErrorUserName(true);
                                     setErrorMessageUserName(
@@ -1073,12 +1187,53 @@ function RegistrationDetail(): JSX.Element {
                                         'Это обязатальное поле'
                                     );
                                 }
+                                if (password !== passwordRepeat) {
+                                    setErrorPasswordRepeat(true);
+                                    setErrorMessagePasswordRepeat(
+                                        'Пароли не совпадают'
+                                    );
+                                }
                                 if (!email) {
                                     setErrorEmail(true);
                                     setErrorMessageEmail(
                                         'Это обязатальное поле'
                                     );
                                 }
+                                if (countryShipping === 'Выберите страну*') {
+                                    setErrorCountryShipping(true);
+                                    setErrorMessageCountryShipping(
+                                        'Это обязатальное поле'
+                                    );
+                                }
+                                if (countryShipping === 'Россия') {
+                                    if (!/^\d{6}$/.test(shippingIndexValue)) {
+                                        setErrorShippingIndex(true);
+                                        setErrorMessageShippingIndex(
+                                            'Формат индекса 6 цифр XXXYYY'
+                                        );
+                                    }
+                                }
+                                if (countryShipping === 'Беларусь') {
+                                    if (!/^\d{6}$/.test(shippingIndexValue)) {
+                                        setErrorShippingIndex(true);
+                                        setErrorMessageShippingIndex(
+                                            'Формат индекса 6 цифр XXXYYY'
+                                        );
+                                    }
+                                }
+                                if (countryShipping === 'Польша') {
+                                    if (
+                                        !/^\d{2}-\d{3}$/.test(
+                                            shippingIndexValue
+                                        )
+                                    ) {
+                                        setErrorShippingIndex(true);
+                                        setErrorMessageShippingIndex(
+                                            'Формат индекса 5 цифр XY-ZZZ'
+                                        );
+                                    }
+                                }
+
                                 if (!shippingRegionValue) {
                                     setErrorShippingRegion(true);
                                     setErrorMessageShippingRegion(
@@ -1103,6 +1258,41 @@ function RegistrationDetail(): JSX.Element {
                                         'Это обязатальное поле'
                                     );
                                 }
+                                if (countryBilling === 'Выберите страну*') {
+                                    setErrorCountryBilling(true);
+                                    setErrorMessageCountryBilling(
+                                        'Это обязатальное поле'
+                                    );
+                                }
+
+                                if (countryBilling === 'Россия') {
+                                    if (!/^\d{6}$/.test(billingIndexValue)) {
+                                        setErrorBillingIndex(true);
+                                        setErrorMessageBillingIndex(
+                                            'Формат индекса 6 цифр XXXYYY'
+                                        );
+                                    }
+                                }
+                                if (countryBilling === 'Беларусь') {
+                                    if (!/^\d{6}$/.test(billingIndexValue)) {
+                                        setErrorBillingIndex(true);
+                                        setErrorMessageBillingIndex(
+                                            'Формат индекса 6 цифр XXXYYY'
+                                        );
+                                    }
+                                }
+
+                                if (countryBilling === 'Польша') {
+                                    if (
+                                        !/^\d{2}-\d{3}$/.test(billingIndexValue)
+                                    ) {
+                                        setErrorShippingIndex(true);
+                                        setErrorMessageShippingIndex(
+                                            'Формат индекса 5 цифр XY-ZZZ'
+                                        );
+                                    }
+                                }
+
                                 if (!billingRegionValue) {
                                     setErrorBillingRegion(true);
                                     setErrorMessageBillingRegion(
@@ -1121,6 +1311,7 @@ function RegistrationDetail(): JSX.Element {
                                         'Это обязатальное поле'
                                     );
                                 }
+
                                 if (!billingStreetValue) {
                                     setErrorBillingStreet(true);
                                     setErrorMessageBillingStreet(
@@ -1151,6 +1342,13 @@ function RegistrationDetail(): JSX.Element {
                                         'Это обязатальное поле'
                                     );
                                 }
+                                if (!formLifeValue) {
+                                    setErrorFormLife(true);
+                                    setErrorMessageFormLife(
+                                        'Это обязатальное поле'
+                                    );
+                                }
+
                                 if (
                                     errorUserName ||
                                     !userName ||
@@ -1187,13 +1385,16 @@ function RegistrationDetail(): JSX.Element {
                                     errorBirthYear ||
                                     !birthYearValue ||
                                     errorFormLife ||
-                                    !formLifeValue
+                                    !formLifeValue ||
+                                    countryShipping === 'Выберите страну*' ||
+                                    countryBilling === 'Выберите страну*' ||
+                                    errorAge
                                 )
                                     return;
-                                // console.log(1);
-
-                                setErrorAge(checkIncorrectAge().incorrect);
-                                setErrorMessageAge(checkIncorrectAge().message);
+                                // eslint-disable-next-line no-console
+                                console.log(
+                                    'Отправка данных прошла успешно, форма валидна'
+                                );
                             }}
                         >
                             Регистрация

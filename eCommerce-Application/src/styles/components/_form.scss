@@ -13,6 +13,7 @@
         color: var(--color-white);
         background-color: var(--color-secondary);
     }
+
     &__content {
         padding: 5.3rem 10rem 6.3rem 10rem;
 
@@ -23,31 +24,20 @@
         background-color: var(--color-white-alpha);
         text-align: start;
     }
+
     &__question {
         a {
             border-bottom: 1px dashed var(--color-secondary);
         }
     }
+
     &__inputs {
         margin-top: 5rem;
-        // &-wrapper {
         > * + * {
             margin-top: 3.5rem;
         }
-        // }
     }
-    // &__input-group {
-    // padding: 20px;
-    // border: 1px solid black;
-    // margin-top: 5rem;
-    // > * + * {
-    //     margin-top: 3.5rem;
-    // }
-    // }
-    // &__input-pair {
-    // --gap: 2rem;
-    // @include mixins.flex(null, null, null);
-    // }
+
     &__input {
         position: relative;
         padding: 1.2rem 0 1.2rem 2.5rem;
@@ -64,6 +54,7 @@
                 opacity: 1;
             }
         }
+
         &-group {
             padding: 20px;
             border: 1px solid black;
@@ -72,18 +63,19 @@
                 margin-top: 3.5rem;
             }
         }
+
         &-pair {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 2rem;
-            // --gap: 2rem;
-            // @include mixins.flex(null, null, null);
         }
+
         &-trio {
             display: grid;
             grid-template-columns: 1fr 2fr 1fr;
             gap: 4rem;
         }
+
         &_checkbox {
             @include mixins.flex(null, null, end);
             input {
@@ -91,10 +83,16 @@
                 height: 2.5rem;
             }
         }
+
+        &_invalid {
+            border: 1px solid rgb(255, 54, 54);
+        }
     }
+
     &__password {
         text-transform: none;
     }
+
     &__select {
         width: 100%;
         height: 100%;
