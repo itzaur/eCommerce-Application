@@ -153,8 +153,12 @@
             --gap: 6rem;
             flex-direction: row;
 
-            & > * {
+            & > a {
                 width: min(14vw, 25%);
+            }
+
+            & > button {
+                width: min-content;
             }
         }
     }

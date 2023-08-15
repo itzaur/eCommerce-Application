@@ -1,10 +1,14 @@
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import Modal from './Modal';
 import ship from '../../assets/images/ship.svg';
 import notFound from '../../assets/images/404.svg';
 import star from '../../assets/images/star.png';
 import ellipse from '../../assets/images/ellipse.png';
 
 function NotFound(): JSX.Element {
+    const [modalActive, setModalActive] = useState(false);
+
     return (
         <section className="fail">
             <div className="fail__ship">
@@ -38,7 +42,16 @@ function NotFound(): JSX.Element {
             <div className="fail__links">
                 <Link to="/">Перейти на главную страницу</Link>
                 <Link to="/store">Перейти в магазин</Link>
-                <Link to="/">Переименовать твиттер</Link>
+                <button
+                    className="btn-modal"
+                    onClick={(): void => setModalActive(true)}
+                    type="button"
+                >
+                    Переименовать твиттер
+                </button>
+                <Modal active={modalActive} setActive={setModalActive}>
+                    Увы... Даже мы не в силах это сделать. Честно.
+                </Modal>
             </div>
             <figcaption className="fail__star" data-num="1">
                 <img src={star} alt="star" />

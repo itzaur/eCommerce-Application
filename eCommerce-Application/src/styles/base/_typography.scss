@@ -134,3 +134,10 @@
         text-align: right;
     }
 }
+
+.modal {
+    &__content {
+        width: min(100%, 15ch);
+        font-size: var(--fs-big);
+    }
+}
