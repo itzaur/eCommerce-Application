@@ -1,9 +1,6 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-<<<<<<< HEAD
 cd ./eCommerce-Application && npm run lint && npm run prettier && git add .
 
-=======
-cd ./Ecommerce-Application && npm run lint && npm run prettier && git add .
->>>>>>> 9009250 (feat: finish styles login page)
+

@@ -19,7 +19,7 @@ function App(): JSX.Element {
     const path = location.pathname.slice(1);
 
     useEffect(() => {
-        console.log('Current location is ', location);
+        // console.log('Current location is ', location);
     }, [location]);
 
     if (paths.includes(path)) {
