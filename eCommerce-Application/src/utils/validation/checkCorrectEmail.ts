@@ -3,15 +3,16 @@ export const checkIncorrectEmail = (
         | React.FocusEvent<HTMLInputElement, Element>
         | React.ChangeEvent<HTMLInputElement>,
     removeError?: boolean
-): boolean => {
-    if (removeError || e.target.value === '') {
-        // e.target.classList.remove('authorization__input_invalid');
-        return false;
+): { incorrect: boolean; message: string } => {
+    if (removeError) {
+        return { incorrect: false, message: '' };
+    }
+    if (e.target.value === '') {
+        return { incorrect: true, message: 'Это обязательное поле' };
     }
     const regexp = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
     if (!e.target.value.match(regexp)) {
-        // e.target.classList.add('authorization__input_invalid');
-        return true;
+        return { incorrect: true, message: 'Введите e-mail в верном формате' };
     }
-    return false;
+    return { incorrect: false, message: '' };
 };
