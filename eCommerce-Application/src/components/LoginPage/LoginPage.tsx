@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import logo from '../../assets/images/logo.svg';
-import './LoginForm.scss';
+import logo from '../../assets/images/logo.png';
 import { checkIncorrectEmail } from '../../utils/validation/checkCorrectEmail';
 import { checkIncorrectPassword } from '../../utils/validation/checkPassword';
 import { loginCustomer } from '../../commercetools/loginCustomer';
