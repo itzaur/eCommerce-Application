@@ -2,6 +2,7 @@ import {
     ClientResponse,
     CustomerSignInResult,
 } from '@commercetools/platform-sdk';
+import { constructClientPasswordFlow } from './PasswordClient';
 import { apiRoot } from './Client';
 
 export async function loginCustomer(
@@ -9,7 +10,7 @@ export async function loginCustomer(
     password: string
 ): Promise<ClientResponse<CustomerSignInResult> | undefined> {
     try {
-        const response = await apiRoot
+        const response = await constructClientPasswordFlow(email, password)
             .me()
             .login()
             .post({ body: { email, password } })

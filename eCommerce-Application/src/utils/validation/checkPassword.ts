@@ -4,11 +4,8 @@ export const checkIncorrectPassword = (
         | React.ChangeEvent<HTMLInputElement>,
     removeError?: boolean
 ): { incorrect: boolean; message: string } => {
-    if (removeError) {
+    if (removeError || e.target.value === '') {
         return { incorrect: false, message: '' };
-    }
-    if (e.target.value === '') {
-        return { incorrect: true, message: 'Это обязательное поле' };
     }
     const { value } = e.target;
     if (value.length < 8) {
