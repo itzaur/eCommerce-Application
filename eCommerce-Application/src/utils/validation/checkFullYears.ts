@@ -26,6 +26,12 @@ export const checkIncorrectBirthDay = (
             message: 'Дата не может быть больше 2 цифр',
         };
     }
+    if (Number(value.trim()) > 31 || Number(value.trim()) <= 0) {
+        return {
+            incorrect: true,
+            message: 'Дата должная быть в диапазоне 1 - 31',
+        };
+    }
     if (!/^\d+$/.test(value)) {
         return {
             incorrect: true,
@@ -62,6 +68,12 @@ export const checkIncorrectBirthMonth = (
         return {
             incorrect: true,
             message: 'Месяц не может быть больше 2 цифр',
+        };
+    }
+    if (Number(value.trim()) > 12 || Number(value.trim()) <= 0) {
+        return {
+            incorrect: true,
+            message: 'Месяц должнен быть в диапазоне 1 - 12',
         };
     }
     if (!/^\d+$/.test(value)) {
@@ -108,6 +120,12 @@ export const checkIncorrectBirthYear = (
             message: 'Год не может быть меньше 4 цифр',
         };
     }
+    if (Number(value.trim()) < 1900 || Number(value.trim()) >= 2024) {
+        return {
+            incorrect: true,
+            message: 'Год должнен быть в диапазоне 1900 - 2023',
+        };
+    }
     if (!/^\d+$/.test(value)) {
         return {
             incorrect: true,
@@ -131,11 +149,6 @@ export const getAge = (): number => {
 
     const monthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
-    // if (
-    //     day instanceof HTMLInputElement &&
-    //     month instanceof HTMLInputElement &&
-    //     year instanceof HTMLInputElement
-    // ) {
     const dayValue = Number(day!.value);
     const dayMonth = Number(month!.value);
     const dayYear = Number(year!.value);
@@ -148,24 +161,14 @@ export const getAge = (): number => {
         curMonth += 12;
         curYear -= 1;
     }
-    // const resDay = curDay - dayValue;
-    // const resMonth = curMonth - dayMonth;
     const resYear = curYear - dayYear;
-    // console.log(resYear);
+
     return resYear;
-    // }
-    // return undefined;
 };
 
 export const checkIncorrectAge = () // e:
-//     | React.FocusEvent<HTMLInputElement, Element>
-//     | React.ChangeEvent<HTMLInputElement>,
-// removeError?: boolean
+
 : { incorrect: boolean; message: string } => {
-    // if (removeError) {
-    //     return { incorrect: false, message: '' };
-    // }
-    // const { value } = e.target;
     if (getAge() < 18) {
         return {
             incorrect: true,

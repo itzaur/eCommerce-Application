@@ -9,7 +9,6 @@ export const checkIncorrectAddressIndex = (
         return { incorrect: false, message: '' };
     }
     const { value } = e.target;
-    // console.log(country);
     if (country === 'Россия') {
         if (!/^\d{6}$/.test(value)) {
             return {
@@ -40,11 +39,6 @@ export const checkIncorrectAddressIndex = (
             message: 'Индекс не должен содержать начальных и конечных пробелов',
         };
     }
-    // if (value.trim().length < 1) {
-    //     return {
-    //         incorrect: true,
-    //         message: 'Улица должна содержать минимум 1 символ',
-    //     };
-    // }
+
     return { incorrect: false, message: '' };
 };
