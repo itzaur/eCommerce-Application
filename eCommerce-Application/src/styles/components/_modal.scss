@@ -1,0 +1,26 @@
+.modal {
+    position: fixed;
+    top: 0;
+
+    width: 100%;
+    height: 100%;
+
+    display: grid;
+    place-items: center;
+
+    border: 0.1rem solid rgba(255, 255, 255, 0.3);
+
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(15px);
+
+    scale: 0;
+
+    z-index: 1;
+
+    transition: scale 0.4s ease-in-out;
+
+    &.active {
+        scale: 1;
+    }
+}

@@ -1,0 +1,7 @@
+@use '../abstracts/mixins';
+
+.header {
+    @include mixins.flex(null, flex-start, center);
+
+    padding-block: 2vw;
+}

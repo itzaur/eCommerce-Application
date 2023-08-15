@@ -1,0 +1,143 @@
+@use '../abstracts/mixins';
+
+@font-face {
+    font-family: 'Project Space';
+    src: url(../assets/fonts/project-space-font/ProjectSpace.otf);
+}
+
+@font-face {
+    font-family: 'Bowler';
+    src: url(../assets/fonts/bowler/BOWLER.otf);
+}
+
+@font-face {
+    font-family: 'Neuropol';
+    src: url(../assets/fonts/neuropol/neuropol.otf);
+}
+
+.home {
+    &__title {
+        .title {
+            font-size: var(--fs-title);
+            line-height: 1.4;
+        }
+    }
+
+    &__text {
+        font-family: var(--ff-secondary);
+        font-size: var(--fs-medium);
+        text-align: left;
+        letter-spacing: 0.06em;
+        line-height: 1.4;
+
+        &-title {
+            font-size: var(--fs-big);
+        }
+    }
+
+    &__btns {
+        font-family: var(--ff-secondary);
+        font-size: var(--fs-small);
+
+        text-align: left;
+    }
+}
+
+.attainment {
+    &__title {
+        font-family: var(--ff-secondary);
+        font-size: var(--fs-big);
+    }
+
+    &__item p {
+        width: min(100%, 17ch);
+        font-family: var(--ff-primary);
+        font-size: var(--fs-paragraph);
+    }
+}
+
+.fail {
+    font-family: 'Neuropol', sans-serif;
+
+    &__inscription {
+        font-size: var(--fs-big);
+    }
+
+    &__subinscription {
+        font-size: var(--fs-paragraph);
+    }
+
+    &__subtitle {
+        h2 {
+            font-size: var(--fs-medium);
+            text-transform: uppercase;
+
+            @include mixins.respond-to('tablet') {
+                font-size: var(--fs-paragraph);
+            }
+        }
+
+        p {
+            font-size: var(--fs-medium);
+        }
+    }
+
+    &__links {
+        font-size: var(--fs-medium);
+        text-align: center;
+
+        @include mixins.respond-to('desktop') {
+            font-size: var(--fs-small);
+        }
+    }
+}
+
+.catalog {
+    &__title {
+        font-family: var(--ff-secondary);
+        font-size: var(--fs-big);
+        letter-spacing: 0.04em;
+        text-align: left;
+    }
+
+    &__item-title {
+        font-family: var(--ff-primary);
+        font-size: var(--fs-paragraph);
+        text-align: left;
+
+        @include mixins.respond-to('tablet') {
+            font-size: var(--fs-small);
+        }
+    }
+}
+
+.footer {
+    font-family: var(--ff-primary);
+    font-size: var(--fs-small);
+    text-align: center;
+
+    @include mixins.respond-to('desktop') {
+        text-align: left;
+    }
+
+    &__title {
+        p {
+            width: 100%;
+
+            @include mixins.respond-to('desktop') {
+                width: min(20ch, 100%);
+            }
+        }
+    }
+
+    &__accent {
+        text-align: right;
+    }
+}
+
+.modal {
+    &__content {
+        width: min(100%, 15ch);
+        font-size: var(--fs-big);
+    }
+}

@@ -1,46 +1,44 @@
-import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
-import './App.css';
+import { useEffect } from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
+import {
+    Home,
+    LoginPage,
+    RegistrationPage,
+    AboutPage,
+    Store,
+    NotFound,
+} from './components';
 // import { getProject } from './commercetools/Client';
 
 function App(): JSX.Element {
-    const [count, setCount] = useState(0);
-
     // getProject().then(console.log).catch(console.error);
 
+    const location = useLocation();
+    const root = document.querySelector('main');
+    const paths = ['login', 'registration', 'store', 'about'];
+    const path = location.pathname.slice(1);
+
+    useEffect(() => {
+        console.log('Current location is ', location);
+    }, [location]);
+
+    if (paths.includes(path)) {
+        root?.setAttribute('id', path);
+    } else if (path === '') {
+        root?.setAttribute('id', 'main');
+    } else {
+        root?.setAttribute('id', 'error-page');
+    }
+
     return (
-        <>
-            <div>
-                <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-                    <img src={viteLogo} className="logo" alt="Vite logo" />
-                </a>
-                <a href="https://react.dev" target="_blank" rel="noreferrer">
-                    <img
-                        src={reactLogo}
-                        className="logo react"
-                        alt="React logo"
-                    />
-                </a>
-            </div>
-            <h1>Vite + React</h1>
-            <div className="card">
-                <button
-                    type="button"
-                    onClick={(): void =>
-                        setCount((prevCount): number => prevCount + 1)
-                    }
-                >
-                    count is {count}
-                </button>
-                <p>
-                    Edit <code>src/App.tsx</code> and save to test HMR
-                </p>
-            </div>
-            <p className="read-the-docs">
-                Click on the Vite and React logos to learn more
-            </p>
-        </>
+        <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/registration" element={<RegistrationPage />} />
+            <Route path="/store" element={<Store />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="*" element={<NotFound />} />
+        </Routes>
     );
 }
 

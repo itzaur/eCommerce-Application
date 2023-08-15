@@ -1,0 +1,260 @@
+@use '../abstracts/mixins';
+
+.catalog {
+    padding-block: clamp(3rem, 6vw, 8rem);
+
+    &__container {
+        display: grid;
+        gap: 3rem;
+
+        width: 95%;
+
+        margin: auto;
+
+        @include mixins.respond-to('desktop') {
+            width: 90%;
+        }
+    }
+
+    &__title {
+        align-self: flex-start;
+        justify-self: flex-start;
+
+        color: var(--color-white);
+    }
+
+    &__items {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+        gap: 3rem;
+
+        @include mixins.respond-to('desktop') {
+            grid-template-rows: minmax(0, 2rem) 1fr minmax(0, 2rem);
+        }
+    }
+
+    &__item {
+        position: relative;
+
+        @include mixins.flex(column, flex-end, flex-start);
+
+        min-height: 40vh;
+
+        color: var(--color-white);
+
+        transition:
+            translate 0.4s ease-out,
+            filter 0.4s ease-out;
+
+        @include mixins.respond-to('desktop') {
+            min-height: 70vh;
+
+            filter: grayscale(1);
+        }
+
+        & > a {
+            position: absolute;
+
+            display: grid;
+            place-items: end;
+            justify-items: flex-start;
+
+            width: 100%;
+            height: 100%;
+
+            z-index: 1;
+        }
+
+        &--1 {
+            &::after {
+                background-image: url('../assets/images/souvenirs.jpg');
+            }
+
+            @include mixins.respond-to('desktop') {
+                grid-row: 2 / span 2;
+                grid-column: 1;
+            }
+        }
+
+        &--2 {
+            &::after {
+                background-image: url('../assets/images/tours.jpg');
+            }
+
+            @include mixins.respond-to('desktop') {
+                grid-row: 2 / span 2;
+                grid-column: 2;
+            }
+        }
+
+        &--3 {
+            &::after {
+                background-image: url('../assets/images/hotels.png');
+            }
+
+            @include mixins.respond-to('desktop') {
+                grid-row: 2 / span 2;
+                grid-column: 3;
+            }
+        }
+
+        &-title {
+            position: relative;
+
+            margin: 0.5rem;
+            padding: 1rem;
+
+            @include mixins.respond-to('tablet') {
+                margin: 1rem;
+                padding: 1.5rem 2rem;
+            }
+
+            &::before,
+            &::after {
+                position: absolute;
+                content: '';
+
+                width: 1rem;
+                height: 1rem;
+
+                border: 2px solid var(--color-primary);
+
+                background-color: transparent;
+
+                opacity: 0;
+
+                transition:
+                    opacity 0.4s ease-in-out,
+                    inset 0.4s ease-in-out;
+
+                @include mixins.respond-to('tablet') {
+                    width: 2rem;
+                    height: 2rem;
+                }
+            }
+
+            &::before {
+                top: -10%;
+                left: -10%;
+
+                border-right: 0;
+                border-bottom: 0;
+            }
+
+            &::after {
+                bottom: -10%;
+                right: -10%;
+
+                border-left: 0;
+                border-top: 0;
+            }
+        }
+
+        &::before,
+        &:after {
+            content: '';
+            position: absolute;
+            inset: 0;
+
+            height: 100%;
+
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+
+            transition: filter 0.4s ease;
+
+            z-index: -2;
+
+            @include mixins.respond-to('desktop') {
+                filter: blur(2px);
+            }
+        }
+
+        @media (hover: hover) {
+            &:hover {
+                translate: 0 -2rem;
+
+                filter: grayscale(0);
+
+                @include mixins.respond-to('tablet') {
+                    translate: 0 -3rem;
+                }
+
+                @include mixins.respond-to('desktop') {
+                    translate: 0 -8rem;
+                }
+
+                .catalog__item-title {
+                    &::before {
+                        top: 0;
+                        left: 0;
+
+                        opacity: 1;
+
+                        transition:
+                            opacity 0.4s ease-out,
+                            inset 0.4s ease-out;
+                    }
+
+                    &:after {
+                        bottom: 0;
+                        right: 0;
+
+                        opacity: 1;
+                    }
+                }
+            }
+
+            &:hover::before {
+                translate: 0 8rem;
+            }
+
+            &:hover::after {
+                filter: blur(0);
+            }
+        }
+    }
+
+    &__decoration {
+        @include mixins.respond-to('tablet') {
+            position: relative;
+
+            width: 100%;
+            height: 0.1rem;
+
+            background-color: var(--color-primary);
+        }
+    }
+
+    &__accent {
+        @include mixins.respond-to('tablet') {
+            --width: 1rem;
+
+            position: absolute;
+            top: calc(var(--width) / 2 * -1);
+            left: calc(100% / 6 - calc(var(--width) / 2));
+
+            width: var(--width);
+            height: var(--width);
+
+            border-radius: 50%;
+
+            background-color: var(--color-primary);
+
+            transition: scale 0.3s;
+
+            &[data-num='2'] {
+                left: calc(100% / 2 - calc(var(--width) / 2));
+            }
+
+            &[data-num='3'] {
+                left: calc(100% - (100% / 6) - calc(var(--width) / 2));
+            }
+
+            &.active {
+                scale: 2;
+            }
+        }
+    }
+}
