@@ -1,29 +1,4 @@
-body,
-section,
-div,
-h1,
-h2,
-div,
-p,
-button {
-    margin: 0;
-    padding: 0;
-}
-:root {
-    --color-dark-l: #5e5971;
-    --color-dark-m: #5e597180;
-    --color-primary: #fff;
-    --color-primary-opacity: #f5f5f5cc;
-    --main-font: 'Neuropol';
-    --second-font: 'Bowler';
-    --color-button: #4de1e3;
-}
-
-html {
-    font-size: 10px;
-}
-
-main {
+#login {
     width: 100%;
     height: 100vh;
     display: flex;
@@ -32,6 +7,7 @@ main {
 
     background-image: url('../assets/images/backround-login.png');
     background-size: cover;
+    background-repeat: no-repeat;
 
     font-family: 'Neuropol', sans-serif;
 }
@@ -48,15 +24,14 @@ main {
 }
 
 .form__content {
-    background-color: var(--color-primary-opacity);
+    padding: 5.8% 9.3% 7.14% 10%;
+    background-color: var(--color-white-opacity);
 }
 .form__title {
-    background-color: var(--color-dark-l);
-    color: var(--color-primary);
+    background-color: var(--color-secondary);
+    color: var(--color-white);
 }
-.form__content {
-    padding: 5.8% 9.3% 7.14% 10%;
-}
+
 .form__title {
     padding: 2.9% 0;
 
@@ -64,16 +39,17 @@ main {
     text-align: center;
     line-height: 92%;
 }
+
 .form__question {
     margin-bottom: 7%;
 
-    color: var(--color-dark-l);
+    color: var(--color-secondary);
 
     font-size: clamp(1rem, 0.95vw, 2rem);
     line-height: 92%;
     a {
-        color: var(--color-dark-l);
-        border-bottom: dotted #5e5971;
+        color: var(--color-secondary);
+        border-bottom: dotted var(--color-secondary);
     }
 }
 
@@ -99,19 +75,19 @@ main {
         padding: 1rem 0 1rem 1rem;
 
         background-color: transparent;
-        color: var(--color-dark-m);
-        border: 1px solid var(--color-dark-l);
+        color: var(--color-secondary-opacity);
+        border: 1px solid var(--color-secondary);
         outline: none;
 
         font-size: clamp(1rem, 1.04vw, 2rem);
         font-family: 'Neuropol', sans-serif;
         &:focus {
-            background-color: var(--color-primary);
-            color: #000;
+            background-color: var(--color-white);
+            color: var(--color-black);
         }
     }
     .form__input_invalid {
-        border: 1px solid rgb(255, 54, 54);
+        border: 1px solid var(--color-error);
     }
 }
 
@@ -127,10 +103,11 @@ main {
 
     cursor: text;
 
-    color: var(--color-dark-m);
+    color: var(--color-secondary-opacity);
+
     font-size: clamp(1rem, 1.04vw, 2rem);
     span {
-        color: var(--color-button);
+        color: var(--color-primary);
     }
 }
 
@@ -139,8 +116,9 @@ main {
     padding: 2rem 7.5rem;
     border-radius: 2px;
 
-    background-color: var(--color-button);
-    border: 2px solid var(--color-button);
+    background-color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+    color: var(--color-secondary);
 
     font-size: clamp(1rem, 1.04vw, 2rem);
     font-family: 'Bowler', sans-serif;
@@ -148,11 +126,11 @@ main {
     cursor: pointer;
     &:focus {
         outline: none;
-        border: 2px solid var(--color-button);
+        border: 2px solid var(--color-primary);
     }
     &:hover {
         border: none;
-        border: 2px solid var(--color-button);
+        border: 2px solid var(--color-primary);
     }
 }
 .password-view,
@@ -190,6 +168,6 @@ main {
     margin-bottom: 4.6rem;
     height: 1rem;
 
-    color: rgb(255, 54, 54);
+    color: var(--color-error);
     font-size: 1.2rem;
 }

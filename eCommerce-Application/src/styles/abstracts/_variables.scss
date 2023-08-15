@@ -5,7 +5,10 @@
     --color-primary: hsl(181, 73%, 60%);
     --color-primary-alpha: hsl(181, 73%, 60%, 0.7);
     --color-secondary: hsl(252, 12%, 40%);
+    --color-secondary-opacity: hsla(253, 12%, 40%, 0.502);
+    --color-error: hsl(0, 100%, 61%);
     --color-white: hsl(0, 0%, 100%);
+    --color-white-opacity: hsla(0, 0%, 96%, 0.8);
     --color-black: hsl(0, 0%, 0%);
     --drop-shadow-white: 0 0 2rem var(--color-white),
         0 0 0.2rem var(--color-white);
