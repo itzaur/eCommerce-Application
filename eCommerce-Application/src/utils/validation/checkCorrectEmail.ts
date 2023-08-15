@@ -4,8 +4,11 @@ export const checkIncorrectEmail = (
         | React.ChangeEvent<HTMLInputElement>,
     removeError?: boolean
 ): { incorrect: boolean; message: string } => {
-    if (removeError || e.target.value === '') {
+    if (removeError) {
         return { incorrect: false, message: '' };
+    }
+    if (e.target.value === '') {
+        return { incorrect: true, message: 'Это обязательное поле' };
     }
     const regexp = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
     if (!e.target.value.match(regexp)) {

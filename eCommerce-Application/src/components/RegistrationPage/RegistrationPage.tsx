@@ -24,26 +24,36 @@ import { checkIncorrectFormLife } from '../../utils/validation/checkFormLife';
 const countries = ['Выберите страну*', 'Россия', 'Беларусь', 'Польша'];
 
 function RegistrationDetail(): JSX.Element {
-    const [errorEmail, setErrorEmail] = useState(false);
-
     const [errorUserName, setErrorUserName] = useState(false);
     const [errorMessageUserName, setErrorMessageUserName] = useState('');
+    const [userName, setUserName] = useState('');
+
+    const [errorName, setErrorName] = useState(false);
+    const [errorMessageName, setErrorMessageName] = useState('');
+    const [name, setName] = useState('');
+
+    const [errorSurname, setErrorSurname] = useState(false);
+    const [errorMessageSurname, setErrorMessageSurname] = useState('');
+    const [surname, setSurname] = useState('');
 
     const [errorPassword, setErrorPassword] = useState(false);
     const [errorMessagePassword, setErrorMessagePassword] = useState('');
+    const [password, setPassword] = useState('');
 
     const [errorPasswordRepeat, setErrorPasswordRepeat] = useState(false);
     const [errorMessagePasswordRepeat, setErrorMessagePasswordRepeat] =
         useState('');
+    const [passwordRepeat, setPasswordRepeat] = useState('');
 
-    const [errorName, setErrorName] = useState(false);
-    const [errorMessageName, setErrorMessageName] = useState('');
-
-    const [errorSurname, setErrorSurname] = useState(false);
-    const [errorMessageSurname, setErrorMessageSurname] = useState('');
+    const [errorEmail, setErrorEmail] = useState(false);
+    const [errorMessageEmail, setErrorMessageEmail] = useState('');
+    const [email, setEmail] = useState('');
 
     const [countryShipping, setShippingCountry] = useState(countries[0]);
     const [countryBilling, setBillingCountry] = useState(countries[0]);
+
+    // const [countryShippingValue, setCountryShippingValue] = useState('');
+    // const [shippingAddressValue, setShippingAddressValue] = useState('');
 
     const shippingAddress: string = countryShipping;
     const billingAddress: string = countryBilling;
@@ -51,48 +61,61 @@ function RegistrationDetail(): JSX.Element {
     const [errorShippingRegion, setErrorShippingRegion] = useState(false);
     const [errorMessageShippingRegion, setErrorMessageShippingRegion] =
         useState('');
+    const [shippingRegionValue, setShippingRegionValue] = useState('');
 
     const [errorShippingCity, setErrorShippingCity] = useState(false);
     const [errorMessageShippingCity, setErrorMessageShippingCity] =
         useState('');
-
-    const [errorShippingStreet, setErrorShippingStreet] = useState(false);
-    const [errorMessageShippingStreet, setErrorMessageShippingStreet] =
-        useState('');
+    const [shippingCityValue, setShippingCityValue] = useState('');
 
     const [errorShippingIndex, setErrorShippingIndex] = useState(false);
     const [errorMessageShippingIndex, setErrorMessageShippingIndex] =
         useState('');
+    const [shippingIndexValue, setShippingIndexValue] = useState('');
+
+    const [errorShippingStreet, setErrorShippingStreet] = useState(false);
+    const [errorMessageShippingStreet, setErrorMessageShippingStreet] =
+        useState('');
+    const [shippingStreetValue, setShippingStreetValue] = useState('');
 
     const [errorBillingRegion, setErrorBillingRegion] = useState(false);
     const [errorMessageBillingRegion, setErrorMessageBillingRegion] =
         useState('');
+    const [billingRegionValue, setBillingRegionValue] = useState('');
 
     const [errorBillingCity, setErrorBillingCity] = useState(false);
     const [errorMessageBillingCity, setErrorMessageBillingCity] = useState('');
-
-    const [errorBillingStreet, setErrorBillingStreet] = useState(false);
-    const [errorMessageBillingStreet, setErrorMessageBillingStreet] =
-        useState('');
+    const [billingCityValue, setBillingCityValue] = useState('');
 
     const [errorBillingIndex, setErrorBillingIndex] = useState(false);
     const [errorMessageBillingIndex, setErrorMessageBillingIndex] =
         useState('');
+    const [billingIndexValue, setBillingIndexValue] = useState('');
+
+    const [errorBillingStreet, setErrorBillingStreet] = useState(false);
+    const [errorMessageBillingStreet, setErrorMessageBillingStreet] =
+        useState('');
+    const [billingStreetValue, setBillingStreetValue] = useState('');
 
     const [errorBirthDay, setErrorBirthDay] = useState(false);
     const [errorMessageBirthDay, setErrorMessageBirthDay] = useState('');
+    const [birthDayValue, setBirthDayValue] = useState('');
 
     const [errorBirthMonth, setErrorBirthMonth] = useState(false);
     const [errorMessageBirthMonth, setErrorMessageBirthMonth] = useState('');
+    const [birthMonthValue, setBirthMonthValue] = useState('');
 
     const [errorBirthYear, setErrorBirthYear] = useState(false);
     const [errorMessageBirthYear, setErrorMessageBirthYear] = useState('');
+    const [birthYearValue, setBirthYearValue] = useState('');
 
     const [errorFormLife, setErrorFormLife] = useState(false);
     const [errorMessageFormLife, setErrorMessageFormLife] = useState('');
+    const [formLifeValue, setFormLifeValue] = useState('');
 
     const [errorAge, setErrorAge] = useState(false);
     const [errorMessageAge, setErrorMessageAge] = useState('');
+    // const [errorAgeValue, setErrorAgeValue] = useState('');
 
     return (
         <>
@@ -133,6 +156,7 @@ function RegistrationDetail(): JSX.Element {
                                             checkIncorrectUserName(e, true)
                                                 .message
                                         );
+                                        setUserName(e.target.value);
                                     }}
                                 />
                                 <div className="placeholder__input">
@@ -169,6 +193,7 @@ function RegistrationDetail(): JSX.Element {
                                                 checkIncorrectName(e, true)
                                                     .message
                                             );
+                                            setName(e.target.value);
                                         }}
                                     />
                                     <div className="placeholder__input">
@@ -207,6 +232,7 @@ function RegistrationDetail(): JSX.Element {
                                                 checkIncorrectSurname(e, true)
                                                     .message
                                             );
+                                            setSurname(e.target.value);
                                         }}
                                     />
                                     <div className="placeholder__input">
@@ -248,6 +274,7 @@ function RegistrationDetail(): JSX.Element {
                                             checkIncorrectPassword(e, true)
                                                 .message
                                         );
+                                        setPassword(e.target.value);
                                     }}
                                 />
                                 <div className="placeholder__input">
@@ -285,6 +312,7 @@ function RegistrationDetail(): JSX.Element {
                                             checkIncorrectPassword(e, true)
                                                 .message
                                         );
+                                        setPasswordRepeat(e.target.value);
                                     }}
                                 />
                                 <div className="placeholder__input">
@@ -304,22 +332,32 @@ function RegistrationDetail(): JSX.Element {
                                     type="text"
                                     id="user-email"
                                     className="form__input user-email"
-                                    onBlur={(e): void =>
-                                        setErrorEmail(checkIncorrectEmail(e))
-                                    }
-                                    onChange={(e): void =>
+                                    onBlur={(e): void => {
+                                        setErrorEmail(
+                                            checkIncorrectEmail(e).incorrect
+                                        );
+                                        setErrorMessageEmail(
+                                            checkIncorrectEmail(e).message
+                                        );
+                                    }}
+                                    onChange={(e): void => {
                                         setErrorEmail(
                                             checkIncorrectEmail(e, true)
-                                        )
-                                    }
+                                                .incorrect
+                                        );
+                                        setErrorMessageEmail(
+                                            checkIncorrectEmail(e, true).message
+                                        );
+                                        setEmail(e.target.value);
+                                    }}
                                 />
                                 <div className="placeholder__input">
                                     e-mail<span>*</span>
                                 </div>
+                                <p className="error-message">
+                                    {errorEmail ? errorMessageEmail : ''}
+                                </p>
                             </label>
-                            <p className="error-message">
-                                {errorEmail ? 'Введите правильный e-mail.' : ''}
-                            </p>
                         </div>
 
                         <fieldset className="form__input-group">
@@ -388,6 +426,9 @@ function RegistrationDetail(): JSX.Element {
                                                         true
                                                     ).message
                                                 );
+                                                setShippingRegionValue(
+                                                    e.target.value
+                                                );
                                             }}
                                         />
                                         <div className="placeholder__input">
@@ -434,6 +475,9 @@ function RegistrationDetail(): JSX.Element {
                                                         e,
                                                         true
                                                     ).message
+                                                );
+                                                setShippingCityValue(
+                                                    e.target.value
                                                 );
                                             }}
                                         />
@@ -486,6 +530,9 @@ function RegistrationDetail(): JSX.Element {
                                                         true
                                                     ).message
                                                 );
+                                                setShippingIndexValue(
+                                                    e.target.value
+                                                );
                                             }}
                                         />
                                         <div className="placeholder__input">
@@ -531,6 +578,9 @@ function RegistrationDetail(): JSX.Element {
                                                     e,
                                                     true
                                                 ).message
+                                            );
+                                            setShippingStreetValue(
+                                                e.target.value
                                             );
                                         }}
                                     />
@@ -624,6 +674,9 @@ function RegistrationDetail(): JSX.Element {
                                                         true
                                                     ).message
                                                 );
+                                                setBillingRegionValue(
+                                                    e.target.value
+                                                );
                                             }}
                                         />
                                         <div className="placeholder__input">
@@ -670,6 +723,9 @@ function RegistrationDetail(): JSX.Element {
                                                         e,
                                                         true
                                                     ).message
+                                                );
+                                                setBillingCityValue(
+                                                    e.target.value
                                                 );
                                             }}
                                         />
@@ -722,6 +778,9 @@ function RegistrationDetail(): JSX.Element {
                                                         true
                                                     ).message
                                                 );
+                                                setBillingIndexValue(
+                                                    e.target.value
+                                                );
                                             }}
                                         />
                                         <div className="placeholder__input">
@@ -767,6 +826,9 @@ function RegistrationDetail(): JSX.Element {
                                                     e,
                                                     true
                                                 ).message
+                                            );
+                                            setBillingStreetValue(
+                                                e.target.value
                                             );
                                         }}
                                     />
@@ -824,6 +886,7 @@ function RegistrationDetail(): JSX.Element {
                                                 checkIncorrectBirthDay(e, true)
                                                     .message
                                             );
+                                            setBirthDayValue(e.target.value);
                                         }}
                                     />
                                     <div className="placeholder__input">
@@ -869,6 +932,7 @@ function RegistrationDetail(): JSX.Element {
                                                     true
                                                 ).message
                                             );
+                                            setBirthMonthValue(e.target.value);
                                         }}
                                     />
                                     <div className="placeholder__input">
@@ -910,6 +974,7 @@ function RegistrationDetail(): JSX.Element {
                                                 checkIncorrectBirthYear(e, true)
                                                     .message
                                             );
+                                            setBirthYearValue(e.target.value);
                                         }}
                                     />
                                     <div className="placeholder__input">
@@ -947,6 +1012,7 @@ function RegistrationDetail(): JSX.Element {
                                             checkIncorrectFormLife(e, true)
                                                 .message
                                         );
+                                        setFormLifeValue(e.target.value);
                                     }}
                                 />
                                 <div className="placeholder__input">
@@ -975,7 +1041,157 @@ function RegistrationDetail(): JSX.Element {
                             style={{ position: 'relative' }}
                             className="btn_action"
                             type="submit"
-                            onClick={(): void => {
+                            onClick={(e): void => {
+                                e.preventDefault();
+                                if (!userName) {
+                                    setErrorUserName(true);
+                                    setErrorMessageUserName(
+                                        'Это обязатальное поле'
+                                    );
+                                }
+                                if (!name) {
+                                    setErrorName(true);
+                                    setErrorMessageName(
+                                        'Это обязатальное поле'
+                                    );
+                                }
+                                if (!surname) {
+                                    setErrorSurname(true);
+                                    setErrorMessageSurname(
+                                        'Это обязатальное поле'
+                                    );
+                                }
+                                if (!password) {
+                                    setErrorPassword(true);
+                                    setErrorMessagePassword(
+                                        'Это обязатальное поле'
+                                    );
+                                }
+                                if (!passwordRepeat) {
+                                    setErrorPasswordRepeat(true);
+                                    setErrorMessagePasswordRepeat(
+                                        'Это обязатальное поле'
+                                    );
+                                }
+                                if (!email) {
+                                    setErrorEmail(true);
+                                    setErrorMessageEmail(
+                                        'Это обязатальное поле'
+                                    );
+                                }
+                                if (!shippingRegionValue) {
+                                    setErrorShippingRegion(true);
+                                    setErrorMessageShippingRegion(
+                                        'Это обязатальное поле'
+                                    );
+                                }
+                                if (!shippingCityValue) {
+                                    setErrorShippingCity(true);
+                                    setErrorMessageShippingCity(
+                                        'Это обязатальное поле'
+                                    );
+                                }
+                                if (!shippingIndexValue) {
+                                    setErrorShippingIndex(true);
+                                    setErrorMessageShippingIndex(
+                                        'Это обязатальное поле'
+                                    );
+                                }
+                                if (!shippingStreetValue) {
+                                    setErrorShippingStreet(true);
+                                    setErrorMessageShippingStreet(
+                                        'Это обязатальное поле'
+                                    );
+                                }
+                                if (!billingRegionValue) {
+                                    setErrorBillingRegion(true);
+                                    setErrorMessageBillingRegion(
+                                        'Это обязатальное поле'
+                                    );
+                                }
+                                if (!billingCityValue) {
+                                    setErrorBillingCity(true);
+                                    setErrorMessageBillingCity(
+                                        'Это обязатальное поле'
+                                    );
+                                }
+                                if (!billingIndexValue) {
+                                    setErrorBillingIndex(true);
+                                    setErrorMessageBillingIndex(
+                                        'Это обязатальное поле'
+                                    );
+                                }
+                                if (!billingStreetValue) {
+                                    setErrorBillingStreet(true);
+                                    setErrorMessageBillingStreet(
+                                        'Это обязатальное поле'
+                                    );
+                                }
+                                if (!birthDayValue) {
+                                    setErrorBirthDay(true);
+                                    setErrorMessageBirthDay(
+                                        'Это обязатальное поле'
+                                    );
+                                }
+                                if (!birthMonthValue) {
+                                    setErrorBirthMonth(true);
+                                    setErrorMessageBirthMonth(
+                                        'Это обязатальное поле'
+                                    );
+                                }
+                                if (!birthYearValue) {
+                                    setErrorBirthYear(true);
+                                    setErrorMessageBirthYear(
+                                        'Это обязатальное поле'
+                                    );
+                                }
+                                if (!formLifeValue) {
+                                    setErrorFormLife(true);
+                                    setErrorMessageFormLife(
+                                        'Это обязатальное поле'
+                                    );
+                                }
+                                if (
+                                    errorUserName ||
+                                    !userName ||
+                                    errorName ||
+                                    !name ||
+                                    errorSurname ||
+                                    !surname ||
+                                    errorPassword ||
+                                    !password ||
+                                    errorPasswordRepeat ||
+                                    !passwordRepeat ||
+                                    errorEmail ||
+                                    !email ||
+                                    errorShippingRegion ||
+                                    !shippingRegionValue ||
+                                    errorShippingCity ||
+                                    !shippingCityValue ||
+                                    errorShippingIndex ||
+                                    !shippingIndexValue ||
+                                    errorShippingStreet ||
+                                    !shippingStreetValue ||
+                                    errorBillingRegion ||
+                                    !billingRegionValue ||
+                                    errorBillingCity ||
+                                    !billingCityValue ||
+                                    errorBillingIndex ||
+                                    !billingIndexValue ||
+                                    errorBillingStreet ||
+                                    !billingStreetValue ||
+                                    errorBirthDay ||
+                                    !birthDayValue ||
+                                    errorBirthMonth ||
+                                    !birthMonthValue ||
+                                    errorBirthYear ||
+                                    !birthYearValue ||
+                                    errorFormLife ||
+                                    !formLifeValue
+                                )
+                                    return;
+                                // console.log(1);
+
                                 setErrorAge(checkIncorrectAge().incorrect);
                                 setErrorMessageAge(checkIncorrectAge().message);
                             }}
