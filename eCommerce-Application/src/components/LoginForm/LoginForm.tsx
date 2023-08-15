@@ -8,10 +8,11 @@ import { loginCustomer } from '../../commercetools/loginCustomer';
 // let user = null;
 
 function LoginForm(): JSX.Element {
-    const [errorEmail, setErrorEmail] = useState(false);
-    const [errorMessageEmail, setErrorMessageEmail] = useState('');
-    const [errorPassword, setErrorPassword] = useState(false);
-    const [errorMessagePassword, setErrorMessagePassword] = useState('');
+    const [errorEmail, setErrorEmail] = useState({ error: false, message: '' });
+    const [errorPassword, setErrorPassword] = useState({
+        error: false,
+        message: '',
+    });
     const [passwordView, setPasswordView] = useState('password');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
@@ -25,7 +26,17 @@ function LoginForm(): JSX.Element {
         e: React.MouseEvent<HTMLButtonElement, MouseEvent>
     ): void => {
         e.preventDefault();
-        if (errorEmail || errorPassword || !email || !password) return;
+        if (!email) {
+            setErrorEmail({ error: false, message: 'Это обязательное поле' });
+        }
+        if (!password) {
+            setErrorPassword({
+                error: false,
+                message: 'Это обязательное поле',
+            });
+        }
+        if (errorEmail.error || errorPassword.error || !email || !password)
+            return;
         loginCustomer(email, password)
             .then(() => {
                 setErrorWithLogin(false);
@@ -34,11 +45,9 @@ function LoginForm(): JSX.Element {
             .catch((err) => {
                 setErrorWithLogin(true);
                 if (err.cause === 'passwordError') {
-                    setErrorPassword(true);
-                    setErrorMessagePassword(err.message);
+                    setErrorPassword({ error: true, message: err.message });
                 } else if (err.cause === 'emailError') {
-                    setErrorEmail(true);
-                    setErrorMessageEmail(err.message);
+                    setErrorEmail({ error: true, message: err.message });
                 }
             });
     };
@@ -59,7 +68,7 @@ function LoginForm(): JSX.Element {
                         <div className="placeinput">
                             <input
                                 className={
-                                    errorEmail
+                                    errorEmail.error
                                         ? 'form__input form__input_invalid'
                                         : 'form__input'
                                 }
@@ -67,24 +76,24 @@ function LoginForm(): JSX.Element {
                                 id="email"
                                 required
                                 onBlur={(e): void => {
-                                    setErrorEmail(
-                                        checkIncorrectEmail(e).incorrect
-                                    );
-                                    setErrorMessageEmail(
-                                        checkIncorrectEmail(e).message
-                                    );
+                                    setErrorEmail({
+                                        error: checkIncorrectEmail(e).incorrect,
+                                        message: checkIncorrectEmail(e).message,
+                                    });
                                 }}
                                 onChange={(e): void => {
                                     if (errorWithLogin) {
-                                        setErrorPassword(false);
-                                        setErrorMessagePassword('');
+                                        setErrorPassword({
+                                            error: false,
+                                            message: '',
+                                        });
                                     }
-                                    setErrorEmail(
-                                        checkIncorrectEmail(e, true).incorrect
-                                    );
-                                    setErrorMessageEmail(
-                                        checkIncorrectEmail(e, true).message
-                                    );
+                                    setErrorEmail({
+                                        error: checkIncorrectEmail(e, true)
+                                            .incorrect,
+                                        message: checkIncorrectEmail(e, true)
+                                            .message,
+                                    });
                                     setEmail(e.target.value);
                                 }}
                             />
@@ -93,12 +102,12 @@ function LoginForm(): JSX.Element {
                             </div>
                         </div>
                         <p className="error-message">
-                            {errorEmail ? errorMessageEmail : ''}
+                            {errorEmail ? errorEmail.message : ''}
                         </p>
                         <div className="placeinput">
                             <input
                                 className={
-                                    errorPassword
+                                    errorPassword.error
                                         ? 'form__input form__input_invalid'
                                         : 'form__input'
                                 }
@@ -106,21 +115,20 @@ function LoginForm(): JSX.Element {
                                 id="password"
                                 required
                                 onBlur={(e): void => {
-                                    setErrorPassword(
-                                        checkIncorrectPassword(e).incorrect
-                                    );
-                                    setErrorMessagePassword(
-                                        checkIncorrectPassword(e).message
-                                    );
+                                    setErrorPassword({
+                                        error: checkIncorrectPassword(e)
+                                            .incorrect,
+                                        message:
+                                            checkIncorrectPassword(e).message,
+                                    });
                                 }}
                                 onChange={(e): void => {
-                                    setErrorPassword(
-                                        checkIncorrectPassword(e, true)
-                                            .incorrect
-                                    );
-                                    setErrorMessagePassword(
-                                        checkIncorrectPassword(e, true).message
-                                    );
+                                    setErrorPassword({
+                                        error: checkIncorrectPassword(e, true)
+                                            .incorrect,
+                                        message: checkIncorrectPassword(e, true)
+                                            .message,
+                                    });
                                     setPassword(e.target.value);
                                 }}
                             />
@@ -137,7 +145,7 @@ function LoginForm(): JSX.Element {
                             </button>
                         </div>
                         <p className="error-message">
-                            {errorPassword ? errorMessagePassword : ''}
+                            {errorPassword ? errorPassword.message : ''}
                         </p>
                         <button
                             className="button-action"
