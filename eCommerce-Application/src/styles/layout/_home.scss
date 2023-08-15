@@ -1,6 +1,8 @@
 @use '../abstracts/mixins';
 
 .home {
+    padding-bottom: 2rem;
+
     @include mixins.respond-to('desktop') {
         padding-bottom: 8rem;
     }
@@ -30,9 +32,6 @@
         }
 
         .title {
-            font-size: var(--fs-title);
-            line-height: 1.4;
-
             text-shadow: var(--drop-shadow-white);
         }
 
@@ -109,11 +108,6 @@
         @include mixins.flex(column, center, center);
         align-self: stretch;
 
-        font-family: var(--ff-secondary);
-        font-size: var(--fs-small);
-
-        text-align: left;
-
         @include mixins.respond-to('tablet') {
             justify-content: flex-start;
             align-items: flex-start;
@@ -124,6 +118,8 @@
         position: relative;
         width: min(90vw, 45rem);
 
+        color: var(--color-white);
+
         & > * + * {
             margin-top: 2rem;
         }
@@ -132,6 +128,18 @@
         &::after {
             position: absolute;
             content: '';
+        }
+
+        &-title {
+            color: var(--color-primary);
+        }
+
+        &-accent {
+            color: var(--color-primary);
+
+            & > * {
+                color: var(--color-white);
+            }
         }
 
         @include mixins.respond-to('tablet') {
@@ -160,7 +168,7 @@
     }
 
     &__slides {
-        --flow: 14rem;
+        --flow: 22rem;
         flex: 1 1 var(--flow);
 
         order: 1;

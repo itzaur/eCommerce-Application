@@ -5,24 +5,24 @@ function Catalog(): JSX.Element {
     const [, setIsHover] = useState(false);
 
     const handleMouseEnter = (event: React.MouseEvent): void => {
-        const hoverElement = event.target as HTMLDivElement;
-
         setIsHover(true);
 
+        const hoverElement = event.target as HTMLDivElement;
+
         const catalogAccent = document.querySelector(
-            `.catalog__accent[data-num="${hoverElement.dataset.num}"]`
+            `.catalog__accent[data-num="${hoverElement.className.at(-1)}"]`
         );
 
         catalogAccent?.classList.add('active');
     };
 
     const handleMouseLeave = (event: React.MouseEvent): void => {
-        const hoverElement = event.target as HTMLDivElement;
-
         setIsHover(false);
 
+        const hoverElement = event.target as HTMLDivElement;
+
         const catalogAccent = document.querySelector(
-            `.catalog__accent[data-num="${hoverElement.dataset.num}"]`
+            `.catalog__accent[data-num="${hoverElement.className.at(-1)}"]`
         );
 
         catalogAccent?.classList.remove('active');
@@ -38,7 +38,11 @@ function Catalog(): JSX.Element {
                         onMouseEnter={handleMouseEnter}
                         onMouseLeave={handleMouseLeave}
                     >
-                        <Link to="/store" data-num="1">
+                        <Link
+                            className="catalog__link catalog__link--1"
+                            to="/store"
+                            data-num="1"
+                        >
                             <span className="sr-only">Сувениры</span>
                         </Link>
                         <h3 className="catalog__item-title">Сувениры</h3>
@@ -48,7 +52,11 @@ function Catalog(): JSX.Element {
                         onMouseEnter={handleMouseEnter}
                         onMouseLeave={handleMouseLeave}
                     >
-                        <Link to="/store" data-num="2">
+                        <Link
+                            className="catalog__link catalog__link--2"
+                            to="/store"
+                            data-num="2"
+                        >
                             <span className="sr-only">Выбрать космотур</span>
                         </Link>
                         <h3 className="catalog__item-title">
@@ -60,7 +68,11 @@ function Catalog(): JSX.Element {
                         onMouseEnter={handleMouseEnter}
                         onMouseLeave={handleMouseLeave}
                     >
-                        <Link to="/store" data-num="3">
+                        <Link
+                            className="catalog__link catalog__link--3"
+                            to="/store"
+                            data-num="3"
+                        >
                             <span className="sr-only">Выбрать номер</span>
                         </Link>
                         <h3 className="catalog__item-title">Выбрать номер</h3>

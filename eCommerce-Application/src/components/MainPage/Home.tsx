@@ -1,4 +1,4 @@
-import { Header, Title, Info, Attainments, Catalog } from '.';
+import { Header, Title, Info, Attainments, Catalog, Footer } from '.';
 
 function Home(): JSX.Element {
     return (
@@ -10,6 +10,7 @@ function Home(): JSX.Element {
             </section>
             <Attainments />
             <Catalog />
+            <Footer />
         </>
     );
 }

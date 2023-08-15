@@ -11,6 +11,14 @@
         0 0 0.2rem var(--color-white);
     --drop-shadow-light: 0 0 2rem var(--color-primary),
         0 0 0.6rem var(--color-primary);
+    --footer-gradient: linear-gradient(
+        to bottom,
+        var(--color-black),
+        #1e191b,
+        #342b33,
+        #493f4e,
+        var(--color-secondary)
+    );
 
     //Fonts
     --ff-title: 'Project Space', sans-serif;

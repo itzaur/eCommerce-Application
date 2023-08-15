@@ -15,27 +15,31 @@
     src: url(../assets/fonts/neuropol/neuropol.otf);
 }
 
-.home__text {
-    font-family: var(--ff-secondary);
-    font-size: var(--fs-medium);
-    text-align: left;
-    letter-spacing: 0.06em;
-    line-height: 1.4;
-
-    color: var(--color-white);
-
-    &-title {
-        font-size: var(--fs-big);
-
-        color: var(--color-primary);
+.home {
+    &__title {
+        .title {
+            font-size: var(--fs-title);
+            line-height: 1.4;
+        }
     }
 
-    &-accent {
-        color: var(--color-primary);
+    &__text {
+        font-family: var(--ff-secondary);
+        font-size: var(--fs-medium);
+        text-align: left;
+        letter-spacing: 0.06em;
+        line-height: 1.4;
 
-        & > * {
-            color: var(--color-white);
+        &-title {
+            font-size: var(--fs-big);
         }
+    }
+
+    &__btns {
+        font-family: var(--ff-secondary);
+        font-size: var(--fs-small);
+
+        text-align: left;
     }
 }
 
@@ -46,12 +50,15 @@
     }
 
     &__item p {
+        width: min(100%, 17ch);
         font-family: var(--ff-primary);
         font-size: var(--fs-paragraph);
     }
 }
 
 .fail {
+    font-family: 'Neuropol', sans-serif;
+
     &__inscription {
         font-size: var(--fs-big);
     }
@@ -101,5 +108,29 @@
         @include mixins.respond-to('tablet') {
             font-size: var(--fs-small);
         }
+    }
+}
+
+.footer {
+    font-family: var(--ff-primary);
+    font-size: var(--fs-small);
+    text-align: center;
+
+    @include mixins.respond-to('desktop') {
+        text-align: left;
+    }
+
+    &__title {
+        p {
+            width: 100%;
+
+            @include mixins.respond-to('desktop') {
+                width: min(20ch, 100%);
+            }
+        }
+    }
+
+    &__accent {
+        text-align: right;
     }
 }
