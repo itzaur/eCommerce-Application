@@ -7,6 +7,10 @@
 
 @use './components/logo';
 @use './components/buttons';
+@use './components/form';
+@use './components/placeholder';
+@use './components/errors';
+
 @use './components/modal';
 @use './layout/header';
 @use './layout/home';
