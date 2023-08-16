@@ -4,7 +4,7 @@ export const checkIncorrectEmail = (
         | React.ChangeEvent<HTMLInputElement>,
     removeError?: boolean
 ): { incorrect: boolean; message: string } => {
-    if (removeError) {
+    if (removeError || e.target.value === '') {
         return { incorrect: false, message: '' };
     }
     if (e.target.value === '') {

@@ -1,3 +1,15 @@
+const maxletterCount = 2;
+const maxletterYearCount = 4;
+const validUserAge = 18;
+const minValidYear = 1900;
+const maxValidYear = 2024;
+
+const maxCountDaysPerMonth = 31;
+const minCountDaysPerMonth = 1;
+
+const maxCountMonthPerYear = 12;
+const minCountMonthPerYear = 1;
+
 export const checkIncorrectBirthDay = (
     e:
         | React.FocusEvent<HTMLInputElement, Element>
@@ -8,34 +20,42 @@ export const checkIncorrectBirthDay = (
         return { incorrect: false, message: '' };
     }
     const { value } = e.target;
+
     if (/^\s/.test(value) || /\s$/.test(value)) {
         return {
             incorrect: true,
-            message: 'Дата не должна содержать начальных и конечных пробелов',
+            message: 'День не должнен содержать начальных и конечных пробелов',
         };
     }
+
     if (value.trim().length < 1) {
         return {
             incorrect: true,
-            message: 'Дата не может быть пустой',
+            message: 'День не может быть пустой',
         };
     }
-    if (value.trim().length >= 3) {
+
+    if (value.trim().length > maxletterCount) {
         return {
             incorrect: true,
-            message: 'Дата не может быть больше 2 цифр',
+            message: 'День не может быть больше 2 цифр',
         };
     }
-    if (Number(value.trim()) > 31 || Number(value.trim()) <= 0) {
+
+    if (
+        Number(value.trim()) > maxCountDaysPerMonth ||
+        Number(value.trim()) < minCountDaysPerMonth
+    ) {
         return {
             incorrect: true,
-            message: 'Дата должная быть в диапазоне 1 - 31',
+            message: 'День должнен быть в диапазоне 1 - 31',
         };
     }
+
     if (!/^\d+$/.test(value)) {
         return {
             incorrect: true,
-            message: 'Дата должна содердажать только цифры',
+            message: 'День должен содердажать только цифры',
         };
     }
 
@@ -51,6 +71,7 @@ export const checkIncorrectBirthMonth = (
     if (removeError || e.target.value === '') {
         return { incorrect: false, message: '' };
     }
+
     const { value } = e.target;
     if (/^\s/.test(value) || /\s$/.test(value)) {
         return {
@@ -58,24 +79,30 @@ export const checkIncorrectBirthMonth = (
             message: 'Месяц не должнен содержать начальных и конечных пробелов',
         };
     }
+
     if (value.trim().length < 1) {
         return {
             incorrect: true,
             message: 'Месяц не может быть пустой',
         };
     }
-    if (value.trim().length >= 3) {
+
+    if (value.trim().length > maxletterCount) {
         return {
             incorrect: true,
             message: 'Месяц не может быть больше 2 цифр',
         };
     }
-    if (Number(value.trim()) > 12 || Number(value.trim()) <= 0) {
+    if (
+        Number(value.trim()) > maxCountMonthPerYear ||
+        Number(value.trim()) < minCountMonthPerYear
+    ) {
         return {
             incorrect: true,
             message: 'Месяц должнен быть в диапазоне 1 - 12',
         };
     }
+
     if (!/^\d+$/.test(value)) {
         return {
             incorrect: true,
@@ -95,6 +122,7 @@ export const checkIncorrectBirthYear = (
     if (removeError || e.target.value === '') {
         return { incorrect: false, message: '' };
     }
+
     const { value } = e.target;
     if (/^\s/.test(value) || /\s$/.test(value)) {
         return {
@@ -102,30 +130,38 @@ export const checkIncorrectBirthYear = (
             message: 'Год не должен содержать начальных и конечных пробелов',
         };
     }
+
     if (value.trim().length < 1) {
         return {
             incorrect: true,
             message: 'Год не может быть пустой',
         };
     }
-    if (value.trim().length > 4) {
+
+    if (value.trim().length > maxletterYearCount) {
         return {
             incorrect: true,
             message: 'Год не может быть больше 4 цифр',
         };
     }
-    if (value.trim().length < 4) {
+
+    if (value.trim().length < maxletterYearCount) {
         return {
             incorrect: true,
             message: 'Год не может быть меньше 4 цифр',
         };
     }
-    if (Number(value.trim()) < 1900 || Number(value.trim()) >= 2024) {
+
+    if (
+        Number(value.trim()) < minValidYear ||
+        Number(value.trim()) >= maxValidYear
+    ) {
         return {
             incorrect: true,
             message: 'Год должнен быть в диапазоне 1900 - 2023',
         };
     }
+
     if (!/^\d+$/.test(value)) {
         return {
             incorrect: true,
@@ -157,8 +193,9 @@ export const getAge = (): number => {
         curDay += monthDays[dayMonth - 1];
         curMonth -= 1;
     }
+
     if (dayMonth > curMonth) {
-        curMonth += 12;
+        curMonth += maxCountMonthPerYear;
         curYear -= 1;
     }
     const resYear = curYear - dayYear;
@@ -166,10 +203,11 @@ export const getAge = (): number => {
     return resYear;
 };
 
-export const checkIncorrectAge = () // e:
-
-: { incorrect: boolean; message: string } => {
-    if (getAge() < 18) {
+export const checkIncorrectAge = (): {
+    incorrect: boolean;
+    message: string;
+} => {
+    if (getAge() < validUserAge) {
         return {
             incorrect: true,
             message: 'Вам нет 18 лет',
