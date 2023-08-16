@@ -17,10 +17,12 @@
     --ff-title: 'Project Space', sans-serif;
     --ff-primary: 'neuropol', sans-serif;
     --ff-secondary: 'Bowler', sans-serif;
+    --ff-errors: Arial, Helvetica, sans-serif;
 
     --fs-title: clamp(1.4rem, 4vw, 10rem);
     --fs-logo: clamp(4rem, 5vw, 9rem);
-    --fs-big: clamp(2rem, 3vw, 5rem);
+    --fs-form: clamp(1.4rem, 3vw, 2rem);
+    --fs-big: clamp(2rem, 3vw, 4rem);
     --fs-medium: clamp(1.2rem, 1vw, 3rem);
     --fs-small: clamp(1rem, 2vw, 1.6rem);
 }

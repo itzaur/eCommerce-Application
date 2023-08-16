@@ -1,8 +1,18 @@
+@use '../abstracts/mixins';
+
 .error-message {
     position: absolute;
 
-    text-align: center;
+    padding-top: 0.5rem;
+
+    font-family: var(--ff-errors);
+    font-size: 1.3rem;
+    text-align: left;
+    text-transform: lowercase;
 
     color: var(--color-danger);
-    font-size: 1.3rem;
+
+    @include mixins.respond-to('tablet') {
+        padding-top: 1rem;
+    }
 }

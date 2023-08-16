@@ -2,7 +2,8 @@
     height: var(--fs-logo);
 
     &_big {
-        padding-top: 13rem;
-        padding-bottom: 7.5rem;
+        width: min(40rem, 100%);
+        padding-top: 8rem;
+        padding-bottom: 3rem;
     }
 }

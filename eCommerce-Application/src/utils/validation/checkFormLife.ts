@@ -11,7 +11,7 @@ export const checkIncorrectFormLife = (
     if (/^\s/.test(value) || /\s$/.test(value)) {
         return {
             incorrect: true,
-            message: 'поле не должна содержать начальных и конечных пробелов',
+            message: 'поле не должно содержать начальных и конечных пробелов',
         };
     }
     if (value.trim().length < 3) {

@@ -120,7 +120,9 @@ function RegistrationDetail(): JSX.Element {
 
     return (
         <>
-            <img src={logo} alt="logo" className="logo_big" />
+            <header>
+                <img src={logo} alt="logo" className="logo_big" />
+            </header>
             <section className="form registration">
                 <h2 className="form__title">
                     добро пожаловать <br /> на борт космической одиссеи!
@@ -1096,7 +1098,7 @@ function RegistrationDetail(): JSX.Element {
                                 </label>
                             </div>
                         </div>
-                        <div className="form__inputs-wrapper">
+                        <div className="form__inputs-wrapper form__inputs-wrapper--offset">
                             <label className="placeholder" htmlFor="life-form">
                                 <input
                                     required
@@ -1150,7 +1152,6 @@ function RegistrationDetail(): JSX.Element {
                         </div>
 
                         <button
-                            style={{ position: 'relative' }}
                             className="btn_action"
                             type="submit"
                             onClick={(e): void => {

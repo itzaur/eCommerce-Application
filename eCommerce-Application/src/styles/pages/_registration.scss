@@ -1,11 +1,14 @@
 body {
-    background-image: url('../assets/images/DreamShaper.png');
+    background-image: url('../assets/images/registration-bg.svg');
+    background-position: center;
 }
 
 .registration {
-    width: 85rem;
+    width: min(100rem, 95%);
 
-    &__button {
-        margin-top: 5rem;
-    }
+    padding-bottom: 20rem;
+
+    // &__button {
+    //     margin-top: 5rem;
+    // }
 }
