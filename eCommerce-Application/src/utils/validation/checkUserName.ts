@@ -12,7 +12,7 @@ export const checkIncorrectUserName = (
         return {
             incorrect: true,
             message:
-                'Имя пользователя не должна содержать начальных и конечных пробелов',
+                'Имя пользователя не должно содержать начальных и конечных пробелов',
         };
     }
     if (value.trim().length < 1) {
