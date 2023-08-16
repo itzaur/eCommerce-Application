@@ -18,14 +18,7 @@
 @use './layout/catalog';
 @use './layout/error-page';
 @use './layout/footer';
-@use './pages/main';
 @use './pages/login';
-@use './components/form';
-@use './components/placeholder';
-@use './components/errors';
-
-@use './layout/header';
-@use './layout/home';
 
 @use './pages/main';
 @use './pages/registration';
