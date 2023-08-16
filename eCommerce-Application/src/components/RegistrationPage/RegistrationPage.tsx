@@ -9,6 +9,7 @@ import {
     checkIncorrectBirthDay,
     checkIncorrectBirthMonth,
     checkIncorrectBirthYear,
+    getAge,
 } from '../../utils/validation/checkFullYears';
 
 import logo from '../../assets/images/logo.png';
@@ -124,11 +125,11 @@ function RegistrationDetail(): JSX.Element {
                 <img src={logo} alt="logo" className="logo_big" />
             </header>
             <section className="form registration">
-                <h2 className="form__title">
+                <h2 className="form__title form_big-first-letter">
                     добро пожаловать <br /> на борт космической одиссеи!
                 </h2>
                 <div className="form__content">
-                    <div className="form__question">
+                    <div className="form__question form_big-first-letter">
                         уже есть аккаунт? <a href="##">войдите</a>
                     </div>
                     <form
@@ -166,7 +167,7 @@ function RegistrationDetail(): JSX.Element {
                                         setUserName(e.target.value);
                                     }}
                                 />
-                                <div className="placeholder__input">
+                                <div className="placeholder__input  form_big-first-letter">
                                     имя пользователя<span>*</span>
                                 </div>
                                 <p className="error-message">
@@ -207,7 +208,7 @@ function RegistrationDetail(): JSX.Element {
                                             setName(e.target.value);
                                         }}
                                     />
-                                    <div className="placeholder__input">
+                                    <div className="placeholder__input form_big-first-letter">
                                         имя<span>*</span>
                                     </div>
                                     <p className="error-message">
@@ -250,7 +251,7 @@ function RegistrationDetail(): JSX.Element {
                                             setSurname(e.target.value);
                                         }}
                                     />
-                                    <div className="placeholder__input">
+                                    <div className="placeholder__input form_big-first-letter">
                                         фамилия<span>*</span>
                                     </div>
                                     <p className="error-message">
@@ -296,7 +297,7 @@ function RegistrationDetail(): JSX.Element {
                                         setPassword(e.target.value);
                                     }}
                                 />
-                                <div className="placeholder__input">
+                                <div className="placeholder__input form_big-first-letter">
                                     создайте пароль<span>*</span>
                                 </div>
 
@@ -339,7 +340,7 @@ function RegistrationDetail(): JSX.Element {
                                         setPasswordRepeat(e.target.value);
                                     }}
                                 />
-                                <div className="placeholder__input">
+                                <div className="placeholder__input form_big-first-letter">
                                     повторите пароль<span>*</span>
                                 </div>
                                 <p className="error-message">
@@ -357,7 +358,7 @@ function RegistrationDetail(): JSX.Element {
                                     id="user-email"
                                     className={
                                         errorEmail
-                                            ? 'form__input form__input_invalid user-email'
+                                            ? 'form__input form__input_invalid'
                                             : 'form__input'
                                     }
                                     onBlur={(e): void => {
@@ -379,7 +380,7 @@ function RegistrationDetail(): JSX.Element {
                                         setEmail(e.target.value);
                                     }}
                                 />
-                                <div className="placeholder__input">
+                                <div className="placeholder__input form_big-first-letter">
                                     e-mail<span>*</span>
                                 </div>
                                 <p className="error-message">
@@ -388,8 +389,8 @@ function RegistrationDetail(): JSX.Element {
                             </label>
                         </div>
 
-                        <fieldset className="form__input-group">
-                            <legend>адрес доставки</legend>
+                        <fieldset className="form__input-group ">
+                            <legend>Адрес доставки</legend>
 
                             <div className="form__input-pair">
                                 <div className="form__inputs-wrapper">
@@ -482,7 +483,7 @@ function RegistrationDetail(): JSX.Element {
                                                 );
                                             }}
                                         />
-                                        <div className="placeholder__input">
+                                        <div className="placeholder__input form_big-first-letter">
                                             регион<span>*</span>
                                         </div>
                                         <p className="error-message">
@@ -536,7 +537,7 @@ function RegistrationDetail(): JSX.Element {
                                                 );
                                             }}
                                         />
-                                        <div className="placeholder__input">
+                                        <div className="placeholder__input form_big-first-letter">
                                             город<span>*</span>
                                         </div>
                                         <p className="error-message">
@@ -594,7 +595,7 @@ function RegistrationDetail(): JSX.Element {
                                                 );
                                             }}
                                         />
-                                        <div className="placeholder__input">
+                                        <div className="placeholder__input form_big-first-letter">
                                             индекс<span>*</span>
                                         </div>
                                         <p className="error-message">
@@ -647,7 +648,7 @@ function RegistrationDetail(): JSX.Element {
                                             );
                                         }}
                                     />
-                                    <div className="placeholder__input">
+                                    <div className="placeholder__input form_big-first-letter">
                                         адрес<span>*</span>
                                     </div>
                                     <p className="error-message">
@@ -667,12 +668,12 @@ function RegistrationDetail(): JSX.Element {
                                         type="checkbox"
                                         id="shipping-address-checkbox"
                                     />
-                                    использовать адрес по умолчанию
+                                    Использовать адрес по умолчанию
                                 </label>
                             </div>
                         </fieldset>
                         <fieldset className="form__input-group">
-                            <legend>адрес выставления счета</legend>
+                            <legend>Адрес выставления счета</legend>
 
                             <div className="form__input-pair">
                                 <div className="form__inputs-wrapper">
@@ -765,7 +766,7 @@ function RegistrationDetail(): JSX.Element {
                                                 );
                                             }}
                                         />
-                                        <div className="placeholder__input">
+                                        <div className="placeholder__input form_big-first-letter">
                                             регион<span>*</span>
                                         </div>
                                         <p className="error-message">
@@ -819,7 +820,7 @@ function RegistrationDetail(): JSX.Element {
                                                 );
                                             }}
                                         />
-                                        <div className="placeholder__input">
+                                        <div className="placeholder__input form_big-first-letter">
                                             город<span>*</span>
                                         </div>
                                         <p className="error-message">
@@ -877,7 +878,7 @@ function RegistrationDetail(): JSX.Element {
                                                 );
                                             }}
                                         />
-                                        <div className="placeholder__input">
+                                        <div className="placeholder__input form_big-first-letter">
                                             индекс<span>*</span>
                                         </div>
                                         <p className="error-message">
@@ -930,7 +931,7 @@ function RegistrationDetail(): JSX.Element {
                                             );
                                         }}
                                     />
-                                    <div className="placeholder__input">
+                                    <div className="placeholder__input form_big-first-letter">
                                         адрес<span>*</span>
                                     </div>
                                     <p className="error-message">
@@ -950,7 +951,7 @@ function RegistrationDetail(): JSX.Element {
                                         type="checkbox"
                                         id="billing-address-checkbox"
                                     />
-                                    использовать адрес по умолчанию
+                                    Использовать адрес по умолчанию
                                 </label>
                             </div>
                         </fieldset>
@@ -991,7 +992,7 @@ function RegistrationDetail(): JSX.Element {
                                             setBirthDayValue(e.target.value);
                                         }}
                                     />
-                                    <div className="placeholder__input">
+                                    <div className="placeholder__input form_big-first-letter">
                                         число<span>*</span>
                                     </div>
                                     <p className="error-message">
@@ -1041,7 +1042,7 @@ function RegistrationDetail(): JSX.Element {
                                             setBirthMonthValue(e.target.value);
                                         }}
                                     />
-                                    <div className="placeholder__input">
+                                    <div className="placeholder__input form_big-first-letter">
                                         месяц<span>*</span>
                                     </div>
                                     <p className="error-message">
@@ -1087,7 +1088,7 @@ function RegistrationDetail(): JSX.Element {
                                             setBirthYearValue(e.target.value);
                                         }}
                                     />
-                                    <div className="placeholder__input">
+                                    <div className="placeholder__input form_big-first-letter">
                                         год<span>*</span>
                                     </div>
                                     <p className="error-message">
@@ -1097,6 +1098,9 @@ function RegistrationDetail(): JSX.Element {
                                     </p>
                                 </label>
                             </div>
+                            <p className="error-message error-message--age">
+                                {errorAge ? errorMessageAge : ''}
+                            </p>
                         </div>
                         <div className="form__inputs-wrapper form__inputs-wrapper--offset">
                             <label className="placeholder" htmlFor="life-form">
@@ -1129,7 +1133,7 @@ function RegistrationDetail(): JSX.Element {
                                         setFormLifeValue(e.target.value);
                                     }}
                                 />
-                                <div className="placeholder__input">
+                                <div className="placeholder__input form_big-first-letter">
                                     форма жизни<span>*</span>
                                 </div>
                                 <p className="error-message">
@@ -1147,7 +1151,7 @@ function RegistrationDetail(): JSX.Element {
                                     type="checkbox"
                                     id="multi-passport-submit"
                                 />
-                                наличие мультипаспорта
+                                Наличие мультипаспорта
                             </label>
                         </div>
 
@@ -1343,12 +1347,6 @@ function RegistrationDetail(): JSX.Element {
                                         'Это обязатальное поле'
                                     );
                                 }
-                                if (!formLifeValue) {
-                                    setErrorFormLife(true);
-                                    setErrorMessageFormLife(
-                                        'Это обязатальное поле'
-                                    );
-                                }
 
                                 if (
                                     errorUserName ||
@@ -1389,22 +1387,17 @@ function RegistrationDetail(): JSX.Element {
                                     !formLifeValue ||
                                     countryShipping === 'Выберите страну*' ||
                                     countryBilling === 'Выберите страну*' ||
-                                    errorAge
+                                    getAge() < 18
                                 )
                                     return;
                                 // eslint-disable-next-line no-console
                                 console.log(
+                                    userName,
                                     'Отправка данных прошла успешно, форма валидна'
                                 );
                             }}
                         >
                             Регистрация
-                            <p
-                                style={{ top: '70px', left: '50px' }}
-                                className="error-message"
-                            >
-                                {errorAge ? errorMessageAge : ''}
-                            </p>
                         </button>
                     </form>
                 </div>

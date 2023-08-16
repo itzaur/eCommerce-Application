@@ -1,3 +1,5 @@
+const letterCount = 3;
+
 export const checkIncorrectFormLife = (
     e:
         | React.FocusEvent<HTMLInputElement, Element>
@@ -14,7 +16,7 @@ export const checkIncorrectFormLife = (
             message: 'поле не должно содержать начальных и конечных пробелов',
         };
     }
-    if (value.trim().length < 3) {
+    if (value.trim().length < letterCount) {
         return {
             incorrect: true,
             message: 'поле должно содержать минимум 3 символа',

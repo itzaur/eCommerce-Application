@@ -15,4 +15,14 @@
     @include mixins.respond-to('tablet') {
         padding-top: 1rem;
     }
+
+    &--age {
+        top: -15%;
+        left: 50%;
+        transform: translateX(-50%);
+
+        @include mixins.respond-to('tablet') {
+            top: -75%;
+        }
+    }
 }
