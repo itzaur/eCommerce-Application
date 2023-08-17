@@ -80,6 +80,22 @@
     &-modal {
         cursor: pointer;
     }
+    &_action {
+        display: block;
+
+        position: relative;
+
+        width: min(100%, 23rem);
+
+        margin: 0 auto;
+        padding: 1em 0.5em;
+
+        font-family: var(--ff-secondary);
+
+        text-align: center;
+        background-color: var(--color-primary);
+        cursor: pointer;
+    }
 }
 
 .arrow {
