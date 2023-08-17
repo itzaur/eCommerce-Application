@@ -26,11 +26,11 @@ function LoginPage(): JSX.Element {
     ): void => {
         e.preventDefault();
         if (!email) {
-            setErrorEmail({ error: false, message: 'Это обязательное поле' });
+            setErrorEmail({ error: true, message: 'Это обязательное поле' });
         }
         if (!password) {
             setErrorPassword({
-                error: false,
+                error: true,
                 message: 'Это обязательное поле',
             });
         }
@@ -39,7 +39,6 @@ function LoginPage(): JSX.Element {
         loginCustomer(email, password)
             .then(() => {
                 setErrorWithLogin(false);
-                // user = data?.body.customer;
             })
             .catch((err) => {
                 setErrorWithLogin(true);
@@ -100,7 +99,7 @@ function LoginPage(): JSX.Element {
                                 Email<span>*</span>
                             </div>
                         </div>
-                        <p className="error-message">
+                        <p className="error-messages">
                             {errorEmail ? errorEmail.message : ''}
                         </p>
                         <div className="placeinput">
