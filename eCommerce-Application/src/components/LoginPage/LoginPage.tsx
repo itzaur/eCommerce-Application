@@ -106,10 +106,11 @@ function LoginPage(): JSX.Element {
                             <div className="place_holder">
                                 Email<span>*</span>
                             </div>
+                            <p className="error-message">
+                                {errorEmail ? errorEmail.message : ''}
+                            </p>
                         </div>
-                        <p className="error-messages">
-                            {errorEmail ? errorEmail.message : ''}
-                        </p>
+
                         <div className="placeinput">
                             <input
                                 className={
@@ -149,10 +150,11 @@ function LoginPage(): JSX.Element {
                             >
                                 &nbsp;
                             </button>
+                            <p className="error-message">
+                                {errorPassword ? errorPassword.message : ''}
+                            </p>
                         </div>
-                        <p className="error-message">
-                            {errorPassword ? errorPassword.message : ''}
-                        </p>
+
                         <button
                             className="button-action"
                             type="submit"
