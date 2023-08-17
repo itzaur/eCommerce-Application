@@ -21,7 +21,7 @@ export const checkIncorrectSurname = (
             message: 'Фамилия должна содержать минимум 1 символ',
         };
     }
-    if (!/^[a-zа-яё]+$/.test(value)) {
+    if (!/^[a-zA-ZА-Яа-яёЁ]+$/.test(value)) {
         return {
             incorrect: true,
             message: 'Фамилия должна содердажать только буквы',

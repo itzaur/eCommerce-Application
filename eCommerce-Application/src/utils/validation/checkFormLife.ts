@@ -22,5 +22,11 @@ export const checkIncorrectFormLife = (
             message: 'поле должно содержать минимум 3 символа',
         };
     }
+    if (!/^[a-zA-ZА-Яа-яёЁ]+$/.test(value)) {
+        return {
+            incorrect: true,
+            message: 'поле должно содердажать только буквы',
+        };
+    }
     return { incorrect: false, message: '' };
 };

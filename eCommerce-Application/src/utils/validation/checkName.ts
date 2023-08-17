@@ -21,7 +21,7 @@ export const checkIncorrectName = (
             message: 'Имя должно содержать минимум 1 символ',
         };
     }
-    if (!/^[a-zа-яё]+$/.test(value)) {
+    if (!/^[a-zA-ZА-Яа-яёЁ]+$/.test(value)) {
         return {
             incorrect: true,
             message: 'Имя должно содердажать только буквы',

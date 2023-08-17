@@ -46,7 +46,7 @@ export const checkIncorrectAddressCity = (
             message: 'Город должен содержать минимум 1 символ',
         };
     }
-    if (!/^[a-zа-яё]+$/.test(value)) {
+    if (!/^[a-zа-яё]+[\s-]?[a-zа-яё]*$/i.test(value)) {
         return {
             incorrect: true,
             message: 'Город должен содердажать только буквы',
@@ -78,7 +78,7 @@ export const checkIncorrectAddressRegion = (
             message: 'Регион должен содержать минимум 1 символ',
         };
     }
-    if (!/^[a-zа-яё]+$/.test(value)) {
+    if (!/^[a-zA-ZА-Яа-яёЁ]+$/.test(value)) {
         return {
             incorrect: true,
             message: 'Регион должен содердажать только буквы',
