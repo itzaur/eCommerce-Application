@@ -1,5 +1,5 @@
-const maxletterCount = 2;
-const maxletterYearCount = 4;
+const maxLetterCount = 2;
+const maxLetterYearCount = 4;
 const validUserAge = 18;
 const minValidYear = 1900;
 const maxValidYear = 2024;
@@ -35,7 +35,7 @@ export const checkIncorrectBirthDay = (
         };
     }
 
-    if (value.trim().length > maxletterCount) {
+    if (value.trim().length > maxLetterCount) {
         return {
             incorrect: true,
             message: 'День не может быть больше 2 цифр',
@@ -87,7 +87,7 @@ export const checkIncorrectBirthMonth = (
         };
     }
 
-    if (value.trim().length > maxletterCount) {
+    if (value.trim().length > maxLetterCount) {
         return {
             incorrect: true,
             message: 'Месяц не может быть больше 2 цифр',
@@ -138,14 +138,14 @@ export const checkIncorrectBirthYear = (
         };
     }
 
-    if (value.trim().length > maxletterYearCount) {
+    if (value.trim().length > maxLetterYearCount) {
         return {
             incorrect: true,
             message: 'Год не может быть больше 4 цифр',
         };
     }
 
-    if (value.trim().length < maxletterYearCount) {
+    if (value.trim().length < maxLetterYearCount) {
         return {
             incorrect: true,
             message: 'Год не может быть меньше 4 цифр',
