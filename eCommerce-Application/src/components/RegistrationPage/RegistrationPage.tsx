@@ -1387,7 +1387,8 @@ function RegistrationDetail(): JSX.Element {
                                     !formLifeValue ||
                                     countryShipping === 'Выберите страну*' ||
                                     countryBilling === 'Выберите страну*' ||
-                                    getAge() < 18
+                                    getAge() < 18 ||
+                                    password !== passwordRepeat
                                 )
                                     return;
                                 // eslint-disable-next-line no-console
