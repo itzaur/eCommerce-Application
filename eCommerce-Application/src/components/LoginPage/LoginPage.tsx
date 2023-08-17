@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Customer } from '@commercetools/platform-sdk';
 import logo from '../../assets/images/logo.png';
 import { checkIncorrectEmail } from '../../utils/validation/checkCorrectEmail';
 import { checkIncorrectPassword } from '../../utils/validation/checkPassword';
 import { loginCustomer } from '../../commercetools/loginCustomer';
 
-// let user = null;
+let user: Customer | undefined;
 
 function LoginPage(): JSX.Element {
     const [errorEmail, setErrorEmail] = useState({ error: false, message: '' });
@@ -16,6 +18,7 @@ function LoginPage(): JSX.Element {
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
     const [errorWithLogin, setErrorWithLogin] = useState(false);
+    const navigate = useNavigate();
 
     const changePasswordView = (): void => {
         setPasswordView(passwordView === 'password' ? 'text' : 'password');
@@ -37,8 +40,10 @@ function LoginPage(): JSX.Element {
         if (errorEmail.error || errorPassword.error || !email || !password)
             return;
         loginCustomer(email, password)
-            .then(() => {
+            .then((data) => {
                 setErrorWithLogin(false);
+                user = data?.body.customer;
+                navigate('/');
             })
             .catch((err) => {
                 setErrorWithLogin(true);
@@ -49,6 +54,9 @@ function LoginPage(): JSX.Element {
                 }
             });
     };
+    useEffect(() => {
+        if (user) navigate('/');
+    });
 
     return (
         <>
@@ -60,7 +68,7 @@ function LoginPage(): JSX.Element {
                 <div className="form__content">
                     <div className="form__question">
                         Путешествуете с нами впервые?&nbsp;
-                        <a href="##">Зарегистрируйтесь!</a>
+                        <a href="/registration">Зарегистрируйтесь!</a>
                     </div>
                     <form className="form__inputs">
                         <div className="placeinput">
@@ -98,10 +106,11 @@ function LoginPage(): JSX.Element {
                             <div className="place_holder">
                                 Email<span>*</span>
                             </div>
+                            <p className="error-message">
+                                {errorEmail ? errorEmail.message : ''}
+                            </p>
                         </div>
-                        <p className="error-messages">
-                            {errorEmail ? errorEmail.message : ''}
-                        </p>
+
                         <div className="placeinput">
                             <input
                                 className={
@@ -141,10 +150,11 @@ function LoginPage(): JSX.Element {
                             >
                                 &nbsp;
                             </button>
+                            <p className="error-message">
+                                {errorPassword ? errorPassword.message : ''}
+                            </p>
                         </div>
-                        <p className="error-message">
-                            {errorPassword ? errorPassword.message : ''}
-                        </p>
+
                         <button
                             className="button-action"
                             type="submit"
