@@ -42,13 +42,13 @@
     }
 
     &_password {
-        background-image: url('../assets/images/eye-open.png');
+        background-image: url('../assets/images/eye-closed.png');
     }
 
     &_text {
         height: auto;
 
-        background-image: url('../assets/images/eye-closed.png');
+        background-image: url('../assets/images/eye-open.png');
 
         cursor: pointer;
     }

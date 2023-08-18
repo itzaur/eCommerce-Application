@@ -2,6 +2,11 @@
 
 .form {
     margin: 0 auto;
+    padding-bottom: 3rem;
+
+    @include mixins.respond-to('tablet') {
+        padding-bottom: 8rem;
+    }
 
     &__title {
         padding: 2vw;
