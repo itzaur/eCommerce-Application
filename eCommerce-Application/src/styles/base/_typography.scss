@@ -141,3 +141,17 @@
         font-size: var(--fs-big);
     }
 }
+
+.form {
+    &__content {
+        font-size: var(--fs-form);
+        font-family: var(--ff-primary);
+        text-align: start;
+    }
+
+    &__title {
+        font-family: var(--ff-primary);
+        font-size: clamp(1.3rem, 4vw, 2.3rem);
+        text-align: center;
+    }
+}

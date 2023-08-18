@@ -32,7 +32,7 @@ export async function loginCustomer(
                 });
             }
         } catch {
-            throw new Error('Сервер улетел в космос, попробуйте позже.', {
+            throw new Error('Сервер улетел в космос, попробуйте позже', {
                 cause: 'emailError',
             });
         }

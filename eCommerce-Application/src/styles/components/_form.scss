@@ -5,10 +5,6 @@
 
     &__title {
         padding: 2vw;
-        text-align: center;
-
-        font-family: var(--ff-primary);
-        font-size: clamp(1.3rem, 4vw, 2.3rem);
 
         color: var(--color-white);
         background-color: var(--color-secondary);
@@ -17,12 +13,10 @@
     &__content {
         padding: 1rem;
 
-        font-size: var(--fs-form);
-        font-family: var(--ff-primary);
-
         color: var(--color-secondary);
         background-color: var(--color-white-alpha);
-        text-align: start;
+
+        backdrop-filter: blur(5px);
 
         @include mixins.respond-to('tablet') {
             padding: 4rem 8rem 0 8rem;
@@ -30,13 +24,25 @@
     }
 
     &__question {
+        @include mixins.flex(column, null, null);
+
         text-align: center;
 
         a {
+            width: min-content;
+
+            align-self: center;
+
             border-bottom: 1px dashed var(--color-secondary);
         }
 
         @include mixins.respond-to('tablet') {
+            display: block;
+
+            flex-direction: row;
+
+            padding-block: 2rem;
+
             text-align: left;
         }
     }
@@ -71,12 +77,13 @@
 
         outline: 1px solid var(--color-secondary);
 
+        z-index: 2;
+
         &::placeholder {
             opacity: 0.5;
         }
 
         &:focus {
-            outline: none;
             background-color: var(--color-white);
 
             + .placeholder__input {
@@ -119,6 +126,7 @@
 
         &-trio {
             position: relative;
+
             display: grid;
             grid-template-columns: 1fr;
             gap: 3rem;
@@ -139,7 +147,6 @@
         }
 
         &_invalid {
-            // border: 1px solid var(--color-danger);
             outline: 1px solid var(--color-danger);
         }
 
@@ -164,11 +171,8 @@
     }
 }
 
-/*Custom rules for checkbox */
+/* Custom rules for checkbox */
 input[type='checkbox'] {
     -webkit-appearance: checkbox;
-    -moz-appearance: checkbox;
-    -ms-appearance: checkbox;
-    -o-appearance: checkbox;
     appearance: checkbox;
 }

@@ -60,7 +60,9 @@ function LoginPage(): JSX.Element {
 
     return (
         <>
-            <img className="logo-big" src={logo} alt="logo" />
+            <header className="header">
+                <img src={logo} alt="logo" className="logo_big" />
+            </header>
             <section className="form login">
                 <h2 className="form__title">
                     Добро пожаловать <br /> На Борт Космической Одиссеи!
@@ -71,92 +73,105 @@ function LoginPage(): JSX.Element {
                         <a href="/registration">Зарегистрируйтесь!</a>
                     </div>
                     <form className="form__inputs">
-                        <div className="placeinput">
-                            <input
-                                className={
-                                    errorEmail.error
-                                        ? 'form__input form__input_invalid'
-                                        : 'form__input'
-                                }
-                                type="text"
-                                id="email"
-                                required
-                                onBlur={(e): void => {
-                                    setErrorEmail({
-                                        error: checkIncorrectEmail(e).incorrect,
-                                        message: checkIncorrectEmail(e).message,
-                                    });
-                                }}
-                                onChange={(e): void => {
-                                    if (errorWithLogin) {
-                                        setErrorPassword({
-                                            error: false,
-                                            message: '',
-                                        });
+                        <div className="form__inputs-wrapper">
+                            <label className="placeholder" htmlFor="name">
+                                <input
+                                    className={
+                                        errorEmail.error
+                                            ? 'form__input form__input_invalid'
+                                            : 'form__input'
                                     }
-                                    setErrorEmail({
-                                        error: checkIncorrectEmail(e, true)
-                                            .incorrect,
-                                        message: checkIncorrectEmail(e, true)
-                                            .message,
-                                    });
-                                    setEmail(e.target.value);
-                                }}
-                            />
-                            <div className="place_holder">
-                                Email<span>*</span>
-                            </div>
-                            <p className="error-message">
-                                {errorEmail ? errorEmail.message : ''}
-                            </p>
+                                    type="text"
+                                    id="email"
+                                    required
+                                    onBlur={(e): void => {
+                                        setErrorEmail({
+                                            error: checkIncorrectEmail(e)
+                                                .incorrect,
+                                            message:
+                                                checkIncorrectEmail(e).message,
+                                        });
+                                    }}
+                                    onChange={(e): void => {
+                                        if (errorWithLogin) {
+                                            setErrorPassword({
+                                                error: false,
+                                                message: '',
+                                            });
+                                        }
+                                        setErrorEmail({
+                                            error: checkIncorrectEmail(e, true)
+                                                .incorrect,
+                                            message: checkIncorrectEmail(
+                                                e,
+                                                true
+                                            ).message,
+                                        });
+                                        setEmail(e.target.value);
+                                    }}
+                                />
+                                <div className="placeholder__input form_big-first-letter">
+                                    Email<span>*</span>
+                                </div>
+                                <p className="error-message ">
+                                    {errorEmail ? errorEmail.message : ''}
+                                </p>
+                            </label>
                         </div>
 
-                        <div className="placeinput">
-                            <input
-                                className={
-                                    errorPassword.error
-                                        ? 'form__input form__input_invalid'
-                                        : 'form__input'
-                                }
-                                type={passwordView}
-                                id="password"
-                                required
-                                onBlur={(e): void => {
-                                    setErrorPassword({
-                                        error: checkIncorrectPassword(e)
-                                            .incorrect,
-                                        message:
-                                            checkIncorrectPassword(e).message,
-                                    });
-                                }}
-                                onChange={(e): void => {
-                                    setErrorPassword({
-                                        error: checkIncorrectPassword(e, true)
-                                            .incorrect,
-                                        message: checkIncorrectPassword(e, true)
-                                            .message,
-                                    });
-                                    setPassword(e.target.value);
-                                }}
-                            />
-                            <div className="place_holder">
-                                Password<span>*</span>
-                            </div>
-                            <button
-                                type="button"
-                                className={`password-view password-view_${passwordView}`}
-                                onClick={(): void => changePasswordView()}
-                                onKeyDown={(): void => changePasswordView()}
-                            >
-                                &nbsp;
-                            </button>
-                            <p className="error-message">
-                                {errorPassword ? errorPassword.message : ''}
-                            </p>
+                        <div className="form__inputs-wrapper">
+                            <label className="placeholder" htmlFor="password">
+                                <input
+                                    className={
+                                        errorPassword.error
+                                            ? 'form__input form__input_invalid'
+                                            : 'form__input'
+                                    }
+                                    type={passwordView}
+                                    id="password"
+                                    required
+                                    onBlur={(e): void => {
+                                        setErrorPassword({
+                                            error: checkIncorrectPassword(e)
+                                                .incorrect,
+                                            message:
+                                                checkIncorrectPassword(e)
+                                                    .message,
+                                        });
+                                    }}
+                                    onChange={(e): void => {
+                                        setErrorPassword({
+                                            error: checkIncorrectPassword(
+                                                e,
+                                                true
+                                            ).incorrect,
+                                            message: checkIncorrectPassword(
+                                                e,
+                                                true
+                                            ).message,
+                                        });
+                                        setPassword(e.target.value);
+                                    }}
+                                />
+                                <div className="placeholder__input form_big-first-letter">
+                                    Password<span>*</span>
+                                </div>
+                                <button
+                                    type="button"
+                                    className={`password-view password-view_${passwordView}`}
+                                    onClick={(): void => changePasswordView()}
+                                    onKeyDown={(): void => changePasswordView()}
+                                >
+                                    &nbsp;
+                                </button>
+                                <p className="error-message">
+                                    {errorPassword ? errorPassword.message : ''}
+                                </p>
+                            </label>
                         </div>
 
                         <button
-                            className="button-action"
+                            className="btn_action"
                             type="submit"
                             onClick={(e): void => {
                                 loginUser(e);

@@ -2,5 +2,11 @@
 
 .header {
     @include mixins.flex(null, flex-start, center);
-    padding-block: 2vw;
+
+    padding: 5vw 3vw;
+
+    @include mixins.respond-to('tablet') {
+        padding-top: 8rem;
+        padding-bottom: 5rem;
+    }
 }

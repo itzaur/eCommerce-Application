@@ -8,11 +8,8 @@ import {
     Store,
     NotFound,
 } from './components';
-// import { getProject } from './commercetools/Client';
 
 function App(): JSX.Element {
-    // getProject().then(console.log).catch(console.error);
-
     const location = useLocation();
     const root = document.querySelector('main');
     const paths = ['login', 'registration', 'store', 'about'];

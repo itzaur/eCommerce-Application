@@ -1,4 +1,3 @@
-/* eslint-disable */
 module.exports = {
     process() {
         return {
@@ -9,4 +8,3 @@ module.exports = {
         return 'svgTransform';
     },
 };
-/* eslint-disable */

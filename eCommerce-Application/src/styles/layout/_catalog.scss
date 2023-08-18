@@ -44,7 +44,8 @@
 
         transition:
             translate 0.4s ease-out,
-            filter 0.4s ease-out;
+            filter 0.4s ease-out,
+            box-shadow 0.4s ease;
 
         @include mixins.respond-to('desktop') {
             min-height: 70vh;
@@ -173,6 +174,8 @@
 
         @media (hover: hover) {
             &:hover {
+                box-shadow: var(--drop-shadow-light);
+
                 translate: 0 -2rem;
 
                 filter: grayscale(0);
