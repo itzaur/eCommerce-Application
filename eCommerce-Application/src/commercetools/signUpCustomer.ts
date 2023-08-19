@@ -19,7 +19,9 @@ export async function signUpCustomer(
     birthDay: string,
     birthMonth: string,
     birthYear: string,
-    formLife: string
+    formLife: string,
+    defaultShippingAddress: boolean,
+    defaultBillingAddress: boolean
 ): Promise<void> {
     let countryShippingAbbr = '';
     let countryBillingAbbr = '';
@@ -57,6 +59,12 @@ export async function signUpCustomer(
                     ],
                     shippingAddresses: [0],
                     billingAddresses: [1],
+                    defaultShippingAddress: defaultShippingAddress
+                        ? 0
+                        : undefined,
+                    defaultBillingAddress: defaultBillingAddress
+                        ? 1
+                        : undefined,
                     title: userName,
                     firstName: name,
                     lastName: surname,
