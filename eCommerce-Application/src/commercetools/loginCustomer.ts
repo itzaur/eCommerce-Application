@@ -1,21 +1,17 @@
-import {
-    ClientResponse,
-    CustomerSignInResult,
-} from '@commercetools/platform-sdk';
 import { constructClientPasswordFlow } from './PasswordClient';
 import { apiRoot } from './Client';
 
 export async function loginCustomer(
     email: string,
     password: string
-): Promise<ClientResponse<CustomerSignInResult> | undefined> {
+): Promise<void> {
     try {
         const response = await constructClientPasswordFlow(email, password)
             .me()
             .login()
             .post({ body: { email, password } })
             .execute();
-        return response;
+        localStorage.setItem('user', JSON.stringify(response.body.customer));
     } catch {
         try {
             const checkEmailExistResponse = await apiRoot
@@ -31,10 +27,15 @@ export async function loginCustomer(
                     cause: 'passwordError',
                 });
             }
-        } catch {
-            throw new Error('Сервер улетел в космос, попробуйте позже', {
-                cause: 'emailError',
-            });
+        } catch (e) {
+            const error = e as Error;
+            if (error.cause === 'passwordError' || error.cause === 'emailError')
+                throw error;
+            else {
+                throw new Error('Сервер улетел в космос, попробуйте позже', {
+                    cause: 'emailError',
+                });
+            }
         }
     }
     return undefined;

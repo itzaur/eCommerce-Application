@@ -1,12 +1,9 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Customer } from '@commercetools/platform-sdk';
+import { useNavigate, Link } from 'react-router-dom';
 import logo from '../../assets/images/logo.png';
 import { checkIncorrectEmail } from '../../utils/validation/checkCorrectEmail';
 import { checkIncorrectPassword } from '../../utils/validation/checkPassword';
 import { loginCustomer } from '../../commercetools/loginCustomer';
-
-let user: Customer | undefined;
 
 function LoginPage(): JSX.Element {
     const [errorEmail, setErrorEmail] = useState({ error: false, message: '' });
@@ -40,9 +37,8 @@ function LoginPage(): JSX.Element {
         if (errorEmail.error || errorPassword.error || !email || !password)
             return;
         loginCustomer(email, password)
-            .then((data) => {
+            .then(() => {
                 setErrorWithLogin(false);
-                user = data?.body.customer;
                 navigate('/');
             })
             .catch((err) => {
@@ -55,7 +51,7 @@ function LoginPage(): JSX.Element {
             });
     };
     useEffect(() => {
-        if (user) navigate('/');
+        if (localStorage.getItem('user')) navigate('/');
     });
 
     return (
@@ -70,7 +66,7 @@ function LoginPage(): JSX.Element {
                 <div className="form__content">
                     <div className="form__question">
                         Путешествуете с нами впервые?&nbsp;
-                        <a href="/registration">Зарегистрируйтесь!</a>
+                        <Link to="/registration">Зарегистрируйтесь!</Link>
                     </div>
                     <form className="form__inputs">
                         <div className="form__inputs-wrapper">

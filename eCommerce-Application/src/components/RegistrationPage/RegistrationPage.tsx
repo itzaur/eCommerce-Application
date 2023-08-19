@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { checkIncorrectUserName } from '../../utils/validation/checkUserName';
 import { checkIncorrectEmail } from '../../utils/validation/checkCorrectEmail';
 import { checkIncorrectPassword } from '../../utils/validation/checkPassword';
@@ -22,6 +23,8 @@ import { checkIncorrectAddressIndex } from '../../utils/validation/checkIndex';
 import { checkIncorrectFormLife } from '../../utils/validation/checkFormLife';
 import { checkIncorrectShippingCountry } from '../../utils/validation/checkShippingCountry';
 import { checkIncorrectBillingCountry } from '../../utils/validation/checkBillingCountry';
+import { signUpCustomer } from '../../commercetools/signUpCustomer';
+import { loginCustomer } from '../../commercetools/loginCustomer';
 
 const countries = ['Выберите страну*', 'Россия', 'Беларусь', 'Польша'];
 
@@ -118,6 +121,11 @@ function RegistrationDetail(): JSX.Element {
 
     const [errorAge, setErrorAge] = useState(false);
     const [errorMessageAge, setErrorMessageAge] = useState('');
+    const [resultMessage, setResultMessage] = useState('');
+    const navigate = useNavigate();
+    useEffect(() => {
+        if (localStorage.getItem('user')) navigate('/');
+    });
 
     return (
         <>
@@ -130,7 +138,7 @@ function RegistrationDetail(): JSX.Element {
                 </h2>
                 <div className="form__content">
                     <div className="form__question form_big-first-letter">
-                        уже есть аккаунт? <a href="/login">войдите</a>
+                        уже есть аккаунт? <Link to="/login">войдите!</Link>
                     </div>
                     <form
                         className="form__inputs"
@@ -1390,11 +1398,59 @@ function RegistrationDetail(): JSX.Element {
                                     password !== passwordRepeat
                                 )
                                     return;
-                                // eslint-disable-next-line no-console
-                                console.log(
+                                signUpCustomer(
                                     userName,
-                                    'Отправка данных прошла успешно, форма валидна'
-                                );
+                                    name,
+                                    surname,
+                                    password,
+                                    email,
+                                    countryShipping,
+                                    shippingRegionValue,
+                                    shippingCityValue,
+                                    shippingIndexValue,
+                                    shippingStreetValue,
+                                    countryBilling,
+                                    billingRegionValue,
+                                    billingCityValue,
+                                    billingIndexValue,
+                                    billingStreetValue,
+                                    birthDayValue,
+                                    birthMonthValue,
+                                    birthYearValue,
+                                    formLifeValue
+                                )
+                                    .then(() => {
+                                        setResultMessage(
+                                            'вы успешно зарегистрировались в системе'
+                                        );
+                                        setTimeout(() => {
+                                            loginCustomer(email, password)
+                                                .then(() => {
+                                                    navigate('/');
+                                                    window.scrollTo({ top: 0 });
+                                                })
+                                                .catch((err) =>
+                                                    setResultMessage(
+                                                        err.message
+                                                    )
+                                                );
+                                        }, 2000);
+                                    })
+                                    .catch((err) => {
+                                        if (err.cause === 'passwordError') {
+                                            setErrorPassword(true);
+                                            setErrorMessagePassword(
+                                                err.message
+                                            );
+                                        } else if (err.cause === 'emailError') {
+                                            setErrorEmail(true);
+                                            setErrorMessageEmail(err.message);
+                                        } else if (
+                                            err.cause === 'serverError'
+                                        ) {
+                                            setResultMessage(err.message);
+                                        }
+                                    });
                             }}
                         >
                             Регистрация
@@ -1402,6 +1458,24 @@ function RegistrationDetail(): JSX.Element {
                     </form>
                 </div>
             </section>
+            {resultMessage && (
+                <div className="modal active ">
+                    <div className="modal_registration">
+                        <button
+                            type="button"
+                            onClick={(): void => {
+                                setResultMessage('');
+                            }}
+                            onKeyDown={(): void => {
+                                setResultMessage('');
+                            }}
+                        >
+                            X
+                        </button>
+                        {resultMessage}
+                    </div>
+                </div>
+            )}
         </>
     );
 }

@@ -24,3 +24,30 @@
         scale: 1;
     }
 }
+.modal_registration {
+    position: fixed;
+    top: calc(50vh - 5rem);
+    left: calc(50vw - 40rem);
+
+    width: 80rem;
+    height: 10rem;
+
+    display: grid;
+    place-content: center;
+
+    background-color: var(--color-secondary);
+    color: var(--color-white);
+
+    button {
+        position: absolute;
+        right: 0.4rem;
+        top: 0.4rem;
+
+        padding: 0.5rem;
+
+        background-color: var(--color-primary);
+        color: var(--color-white);
+
+        cursor: pointer;
+    }
+}
