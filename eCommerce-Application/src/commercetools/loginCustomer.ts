@@ -1,4 +1,4 @@
-import { constructClientPasswordFlow } from './PasswordClient';
+import { constructClientPasswordFlow, tokenInstance } from './PasswordClient';
 import { apiRoot } from './Client';
 
 export async function loginCustomer(
@@ -11,6 +11,7 @@ export async function loginCustomer(
             .login()
             .post({ body: { email, password } })
             .execute();
+        localStorage.setItem('token', JSON.stringify(tokenInstance.get()));
         localStorage.setItem('user', JSON.stringify(response.body.customer));
     } catch {
         try {

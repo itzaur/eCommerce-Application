@@ -7,12 +7,16 @@ function Info(): JSX.Element {
         <>
             <div className="home__info">
                 <div className="home__btns">
-                    <button className="btn" type="button">
-                        <Link to="/login">Войти</Link>
-                    </button>
-                    <button className="btn" type="button">
-                        <Link to="/registration">Регистрация</Link>
-                    </button>
+                    {!localStorage.getItem('user') && (
+                        <button className="btn" type="button">
+                            <Link to="/login">Войти</Link>
+                        </button>
+                    )}
+                    {!localStorage.getItem('user') && (
+                        <button className="btn" type="button">
+                            <Link to="/registration">Регистрация</Link>
+                        </button>
+                    )}
                     <button className="btn" type="button">
                         <Link to="/store">Перейти в магазин</Link>
                     </button>

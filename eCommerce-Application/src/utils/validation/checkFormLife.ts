@@ -1,10 +1,9 @@
 const letterCount = 3;
 
 export const checkIncorrectFormLife = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    removeError?: boolean
+    e: React.ChangeEvent<HTMLInputElement>
 ): { incorrect: boolean; message: string } => {
-    if (removeError || e.target.value === '') {
+    if (e.target.value === '') {
         return { incorrect: false, message: '' };
     }
     const { value } = e.target;

@@ -11,10 +11,9 @@ const maxCountMonthPerYear = 12;
 const minCountMonthPerYear = 1;
 
 export const checkIncorrectBirthDay = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    removeError?: boolean
+    e: React.ChangeEvent<HTMLInputElement>
 ): { incorrect: boolean; message: string } => {
-    if (removeError || e.target.value === '') {
+    if (e.target.value === '') {
         return { incorrect: false, message: '' };
     }
     const { value } = e.target;
@@ -61,10 +60,9 @@ export const checkIncorrectBirthDay = (
 };
 
 export const checkIncorrectBirthMonth = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    removeError?: boolean
+    e: React.ChangeEvent<HTMLInputElement>
 ): { incorrect: boolean; message: string } => {
-    if (removeError || e.target.value === '') {
+    if (e.target.value === '') {
         return { incorrect: false, message: '' };
     }
 
@@ -110,10 +108,9 @@ export const checkIncorrectBirthMonth = (
 };
 
 export const checkIncorrectBirthYear = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    removeError?: boolean
+    e: React.ChangeEvent<HTMLInputElement>
 ): { incorrect: boolean; message: string } => {
-    if (removeError || e.target.value === '') {
+    if (e.target.value === '') {
         return { incorrect: false, message: '' };
     }
 

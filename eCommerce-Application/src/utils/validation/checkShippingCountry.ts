@@ -1,8 +1,7 @@
 export const checkIncorrectShippingCountry = (
-    e: React.ChangeEvent<HTMLSelectElement>,
-    removeError?: boolean
+    e: React.ChangeEvent<HTMLSelectElement>
 ): { incorrect: boolean; message: string } => {
-    if (removeError || e.target.value === '') {
+    if (e.target.value === '') {
         return { incorrect: false, message: '' };
     }
     const { value } = e.target;

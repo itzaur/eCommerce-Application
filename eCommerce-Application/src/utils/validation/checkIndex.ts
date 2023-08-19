@@ -1,9 +1,8 @@
 export const checkIncorrectAddressIndex = (
     e: React.ChangeEvent<HTMLInputElement>,
-    country: string,
-    removeError?: boolean
+    country: string
 ): { incorrect: boolean; message: string } => {
-    if (removeError || e.target.value === '') {
+    if (e.target.value === '') {
         return { incorrect: false, message: '' };
     }
     const { value } = e.target;

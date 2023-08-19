@@ -80,14 +80,6 @@ function LoginPage(): JSX.Element {
                                     type="text"
                                     id="email"
                                     required
-                                    onBlur={(e): void => {
-                                        setErrorEmail({
-                                            error: checkIncorrectEmail(e)
-                                                .incorrect,
-                                            message:
-                                                checkIncorrectEmail(e).message,
-                                        });
-                                    }}
                                     onChange={(e): void => {
                                         if (errorWithLogin) {
                                             setErrorPassword({
@@ -96,12 +88,10 @@ function LoginPage(): JSX.Element {
                                             });
                                         }
                                         setErrorEmail({
-                                            error: checkIncorrectEmail(e, true)
+                                            error: checkIncorrectEmail(e)
                                                 .incorrect,
-                                            message: checkIncorrectEmail(
-                                                e,
-                                                true
-                                            ).message,
+                                            message:
+                                                checkIncorrectEmail(e).message,
                                         });
                                         setEmail(e.target.value);
                                     }}
@@ -126,25 +116,13 @@ function LoginPage(): JSX.Element {
                                     type={passwordView}
                                     id="password"
                                     required
-                                    onBlur={(e): void => {
+                                    onChange={(e): void => {
                                         setErrorPassword({
                                             error: checkIncorrectPassword(e)
                                                 .incorrect,
                                             message:
                                                 checkIncorrectPassword(e)
                                                     .message,
-                                        });
-                                    }}
-                                    onChange={(e): void => {
-                                        setErrorPassword({
-                                            error: checkIncorrectPassword(
-                                                e,
-                                                true
-                                            ).incorrect,
-                                            message: checkIncorrectPassword(
-                                                e,
-                                                true
-                                            ).message,
                                         });
                                         setPassword(e.target.value);
                                     }}
