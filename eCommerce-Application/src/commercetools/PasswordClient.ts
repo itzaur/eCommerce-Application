@@ -2,6 +2,8 @@ import {
     TokenCache,
     ClientBuilder,
     HttpMiddlewareOptions,
+    PasswordAuthMiddlewareOptions,
+    TokenStore,
 } from '@commercetools/sdk-client-v2';
 import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
@@ -14,21 +16,26 @@ const {
     VITE_CTP_API_URL,
 } = import.meta.env;
 
-type PasswordAuthMiddlewareOptions = {
-    host: string;
-    projectKey: string;
-    credentials: {
-        clientId: string;
-        clientSecret: string;
-        user: {
-            username: string;
-            password: string;
+class TokenCacheClass implements TokenCache {
+    private token: TokenStore;
+
+    constructor() {
+        this.token = {
+            token: '',
+            expirationTime: 0,
+            refreshToken: '',
         };
-    };
-    scopes?: string[];
-    tokenCache?: TokenCache;
-    oauthUri?: string;
-};
+    }
+
+    public get(): TokenStore {
+        return this.token;
+    }
+
+    public set(cache: TokenStore): void {
+        this.token = cache;
+    }
+}
+export const tokenInstance = new TokenCacheClass();
 
 export function constructClientPasswordFlow(
     email: string,
@@ -46,6 +53,7 @@ export function constructClientPasswordFlow(
             },
         },
         scopes: [`manage_project:${VITE_CTP_PROJECT_KEY}`],
+        tokenCache: tokenInstance,
     };
     const httpMiddlewareOptions: HttpMiddlewareOptions = {
         host: VITE_CTP_API_URL,

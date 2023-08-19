@@ -1,8 +1,7 @@
 export const checkIncorrectEmail = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    removeError?: boolean
+    e: React.ChangeEvent<HTMLInputElement>
 ): { incorrect: boolean; message: string } => {
-    if (removeError || e.target.value === '') {
+    if (e.target.value === '') {
         return { incorrect: false, message: '' };
     }
     const regexp = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;

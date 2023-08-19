@@ -1,8 +1,7 @@
 export const checkIncorrectAddressStreet = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    removeError?: boolean
+    e: React.ChangeEvent<HTMLInputElement>
 ): { incorrect: boolean; message: string } => {
-    if (removeError || e.target.value === '') {
+    if (e.target.value === '') {
         return { incorrect: false, message: '' };
     }
     const { value } = e.target;
@@ -22,10 +21,9 @@ export const checkIncorrectAddressStreet = (
 };
 
 export const checkIncorrectAddressCity = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    removeError?: boolean
+    e: React.ChangeEvent<HTMLInputElement>
 ): { incorrect: boolean; message: string } => {
-    if (removeError || e.target.value === '') {
+    if (e.target.value === '') {
         return { incorrect: false, message: '' };
     }
     const { value } = e.target;
@@ -52,10 +50,9 @@ export const checkIncorrectAddressCity = (
 };
 
 export const checkIncorrectAddressRegion = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    removeError?: boolean
+    e: React.ChangeEvent<HTMLInputElement>
 ): { incorrect: boolean; message: string } => {
-    if (removeError || e.target.value === '') {
+    if (e.target.value === '') {
         return { incorrect: false, message: '' };
     }
     const { value } = e.target;

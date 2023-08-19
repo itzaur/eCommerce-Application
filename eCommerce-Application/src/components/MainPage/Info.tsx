@@ -1,18 +1,50 @@
 import { Link, Outlet } from 'react-router-dom';
+import { useState } from 'react';
 import slide1 from '../../assets/images/slide1.png';
 import arrow from '../../assets/images/arrow.png';
+import userLogo from '../../assets/images/user.png';
 
 function Info(): JSX.Element {
+    const [user, setUser] = useState(
+        JSON.parse(localStorage.getItem('user') as string)
+    );
+
     return (
         <>
             <div className="home__info">
                 <div className="home__btns">
-                    <button className="btn" type="button">
-                        <Link to="/login">Войти</Link>
-                    </button>
-                    <button className="btn" type="button">
-                        <Link to="/registration">Регистрация</Link>
-                    </button>
+                    {!user && (
+                        <button className="btn" type="button">
+                            <Link to="/login">Войти</Link>
+                        </button>
+                    )}
+                    {!user && (
+                        <button className="btn" type="button">
+                            <Link to="/registration">Регистрация</Link>
+                        </button>
+                    )}
+                    {user && (
+                        <>
+                            <div className="user-info">
+                                <img src={userLogo} alt="userIcon" />
+                                <h2>{user.salutation}</h2>
+                            </div>
+                            <button
+                                className="btn"
+                                type="button"
+                                onClick={(): void => {
+                                    localStorage.clear();
+                                    setUser(null);
+                                }}
+                                onKeyDown={(): void => {
+                                    localStorage.clear();
+                                    setUser(null);
+                                }}
+                            >
+                                Выйти
+                            </button>
+                        </>
+                    )}
                     <button className="btn" type="button">
                         <Link to="/store">Перейти в магазин</Link>
                     </button>
