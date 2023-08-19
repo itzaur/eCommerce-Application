@@ -1,13 +1,17 @@
 export const checkIncorrectPassword = (
-    e:
-        | React.FocusEvent<HTMLInputElement, Element>
-        | React.ChangeEvent<HTMLInputElement>,
+    e: React.ChangeEvent<HTMLInputElement>,
     removeError?: boolean
 ): { incorrect: boolean; message: string } => {
     if (removeError || e.target.value === '') {
         return { incorrect: false, message: '' };
     }
     const { value } = e.target;
+    if (/^\s/.test(value) || /\s$/.test(value)) {
+        return {
+            incorrect: true,
+            message: 'Пароль не должен содержать начальных и конечных пробелов',
+        };
+    }
     if (value.length < 8) {
         return {
             incorrect: true,
@@ -34,12 +38,6 @@ export const checkIncorrectPassword = (
         return {
             incorrect: true,
             message: 'Пароль должен содержать специальный символ !@#$%^&*+',
-        };
-    }
-    if (/^\s/.test(value) || /\s$/.test(value)) {
-        return {
-            incorrect: true,
-            message: 'Пароль не должен содержать начальных и конечных пробелов',
         };
     }
     return { incorrect: false, message: '' };

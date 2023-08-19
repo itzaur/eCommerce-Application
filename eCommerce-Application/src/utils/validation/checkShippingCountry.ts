@@ -1,7 +1,5 @@
 export const checkIncorrectShippingCountry = (
-    e:
-        | React.FocusEvent<HTMLSelectElement, Element>
-        | React.ChangeEvent<HTMLSelectElement>,
+    e: React.ChangeEvent<HTMLSelectElement>,
     removeError?: boolean
 ): { incorrect: boolean; message: string } => {
     if (removeError || e.target.value === '') {

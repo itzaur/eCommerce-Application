@@ -1,7 +1,5 @@
 export const checkIncorrectUserName = (
-    e:
-        | React.FocusEvent<HTMLInputElement, Element>
-        | React.ChangeEvent<HTMLInputElement>,
+    e: React.ChangeEvent<HTMLInputElement>,
     removeError?: boolean
 ): { incorrect: boolean; message: string } => {
     if (removeError || e.target.value === '') {
