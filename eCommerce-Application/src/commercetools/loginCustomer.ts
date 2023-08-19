@@ -1,9 +1,5 @@
-import { Customer } from '@commercetools/platform-sdk';
 import { constructClientPasswordFlow } from './PasswordClient';
 import { apiRoot } from './Client';
-
-/* eslint-disable */
-export let user: Customer | undefined;
 
 export async function loginCustomer(
     email: string,
@@ -15,7 +11,7 @@ export async function loginCustomer(
             .login()
             .post({ body: { email, password } })
             .execute();
-        user = response.body.customer;
+        localStorage.setItem('user', JSON.stringify(response.body.customer));
     } catch {
         try {
             const checkEmailExistResponse = await apiRoot

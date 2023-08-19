@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { checkIncorrectUserName } from '../../utils/validation/checkUserName';
 import { checkIncorrectEmail } from '../../utils/validation/checkCorrectEmail';
@@ -123,6 +123,9 @@ function RegistrationDetail(): JSX.Element {
     const [errorMessageAge, setErrorMessageAge] = useState('');
     const [resultMessage, setResultMessage] = useState('');
     const navigate = useNavigate();
+    useEffect(() => {
+        if (localStorage.getItem('user')) navigate('/');
+    });
 
     return (
         <>

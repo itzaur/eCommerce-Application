@@ -26,7 +26,7 @@ function App(): JSX.Element {
     } else {
         root?.setAttribute('id', 'error-page');
     }
-
+    // localStorage.clear();
     return (
         <Routes>
             <Route path="/" element={<Home />} />

@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import logo from '../../assets/images/logo.png';
 import { checkIncorrectEmail } from '../../utils/validation/checkCorrectEmail';
 import { checkIncorrectPassword } from '../../utils/validation/checkPassword';
-import { loginCustomer, user } from '../../commercetools/loginCustomer';
+import { loginCustomer } from '../../commercetools/loginCustomer';
 
 function LoginPage(): JSX.Element {
     const [errorEmail, setErrorEmail] = useState({ error: false, message: '' });
@@ -51,7 +51,7 @@ function LoginPage(): JSX.Element {
             });
     };
     useEffect(() => {
-        if (user) navigate('/');
+        if (localStorage.getItem('user')) navigate('/');
     });
 
     return (
