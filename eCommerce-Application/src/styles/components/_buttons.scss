@@ -80,6 +80,7 @@
     &-modal {
         cursor: pointer;
     }
+
     &_action {
         display: block;
 
@@ -91,15 +92,32 @@
         padding: 1em 0.5em;
 
         font-family: var(--ff-secondary);
-
         text-align: center;
+
         background-color: var(--color-primary);
+
         cursor: pointer;
+
+        transition: box-shadow 0.3s linear;
+
+        &:focus-visible {
+            outline: 2px solid var(--color-secondary);
+        }
+
+        &:active,
+        &:visited {
+            outline-color: transparent;
+        }
+
+        &:hover {
+            box-shadow: var(--drop-shadow-light);
+        }
     }
 }
 
 .arrow {
     margin-top: auto;
     padding: 0.8em 1em;
+
     border: 0.1rem solid var(--color-primary);
 }

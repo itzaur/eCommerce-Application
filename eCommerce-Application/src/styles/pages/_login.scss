@@ -1,176 +1,62 @@
+@use '../abstracts/mixins';
+
 #login {
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    display: grid;
+    row-gap: 1rem;
+
+    height: 100dvh;
 
     background-image: url('../assets/images/backround-login.png');
     background-size: cover;
     background-repeat: no-repeat;
+    background-position: center;
 
-    font-family: 'Neuropol', sans-serif;
-}
-.login {
-    width: 47.4%;
-    margin: 0 auto;
+    & .form {
+        width: min(100rem, 95%);
+    }
 
-    font-family: 'Neuropol', sans-serif;
-}
-.logo-big {
-    display: block;
-    width: 26%;
-    margin: 0 auto;
-}
-
-.form__content {
-    padding: 5.8% 9.3% 7.14% 10%;
-    background-color: var(--color-white-opacity);
-}
-.form__title {
-    background-color: var(--color-secondary);
-    color: var(--color-white);
-}
-
-.form__title {
-    padding: 2.9% 0;
-
-    font-size: clamp(1rem, 1.5vw, 2.8rem);
-    text-align: center;
-    line-height: 92%;
-}
-
-.form__question {
-    margin-bottom: 7%;
-
-    color: var(--color-secondary);
-
-    font-size: clamp(1rem, 0.95vw, 2rem);
-    line-height: 92%;
-    a {
-        color: var(--color-secondary);
-        border-bottom: dotted var(--color-secondary);
+    @include mixins.respond-to('tablet') {
+        row-gap: 4rem;
     }
 }
 
-.form__inputs {
-    display: flex;
-    flex-direction: column;
-}
-
-.placeinput input:invalid + .place_holder {
-    display: inline;
-}
-
-.placeinput {
-    position: relative;
-    overflow: hidden;
-    width: 100%;
-    height: 7rem;
-    input {
+.password-view {
+    &,
+    &:focus-visible,
+    &:focus {
         position: absolute;
+        right: 0;
+
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-color: transparent;
+        background-position: center;
+
         z-index: 2;
 
-        width: 97%;
-        padding: 1rem 0 1rem 1rem;
-
-        background-color: transparent;
-        color: var(--color-secondary-opacity);
-        border: 1px solid var(--color-secondary);
-        outline: none;
-
-        font-size: clamp(1rem, 1.04vw, 2rem);
-        font-family: 'Neuropol', sans-serif;
-        &:focus {
-            background-color: var(--color-white);
-            color: var(--color-black);
+        @include mixins.respond-to('tablet') {
+            right: 1rem;
         }
     }
-    .form__input_invalid {
-        border: 1px solid var(--color-error);
+
+    &_password,
+    &_text {
+        width: 4rem;
+        top: 50%;
+        translate: 0 -50%;
+
+        cursor: pointer;
     }
-}
 
-.place_holder {
-    display: none;
-
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1;
-
-    padding: 1rem;
-
-    cursor: text;
-
-    color: var(--color-secondary-opacity);
-
-    font-size: clamp(1rem, 1.04vw, 2rem);
-    span {
-        color: var(--color-primary);
+    &_password {
+        background-image: url('../assets/images/eye-closed.png');
     }
-}
 
-.button-action {
-    align-self: center;
-    padding: 2rem 7.5rem;
-    border-radius: 2px;
+    &_text {
+        height: auto;
 
-    background-color: var(--color-primary);
-    border: 2px solid var(--color-primary);
-    color: var(--color-secondary);
+        background-image: url('../assets/images/eye-open.png');
 
-    font-size: clamp(1rem, 1.04vw, 2rem);
-    font-family: 'Bowler', sans-serif;
-
-    cursor: pointer;
-    &:focus {
-        outline: none;
-        border: 2px solid var(--color-primary);
+        cursor: pointer;
     }
-    &:hover {
-        border: none;
-        border: 2px solid var(--color-primary);
-    }
-}
-.password-view,
-.password-view:focus-visible,
-.password-view:focus {
-    position: absolute;
-    right: 4%;
-    height: inherit;
-    z-index: 3;
-
-    background-color: transparent;
-    border: none;
-    outline: none;
-    background-size: contain;
-    background-repeat: no-repeat;
-}
-.password-view_text {
-    width: 4.1rem;
-    top: 0.7rem;
-
-    background-image: url('../assets/images/eye-closed.png');
-
-    cursor: pointer;
-}
-.password-view_password {
-    width: 3.9rem;
-    top: 1.02rem;
-
-    background-image: url('../assets/images/eye-open.png');
-
-    cursor: pointer;
-}
-
-.error-message {
-    position: absolute;
-    top: 50%;
-
-    margin-bottom: 4.6rem;
-    height: 1rem;
-
-    color: var(--color-error);
-    font-size: 1.2rem;
 }

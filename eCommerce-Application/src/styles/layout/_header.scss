@@ -1,6 +1,16 @@
 @use '../abstracts/mixins';
 
 .header {
-    @include mixins.flex(null, flex-start, center);
-    padding-block: 2vw;
+    @include mixins.flex(null, flex-start, flex-end);
+
+    padding: 2rem 2rem 0 2rem;
+}
+
+#registration .header {
+    padding: 5vw 3vw;
+
+    @include mixins.respond-to('tablet') {
+        padding-top: 8rem;
+        padding-bottom: 5rem;
+    }
 }

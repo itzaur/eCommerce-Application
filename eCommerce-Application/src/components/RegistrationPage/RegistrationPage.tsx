@@ -121,7 +121,7 @@ function RegistrationDetail(): JSX.Element {
 
     return (
         <>
-            <header>
+            <header className="header">
                 <img src={logo} alt="logo" className="logo_big" />
             </header>
             <section className="form registration">
@@ -130,7 +130,7 @@ function RegistrationDetail(): JSX.Element {
                 </h2>
                 <div className="form__content">
                     <div className="form__question form_big-first-letter">
-                        уже есть аккаунт? <a href="##">войдите</a>
+                        уже есть аккаунт? <a href="/login">войдите</a>
                     </div>
                     <form
                         className="form__inputs"
@@ -300,7 +300,6 @@ function RegistrationDetail(): JSX.Element {
                                 <div className="placeholder__input form_big-first-letter">
                                     создайте пароль<span>*</span>
                                 </div>
-
                                 <p className="error-message">
                                     {errorPassword ? errorMessagePassword : ''}
                                 </p>

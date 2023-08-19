@@ -21,6 +21,7 @@
         opacity: 0.5;
 
         z-index: 1;
+
         cursor: text;
 
         span {
@@ -28,12 +29,11 @@
         }
 
         @include mixins.respond-to('tablet') {
-            left: 2.5rem;
+            padding-left: 2.5rem;
         }
     }
 
     input:invalid + .placeholder__input {
-        // display: inline;
         @include mixins.flex(null, center, center);
 
         @include mixins.respond-to('tablet') {
@@ -43,5 +43,5 @@
 }
 
 select option span {
-    background-color: red;
+    background-color: var(--color-danger);
 }
