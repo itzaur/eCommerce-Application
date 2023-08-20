@@ -164,6 +164,71 @@ function RegistrationDetail(): JSX.Element {
         setCheckboxUseBillingAddressAsDefault,
     ] = useState(false);
 
+    useEffect(() => {
+        if (checkboxUseShippingAsBillingAddress) {
+            setCountryBilling(countryShipping);
+            setErrorCountryBilling(errorCountryShipping);
+            setErrorMessageCountryBilling(errorMessageCountryShipping);
+        }
+    }, [
+        checkboxUseShippingAsBillingAddress,
+        countryShipping,
+        errorCountryShipping,
+        errorMessageCountryShipping,
+    ]);
+
+    useEffect(() => {
+        if (checkboxUseShippingAsBillingAddress) {
+            setBillingRegionValue(shippingRegionValue);
+            setErrorBillingRegion(errorShippingRegion);
+            setErrorMessageBillingRegion(errorMessageShippingRegion);
+        }
+    }, [
+        checkboxUseShippingAsBillingAddress,
+        shippingRegionValue,
+        errorShippingRegion,
+        errorMessageShippingRegion,
+    ]);
+
+    useEffect(() => {
+        if (checkboxUseShippingAsBillingAddress) {
+            setBillingCityValue(shippingCityValue);
+            setErrorBillingCity(errorShippingCity);
+            setErrorMessageBillingCity(errorMessageShippingCity);
+        }
+    }, [
+        checkboxUseShippingAsBillingAddress,
+        shippingCityValue,
+        errorShippingCity,
+        errorMessageShippingCity,
+    ]);
+
+    useEffect(() => {
+        if (checkboxUseShippingAsBillingAddress) {
+            setBillingIndexValue(shippingIndexValue);
+            setErrorBillingIndex(errorShippingIndex);
+            setErrorMessageBillingIndex(errorMessageShippingIndex);
+        }
+    }, [
+        checkboxUseShippingAsBillingAddress,
+        shippingIndexValue,
+        errorShippingIndex,
+        errorMessageShippingIndex,
+    ]);
+
+    useEffect(() => {
+        if (checkboxUseShippingAsBillingAddress) {
+            setBillingStreetValue(shippingStreetValue);
+            setErrorBillingStreet(errorShippingStreet);
+            setErrorMessageBillingStreet(errorMessageShippingStreet);
+        }
+    }, [
+        checkboxUseShippingAsBillingAddress,
+        shippingStreetValue,
+        errorShippingStreet,
+        errorMessageShippingStreet,
+    ]);
+
     return (
         <>
             <header className="header">
