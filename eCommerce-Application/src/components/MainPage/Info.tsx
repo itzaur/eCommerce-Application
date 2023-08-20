@@ -30,7 +30,7 @@ function Info(): JSX.Element {
                                 <h2>{user.salutation}</h2>
                             </div>
                             <button
-                                className="btn"
+                                className="btn btn--exit"
                                 type="button"
                                 onClick={(): void => {
                                     localStorage.clear();
@@ -41,7 +41,7 @@ function Info(): JSX.Element {
                                     setUser(null);
                                 }}
                             >
-                                Выйти
+                                <span>Выйти</span>
                             </button>
                         </>
                     )}

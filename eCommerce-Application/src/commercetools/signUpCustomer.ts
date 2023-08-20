@@ -68,7 +68,7 @@ export async function signUpCustomer(
                     title: userName,
                     firstName: name,
                     lastName: surname,
-                    salutation: `Привет ${formLife} ${name}!`,
+                    salutation: `Привет, ${formLife} ${name}!`,
                     dateOfBirth: `${birthYear}-${birthMonth}-${birthDay}`,
                 },
             })

@@ -167,7 +167,9 @@ function RegistrationDetail(): JSX.Element {
     return (
         <>
             <header className="header">
-                <img src={logo} alt="logo" className="logo_big" />
+                <Link to="/">
+                    <img src={logo} alt="logo" className="logo_big" />
+                </Link>
             </header>
             <section className="form registration">
                 <h2 className="form__title form_big-first-letter">
