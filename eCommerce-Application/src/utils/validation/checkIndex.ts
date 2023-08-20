@@ -1,13 +1,14 @@
 export const checkIncorrectAddressIndex = (
-    e: React.ChangeEvent<HTMLInputElement>,
+    // e: React.ChangeEvent<HTMLInputElement>,
+    index: string,
     country: string
 ): { incorrect: boolean; message: string } => {
-    if (e.target.value === '') {
+    if (index === '') {
         return { incorrect: false, message: '' };
     }
-    const { value } = e.target;
+    // const { value } = e.target;
     if (country === 'Россия') {
-        if (!/^\d{6}$/.test(value)) {
+        if (!/^\d{6}$/.test(index)) {
             return {
                 incorrect: true,
                 message: 'Формат индекса 6 цифр XXXYYY',
@@ -15,7 +16,7 @@ export const checkIncorrectAddressIndex = (
         }
     }
     if (country === 'Беларусь') {
-        if (!/^\d{6}$/.test(value)) {
+        if (!/^\d{6}$/.test(index)) {
             return {
                 incorrect: true,
                 message: 'Формат индекса 6 цифр XXXYYY',
@@ -23,14 +24,14 @@ export const checkIncorrectAddressIndex = (
         }
     }
     if (country === 'Польша') {
-        if (!/^\d{2}-\d{3}$/.test(value)) {
+        if (!/^\d{2}-\d{3}$/.test(index)) {
             return {
                 incorrect: true,
                 message: 'Формат индекса 5 цифр XY-ZZZ',
             };
         }
     }
-    if (/^\s/.test(value) || /\s$/.test(value)) {
+    if (/^\s/.test(index) || /\s$/.test(index)) {
         return {
             incorrect: true,
             message: 'Индекс не должен содержать начальных и конечных пробелов',
