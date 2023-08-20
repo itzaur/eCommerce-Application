@@ -14,6 +14,7 @@ module.exports = {
         'jest.config.ts',
         'jest.setup.ts',
         'vite.config.ts',
+        'vitest.config.ts',
         'svgTransform.cjs',
         'test',
     ],
