@@ -382,11 +382,13 @@ function RegistrationDetail(): JSX.Element {
                                     onChange={(e): void => {
                                         setPassword(e.target.value);
 
-                                        const tmp =
+                                        const checkPasswordError =
                                             checkIncorrectPassword(e).incorrect;
 
-                                        if (tmp) {
-                                            setErrorPassword(tmp);
+                                        if (checkPasswordError) {
+                                            setErrorPassword(
+                                                checkPasswordError
+                                            );
 
                                             setErrorMessagePassword(
                                                 checkIncorrectPassword(e)
@@ -426,11 +428,13 @@ function RegistrationDetail(): JSX.Element {
                                     onChange={(e): void => {
                                         setPasswordRepeat(e.target.value);
 
-                                        const tmp =
+                                        const checkPasswordError =
                                             checkIncorrectPassword(e).incorrect;
 
-                                        if (tmp) {
-                                            setErrorPasswordRepeat(tmp);
+                                        if (checkPasswordError) {
+                                            setErrorPasswordRepeat(
+                                                checkPasswordError
+                                            );
                                             setErrorMessagePasswordRepeat(
                                                 checkIncorrectPassword(e)
                                                     .message
