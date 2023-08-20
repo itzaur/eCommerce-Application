@@ -1,0 +1,270 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Login tests > Login page renders 1`] = `
+{
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <header
+        class="header"
+      >
+        <img
+          alt="logo"
+          class="logo_big"
+          src="/src/assets/images/logo.png"
+        />
+      </header>
+      <section
+        class="form login"
+      >
+        <h2
+          class="form__title"
+        >
+          Добро пожаловать 
+          <br />
+           На Борт Космической Одиссеи!
+        </h2>
+        <div
+          class="form__content"
+        >
+          <div
+            class="form__question"
+          >
+            Путешествуете с нами впервые? 
+            <a
+              href="/registration"
+            >
+              Зарегистрируйтесь!
+            </a>
+          </div>
+          <form
+            class="form__inputs"
+          >
+            <div
+              class="form__inputs-wrapper"
+            >
+              <label
+                class="placeholder"
+                for="name"
+              >
+                <input
+                  class="form__input"
+                  id="email"
+                  required=""
+                  type="text"
+                />
+                <div
+                  class="placeholder__input form_big-first-letter"
+                >
+                  Email
+                  <span>
+                    *
+                  </span>
+                </div>
+                <p
+                  class="error-message "
+                />
+              </label>
+            </div>
+            <div
+              class="form__inputs-wrapper"
+            >
+              <label
+                class="placeholder"
+                for="password"
+              >
+                <input
+                  class="form__input"
+                  id="password"
+                  required=""
+                  type="password"
+                />
+                <div
+                  class="placeholder__input form_big-first-letter"
+                >
+                  Password
+                  <span>
+                    *
+                  </span>
+                </div>
+                <button
+                  class="password-view password-view_password"
+                  type="button"
+                >
+                   
+                </button>
+                <p
+                  class="error-message"
+                />
+              </label>
+            </div>
+            <button
+              class="btn_action"
+              id="button-login"
+              type="submit"
+            >
+              Войти
+            </button>
+          </form>
+        </div>
+      </section>
+    </div>
+  </body>,
+  "container": <div>
+    <header
+      class="header"
+    >
+      <img
+        alt="logo"
+        class="logo_big"
+        src="/src/assets/images/logo.png"
+      />
+    </header>
+    <section
+      class="form login"
+    >
+      <h2
+        class="form__title"
+      >
+        Добро пожаловать 
+        <br />
+         На Борт Космической Одиссеи!
+      </h2>
+      <div
+        class="form__content"
+      >
+        <div
+          class="form__question"
+        >
+          Путешествуете с нами впервые? 
+          <a
+            href="/registration"
+          >
+            Зарегистрируйтесь!
+          </a>
+        </div>
+        <form
+          class="form__inputs"
+        >
+          <div
+            class="form__inputs-wrapper"
+          >
+            <label
+              class="placeholder"
+              for="name"
+            >
+              <input
+                class="form__input"
+                id="email"
+                required=""
+                type="text"
+              />
+              <div
+                class="placeholder__input form_big-first-letter"
+              >
+                Email
+                <span>
+                  *
+                </span>
+              </div>
+              <p
+                class="error-message "
+              />
+            </label>
+          </div>
+          <div
+            class="form__inputs-wrapper"
+          >
+            <label
+              class="placeholder"
+              for="password"
+            >
+              <input
+                class="form__input"
+                id="password"
+                required=""
+                type="password"
+              />
+              <div
+                class="placeholder__input form_big-first-letter"
+              >
+                Password
+                <span>
+                  *
+                </span>
+              </div>
+              <button
+                class="password-view password-view_password"
+                type="button"
+              >
+                 
+              </button>
+              <p
+                class="error-message"
+              />
+            </label>
+          </div>
+          <button
+            class="btn_action"
+            id="button-login"
+            type="submit"
+          >
+            Войти
+          </button>
+        </form>
+      </div>
+    </section>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;

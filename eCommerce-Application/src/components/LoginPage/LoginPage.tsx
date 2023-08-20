@@ -149,6 +149,7 @@ function LoginPage(): JSX.Element {
                         <button
                             className="btn_action"
                             type="submit"
+                            id="button-login"
                             onClick={(e): void => {
                                 loginUser(e);
                             }}
