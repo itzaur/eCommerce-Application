@@ -229,6 +229,28 @@ function RegistrationDetail(): JSX.Element {
         errorMessageShippingStreet,
     ]);
 
+    useEffect(() => {
+        setErrorShippingIndex(
+            checkIncorrectAddressIndex(shippingIndexValue, countryShipping)
+                .incorrect
+        );
+        setErrorMessageShippingIndex(
+            checkIncorrectAddressIndex(shippingIndexValue, countryShipping)
+                .message
+        );
+    }, [shippingIndexValue, countryShipping]);
+
+    useEffect(() => {
+        setErrorBillingIndex(
+            checkIncorrectAddressIndex(billingIndexValue, countryBilling)
+                .incorrect
+        );
+        setErrorMessageBillingIndex(
+            checkIncorrectAddressIndex(billingIndexValue, countryBilling)
+                .message
+        );
+    }, [billingIndexValue, countryBilling]);
+
     return (
         <>
             <header className="header">
@@ -603,18 +625,18 @@ function RegistrationDetail(): JSX.Element {
                                                     : 'form__input'
                                             }
                                             onChange={(e): void => {
-                                                setErrorShippingIndex(
-                                                    checkIncorrectAddressIndex(
-                                                        e,
-                                                        countryShipping
-                                                    ).incorrect
-                                                );
-                                                setErrorMessageShippingIndex(
-                                                    checkIncorrectAddressIndex(
-                                                        e,
-                                                        countryShipping
-                                                    ).message
-                                                );
+                                                // setErrorShippingIndex(
+                                                //     checkIncorrectAddressIndex(
+                                                //         e,
+                                                //         countryShipping
+                                                //     ).incorrect
+                                                // );
+                                                // setErrorMessageShippingIndex(
+                                                //     checkIncorrectAddressIndex(
+                                                //         e,
+                                                //         countryShipping
+                                                //     ).message
+                                                // );
                                                 setShippingIndexValue(
                                                     e.target.value
                                                 );
@@ -705,22 +727,22 @@ function RegistrationDetail(): JSX.Element {
                                             setCheckboxUseShippingAsBillingAddress(
                                                 !checkboxUseShippingAsBillingAddress
                                             );
-                                            setCountryBilling(countryShipping);
-                                            setBillingRegionValue(
-                                                shippingRegionValue
-                                            );
-                                            setBillingCityValue(
-                                                shippingCityValue
-                                            );
-                                            setBillingIndexValue(
-                                                shippingIndexValue
-                                            );
-                                            setBillingStreetValue(
-                                                shippingStreetValue
-                                            );
-                                            if (!errorShippingCity) {
-                                                setErrorBillingCity(false);
-                                            }
+                                            // setCountryBilling(countryShipping);
+                                            // setBillingRegionValue(
+                                            //     shippingRegionValue
+                                            // );
+                                            // setBillingCityValue(
+                                            //     shippingCityValue
+                                            // );
+                                            // setBillingIndexValue(
+                                            //     shippingIndexValue
+                                            // );
+                                            // setBillingStreetValue(
+                                            //     shippingStreetValue
+                                            // );
+                                            // if (!errorShippingCity) {
+                                            //     setErrorBillingCity(false);
+                                            // }
                                         }}
                                     />
                                     Использовать как адрес выставления счета
@@ -894,18 +916,18 @@ function RegistrationDetail(): JSX.Element {
                                                     : 'form__input'
                                             }
                                             onChange={(e): void => {
-                                                setErrorBillingIndex(
-                                                    checkIncorrectAddressIndex(
-                                                        e,
-                                                        countryBilling
-                                                    ).incorrect
-                                                );
-                                                setErrorMessageBillingIndex(
-                                                    checkIncorrectAddressIndex(
-                                                        e,
-                                                        countryBilling
-                                                    ).message
-                                                );
+                                                // setErrorBillingIndex(
+                                                //     checkIncorrectAddressIndex(
+                                                //         e,
+                                                //         countryBilling
+                                                //     ).incorrect
+                                                // );
+                                                // setErrorMessageBillingIndex(
+                                                //     checkIncorrectAddressIndex(
+                                                //         e,
+                                                //         countryBilling
+                                                //     ).message
+                                                // );
                                                 setBillingIndexValue(
                                                     e.target.value
                                                 );
