@@ -1,0 +1,40 @@
+@use '../abstracts/mixins';
+
+:root {
+    //Colors
+    --color-primary: hsl(181, 73%, 60%);
+    --color-primary-alpha: hsl(181, 73%, 60%, 0.7);
+    --color-secondary: hsl(252, 12%, 40%);
+    --color-secondary-opacity: hsla(253, 12%, 40%, 0.502);
+    --color-error: hsl(0, 100%, 61%);
+    --color-white: hsl(0, 0%, 100%);
+    --color-white-alpha: hsla(0, 0%, 100%, 80%);
+    --color-danger: hsl(0, 81%, 44%);
+    --color-black: hsl(0, 0%, 0%);
+    --drop-shadow-white: 0 0 2rem var(--color-white),
+        0 0 0.2rem var(--color-white);
+    --drop-shadow-light: 0 0 2rem var(--color-primary),
+        0 0 0.6rem var(--color-primary);
+    --footer-gradient: linear-gradient(
+        to bottom,
+        var(--color-black),
+        #1e191b,
+        #342b33,
+        #493f4e,
+        var(--color-secondary)
+    );
+
+    //Fonts
+    --ff-title: 'Project Space', sans-serif;
+    --ff-primary: 'Neuropol', sans-serif;
+    --ff-secondary: 'Bowler', sans-serif;
+    --ff-errors: Arial, Helvetica, sans-serif;
+
+    --fs-title: clamp(1.4rem, 4vw, 10rem);
+    --fs-logo: clamp(4rem, 5vw, 9rem);
+    --fs-form: clamp(1.2rem, 3vw, 2rem);
+    --fs-paragraph: clamp(1.2rem, 2vw, 2.2rem);
+    --fs-big: clamp(2rem, 3vw, 4rem);
+    --fs-medium: clamp(1.2rem, 1vw, 3rem);
+    --fs-small: clamp(1rem, 2vw, 1.6rem);
+}

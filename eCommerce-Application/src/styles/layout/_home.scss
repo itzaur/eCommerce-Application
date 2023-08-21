@@ -1,0 +1,180 @@
+@use '../abstracts/mixins';
+
+.home {
+    padding-bottom: 2rem;
+
+    @include mixins.respond-to('desktop') {
+        padding-bottom: 8rem;
+    }
+
+    & > * {
+        max-width: 96rem;
+        margin: auto;
+    }
+
+    & > * + * {
+        margin-top: 10vw;
+
+        @include mixins.respond-to('desktop') {
+            margin-top: 10rem;
+        }
+    }
+
+    &__title {
+        @include mixins.flex(column, center, center);
+
+        text-align: left;
+
+        color: var(--color-white);
+
+        @include mixins.respond-to('tablet') {
+            align-items: flex-start;
+        }
+
+        .title {
+            text-shadow: var(--drop-shadow-white);
+        }
+
+        & span {
+            position: relative;
+
+            display: inline-block;
+
+            margin-left: 1rem;
+
+            color: var(--color-primary);
+
+            text-shadow: var(--drop-shadow-light);
+
+            @include mixins.respond-to('desktop') {
+                margin-left: 2rem;
+            }
+
+            &:before,
+            &:after {
+                position: absolute;
+                content: '';
+                top: 0;
+                width: 1rem;
+                height: 100%;
+                border: 0.3rem solid var(--color-primary);
+
+                filter: drop-shadow(
+                        0.1rem 0.1rem 0.5rem var(--color-primary-alpha)
+                    )
+                    drop-shadow(
+                        -0.1rem -0.1rem 0.5rem var(--color-primary-alpha)
+                    );
+
+                @include mixins.respond-to('desktop') {
+                    width: 5rem;
+                    border: 0.5rem solid var(--color-primary);
+                }
+            }
+
+            &:before {
+                left: -1rem;
+                border-right: 0;
+
+                @include mixins.respond-to('desktop') {
+                    left: -2rem;
+                }
+            }
+
+            &:after {
+                right: -1rem;
+                border-left: 0;
+
+                @include mixins.respond-to('desktop') {
+                    right: -2rem;
+                }
+            }
+        }
+    }
+
+    &__info {
+        --gap: 2rem;
+        @include mixins.flex(column, space-between, center);
+
+        @include mixins.respond-to('tablet') {
+            --gap: 10rem;
+            flex-direction: row;
+            align-items: flex-start;
+        }
+    }
+
+    &__btns {
+        --gap: 1rem;
+        @include mixins.flex(column, center, center);
+        align-self: stretch;
+
+        @include mixins.respond-to('tablet') {
+            justify-content: flex-start;
+            align-items: flex-start;
+        }
+    }
+
+    &__text {
+        position: relative;
+        width: min(90vw, 45rem);
+
+        color: var(--color-white);
+
+        & > * + * {
+            margin-top: 2rem;
+        }
+
+        &::before,
+        &::after {
+            position: absolute;
+            content: '';
+        }
+
+        &-title {
+            color: var(--color-primary);
+        }
+
+        &-accent {
+            color: var(--color-primary);
+
+            & > * {
+                color: var(--color-white);
+            }
+        }
+
+        @include mixins.respond-to('tablet') {
+            &::before {
+                top: 3.5rem;
+                left: -2rem;
+
+                width: 0.1rem;
+                height: 100%;
+
+                background-color: var(--color-white);
+            }
+
+            &::after {
+                top: 2.3rem;
+                left: -2.5rem;
+
+                width: 1.2rem;
+                height: 1.2rem;
+
+                border-radius: 50%;
+
+                background-color: var(--color-white);
+            }
+        }
+    }
+
+    &__slides {
+        --flow: 22rem;
+        flex: 1 1 var(--flow);
+
+        order: 1;
+
+        @include mixins.respond-to('tablet') {
+            order: 0;
+        }
+    }
+}

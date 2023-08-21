@@ -1,0 +1,62 @@
+@use '../abstracts/mixins';
+
+#login {
+    display: grid;
+    row-gap: 1rem;
+
+    height: 100dvh;
+
+    background-image: url('../assets/images/backround-login.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+
+    & .form {
+        width: min(100rem, 95%);
+    }
+
+    @include mixins.respond-to('tablet') {
+        row-gap: 4rem;
+    }
+}
+
+.password-view {
+    &,
+    &:focus-visible,
+    &:focus {
+        position: absolute;
+        right: 0;
+
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-color: transparent;
+        background-position: center;
+
+        z-index: 2;
+
+        @include mixins.respond-to('tablet') {
+            right: 1rem;
+        }
+    }
+
+    &_password,
+    &_text {
+        width: 4rem;
+        top: 50%;
+        translate: 0 -50%;
+
+        cursor: pointer;
+    }
+
+    &_password {
+        background-image: url('../assets/images/eye-closed.png');
+    }
+
+    &_text {
+        height: auto;
+
+        background-image: url('../assets/images/eye-open.png');
+
+        cursor: pointer;
+    }
+}

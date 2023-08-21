@@ -1,0 +1,28 @@
+@use '../abstracts/mixins';
+
+.header {
+    @include mixins.flex(null, center, flex-end);
+
+    padding: 1rem 2rem;
+
+    @include mixins.respond-to('tablet') {
+        justify-content: flex-start;
+
+        padding: 2rem 2rem;
+    }
+}
+
+#registration .header {
+    padding: 5vw 3vw;
+
+    @include mixins.respond-to('tablet') {
+        justify-content: center;
+
+        padding-top: 8rem;
+        padding-bottom: 5rem;
+    }
+}
+
+#login .header {
+    justify-content: center;
+}

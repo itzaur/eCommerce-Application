@@ -14,6 +14,8 @@ module.exports = {
         'jest.config.ts',
         'jest.setup.ts',
         'vite.config.ts',
+        'vitest.config.ts',
+        'svgTransform.cjs',
         'test',
     ],
     parser: '@typescript-eslint/parser',
@@ -55,5 +57,9 @@ module.exports = {
         '@typescript-eslint/explicit-function-return-type': 'error',
         '@typescript-eslint/consistent-type-assertions': 'error',
         '@typescript-eslint/no-confusing-non-null-assertion': 'error',
+        'import/no-extraneous-dependencies': [
+            'error',
+            { devDependencies: true },
+        ],
     },
 };

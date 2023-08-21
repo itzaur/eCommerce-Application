@@ -10,4 +10,9 @@ export default defineConfig({
         emptyOutDir: true,
         sourcemap: true,
     },
+    resolve: {
+        alias: {
+            'node-fetch': 'isomorphic-fetch',
+        },
+    },
 });

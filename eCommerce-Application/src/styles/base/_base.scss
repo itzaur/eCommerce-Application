@@ -1,0 +1,37 @@
+@use '../abstracts/mixins';
+
+html {
+    font-size: 62.5%;
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100dvh;
+
+    font-family: var(--ff-title);
+
+    background-image: url('../assets/images/backround2.png'),
+        url('../assets/images/background.jpg');
+    background-repeat: no-repeat;
+    background-position: top;
+    background-attachment: fixed;
+    background-size: calc(max(100%, 100rem)), cover;
+}
+
+.sr-only {
+    position: absolute;
+
+    width: 1px;
+    height: 1px;
+
+    margin: -1px;
+    padding: 0;
+
+    clip: rect(0, 0, 0, 0);
+
+    border: none;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+}
