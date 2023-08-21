@@ -496,6 +496,7 @@ function RegistrationDetail(): JSX.Element {
                             <div className="form__input-pair">
                                 <div className="form__inputs-wrapper">
                                     <select
+                                        id="shipping-country"
                                         className={
                                             errorCountryShipping
                                                 ? 'form__input form__input_invalid form__select'
@@ -778,6 +779,7 @@ function RegistrationDetail(): JSX.Element {
                                                 ? 'form__input form__input_invalid form__select'
                                                 : 'form__input'
                                         }
+                                        id="billing-country"
                                         onChange={(e): void => {
                                             setErrorCountryBilling(
                                                 checkIncorrectBillingCountry(e)
