@@ -132,19 +132,26 @@
                 top: 50%;
                 left: calc(100% + 1.2rem);
                 translate: 0 -50%;
+
                 width: 2rem;
                 height: 2rem;
+
                 background-image: url('../assets/images/exit-icon.png');
                 background-repeat: no-repeat;
                 background-size: 2rem 2rem;
+
                 filter: invert(1) brightness(200%);
-                // filter: invert(1) sepia(100%) saturate(0%) hue-rotate(90deg)
-                //     brightness(200%) contrast(100%);
+
                 transition:
                     filter 0.3s linear,
                     left 0.2s ease-in;
             }
         }
+    }
+
+    & a {
+        margin-inline: -0.5em;
+        padding: 0.5em;
     }
 }
 

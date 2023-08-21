@@ -156,7 +156,7 @@
         }
 
         @include mixins.respond-to('tablet') {
-            padding: 1rem;
+            padding: 1rem 2.5rem;
 
             text-align: left;
         }

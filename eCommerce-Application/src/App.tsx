@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import {
     Home,
@@ -14,10 +13,6 @@ function App(): JSX.Element {
     const root = document.querySelector('main');
     const paths = ['login', 'registration', 'store', 'about'];
     const path = location.pathname.slice(1);
-
-    useEffect(() => {
-        // console.log('Current location is ', location);
-    }, [location]);
 
     if (paths.includes(path)) {
         root?.setAttribute('id', path);

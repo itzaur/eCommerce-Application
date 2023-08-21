@@ -1,12 +1,11 @@
 export const checkIncorrectAddressIndex = (
-    // e: React.ChangeEvent<HTMLInputElement>,
     index: string,
     country: string
 ): { incorrect: boolean; message: string } => {
     if (index === '') {
         return { incorrect: false, message: '' };
     }
-    // const { value } = e.target;
+
     if (country === 'Россия') {
         if (!/^\d{6}$/.test(index)) {
             return {
@@ -15,6 +14,7 @@ export const checkIncorrectAddressIndex = (
             };
         }
     }
+
     if (country === 'Беларусь') {
         if (!/^\d{6}$/.test(index)) {
             return {
@@ -23,6 +23,7 @@ export const checkIncorrectAddressIndex = (
             };
         }
     }
+
     if (country === 'Польша') {
         if (!/^\d{2}-\d{3}$/.test(index)) {
             return {
@@ -31,6 +32,7 @@ export const checkIncorrectAddressIndex = (
             };
         }
     }
+
     if (/^\s/.test(index) || /\s$/.test(index)) {
         return {
             incorrect: true,
