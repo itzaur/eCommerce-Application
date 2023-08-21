@@ -11,7 +11,7 @@ import { BrowserRouter } from 'react-router-dom';
 import '@testing-library/jest-dom/extend-expect';
 
 let page: null | RenderResult<
-    typeof import('c:/Users/100nout/Documents/RS/eCommerce-Application/eCommerce-Application/node_modules/@testing-library/dom/types/queries'),
+    typeof import('../node_modules/@testing-library/dom/types/queries'),
     HTMLElement,
     HTMLElement
 > = null;
