@@ -1,10 +1,12 @@
 export const checkIncorrectSurname = (
     e: React.ChangeEvent<HTMLInputElement>
 ): { incorrect: boolean; message: string } => {
-    if (e.target.value === '') {
+    const { value } = e.target;
+
+    if (value === '') {
         return { incorrect: false, message: '' };
     }
-    const { value } = e.target;
+
     if (/^\s/.test(value) || /\s$/.test(value)) {
         return {
             incorrect: true,
@@ -12,12 +14,14 @@ export const checkIncorrectSurname = (
                 'Фамилия не должна содержать начальных и конечных пробелов',
         };
     }
+
     if (value.trim().length < 1) {
         return {
             incorrect: true,
             message: 'Фамилия должна содержать минимум 1 символ',
         };
     }
+
     if (!/^[a-zA-ZА-Яа-яёЁ]+$/.test(value)) {
         return {
             incorrect: true,
