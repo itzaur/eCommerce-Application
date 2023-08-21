@@ -11,7 +11,8 @@
         "prepare": "cd ../ && husky install ./eCommerce-Application/.husky",
         "preview": "vite preview",
         "prettier": "npx prettier . --write",
-        "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
+        "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+        "deploy": "vercel --prod"
     },
     "dependencies": {
         "@commercetools/platform-sdk": "^4.11.0",
@@ -22,7 +23,8 @@
         "isomorphic-fetch": "^3.0.0",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
-        "react-router-dom": "^6.15.0"
+        "react-router-dom": "^6.15.0",
+        "vercel": "^31.4.0"
     },
     "devDependencies": {
         "@babel/core": "^7.22.9",
