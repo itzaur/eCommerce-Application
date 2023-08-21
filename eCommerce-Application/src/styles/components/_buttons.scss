@@ -150,8 +150,11 @@
     }
 
     & a {
-        margin-inline: -0.5em;
         padding: 0.5em;
+
+        @include mixins.respond-to('tablet') {
+            margin-inline: -0.5em;
+        }
     }
 }
 
