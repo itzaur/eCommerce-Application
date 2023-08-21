@@ -543,6 +543,7 @@ exports[`Registration tests > Registration page renders 1`] = `
               </div>
               <div
                 class="form__inputs-wrapper"
+                style="pointer-events: auto;"
               >
                 <label
                   class="form__input_checkbox"
@@ -1231,6 +1232,7 @@ exports[`Registration tests > Registration page renders 1`] = `
             </div>
             <div
               class="form__inputs-wrapper"
+              style="pointer-events: auto;"
             >
               <label
                 class="form__input_checkbox"
