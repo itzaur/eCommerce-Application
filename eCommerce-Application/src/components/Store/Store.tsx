@@ -1,35 +1,18 @@
-/*
- * This is a stub page
- */
-import { Link, Outlet } from 'react-router-dom';
-import logo from '../../assets/images/logo.png';
+import Header from './Header';
+import Filters from './Filters';
 
 function Store(): JSX.Element {
+    const categories = [
+        {
+            parent: 'Космотуры',
+            children: ['Релакс', 'Хобби', 'Активный отдых'],
+        },
+    ];
     return (
-        <section
-            style={{
-                display: 'grid',
-                height: '100vh',
-                backgroundColor: '#000000',
-            }}
-        >
-            <header className="header">
-                <Link to="/">
-                    <img src={logo} alt="logo" className="logo_big" />
-                </Link>
-            </header>
-            <h1
-                style={{
-                    color: 'white',
-                    fontSize: '5rem',
-                    textAlign: 'center',
-                }}
-            >
-                Store Page
-            </h1>
-            <Link to="/store/products">Товары</Link>
-            <Outlet />
-        </section>
+        <>
+            <Header />
+            <Filters categories={categories} />
+        </>
     );
 }
 
