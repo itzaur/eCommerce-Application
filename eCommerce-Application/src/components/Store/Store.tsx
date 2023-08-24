@@ -11,7 +11,7 @@ import { getProductsBySubcategory } from '../../commercetools/getProductsBySubca
 function Store(): JSX.Element {
     const [selectedType, setSelectedType] = useState('Космотуры');
     const [selectedCategory, setSelectedCategory] = useState('');
-    const [cards, setCards] = useState<ProductProjection[] | []>([]);
+    const [cards, setCards] = useState<ProductProjection[]>([]);
 
     useEffect(() => {
         if (selectedCategory) {

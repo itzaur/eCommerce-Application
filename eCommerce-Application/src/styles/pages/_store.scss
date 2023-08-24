@@ -1,7 +1,13 @@
 @use '../abstracts/mixins';
 
 #store {
+    font-family: var(--ff-secondary);
+
     color: var(--color-white);
+
+    background-image: url('../assets/images/background-catalog.png');
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 .sidebar {
@@ -11,5 +17,45 @@
 
     &__btns {
         @include mixins.flex(column, center, center);
+    }
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6.2%;
+
+    width: 66.5%;
+    margin: auto;
+}
+
+.card {
+    background-color: var(--color-primary-opacity);
+    .card__description {
+        padding: 0.2rem 1rem 2rem 2rem;
+    }
+    .card__details {
+        @include mixins.flex(row, space-between, center);
+    }
+    .card__img {
+        width: 100%;
+    }
+    .card__price {
+        width: 50%;
+        margin-top: 3rem;
+
+        font-size: var(--fs-price);
+    }
+    .card__icons {
+        width: 35%;
+        @include mixins.flex(row, space-between, center);
+        img {
+            width: 100%;
+        }
+    }
+    h2 {
+        margin-top: 2rem;
+
+        font-size: var(--fs-very-small);
     }
 }
