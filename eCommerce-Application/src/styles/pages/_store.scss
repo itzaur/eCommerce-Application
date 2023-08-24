@@ -1,0 +1,15 @@
+@use '../abstracts/mixins';
+
+#store {
+    color: var(--color-white);
+}
+
+.sidebar {
+    &__item {
+        @include mixins.flex(column, center, center);
+    }
+
+    &__btns {
+        @include mixins.flex(column, center, center);
+    }
+}

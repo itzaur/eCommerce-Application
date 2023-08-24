@@ -1,6 +1,7 @@
 @use './abstracts/mixins';
 @use './abstracts/variables';
 @use './abstracts/animations';
+
 @use './base/base';
 @use './base/reset';
 @use './base/typography';
@@ -10,15 +11,16 @@
 @use './components/form';
 @use './components/placeholder';
 @use './components/errors';
-
 @use './components/modal';
+
 @use './layout/header';
 @use './layout/home';
 @use './layout/attainments';
 @use './layout/catalog';
 @use './layout/error-page';
 @use './layout/footer';
-@use './pages/login';
 
+@use './pages/login';
 @use './pages/main';
 @use './pages/registration';
+@use './pages/store';

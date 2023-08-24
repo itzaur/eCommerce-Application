@@ -9,6 +9,7 @@ export async function getTypeId(
             .productTypes()
             .get({ queryArgs: { where: `name="${productTypeName}"` } })
             .execute();
+
         return productType.body.results[0].id;
     } catch {
         //
@@ -27,6 +28,7 @@ export async function getProductsByProductType(
                 queryArgs: { where: `productType(id="${typeId}")` },
             })
             .execute();
+
         return result.body.results;
     } catch {
         //
