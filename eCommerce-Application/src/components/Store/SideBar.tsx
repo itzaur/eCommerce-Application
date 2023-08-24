@@ -1,16 +1,24 @@
-import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { categories } from '../../utils/constants';
 
-function SideBar({ selectedCategory, setSelectedCategory }): JSX.Element {
-    console.log(selectedCategory);
-
+function SideBar(props: {
+    setSelectedType: React.Dispatch<React.SetStateAction<string>>;
+    setSelectedCategory: React.Dispatch<React.SetStateAction<string>>;
+}): JSX.Element {
+    const { setSelectedType, setSelectedCategory } = props;
     return (
         <aside className="sidebar">
             {categories.map((category) => (
                 <div className="sidebar__item" key={category.name}>
                     <button className="btn" type="button">
-                        <Link className="sidebar__title" to="/store">
+                        <Link
+                            className="sidebar__title"
+                            to="/store"
+                            onClick={(): void => {
+                                setSelectedCategory('');
+                                setSelectedType(category.name);
+                            }}
+                        >
                             {category.name}
                         </Link>
                     </button>
@@ -21,8 +29,9 @@ function SideBar({ selectedCategory, setSelectedCategory }): JSX.Element {
                                 className="btn"
                                 key={el}
                                 type="button"
-                                onClick={(): void => setSelectedCategory(el)}
-                                data-category={{ selectedCategory }}
+                                onClick={(): void => {
+                                    setSelectedCategory(el);
+                                }}
                             >
                                 {el}
                             </button>
