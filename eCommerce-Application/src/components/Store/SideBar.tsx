@@ -26,7 +26,7 @@ function SideBar(props: {
                     <div className="sidebar__btns">
                         {category.items.map((el) => (
                             <button
-                                className="btn"
+                                className="sidebar__category"
                                 key={el}
                                 type="button"
                                 onClick={(): void => {

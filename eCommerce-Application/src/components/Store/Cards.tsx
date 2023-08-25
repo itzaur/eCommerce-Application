@@ -4,6 +4,7 @@ import cartIcon from '../../assets/images/cart-icon.png';
 import favouriteIcon from '../../assets/images/favourite-icon.png';
 
 function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
+    // console.log(cards);
     return (
         <div className="cards">
             {cards.map((card, i: number) => (
@@ -24,14 +25,41 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
                         />
                         <div className="card__description">
                             <div className="card__details">
-                                <h3 className="card__price">
-                                    {card.masterVariant.prices
-                                        ? `${(
-                                              card.masterVariant.prices[0].value
-                                                  .centAmount / 100
-                                          ).toLocaleString('ru')} $`
-                                        : ''}
-                                </h3>
+                                {card.masterVariant.prices && (
+                                    <div className="card__price">
+                                        {card.masterVariant.prices[0]
+                                            .discounted ? (
+                                            <>
+                                                <h2 className="promotion-price">
+                                                    {(
+                                                        card.masterVariant
+                                                            .prices[0]
+                                                            .discounted.value
+                                                            .centAmount / 100
+                                                    ).toLocaleString('ru')}{' '}
+                                                    $
+                                                </h2>
+
+                                                <h3 className="old-price">
+                                                    <div className="cross-price" />
+                                                    {(
+                                                        card.masterVariant
+                                                            .prices[0].value
+                                                            .centAmount / 100
+                                                    ).toLocaleString('ru')}{' '}
+                                                </h3>
+                                            </>
+                                        ) : (
+                                            <h2>
+                                                {(
+                                                    card.masterVariant.prices[0]
+                                                        .value.centAmount / 100
+                                                ).toLocaleString('ru')}{' '}
+                                                $
+                                            </h2>
+                                        )}
+                                    </div>
+                                )}
                                 <div className="card__icons">
                                     <img src={cartIcon} alt="cart-icon" />
                                     <img
@@ -40,7 +68,9 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
                                     />
                                 </div>
                             </div>
-                            <h2>{card.name['ru-RU']}</h2>
+                            <h2 className="card__title">
+                                {card.name['ru-RU']}
+                            </h2>
                         </div>
                     </div>
                 </Link>

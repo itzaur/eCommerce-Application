@@ -1,6 +1,7 @@
 @use '../abstracts/mixins';
 
 #store {
+    padding: 0 5.2%;
     font-family: var(--ff-secondary);
 
     color: var(--color-white);
@@ -9,14 +10,46 @@
     background-size: cover;
     background-repeat: no-repeat;
 }
+.store__content {
+    @include mixins.flex(row, space-between, flex-start);
+    gap: 5%;
+}
 
 .sidebar {
-    &__item {
-        @include mixins.flex(column, center, center);
-    }
+    padding: 2rem 2.5rem 2rem 2rem;
 
+    background-color: var(--color-secondary-opacity);
+
+    cursor: pointer;
+    &__title {
+        &:hover {
+            color: var(--color-primary);
+        }
+    }
+    &__item {
+        @include mixins.flex(column, center, flex-start);
+        font-size: clamp(1.6rem, 1.3vw, 2.5rem);
+    }
     &__btns {
-        @include mixins.flex(column, center, center);
+        @include mixins.flex(column, center, flex-start);
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+    &__category {
+        @include mixins.flex(column, center, flex-start);
+        margin-left: 5rem;
+        width: fit-content;
+        border-bottom: 1px solid transparent;
+
+        font-family: var(--ff-primary);
+        font-size: var(--fs-small);
+
+        cursor: pointer;
+
+        &:hover {
+            border-bottom: 1px solid var(--color-primary);
+            color: var(--color-primary);
+        }
     }
 }
 
@@ -24,36 +57,64 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 6.2%;
+    width: 64.5;
 
-    width: 66.5%;
     margin: auto;
 }
 
 .card {
+    height: 100%;
+
     background-color: var(--color-primary-opacity);
+
     .card__description {
         padding: 0.2rem 1rem 2rem 2rem;
     }
+
     .card__details {
         @include mixins.flex(row, space-between, center);
     }
+
     .card__img {
         width: 100%;
     }
+
     .card__price {
         width: 50%;
         margin-top: 3rem;
 
-        font-size: var(--fs-price);
+        font-size: var(--fs-medium-big);
+
+        .old-price {
+            width: fit-content;
+
+            font-size: var(--fs-small);
+        }
+
+        .promotion-price {
+            color: var(--color-danger);
+        }
+
+        .cross-price {
+            position: relative;
+            top: 1rem;
+            height: 2px;
+            transform: rotate(-10deg);
+
+            background-color: var(--color-danger);
+        }
     }
+
     .card__icons {
-        width: 35%;
         @include mixins.flex(row, space-between, center);
+
+        width: 35%;
+
         img {
             width: 100%;
         }
     }
-    h2 {
+    .card__title {
         margin-top: 2rem;
 
         font-size: var(--fs-very-small);
