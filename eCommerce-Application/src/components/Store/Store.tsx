@@ -6,6 +6,7 @@ import { Cards, SearchBar, SideBar } from './index';
 
 import { getProductsByProductType } from '../../commercetools/getProductsByType';
 import { getProductsBySubcategory } from '../../commercetools/getProductsBySubcategory';
+import Parameters from './Parameters';
 
 function Store(): JSX.Element {
     const [selectedType, setSelectedType] = useState('Космотуры');
@@ -33,8 +34,15 @@ function Store(): JSX.Element {
                     setSelectedType={setSelectedType}
                     setSelectedCategory={setSelectedCategory}
                 />
-
-                {cards.length && <Cards cards={cards} />}
+                <div>
+                    <Parameters
+                        selectedType={selectedType}
+                        // selectedCategory={selectedCategory}
+                        // setSelectedType={setSelectedType}
+                        // setSelectedCategory={setSelectedCategory}
+                    />
+                    {cards.length && <Cards cards={cards} />}
+                </div>
             </section>
         </>
     );

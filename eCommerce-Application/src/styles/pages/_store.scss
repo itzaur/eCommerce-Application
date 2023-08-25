@@ -11,11 +11,109 @@
     background-repeat: no-repeat;
 }
 .store__content {
-    @include mixins.flex(row, space-between, flex-start);
+    display: grid;
+    grid-template-columns: 1fr 2.6fr;
     gap: 5%;
 }
 
+.parameters {
+    @include mixins.flex(row, space-between, flex-start);
+    padding-bottom: 3rem;
+
+    border-bottom: 1px solid var(--color-primary-alpha);
+
+    &__left-side {
+        @include mixins.flex(row, space-between, flex-start);
+        gap: 2rem;
+    }
+
+    &__item {
+        position: relative;
+
+        @include mixins.flex(column, flex-start, center);
+        gap: 0;
+    }
+
+    &__btn {
+        position: relative;
+
+        width: fit-content;
+        height: 4.5rem;
+        padding: 0rem 3rem;
+
+        font-size: var(--fs-very-small);
+        border: 1px solid var(--color-primary);
+
+        &:hover + .parameters__dropdown {
+            visibility: visible;
+            transform: scale(1, 1);
+        }
+
+        &__img {
+            margin-right: 0.7rem;
+
+            font-size: var(--fs-medium);
+            color: var(--color-primary);
+        }
+
+        &__illustration {
+            position: absolute;
+            top: -1.5rem;
+            right: -1rem;
+            width: 2.5rem;
+            height: 2.5rem;
+
+            display: grid;
+            place-content: center;
+
+            background-color: var(--color-primary);
+            color: var(--color-secondary);
+        }
+    }
+
+    &__btn:last-child {
+        background-color: var(--color-secondary);
+        color: var(--color-primary);
+    }
+
+    &__btn:nth-child(4) {
+        background-color: var(--color-primary);
+        color: var(--color-secondary);
+    }
+
+    &__dropdown {
+        position: absolute;
+        top: 100%;
+        min-width: 22rem;
+        transform: scale(1, 0);
+        transform-origin: top;
+        transition: 0.3s;
+
+        background-color: var(--color-white);
+        color: var(--color-secondary);
+
+        li {
+            @include mixins.flex(row, flex-start, center);
+            width: 80%;
+            margin: auto;
+            height: 6rem;
+
+            border-bottom: 1px solid var(--color-secondary);
+            font-size: var(--fs-smallest);
+            span {
+                display: inline-block;
+                font-size: var(--fs-medium-big);
+            }
+        }
+
+        li:last-child {
+            border-bottom: none;
+        }
+    }
+}
+
 .sidebar {
+    height: fit-content;
     padding: 2rem 2.5rem 2rem 2rem;
 
     background-color: var(--color-secondary-opacity);
@@ -55,11 +153,10 @@
 
 .cards {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 6.2%;
-    width: 64.5;
+    grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+    gap: 5rem;
 
-    margin: auto;
+    margin: 4rem auto;
 }
 
 .card {
