@@ -1,0 +1,90 @@
+@use '../abstracts/mixins';
+
+.dropdown {
+    position: relative;
+}
+
+.select {
+    @include mixins.flex(null, space-between, center);
+    width: 100%;
+    padding: 1rem;
+    min-height: 6rem;
+    border-radius: 0.5rem;
+    background-color: var(--color-white);
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &-clicked {
+        opacity: 0.5;
+    }
+
+    &:hover {
+        background-color: var(--color-primary);
+    }
+}
+
+.caret {
+    width: 0;
+    height: 0;
+    border-left: 0.5rem solid transparent;
+    border-right: 0.5rem solid transparent;
+    border-top: 0.6rem solid var(--color-black);
+    transition: 0.3s;
+
+    &-rotate {
+        transform: rotate(180deg);
+    }
+}
+
+.menu {
+    padding: 1rem 2rem;
+    background-color: var(--color-white);
+    border: 1px var(--color-secondary) solid;
+    box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.5);
+    border-radius: 0.5rem;
+    // color: #9fa5b5;
+    position: absolute;
+    top: 7rem;
+    left: 50%;
+    width: 100%;
+    transform: translate(-50%);
+    opacity: 0;
+    pointer-events: none;
+    // display: none;
+    transition: all 0.5s;
+    z-index: 1;
+
+    &-open {
+        pointer-events: auto;
+        // display: block;
+        opacity: 1;
+    }
+
+    & button {
+        display: block;
+        width: 100%;
+        padding: 1rem 1rem;
+        // margin: 0.3rem 0;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        &:after {
+            display: block;
+            content: '';
+            border-bottom: 2px solid var(--color-primary);
+            transform: scaleX(0);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        &:hover {
+            &:after {
+                transform: scaleX(1);
+            }
+            // scale: 0.9;
+            // background-color: #2a2d35;
+        }
+    }
+}
+
+.active {
+    // background-color: #23242a;
+}

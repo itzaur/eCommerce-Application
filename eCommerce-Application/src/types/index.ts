@@ -37,3 +37,12 @@ export interface ProductOptions {
         | { autor: string; text: string; stars: number; starsEmpty: number }[]
         | undefined;
 }
+
+export interface IAddress {
+    city: string;
+    country: string;
+    id: string;
+    postalCode: string;
+    region: string;
+    streetName: string;
+}

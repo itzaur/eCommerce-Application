@@ -105,6 +105,7 @@
         text-align: center;
 
         background-color: var(--color-primary);
+        color: var(--color-secondary);
 
         cursor: pointer;
 
@@ -123,6 +124,14 @@
             &:hover {
                 box-shadow: var(--drop-shadow-light);
             }
+        }
+    }
+    &_un-action {
+        background-color: var(--color-secondary);
+        color: var(--color-secondary-opacity);
+
+        &:hover {
+            box-shadow: var(--drop-shadow-dark);
         }
     }
 
