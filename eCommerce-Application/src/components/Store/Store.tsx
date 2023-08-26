@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react';
 // import { Routes, Route } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { ProductProjection } from '@commercetools/platform-sdk';
 import Header from './Header';
-import { Cards, SearchBar, SideBar } from './index';
+import { Cards, SideBar, Parameters } from './index';
 
 import { getProductsByProductType } from '../../commercetools/getProductsByType';
 import { getProductsBySubcategory } from '../../commercetools/getProductsBySubcategory';
-import Parameters from './Parameters';
 
-function Store(): JSX.Element {
-    const [selectedType, setSelectedType] = useState('Космотуры');
+function Store({ type }: Record<'type', string>): JSX.Element {
+    const [selectedType, setSelectedType] = useState(type);
     const [selectedCategory, setSelectedCategory] = useState('');
     const [cards, setCards] = useState<ProductProjection[]>([]);
 
@@ -28,21 +28,34 @@ function Store(): JSX.Element {
     return (
         <>
             <Header />
-            <SearchBar />
-            <section className="store__content">
-                <SideBar
-                    setSelectedType={setSelectedType}
-                    setSelectedCategory={setSelectedCategory}
-                />
-                <div>
-                    <Parameters
-                        selectedType={selectedType}
-                        // selectedCategory={selectedCategory}
-                        // setSelectedType={setSelectedType}
-                        // setSelectedCategory={setSelectedCategory}
+            <section className="store__main">
+                <ul className="bread-crumbs">
+                    <li>
+                        <Link to="/">Главная /</Link>
+                    </li>
+                    <li>
+                        <Link to="/store">Каталог /</Link>
+                    </li>
+                    <li>
+                        <Link to="/store">{selectedType} </Link>
+                    </li>
+                </ul>
+                <section className="store__content">
+                    <SideBar
+                        setSelectedType={setSelectedType}
+                        setSelectedCategory={setSelectedCategory}
                     />
-                    {cards.length && <Cards cards={cards} />}
-                </div>
+                    <div>
+                        <Parameters
+                            cards={cards}
+                            selectedType={selectedType}
+                            // selectedCategory={selectedCategory}
+                            // setSelectedType={setSelectedType}
+                            // setSelectedCategory={setSelectedCategory}
+                        />
+                        {cards.length && <Cards cards={cards} />}
+                    </div>
+                </section>
             </section>
         </>
     );

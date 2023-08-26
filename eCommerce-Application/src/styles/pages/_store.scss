@@ -1,7 +1,5 @@
 @use '../abstracts/mixins';
-
 #store {
-    padding: 0 5.2%;
     font-family: var(--ff-secondary);
 
     color: var(--color-white);
@@ -10,10 +8,20 @@
     background-size: cover;
     background-repeat: no-repeat;
 }
+.store__main {
+    padding: 0 5.2%;
+}
 .store__content {
     display: grid;
     grid-template-columns: 1fr 2.6fr;
     gap: 5%;
+}
+
+.bread-crumbs {
+    @include mixins.flex(row, flex-start, flex-start);
+    margin: 7rem 0 4rem;
+
+    font-size: var(--fs-medium);
 }
 
 .parameters {
@@ -37,15 +45,15 @@
     &__btn {
         position: relative;
 
-        width: fit-content;
+        min-width: 15rem;
         height: 4.5rem;
-        padding: 0rem 3rem;
+        padding: 0rem 2rem;
 
         font-size: var(--fs-very-small);
+        text-align: center;
         border: 1px solid var(--color-primary);
 
         &:hover + .parameters__dropdown {
-            visibility: visible;
             transform: scale(1, 1);
         }
 
@@ -84,13 +92,17 @@
     &__dropdown {
         position: absolute;
         top: 100%;
-        min-width: 22rem;
+        min-width: 19rem;
         transform: scale(1, 0);
         transform-origin: top;
         transition: 0.3s;
 
         background-color: var(--color-white);
         color: var(--color-secondary);
+
+        &:hover {
+            transform: scale(1, 1);
+        }
 
         li {
             @include mixins.flex(row, flex-start, center);
@@ -104,12 +116,83 @@
                 display: inline-block;
                 font-size: var(--fs-medium-big);
             }
+
+            &:last-child {
+                border-bottom: none;
+            }
         }
 
-        li:last-child {
-            border-bottom: none;
+        &:last-child {
+            min-width: 35rem;
+            padding: 0 2rem;
+        }
+        .parameters__dropdown__price-inputs_number {
+            @include mixins.flex(row, center, center);
+            height: 6rem;
+
+            border-bottom: 1px solid var(--color-secondary);
+            font-size: var(--fs-smallest);
+        }
+
+        .price-input_number {
+            width: 10rem;
+            height: 3em;
+            padding: 0 2rem;
+
+            background-color: var(--color-input);
+        }
+        .parameters__dropdown__price-inputs_range {
+            height: 6rem;
+            position: relative;
+            @include mixins.flex(column, center, fl);
         }
     }
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+input[type='number'] {
+    -moz-appearance: textfield;
+}
+input[type='range'] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+input[type='range']::-webkit-slider-runnable-track {
+    position: absolute;
+    width: 30rem;
+    top: 3rem;
+    border-radius: 1px;
+    height: 2px;
+    background-color: var(--color-secondary);
+}
+input[type='range']::-webkit-slider-thumb {
+    pointer-events: all;
+    -webkit-appearance: none;
+    position: relative;
+    z-index: 1;
+    margin-top: -0.8rem;
+    border-radius: 0.8rem;
+    width: 1.7rem;
+    height: 1.7rem;
+
+    cursor: pointer;
+
+    background: var(--color-secondary);
+}
+
+input[type='range']::-moz-range-track {
+    border-radius: 1px;
+    height: 2px;
+    background: var(--color-secondary);
+}
+input[type='range']::-moz-range-thumb {
+    background: var(--color-secondary);
+    border-radius: 0.8rem;
+    cursor: pointer;
 }
 
 .sidebar {

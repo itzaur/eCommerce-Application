@@ -26,3 +26,45 @@
 #login .header {
     justify-content: center;
 }
+
+#store .header {
+    justify-content: space-between;
+    padding: 2rem 5.2% 3rem;
+
+    box-shadow: 0px 10px 200px var(--color-primary);
+
+    nav {
+        @include mixins.flex(row, space-between, flex-end);
+        gap: 4.5rem;
+
+        a,
+        button {
+            @include mixins.flex(column, center, center);
+
+            font-size: var(--fs-medium);
+
+            cursor: pointer;
+        }
+        .search-btn {
+            position: relative;
+        }
+        a:last-child {
+            position: relative;
+            #purchases-number {
+                visibility: hidden;
+
+                position: absolute;
+                top: -1rem;
+                right: 1.8rem;
+                width: 2.5rem;
+                height: 2.5rem;
+
+                display: grid;
+                place-content: center;
+
+                background-color: var(--color-primary);
+                color: var(--color-secondary);
+            }
+        }
+    }
+}
