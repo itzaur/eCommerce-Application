@@ -42,6 +42,10 @@ function SideBar(props: {
                                     key={el.name}
                                     type="button"
                                     onClick={(): void => {
+                                        setSelectedType(category.parent.name);
+                                        setSelectedTypePath(
+                                            category.parent.path
+                                        );
                                         setSelectedCategory(el.name);
                                         setSelectedCategoryPath(el.path);
                                     }}

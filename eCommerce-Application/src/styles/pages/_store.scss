@@ -85,15 +85,14 @@
     &__btn_first {
         width: 20rem;
     }
-
-    &__btn:last-child {
-        background-color: var(--color-secondary);
-        color: var(--color-primary);
-    }
-
-    &__btn:nth-child(4) {
+    &__btn_promotions {
         background-color: var(--color-primary);
         color: var(--color-secondary);
+    }
+
+    &__btn_reset {
+        background-color: var(--color-secondary);
+        color: var(--color-primary);
     }
 
     &__dropdown {

@@ -17,7 +17,6 @@ function Store({ type }: Record<'type', string>): JSX.Element {
     const [selectedCategoryPath, setSelectedCategoryPath] = useState('');
     const [cards, setCards] = useState<ProductProjection[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
-    // const [sortOrder, setSortOrder] = useState('По умолчанию');
 
     useEffect(() => {
         getCategories().then((data) => {
@@ -91,11 +90,7 @@ function Store({ type }: Record<'type', string>): JSX.Element {
                             cards={cards}
                             categories={categories}
                             selectedType={selectedType}
-                            // selectedCategory={selectedCategory}
-                            // setSelectedType={setSelectedType}
-                            // setSelectedCategory={setSelectedCategory}
-                            // sortOrder={sortOrder}
-                            // setSortOrder={setSortOrder}
+                            selectedCategory={selectedCategory}
                         />
                         {cards.length && <Cards cards={cards} />}
                     </div>
