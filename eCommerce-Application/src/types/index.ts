@@ -3,7 +3,7 @@ export type ModalProps = {
     setActive(arg: boolean): void;
     children: React.ReactNode;
 };
-export type Categories = {
-    parent: string;
-    children: string[];
+export type Category = {
+    parent: { name: string; path: string };
+    items: { name: string; path: string }[];
 };

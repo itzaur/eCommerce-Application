@@ -32,7 +32,8 @@
 
     &__left-side {
         @include mixins.flex(row, space-between, flex-start);
-        gap: 2rem;
+        gap: 1rem;
+        width: 100%;
     }
 
     &__item {
@@ -40,6 +41,9 @@
 
         @include mixins.flex(column, flex-start, center);
         gap: 0;
+    }
+    &__item:first-child {
+        width: 18rem;
     }
 
     &__btn {
@@ -78,6 +82,9 @@
             color: var(--color-secondary);
         }
     }
+    &__btn_first {
+        width: 20rem;
+    }
 
     &__btn:last-child {
         background-color: var(--color-secondary);
@@ -91,14 +98,18 @@
 
     &__dropdown {
         position: absolute;
+        z-index: 10;
         top: 100%;
-        min-width: 19rem;
+        min-width: 20rem;
         transform: scale(1, 0);
         transform-origin: top;
         transition: 0.3s;
 
         background-color: var(--color-white);
         color: var(--color-secondary);
+        * {
+            cursor: pointer;
+        }
 
         &:hover {
             transform: scale(1, 1);
@@ -112,6 +123,12 @@
 
             border-bottom: 1px solid var(--color-secondary);
             font-size: var(--fs-smallest);
+            button,
+            label {
+                width: 100%;
+                height: 100%;
+                @include mixins.flex(row, flex-start, center);
+            }
             span {
                 display: inline-block;
                 font-size: var(--fs-medium-big);
@@ -122,8 +139,8 @@
             }
         }
 
-        &:last-child {
-            min-width: 35rem;
+        &_last {
+            width: 35rem;
             padding: 0 2rem;
         }
         .parameters__dropdown__price-inputs_number {
