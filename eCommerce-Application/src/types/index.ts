@@ -18,3 +18,20 @@ export type FilterSortSearcParameters = {
     searchValue?: string;
     discountedProducts?: boolean;
 };
+
+export interface ProductOptions {
+    title: string;
+    description: string | undefined;
+    currency: string | undefined;
+    price?: string | number;
+    discount?: string | number;
+    imageSrc: string;
+    imageAlt: string | undefined;
+    detailsTitle: string | undefined;
+    detailsItems?: string[];
+    reviewAutor?: string[];
+    reviewText?: string[];
+    reviews:
+        | { autor: string; text: string; stars: number; starsEmpty: number }[]
+        | undefined;
+}

@@ -6,3 +6,10 @@
 
     text-align: center;
 }
+
+main:not(#main, #login, #registration, #store, #about) {
+    background-image: url('../assets/images/bg-product.jpg');
+    background-repeat: no-repeat;
+    background-position: top;
+    background-size: cover;
+}

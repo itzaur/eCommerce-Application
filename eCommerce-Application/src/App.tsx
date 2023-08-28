@@ -8,11 +8,19 @@ import {
     NotFound,
 } from './components';
 import Tour from './components/Store/Tour';
+import ProductDetail from './components/ProductPage/ProductPage';
+import { tours } from './utils/constants';
 
 function App(): JSX.Element {
     const location = useLocation();
     const root = document.querySelector('main');
-    const paths = ['login', 'registration', 'store', 'about'];
+    const paths = [
+        'login',
+        'registration',
+        'store',
+        'about',
+        ...tours.map((tour) => tour.name),
+    ];
     const categories = [
         'cosmotours',
         'hotel',
@@ -94,6 +102,7 @@ function App(): JSX.Element {
             />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/store/tours/:id" element={<Tour />} />
+            <Route path="/store/:key" element={<ProductDetail />} />
             <Route path="*" element={<NotFound />} />
         </Routes>
     );

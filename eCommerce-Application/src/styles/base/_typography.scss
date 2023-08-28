@@ -15,6 +15,12 @@
     src: url(../assets/fonts/neuropol/neuropol.otf);
 }
 
+@font-face {
+    font-family: 'Zekton Rg';
+    // src: url(../assets/fonts/zekton/ZEKTON_RG.OTF);
+    src: url(../assets/fonts/zekton/ZektonLt-Regular.woff2);
+}
+
 .home {
     &__title {
         .title {
@@ -153,5 +159,92 @@
         font-family: var(--ff-primary);
         font-size: clamp(1.3rem, 4vw, 2.3rem);
         text-align: center;
+    }
+}
+
+.product {
+    &__path,
+    &__back {
+        font-family: var(--ff-secondary);
+        font-size: 1.2rem;
+        letter-spacing: 0.1em;
+    }
+
+    &__info {
+        .info-title {
+            font-family: var(--ff-secondary);
+            font-size: var(--fs-medium-big);
+        }
+
+        .info-text {
+            p {
+                font-family: var(--ff-product);
+                font-size: var(--fs-form);
+                line-height: 1.5;
+            }
+        }
+
+        .info-discount {
+            font-family: var(--ff-product);
+            font-size: var(--fs-paragraph);
+
+            & *:nth-child(2) {
+                font-family: var(--ff-secondary);
+            }
+        }
+
+        .info-value {
+            &__discount,
+            &__price {
+                font-family: var(--ff-secondary);
+            }
+
+            &__discount {
+                font-size: var(--fs-big);
+            }
+
+            &__price {
+                font-size: var(--fs-paragraph);
+                text-decoration: line-through;
+
+                &-active {
+                    text-decoration: none;
+                }
+            }
+        }
+    }
+
+    &__details {
+        font-family: var(--ff-product);
+        font-size: var(--fs-small);
+
+        &-title {
+            font-size: var(--fs-paragraph);
+            text-align: center;
+
+            @include mixins.respond-to('tablet') {
+                text-align: left;
+            }
+        }
+
+        &-btns {
+            font-size: (var(--fs-medium));
+            text-align: center;
+        }
+    }
+
+    &__reviews {
+        h2 {
+            font-family: var(--ff-secondary);
+            font-size: var(--fs-small);
+        }
+    }
+}
+
+.review {
+    &__text,
+    &__autor {
+        font-family: var(--ff-product);
+        font-size: var(--fs-review);
     }
 }

@@ -10,9 +10,11 @@
     --color-error: hsl(0, 100%, 61%);
     --color-white: hsl(0, 0%, 100%);
     --color-white-alpha: hsla(0, 0%, 100%, 80%);
+
     --color-danger: hsl(0, 81%, 44%);
     --color-black: hsl(0, 0%, 0%);
     --color-input: hsla(0, 0%, 85%, 1);
+    --color-black-alpha: hsla(0, 0%, 40%, 0.4);
     --drop-shadow-white: 0 0 2rem var(--color-white),
         0 0 0.2rem var(--color-white);
     --drop-shadow-light: 0 0 2rem var(--color-primary),
@@ -30,6 +32,7 @@
     --ff-title: 'Project Space', sans-serif;
     --ff-primary: 'Neuropol', sans-serif;
     --ff-secondary: 'Bowler', sans-serif;
+    --ff-product: 'Zekton Rg', sans-serif;
     --ff-errors: Arial, Helvetica, sans-serif;
 
     --fs-title: clamp(1.4rem, 4vw, 10rem);
@@ -40,6 +43,7 @@
     --fs-medium-big: clamp(1.6rem, 1.3vw, 3.5rem);
     --fs-medium: clamp(1.2rem, 1vw, 3rem);
     --fs-small: clamp(1rem, 2vw, 1.6rem);
+    --fs-review: clamp(1rem, 2vw, 1.4rem);
     --fs-very-small: clamp(0.5rem, 1vw, 1.3rem);
     --fs-smallest: clamp(0.5rem, 0.9vw, 1.1rem);
 }

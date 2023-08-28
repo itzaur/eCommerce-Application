@@ -4,7 +4,6 @@ import cartIcon from '../../assets/images/cart-icon.png';
 import favouriteIcon from '../../assets/images/favourite-icon.png';
 
 function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
-    // console.log(cards);
     return (
         <div className="cards">
             {cards.map((card, i: number) => (

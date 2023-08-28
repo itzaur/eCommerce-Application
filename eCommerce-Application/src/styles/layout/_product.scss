@@ -1,0 +1,342 @@
+@use '../abstracts/mixins';
+
+.product {
+    display: grid;
+    grid-template-columns: minmax(1rem, 1fr) repeat(2, minmax(0, 75rem)) minmax(
+            1rem,
+            1fr
+        );
+    grid-template-rows: min-content min-content 1fr;
+    row-gap: 2rem;
+
+    padding-block: 2rem;
+
+    color: var(--color-white);
+
+    box-shadow:
+        inset 0rem 3.8rem 4rem -4rem var(--color-primary),
+        inset 0rem -3.8rem 4rem -4rem var(--color-primary);
+
+    @include mixins.respond-to('desktop') {
+        column-gap: 5rem;
+    }
+
+    &__path {
+        grid-column: 2 / span 2;
+
+        padding-block: 1rem;
+
+        opacity: 0.5;
+
+        @include mixins.respond-to('desktop') {
+            grid-column: 2;
+
+            padding-block: 2rem;
+        }
+    }
+
+    &__back {
+        @include mixins.flex(null, flex-start, center);
+
+        grid-row: 2;
+        grid-column: 2;
+
+        opacity: 0.5;
+
+        & a {
+            @include mixins.flex(null, flex-start, center);
+        }
+
+        & span {
+            width: 1.5rem;
+            height: 1.5rem;
+
+            border-left: 2px solid var(--color-primary);
+            border-bottom: 2px solid var(--color-primary);
+
+            rotate: 45deg;
+        }
+    }
+
+    &__box {
+        grid-column: 2 / -2;
+        grid-row: 3;
+
+        display: grid;
+        grid-template-areas:
+            'info'
+            'img'
+            'details'
+            'review';
+        grid-template-columns: 1fr;
+        column-gap: 5rem;
+        row-gap: 2rem;
+
+        @include mixins.respond-to('desktop') {
+            grid-template-areas:
+                'img img info info info'
+                'img img details details details'
+                'review review review review review';
+            grid-template-columns: minmax(0, 12rem) repeat(4, 1fr);
+        }
+    }
+
+    &__imgs {
+        grid-area: img;
+        grid-row: 2;
+
+        display: grid;
+
+        grid-template-columns: 1fr 1fr;
+        row-gap: 1rem;
+
+        @include mixins.respond-to('desktop') {
+            display: contents;
+            grid-row: 1 / span 2;
+            row-gap: 2rem;
+        }
+
+        .slider {
+            grid-column: 1 / span 2;
+            grid-row: 1;
+            align-self: center;
+
+            display: block;
+            place-items: center;
+
+            height: auto;
+
+            @include mixins.respond-to('tablet') {
+                height: max(20rem, 40vh);
+            }
+
+            @include mixins.respond-to('desktop') {
+                height: auto;
+
+                align-self: auto;
+            }
+
+            & img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+        }
+
+        .slider-details {
+            grid-column: 1 / span 2;
+
+            display: grid;
+            place-content: center;
+            column-gap: 1rem;
+
+            @include mixins.respond-to('desktop') {
+                place-content: center;
+                column-gap: 2rem;
+            }
+
+            & *:nth-child(1) {
+                grid-column: 1;
+            }
+
+            & *:nth-child(2) {
+                grid-column: 2;
+            }
+        }
+    }
+
+    &__info {
+        @include mixins.flex(column, flex-start, baseline);
+
+        grid-area: info;
+        grid-row: 1;
+
+        & > * + * {
+            margin-top: 1rem;
+
+            @include mixins.respond-to('desktop') {
+                margin-top: 3rem;
+            }
+        }
+
+        .info-text {
+            padding: 1rem;
+
+            background-color: var(--color-black-alpha);
+            backdrop-filter: blur(3px);
+
+            border: 1px solid var(--color-primary);
+
+            box-shadow: inset var(--drop-shadow-light);
+
+            @include mixins.respond-to('desktop') {
+                min-height: 20rem;
+
+                padding: 3rem;
+            }
+        }
+
+        .info-price {
+            @include mixins.flex(column, center, flex-start);
+
+            margin-top: auto;
+
+            @include mixins.respond-to('desktop') {
+                --gap: 3rem;
+            }
+        }
+
+        .info-value {
+            @include mixins.flex(null, center, baseline);
+            flex-wrap: wrap;
+
+            @include mixins.respond-to('desktop') {
+                --gap: 1rem;
+            }
+
+            &__discount {
+                color: var(--color-primary);
+            }
+
+            &__price {
+                color: var(--color-white);
+                opacity: 0.5;
+
+                &-active {
+                    color: var(--color-primary);
+                    opacity: 1;
+                }
+            }
+        }
+
+        .info-discount {
+            --gap: 1.5rem;
+            @include mixins.flex(null, flex-start, center);
+
+            &--inactive {
+                display: none;
+            }
+
+            & *:nth-child(2) {
+                padding: 0.4em 0.2em;
+
+                color: var(--color-secondary);
+                background-color: var(--color-primary);
+            }
+        }
+    }
+
+    &__details {
+        --gap: 2rem;
+        @include mixins.flex(column, center, flex-start);
+
+        grid-area: details;
+        grid-row: 3;
+
+        padding: 1rem;
+
+        border: 1px solid var(--color-primary);
+
+        &-items {
+            @include mixins.flex(null, center, center);
+            flex-wrap: wrap;
+        }
+
+        &-btns {
+            @include mixins.flex(null, center, stretch);
+            flex-wrap: wrap;
+        }
+
+        @include mixins.respond-to('desktop') {
+            --gap: 2vw;
+
+            grid-row: 2;
+
+            padding: 3rem;
+        }
+    }
+
+    &__reviews {
+        display: grid;
+        row-gap: 1rem;
+
+        grid-area: review;
+
+        @include mixins.respond-to('tablet') {
+            --gap: 2rem;
+            @include mixins.flex(null, space-between, center);
+            flex-wrap: wrap;
+
+            & > * {
+                flex: 1 0 40rem;
+            }
+
+            h2 {
+                flex: 1 0 100%;
+            }
+        }
+
+        @include mixins.respond-to('desktop') {
+            --gap: 4rem;
+        }
+    }
+}
+
+.review {
+    @include mixins.flex(null, center, stretch);
+    flex-wrap: wrap;
+
+    padding: 1rem;
+
+    border: 1px solid var(--color-primary);
+
+    @include mixins.respond-to('tablet') {
+        --gap: 1rem;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+
+        padding: 2rem;
+    }
+
+    &__autor {
+        @include mixins.flex(column, space-between, center);
+        flex: 0 0 9rem;
+
+        img {
+            width: max(3rem, 10vw);
+
+            @include mixins.respond-to('tablet') {
+                width: 8rem;
+                height: 8rem;
+            }
+        }
+
+        @include mixins.respond-to('tablet') {
+            align-items: flex-start;
+        }
+    }
+
+    &__info {
+        @include mixins.flex(column, space-between, center);
+
+        @include mixins.respond-to('tablet') {
+            align-items: flex-start;
+        }
+    }
+
+    &__text {
+        text-align: center;
+
+        @include mixins.respond-to('tablet') {
+            text-align: left;
+        }
+    }
+
+    &__stars {
+        height: 1.5rem;
+
+        @include mixins.respond-to('tablet') {
+            height: auto;
+        }
+    }
+}
