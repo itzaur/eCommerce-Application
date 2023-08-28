@@ -4,9 +4,9 @@ import { checkMinMaxPrice } from '../../utils/checkMinMaxPrice';
 import { checkFilterVariants } from '../../utils/checkFilterVariants';
 
 function Parameters(props: {
-    cards: ProductProjection[];
     selectedType: string;
     selectedCategory: string;
+    cards: ProductProjection[];
 }): JSX.Element {
     const { cards, selectedType, selectedCategory } = props;
     const [selectedCategoriesList] = useState<string[]>([]);
@@ -21,8 +21,13 @@ function Parameters(props: {
     const [maxSelectedPrice, setMaxSelectedPrice] = useState(0);
     const [sortOrderValue, setSortOrderValue] = useState('По умолчанию');
     const [sortOrderIcon, setSortOrderIcon] = useState('↓↑');
+
     if (selectedType === 'Космотуры') {
         filter = { name: 'Локация', key: 'location' };
+    } else if (selectedType === 'Выбрать номер') {
+        filter = { name: 'Цвет', key: 'сolor' };
+    } else {
+        filter = { name: 'Форма', key: 'shape' };
     }
 
     useEffect(() => {

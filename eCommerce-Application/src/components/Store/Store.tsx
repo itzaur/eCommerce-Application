@@ -88,7 +88,6 @@ function Store({ type }: Record<'type', string>): JSX.Element {
                     <div>
                         <Parameters
                             cards={cards}
-                            categories={categories}
                             selectedType={selectedType}
                             selectedCategory={selectedCategory}
                         />
