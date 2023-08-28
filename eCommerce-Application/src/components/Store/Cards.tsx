@@ -32,32 +32,38 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
                                             <>
                                                 <h2 className="promotion-price">
                                                     ${' '}
-                                                    {(
+                                                    {(+(
                                                         card.masterVariant
                                                             .prices[0]
                                                             .discounted.value
                                                             .centAmount / 100
-                                                    ).toLocaleString('ru')}
+                                                    ).toFixed(
+                                                        0
+                                                    )).toLocaleString('ru')}
                                                     .00
                                                 </h2>
 
                                                 <h3 className="old-price">
                                                     <div className="cross-price" />
-                                                    {(
+                                                    {(+(
                                                         card.masterVariant
                                                             .prices[0].value
                                                             .centAmount / 100
-                                                    ).toLocaleString('ru')}
+                                                    ).toFixed(
+                                                        0
+                                                    )).toLocaleString('ru')}
                                                     .00
                                                 </h3>
                                             </>
                                         ) : (
                                             <h2>
                                                 ${' '}
-                                                {(
+                                                {(+(
                                                     card.masterVariant.prices[0]
                                                         .value.centAmount / 100
-                                                ).toLocaleString('ru')}
+                                                ).toFixed(0)).toLocaleString(
+                                                    'ru'
+                                                )}
                                                 .00
                                             </h2>
                                         )}
