@@ -25,6 +25,7 @@ export interface ProductOptions {
     currency: string | undefined;
     price?: string | number;
     discount?: string | number;
+    images: string[] | undefined;
     imageSrc: string;
     imageAlt: string | undefined;
     detailsTitle: string | undefined;

@@ -1,0 +1,1 @@
+Created by Jim Sorenson.  Based on the self-destruct device's script.  I've assumed that the 3 different types of characters we see are numbers, lowercase letters and uppercase letters.  Completed on 8/4/97.  1-4, A-M, and a - j are cannononical.

@@ -1,14 +1,21 @@
 import { useEffect, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { EffectCoverflow, Pagination, Navigation } from 'swiper/modules';
 import { Product } from '@commercetools/platform-sdk';
 import { apiRoot } from '../../commercetools/Client';
 import { Header } from '../Store';
 import { Footer } from '../MainPage';
 import { tours } from '../../utils/constants';
 import { ProductOptions } from '../../types';
+import starEmpty from '../../assets/images/review-star-empty.png';
 import avatar from '../../assets/images/user.png';
 import star from '../../assets/images/review-star.png';
-import starEmpty from '../../assets/images/review-star-empty.png';
+
+import 'swiper/css';
+import 'swiper/css/effect-coverflow';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
 
 function ProductDetail(): JSX.Element {
     const [card, setCard] = useState<Product>();
@@ -44,6 +51,9 @@ function ProductDetail(): JSX.Element {
             ? card?.masterData.current.masterVariant.prices[0].value
                   .currencyCode
             : '',
+        images: card?.masterData.current.masterVariant.images?.map(
+            (el) => el.url
+        ),
         imageSrc: card?.masterData.current.masterVariant.images
             ? card?.masterData.current.masterVariant.images[0].url
             : '',
@@ -74,9 +84,6 @@ function ProductDetail(): JSX.Element {
           })
         : '';
 
-    // console.log(product.price);
-    // console.log(product.discount);
-
     return (
         <>
             <Header />
@@ -94,20 +101,53 @@ function ProductDetail(): JSX.Element {
                 <div className="product__box">
                     <div className="product__imgs">
                         <div className="slider">
-                            <img
-                                src={product.imageSrc}
-                                alt={product.imageAlt}
-                            />
+                            <Swiper
+                                effect="coverflow"
+                                grabCursor
+                                slidesPerView={1}
+                                spaceBetween={20}
+                                coverflowEffect={{
+                                    rotate: 0,
+                                    stretch: 0,
+                                    depth: 100,
+                                    modifier: 2.5,
+                                }}
+                                pagination={{
+                                    el: '.swiper-pagination',
+                                    clickable: true,
+                                }}
+                                navigation={{
+                                    nextEl: '.swiper-button-next',
+                                    prevEl: '.swiper-button-prev',
+                                }}
+                                modules={[
+                                    EffectCoverflow,
+                                    Pagination,
+                                    Navigation,
+                                ]}
+                                className="swiper-container"
+                                onSlideChange={(swiper): void =>
+                                    console.log(swiper.activeIndex)
+                                }
+                            >
+                                {product.images?.map((img, i) => (
+                                    <SwiperSlide key={i}>
+                                        <img src={img} alt="img" />
+                                    </SwiperSlide>
+                                ))}
+                                <div className="slider-controler">
+                                    <div className="swiper-button-prev slider-arrow" />
+                                    <div className="swiper-button-next slider-arrow" />
+                                    <div className="swiper-pagination" />
+                                </div>
+                            </Swiper>
                         </div>
                         <div className="slider-details">
-                            <img
-                                src={product.imageSrc}
-                                alt={product.imageAlt}
-                            />
-                            <img
-                                src={product.imageSrc}
-                                alt={product.imageAlt}
-                            />
+                            {product.images?.slice(1)?.map((img, i) => (
+                                <div key={i}>
+                                    <img src={img} alt="" />
+                                </div>
+                            ))}
                         </div>
                     </div>
                     <div className="product__info">
@@ -125,6 +165,15 @@ function ProductDetail(): JSX.Element {
                             >
                                 <span>Цена со скидкой</span>
                                 <span>-10%</span>
+                            </div>
+                            <div
+                                className={
+                                    product.discount !== '$0.00'
+                                        ? 'info-value--inactive'
+                                        : 'info-value info-value--active'
+                                }
+                            >
+                                <span>Ваша цена:</span>
                             </div>
                             <div className="info-value">
                                 <span className="info-value__discount">
@@ -177,7 +226,17 @@ function ProductDetail(): JSX.Element {
                                     <span>{el.autor}</span>
                                 </div>
                                 <div className="review__info">
-                                    <div className="review__text">
+                                    <div
+                                        className={`review__text ${
+                                            el.autor === 'Чужой'
+                                                ? 'review__text--alien'
+                                                : ''
+                                        } ${
+                                            el.autor === 'Хищник'
+                                                ? 'review__text--predator'
+                                                : ''
+                                        }`}
+                                    >
                                         {el.text}
                                     </div>
                                     <div className="review__stars">

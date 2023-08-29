@@ -17,8 +17,17 @@
 
 @font-face {
     font-family: 'Zekton Rg';
-    // src: url(../assets/fonts/zekton/ZEKTON_RG.OTF);
     src: url(../assets/fonts/zekton/ZektonLt-Regular.woff2);
+}
+
+@font-face {
+    font-family: 'Stray Robotalk';
+    src: url(../assets/fonts/stray-game-font/STRAY_ROBOTALK_REGULAR.TTF);
+}
+
+@font-face {
+    font-family: 'Predator';
+    src: url(../assets/fonts/predator/predator.ttf);
 }
 
 .home {
@@ -208,8 +217,14 @@
                 text-decoration: line-through;
 
                 &-active {
+                    font-size: var(--fs-big);
                     text-decoration: none;
                 }
+            }
+
+            &--active {
+                font-family: var(--ff-product);
+                font-size: var(--fs-form);
             }
         }
     }
@@ -246,5 +261,15 @@
     &__autor {
         font-family: var(--ff-product);
         font-size: var(--fs-review);
+    }
+
+    &__text--alien {
+        font-family: var(--ff-alien);
+        font-size: var(--fs-paragraph);
+    }
+
+    &__text--predator {
+        font-family: var(--ff-predator);
+        font-size: var(--fs-paragraph);
     }
 }

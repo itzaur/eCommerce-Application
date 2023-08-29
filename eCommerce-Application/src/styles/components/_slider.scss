@@ -1,0 +1,32 @@
+.slider {
+    &-arrow {
+        color: var(--color-white);
+    }
+}
+
+.swiper {
+    // &-wrapper {
+    //     cursor: grab;
+    // }
+    height: 100%;
+    // height: fit-content;
+
+    &-slide {
+        height: auto;
+    }
+
+    // &-pagination {
+    //     top: 80%;
+    // }
+
+    &-pagination-bullet {
+        background-color: var(--color-white);
+        opacity: 0.5;
+
+        &-active {
+            background-color: var(--color-white);
+
+            opacity: 1;
+        }
+    }
+}
