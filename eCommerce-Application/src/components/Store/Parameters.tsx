@@ -36,6 +36,7 @@ function Parameters(props: {
 
     let filter: { name: string; key: string } = { name: '', key: '' };
     const [filtersApplied, setFiltersApplied] = useState(false);
+    const [discountedProducts, setDiscountedProducts] = useState(false);
     const [sort, setSort] = useState('');
     const [sortOrderValue, setSortOrderValue] = useState('По умолчанию');
     const [sortOrderIcon, setSortOrderIcon] = useState('↓↑');
@@ -50,6 +51,7 @@ function Parameters(props: {
 
     useEffect(() => {
         setSelectedCategoriesList([]);
+        setDiscountedProducts(false);
         document.querySelectorAll('input[data-type="filter"').forEach((el) => {
             if (el instanceof HTMLInputElement) {
                 const elCopy = el;
@@ -80,6 +82,7 @@ function Parameters(props: {
                 maxSelectedPrice,
                 sort,
                 searchValue,
+                discountedProducts,
             }).then((data) => {
                 if (data) setCards(data);
             });
@@ -94,6 +97,7 @@ function Parameters(props: {
         setCards,
         sort,
         searchValue,
+        discountedProducts,
     ]);
 
     return (
@@ -296,6 +300,18 @@ function Parameters(props: {
                 <button
                     className="btn parameters__btn parameters__btn_promotions"
                     type="button"
+                    onClick={(e): void => {
+                        (e.target as HTMLElement).classList.toggle(
+                            'parameters__btn_promotions_applied'
+                        );
+                        if (discountedProducts) {
+                            setDiscountedProducts(false);
+                        } else {
+                            setDiscountedProducts(true);
+                        }
+
+                        if (!filtersApplied) setFiltersApplied(true);
+                    }}
                 >
                     Акции
                 </button>
@@ -308,6 +324,12 @@ function Parameters(props: {
                     setMinSelectedPrice(minPrice);
                     setMaxSelectedPrice(maxPrice);
                     setSelectedCategoriesList([]);
+                    setDiscountedProducts(false);
+                    document
+                        .querySelector('.parameters__btn_promotions_applied')
+                        ?.classList.remove(
+                            'parameters__btn_promotions_applied'
+                        );
                     document
                         .querySelectorAll('input[data-type="filter"')
                         .forEach((el) => {

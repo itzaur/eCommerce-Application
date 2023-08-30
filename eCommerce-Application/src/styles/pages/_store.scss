@@ -88,6 +88,9 @@
     &__btn_promotions {
         background-color: var(--color-primary);
         color: var(--color-secondary);
+        &_applied {
+            filter: drop-shadow(0 0 15px var(--color-primary));
+        }
     }
 
     &__btn_reset {
