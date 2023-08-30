@@ -176,6 +176,22 @@
     }
 }
 
+.search-bar {
+    position: absolute;
+    top: 8.5rem;
+    left: -130%;
+    z-index: 3;
+
+    @include mixins.flex(row, space-between, center);
+
+    transform: scale(1, 0);
+    transform-origin: top;
+    transition: 0.3s;
+}
+.search-bar_open {
+    transform: scale(1, 1);
+}
+
 /* Custom rules for checkbox */
 input[type='checkbox'] {
     -webkit-appearance: checkbox;
