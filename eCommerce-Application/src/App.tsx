@@ -47,50 +47,50 @@ function App(): JSX.Element {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/registration" element={<RegistrationPage />} />
-            <Route path="/store" element={<Store type="" />} />
+            <Route path="/store" element={<Store type="" category="" />} />
             <Route
                 path="/store/cosmotours"
-                element={<Store type="Космотуры" />}
+                element={<Store type="Космотуры" category="" />}
             />
             <Route
                 path="/store/cosmotours/relax"
-                element={<Store type="Космотуры" />}
+                element={<Store type="Космотуры" category="Релакс" />}
             />
             <Route
                 path="/store/cosmotours/hobby"
-                element={<Store type="Космотуры" />}
+                element={<Store type="Космотуры" category="Хобби" />}
             />
             <Route
                 path="/store/cosmotours/active"
-                element={<Store type="Космотуры" />}
+                element={<Store type="Космотуры" category="Активный Отдых" />}
             />
             <Route
                 path="/store/souvenirs"
-                element={<Store type="Сувениры" />}
+                element={<Store type="Сувениры" category="" />}
             />
             <Route
                 path="/store/souvenirs/glass"
-                element={<Store type="Сувениры" />}
+                element={<Store type="Сувениры" category="Стеклянные" />}
             />
             <Route
                 path="/store/souvenirs/robotic"
-                element={<Store type="Сувениры" />}
+                element={<Store type="Сувениры" category="Роботизированные" />}
             />
             <Route
                 path="/store/souvenirs/other"
-                element={<Store type="Сувениры" />}
+                element={<Store type="Сувениры" category="Прочие" />}
             />
             <Route
                 path="/store/hotel"
-                element={<Store type="Выбрать номер" />}
+                element={<Store type="Выбрать номер" category="" />}
             />
             <Route
                 path="/store/hotel/classic"
-                element={<Store type="Выбрать номер" />}
+                element={<Store type="Выбрать номер" category="Классик" />}
             />
             <Route
                 path="/store/hotel/hard"
-                element={<Store type="Выбрать номер" />}
+                element={<Store type="Выбрать номер" category="Хард" />}
             />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/store/tours/:id" element={<Tour />} />

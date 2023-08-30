@@ -15,10 +15,15 @@ export async function getCategories(): Promise<Category[] | undefined> {
                     return {
                         name: elem.name['ru-RU'],
                         path: elem.slug['ru-RU'],
+                        id: elem.id,
                     };
                 });
             result.push({
-                parent: { name: el.name['ru-RU'], path: el.slug['ru-RU'] },
+                parent: {
+                    name: el.name['ru-RU'],
+                    path: el.slug['ru-RU'],
+                    id: el.id,
+                },
 
                 items: children,
             });

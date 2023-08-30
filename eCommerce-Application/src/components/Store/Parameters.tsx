@@ -1,43 +1,93 @@
 import { useEffect, useState } from 'react';
 import { ProductProjection } from '@commercetools/platform-sdk';
-import { checkMinMaxPrice } from '../../utils/checkMinMaxPrice';
-import { checkFilterVariants } from '../../utils/checkFilterVariants';
+import { filterSortSearcProducts } from '../../commercetools/filterSortSearchProducts';
 
 function Parameters(props: {
     selectedType: string;
     selectedCategory: string;
-    cards: ProductProjection[];
+    selectedCategoryId: string;
+    setCards: React.Dispatch<React.SetStateAction<ProductProjection[]>>;
+    filterVariants: string[];
+    minPrice: number;
+    maxPrice: number;
+    minSelectedPrice: number;
+    maxSelectedPrice: number;
+    setMinSelectedPrice: React.Dispatch<React.SetStateAction<number>>;
+    setMaxSelectedPrice: React.Dispatch<React.SetStateAction<number>>;
 }): JSX.Element {
-    const { cards, selectedType, selectedCategory } = props;
-    const [selectedCategoriesList] = useState<string[]>([]);
+    const {
+        setCards,
+        selectedType,
+        selectedCategory,
+        selectedCategoryId,
+        filterVariants,
+        minPrice,
+        maxPrice,
+        minSelectedPrice,
+        maxSelectedPrice,
+        setMinSelectedPrice,
+        setMaxSelectedPrice,
+    } = props;
+    const [selectedCategoriesList, setSelectedCategoriesList] = useState<
+        string[]
+    >([]);
 
-    const [minPrice, maxPrice] = cards.length
-        ? checkMinMaxPrice(cards)
-        : [0, 0];
-
-    let filter;
-    const filterVariants = cards.length ? checkFilterVariants(cards) : [];
-    const [minSelectedPrice, setMinSelectedPrice] = useState(0);
-    const [maxSelectedPrice, setMaxSelectedPrice] = useState(0);
+    let filter: { name: string; key: string } = { name: '', key: '' };
+    const [filtersApplied, setFiltersApplied] = useState(false);
     const [sortOrderValue, setSortOrderValue] = useState('По умолчанию');
     const [sortOrderIcon, setSortOrderIcon] = useState('↓↑');
 
     if (selectedType === 'Космотуры') {
         filter = { name: 'Локация', key: 'location' };
     } else if (selectedType === 'Выбрать номер') {
-        filter = { name: 'Цвет', key: 'сolor' };
-    } else {
+        filter = { name: 'Цвет', key: 'color' };
+    } else if (selectedType === 'Сувениры') {
         filter = { name: 'Форма', key: 'shape' };
     }
 
     useEffect(() => {
+        setSelectedCategoriesList([]);
         document.querySelectorAll('input[data-type="filter"').forEach((el) => {
             if (el instanceof HTMLInputElement) {
                 const elCopy = el;
                 elCopy.checked = false;
             }
         });
+        document.querySelectorAll('input[type="number"').forEach((el) => {
+            if (el instanceof HTMLInputElement) {
+                const elCopy = el;
+                elCopy.value = '';
+            }
+        });
+        document.querySelectorAll('input[type="range"').forEach((el) => {
+            if (el instanceof HTMLInputElement) {
+                const elCopy = el;
+                elCopy.value = '';
+            }
+        });
     }, [selectedType, selectedCategory]);
+
+    useEffect(() => {
+        if (filtersApplied) {
+            filterSortSearcProducts({
+                selectedCategoryId,
+                filter: filter.key,
+                selectedCategoriesList,
+                minSelectedPrice,
+                maxSelectedPrice,
+            }).then((data) => {
+                if (data) setCards(data);
+            });
+        }
+    }, [
+        minSelectedPrice,
+        maxSelectedPrice,
+        selectedCategoriesList,
+        filtersApplied,
+        filter.key,
+        selectedCategoryId,
+        setCards,
+    ]);
 
     return (
         <div className="parameters">
@@ -131,18 +181,23 @@ function Parameters(props: {
                                             id={el}
                                             onChange={(e): void => {
                                                 if (e.target.checked) {
-                                                    selectedCategoriesList.push(
-                                                        el
-                                                    );
-                                                }
-                                                if (!e.target.checked) {
-                                                    const indexElem =
+                                                    setSelectedCategoriesList([
+                                                        ...selectedCategoriesList,
+                                                        `"${el}"`,
+                                                    ]);
+                                                    if (!filtersApplied)
+                                                        setFiltersApplied(true);
+                                                } else if (!e.target.checked) {
+                                                    const indexEl =
                                                         selectedCategoriesList.indexOf(
-                                                            el
+                                                            `"${el}"`
                                                         );
-                                                    selectedCategoriesList.splice(
-                                                        indexElem,
-                                                        1
+                                                    const temp = [
+                                                        ...selectedCategoriesList,
+                                                    ];
+                                                    temp.splice(indexEl, 1);
+                                                    setSelectedCategoriesList(
+                                                        temp
                                                     );
                                                 }
                                             }}
@@ -166,24 +221,24 @@ function Parameters(props: {
                                 className="price-input_number"
                                 type="number"
                                 id="price-min"
-                                value={minSelectedPrice || minPrice}
-                                onChange={(e): void =>
-                                    setMinSelectedPrice(
-                                        +(+e.target.value).toLocaleString('ru')
-                                    )
-                                }
+                                placeholder={minSelectedPrice.toString()}
+                                onChange={(e): void => {
+                                    setMinSelectedPrice(+e.target.value);
+                                    if (!filtersApplied)
+                                        setFiltersApplied(true);
+                                }}
                             />
                             <p>До</p>
                             <input
                                 className="price-input_number"
                                 type="number"
                                 id="price-max"
-                                value={maxSelectedPrice || maxPrice}
-                                onChange={(e): void =>
-                                    setMaxSelectedPrice(
-                                        +(+e.target.value).toLocaleString('ru')
-                                    )
-                                }
+                                placeholder={maxSelectedPrice.toString()}
+                                onChange={(e): void => {
+                                    setMaxSelectedPrice(+e.target.value);
+                                    if (!filtersApplied)
+                                        setFiltersApplied(true);
+                                }}
                             />
                         </div>
                         <div className="parameters__dropdown__price-inputs_range">
@@ -193,10 +248,12 @@ function Parameters(props: {
                                 id="price-range-min"
                                 min={minPrice}
                                 max={maxPrice}
-                                value={minSelectedPrice || minPrice}
-                                onChange={(e): void =>
-                                    setMinSelectedPrice(+e.target.value)
-                                }
+                                value={minSelectedPrice}
+                                onChange={(e): void => {
+                                    setMinSelectedPrice(+e.target.value);
+                                    if (!filtersApplied)
+                                        setFiltersApplied(true);
+                                }}
                             />
                             <input
                                 className="price-input_range"
@@ -204,10 +261,12 @@ function Parameters(props: {
                                 id="price-range-max"
                                 min={minPrice}
                                 max={maxPrice}
-                                value={maxSelectedPrice || maxPrice}
-                                onChange={(e): void =>
-                                    setMaxSelectedPrice(+e.target.value)
-                                }
+                                value={maxSelectedPrice}
+                                onChange={(e): void => {
+                                    setMaxSelectedPrice(+e.target.value);
+                                    if (!filtersApplied)
+                                        setFiltersApplied(true);
+                                }}
                             />
                         </div>
                     </div>
