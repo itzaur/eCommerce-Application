@@ -15,4 +15,5 @@ export type FilterSortSearcParameters = {
     minSelectedPrice: number;
     maxSelectedPrice: number;
     sort?: string;
+    searchValue?: string;
 };

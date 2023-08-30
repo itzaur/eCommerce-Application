@@ -14,6 +14,7 @@ function Parameters(props: {
     maxSelectedPrice: number;
     setMinSelectedPrice: React.Dispatch<React.SetStateAction<number>>;
     setMaxSelectedPrice: React.Dispatch<React.SetStateAction<number>>;
+    searchValue: string;
 }): JSX.Element {
     const {
         setCards,
@@ -27,6 +28,7 @@ function Parameters(props: {
         maxSelectedPrice,
         setMinSelectedPrice,
         setMaxSelectedPrice,
+        searchValue,
     } = props;
     const [selectedCategoriesList, setSelectedCategoriesList] = useState<
         string[]
@@ -69,7 +71,7 @@ function Parameters(props: {
     }, [selectedType, selectedCategory]);
 
     useEffect(() => {
-        if (filtersApplied) {
+        if (filtersApplied || searchValue) {
             filterSortSearcProducts({
                 selectedCategoryId,
                 filter: filter.key,
@@ -77,6 +79,7 @@ function Parameters(props: {
                 minSelectedPrice,
                 maxSelectedPrice,
                 sort,
+                searchValue,
             }).then((data) => {
                 if (data) setCards(data);
             });
@@ -90,6 +93,7 @@ function Parameters(props: {
         selectedCategoryId,
         setCards,
         sort,
+        searchValue,
     ]);
 
     return (

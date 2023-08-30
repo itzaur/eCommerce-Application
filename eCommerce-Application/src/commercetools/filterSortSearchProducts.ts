@@ -12,12 +12,14 @@ export async function filterSortSearcProducts(
         minSelectedPrice,
         maxSelectedPrice,
         sort,
+        searchValue,
     } = parameters;
-    // console.log(parameters);
     const queryArgs: {
         filter: string | string[] | undefined;
         limit: number;
         sort?: string[];
+        ['text.ru-RU']?: string;
+        fuzzy?: boolean;
     } = {
         filter: [] as string | string[] | undefined,
         limit: 100,
@@ -59,8 +61,10 @@ export async function filterSortSearcProducts(
     if (queryArgs && sort) {
         queryArgs.sort = [sort];
     }
-
-    // console.log(queryArgs);
+    if (queryArgs && searchValue) {
+        queryArgs['text.ru-RU'] = searchValue;
+        queryArgs.fuzzy = true;
+    }
 
     try {
         const result = await apiRoot

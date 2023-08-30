@@ -7,7 +7,12 @@ import iconSearch from '../../assets/images/icon-search.png';
 import iconCart from '../../assets/images/icon-cart.png';
 import iconUser from '../../assets/images/icon-user.png';
 
-function Header(): JSX.Element {
+function Header({
+    setSearchValue,
+}: Record<
+    'setSearchValue',
+    React.Dispatch<React.SetStateAction<string>>
+>): JSX.Element {
     return (
         <header className="header">
             <Link to="/">
@@ -34,7 +39,7 @@ function Header(): JSX.Element {
                         <img src={iconSearch} alt="icon-search" />
                         <h3>Поиск</h3>
                     </button>
-                    <SearchBar />
+                    <SearchBar setSearchValue={setSearchValue} />
                 </div>
 
                 <Link to="/profile">

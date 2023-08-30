@@ -1,9 +1,15 @@
 // import { useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { Search } from '@mui/icons-material';
 import { Paper, IconButton } from '@mui/material';
 
-function SearchBar(): JSX.Element {
+function SearchBar({
+    setSearchValue,
+}: Record<
+    'setSearchValue',
+    React.Dispatch<React.SetStateAction<string>>
+>): JSX.Element {
+    const [value, setValue] = useState('');
     return (
         <Paper
             component="form"
@@ -17,8 +23,20 @@ function SearchBar(): JSX.Element {
                 mr: { sm: 5 },
             }}
         >
-            <input placeholder="Поиск..." value="" onChange={(): void => {}} />
-            <IconButton type="submit" sx={{ p: '2rem', color: '#000000' }}>
+            <input
+                placeholder="Поиск..."
+                onChange={(e): void => {
+                    setValue(e.target.value);
+                }}
+            />
+            <IconButton
+                type="submit"
+                onClick={(e): void => {
+                    e.preventDefault();
+                    setSearchValue(value);
+                }}
+                sx={{ p: '2rem', color: '#000000' }}
+            >
                 <Search />
             </IconButton>
         </Paper>

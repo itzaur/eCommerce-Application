@@ -34,6 +34,7 @@ function Store({
     const [maxPrice, setMaxPrice] = useState(0);
     const [minSelectedPrice, setMinSelectedPrice] = useState(0);
     const [maxSelectedPrice, setMaxSelectedPrice] = useState(0);
+    const [searchValue, setSearchValue] = useState('');
 
     useEffect(() => {
         getCategories().then((data) => {
@@ -88,7 +89,7 @@ function Store({
 
     return (
         <>
-            <Header />
+            <Header setSearchValue={setSearchValue} />
             <section className="store__main">
                 <ul className="bread-crumbs">
                     <li>
@@ -147,6 +148,7 @@ function Store({
                             maxSelectedPrice={maxSelectedPrice}
                             setMinSelectedPrice={setMinSelectedPrice}
                             setMaxSelectedPrice={setMaxSelectedPrice}
+                            searchValue={searchValue}
                         />
                         {cards.length && <Cards cards={cards} />}
                     </div>
