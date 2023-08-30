@@ -304,6 +304,19 @@ function Parameters(props: {
             <button
                 className="btn parameters__btn parameters__btn_reset"
                 type="button"
+                onClick={(): void => {
+                    setMinSelectedPrice(minPrice);
+                    setMaxSelectedPrice(maxPrice);
+                    setSelectedCategoriesList([]);
+                    document
+                        .querySelectorAll('input[data-type="filter"')
+                        .forEach((el) => {
+                            if (el instanceof HTMLInputElement) {
+                                const elCopy = el;
+                                elCopy.checked = false;
+                            }
+                        });
+                }}
             >
                 Очистить фильтры
             </button>
