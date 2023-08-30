@@ -34,6 +34,7 @@ function Parameters(props: {
 
     let filter: { name: string; key: string } = { name: '', key: '' };
     const [filtersApplied, setFiltersApplied] = useState(false);
+    const [sort, setSort] = useState('');
     const [sortOrderValue, setSortOrderValue] = useState('По умолчанию');
     const [sortOrderIcon, setSortOrderIcon] = useState('↓↑');
 
@@ -75,6 +76,7 @@ function Parameters(props: {
                 selectedCategoriesList,
                 minSelectedPrice,
                 maxSelectedPrice,
+                sort,
             }).then((data) => {
                 if (data) setCards(data);
             });
@@ -87,6 +89,7 @@ function Parameters(props: {
         filter.key,
         selectedCategoryId,
         setCards,
+        sort,
     ]);
 
     return (
@@ -107,8 +110,11 @@ function Parameters(props: {
                             <button
                                 type="button"
                                 onClick={(): void => {
+                                    setSort('');
                                     setSortOrderIcon('↑');
                                     setSortOrderValue('По умолчанию');
+                                    if (!filtersApplied)
+                                        setFiltersApplied(true);
                                 }}
                             >
                                 <span>↑</span> По умолчанию
@@ -118,8 +124,11 @@ function Parameters(props: {
                             <button
                                 type="button"
                                 onClick={(): void => {
+                                    setSort('name.ru-RU asc');
                                     setSortOrderIcon('↓');
                                     setSortOrderValue('А - Я');
+                                    if (!filtersApplied)
+                                        setFiltersApplied(true);
                                 }}
                             >
                                 <span>&#8595;</span> A - Я
@@ -129,8 +138,11 @@ function Parameters(props: {
                             <button
                                 type="button"
                                 onClick={(): void => {
+                                    setSort('name.ru-RU desc');
                                     setSortOrderIcon('↑');
                                     setSortOrderValue('Я - А');
+                                    if (!filtersApplied)
+                                        setFiltersApplied(true);
                                 }}
                             >
                                 <span>&#8593;</span> Я - А
@@ -140,8 +152,11 @@ function Parameters(props: {
                             <button
                                 type="button"
                                 onClick={(): void => {
+                                    setSort('price asc');
                                     setSortOrderIcon('↑');
                                     setSortOrderValue('По возрастанию цены');
+                                    if (!filtersApplied)
+                                        setFiltersApplied(true);
                                 }}
                             >
                                 <span>&#8593;</span> По возрастанию цены
@@ -151,8 +166,11 @@ function Parameters(props: {
                             <button
                                 type="button"
                                 onClick={(): void => {
+                                    setSort('price desc');
                                     setSortOrderIcon('↓');
                                     setSortOrderValue('По убыванию цены');
+                                    if (!filtersApplied)
+                                        setFiltersApplied(true);
                                 }}
                             >
                                 <span>&#8595;</span> По убыванию цены

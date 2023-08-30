@@ -11,9 +11,14 @@ export async function filterSortSearcProducts(
         selectedCategoriesList,
         minSelectedPrice,
         maxSelectedPrice,
+        sort,
     } = parameters;
     // console.log(parameters);
-    const queryArgs = {
+    const queryArgs: {
+        filter: string | string[] | undefined;
+        limit: number;
+        sort?: string[];
+    } = {
         filter: [] as string | string[] | undefined,
         limit: 100,
     };
@@ -50,6 +55,9 @@ export async function filterSortSearcProducts(
                 } to ${maxSelectedPrice * 100})`
             );
         }
+    }
+    if (queryArgs && sort) {
+        queryArgs.sort = [sort];
     }
 
     // console.log(queryArgs);

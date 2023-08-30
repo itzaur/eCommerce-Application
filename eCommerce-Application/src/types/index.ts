@@ -14,4 +14,5 @@ export type FilterSortSearcParameters = {
     selectedCategoriesList: string[];
     minSelectedPrice: number;
     maxSelectedPrice: number;
+    sort?: string;
 };
