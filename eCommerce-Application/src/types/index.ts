@@ -2,6 +2,7 @@ export type ModalProps = {
     active: boolean;
     setActive(arg: boolean): void;
     children: React.ReactNode;
+    onClick(): void;
 };
 export type Category = {
     parent: { name: string; path: string; id: string };

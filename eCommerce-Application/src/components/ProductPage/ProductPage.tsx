@@ -1,7 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { EffectCoverflow, Pagination, Navigation } from 'swiper/modules';
+import ModalSwiper from 'swiper';
+import {
+    EffectCoverflow,
+    Pagination,
+    Navigation,
+    Scrollbar,
+} from 'swiper/modules';
 import { Product } from '@commercetools/platform-sdk';
 import { apiRoot } from '../../commercetools/Client';
 import { Header } from '../Store';
@@ -11,11 +17,13 @@ import { ProductOptions } from '../../types';
 import starEmpty from '../../assets/images/review-star-empty.png';
 import avatar from '../../assets/images/user.png';
 import star from '../../assets/images/review-star.png';
+import Modal from '../NotFoundPage/Modal';
 
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
+import 'swiper/css/scrollbar';
 
 function ProductDetail(): JSX.Element {
     const [card, setCard] = useState<Product>();
@@ -37,8 +45,6 @@ function ProductDetail(): JSX.Element {
         }
         getProductKey(location);
     }, [location]);
-
-    // console.log(card);
 
     const product: ProductOptions = {
         title: card?.masterData.current.name
@@ -84,9 +90,80 @@ function ProductDetail(): JSX.Element {
           })
         : '';
 
+    const [modalActive, setModalActive] = useState(false);
+
+    // Slider functionality
+    const [index, setIndex] = useState(0);
+
+    function handleClickSlideIndex(event: React.MouseEvent<HTMLElement>): void {
+        const target = event.target as HTMLElement;
+
+        setIndex(Number(target.dataset.num));
+    }
+
+    const modalSwiper = new ModalSwiper('.swiper-container2', {
+        observer: true,
+        observeParents: true,
+        slideToClickedSlide: true,
+        effect: 'coverflow',
+        coverflowEffect: {
+            rotate: 0,
+            stretch: 0,
+            depth: 100,
+            modifier: 2.5,
+        },
+        initialSlide: index,
+        slidesPerView: 'auto',
+        spaceBetween: 20,
+        grabCursor: true,
+        scrollbar: { el: '.swiper-scrollbar' },
+        pagination: {
+            el: '.swiper-pagination2',
+            clickable: true,
+            type: 'bullets',
+        },
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        modules: [Navigation, Pagination, Scrollbar, EffectCoverflow],
+    });
+
+    modalSwiper.on('slideChange', () => {
+        modalSwiper.pagination.render();
+        modalSwiper.pagination.update();
+        modalSwiper.navigation.update();
+    });
+
+    const sliderState = (): void => {
+        if (modalActive) {
+            modalSwiper.destroy();
+        } else {
+            modalSwiper.init();
+        }
+    };
+
     return (
         <>
             <Header />
+            <Modal
+                active={modalActive}
+                setActive={setModalActive}
+                onClick={sliderState}
+            >
+                <div className="swiper-container2">
+                    <div className="swiper-wrapper">
+                        {product.images?.map((img, i) => (
+                            <div className="swiper-slide" key={i}>
+                                <img src={img} alt="img" data-num={i} />
+                            </div>
+                        ))}
+                    </div>
+                    <div className="swiper-button-prev slider-arrow" />
+                    <div className="swiper-button-next slider-arrow" />
+                    <div className="swiper-scrollbar" />
+                </div>
+            </Modal>
             <section className="product">
                 <div className="product__path">
                     <span>Главная / </span>
@@ -126,15 +203,20 @@ function ProductDetail(): JSX.Element {
                                     Navigation,
                                 ]}
                                 className="swiper-container"
-                                onSlideChange={(swiper): void =>
-                                    console.log(swiper.activeIndex)
-                                }
                             >
                                 {product.images?.map((img, i) => (
-                                    <SwiperSlide key={i}>
-                                        <img src={img} alt="img" />
+                                    <SwiperSlide
+                                        key={i}
+                                        onClick={(e): void => {
+                                            setModalActive(true);
+                                            handleClickSlideIndex(e);
+                                            sliderState();
+                                        }}
+                                    >
+                                        <img src={img} alt="img" data-num={i} />
                                     </SwiperSlide>
                                 ))}
+
                                 <div className="slider-controler">
                                     <div className="swiper-button-prev slider-arrow" />
                                     <div className="swiper-button-next slider-arrow" />
@@ -143,9 +225,19 @@ function ProductDetail(): JSX.Element {
                             </Swiper>
                         </div>
                         <div className="slider-details">
-                            {product.images?.slice(1)?.map((img, i) => (
-                                <div key={i}>
-                                    <img src={img} alt="" />
+                            {product.images?.map((img, i) => (
+                                <div
+                                    tabIndex={0}
+                                    role="button"
+                                    onKeyDown={(e): void => console.log(e)}
+                                    key={i}
+                                    onClick={(e): void => {
+                                        setModalActive(true);
+                                        handleClickSlideIndex(e);
+                                        sliderState();
+                                    }}
+                                >
+                                    <img src={img} alt="" data-num={i} />
                                 </div>
                             ))}
                         </div>
@@ -212,7 +304,10 @@ function ProductDetail(): JSX.Element {
                             <button className="btn btn--product" type="button">
                                 Продолжить покупки
                             </button>
-                            <button className="btn btn--product" type="button">
+                            <button
+                                className="btn btn--product btn--basket"
+                                type="button"
+                            >
                                 В корзину
                             </button>
                         </div>

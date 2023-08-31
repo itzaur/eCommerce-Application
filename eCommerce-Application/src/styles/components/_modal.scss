@@ -1,3 +1,5 @@
+@use '../abstracts/mixins';
+
 .modal {
     position: fixed;
     top: 0;
@@ -11,19 +13,52 @@
     border: 0.1rem solid rgba(255, 255, 255, 0.3);
 
     background: rgba(255, 255, 255, 0.2);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0.4rem 3rem rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(15px);
 
-    scale: 0;
+    clip-path: circle(0%);
 
-    z-index: 1;
+    z-index: 2;
 
-    transition: scale 0.4s ease-in-out;
+    transition: clip-path 0.5s cubic-bezier(0.6, 0.44, 0.98, 0.335);
 
     &.active {
-        scale: 1;
+        clip-path: circle(100%);
+    }
+
+    &.active &__content {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    &__content {
+        position: relative;
+        width: auto;
+
+        display: grid;
+        place-content: center;
+        place-items: center;
+        grid-template-columns: 80vw;
+        grid-template-rows: auto;
+        row-gap: 2rem;
+
+        transform: translateY(-100%);
+        opacity: 0;
+        transition:
+            transform 0.6s ease,
+            opacity 0.6s ease;
+
+        @include mixins.respond-to('tablet') {
+            grid-template-columns: 45vw;
+            grid-template-rows: minmax(0, 70vh);
+        }
+    }
+
+    &__img {
+        width: 100%;
     }
 }
+
 .modal_registration {
     position: fixed;
     top: calc(50vh - 5rem);

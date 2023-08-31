@@ -83,7 +83,6 @@
             grid-template-rows:
                 minmax(48rem, 1fr)
                 min-content;
-            // grid-auto-rows: minmax(50%, 1fr) auto;
         }
     }
 
@@ -149,12 +148,8 @@
                 column-gap: 2rem;
             }
 
-            & *:nth-child(1) {
-                grid-column: 1;
-            }
-
-            & *:nth-child(2) {
-                grid-column: 2;
+            & > *:nth-child(1) {
+                display: none;
             }
 
             img {

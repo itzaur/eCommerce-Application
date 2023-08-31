@@ -167,6 +167,12 @@
         }
     }
 
+    &--basket {
+        background-color: var(--color-primary);
+        color: var(--color-secondary);
+        font-weight: bold;
+    }
+
     &--item {
         padding: 0.5em 1.5em;
         border: 2px solid var(--color-primary);
@@ -176,6 +182,16 @@
         &:hover {
             background-color: var(--color-primary);
         }
+    }
+
+    &--close {
+        color: var(--color-secondary);
+        background-color: var(--color-primary);
+
+        padding: 0.5em 2em;
+
+        font-family: var(--ff-product);
+        font-size: var(--fs-paragraph);
     }
 }
 
