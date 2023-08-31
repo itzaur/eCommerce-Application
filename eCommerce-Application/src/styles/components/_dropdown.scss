@@ -52,7 +52,7 @@
     pointer-events: none;
     // display: none;
     transition: all 0.5s;
-    z-index: 1;
+    z-index: 3;
 
     &-open {
         pointer-events: auto;
@@ -62,7 +62,7 @@
 
     & button {
         display: block;
-        width: 100%;
+        // width: 100%;
         padding: 1rem 1rem;
         // margin: 0.3rem 0;
         border-radius: 0.5rem;
@@ -81,6 +81,16 @@
             }
             // scale: 0.9;
             // background-color: #2a2d35;
+        }
+    }
+    &__wrapper {
+        @include mixins.flex(null, space-between, center);
+    }
+
+    &__button {
+        &_trash {
+            // width: 0;
+            // display: inline-block;
         }
     }
 }

@@ -10,5 +10,7 @@ export function getCountry(
     if (country === 'PL') {
         return 'Польша';
     }
+    // return '';
+
     return undefined;
 }

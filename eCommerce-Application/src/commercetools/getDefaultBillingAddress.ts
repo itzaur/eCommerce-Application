@@ -10,7 +10,7 @@ export function getDefaultBillingAddress(
         }
         return undefined;
     });
-    if (billingAddresses)
+    if (billingAddresses?.length)
         return `${billingAddresses[0].postalCode}, ${billingAddresses[0].country}, ${billingAddresses[0].region}, ${billingAddresses[0].city}, ${billingAddresses[0].streetName}`;
     return undefined;
 }
