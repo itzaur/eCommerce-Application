@@ -176,20 +176,71 @@
     }
 }
 
-.search-bar {
-    position: absolute;
-    top: 8.5rem;
-    left: -130%;
-    z-index: 3;
+#search-bar {
+    margin-right: 0;
+    border-radius: 0;
 
-    @include mixins.flex(row, space-between, center);
-
-    transform: scale(1, 0);
-    transform-origin: top;
-    transition: 0.3s;
+    transition:
+        opacity 0.16s,
+        scale 0.16s cubic-bezier(0.785, 0.135, 0.15, 0.86);
 }
-.search-bar_open {
-    transform: scale(1, 1);
+
+.search-bar {
+    @include mixins.flex(row, center, center);
+
+    position: absolute;
+    top: calc(100% + 3.1rem);
+    width: max(20rem, 50%);
+
+    padding: 1em 2em;
+
+    opacity: 0;
+
+    scale: 0 0;
+
+    z-index: -1;
+
+    & input {
+        width: 100%;
+        order: 1;
+    }
+
+    & button {
+        --gap: 1rem;
+        @include mixins.flex(row, flex-start, center);
+
+        width: fit-content;
+
+        padding: 0;
+
+        border-radius: 0;
+        border-bottom: 1px solid transparent;
+        border-image: linear-gradient(
+            0.4turn,
+            transparent 20%,
+            var(--color-secondary),
+            var(--color-secondary)
+        );
+        border-image-slice: 1;
+
+        &:active,
+        &:hover {
+            background-color: transparent;
+            border-radius: 0;
+        }
+    }
+
+    & svg {
+        font-size: 2.2rem;
+    }
+
+    &.search-bar_open {
+        margin: 0;
+
+        opacity: 1;
+
+        scale: 1 1;
+    }
 }
 
 /* Custom rules for checkbox */

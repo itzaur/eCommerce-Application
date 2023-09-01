@@ -102,13 +102,13 @@ function Parameters(props: {
 
     return (
         <div className="parameters">
-            <div className="parameters__left-side">
+            <div className="parameters__filters">
                 <div className="parameters__item">
                     <button
                         className="btn parameters__btn parameters__btn_first"
                         type="button"
                     >
-                        <span className="parameters__btn__img">
+                        <span className="parameters__btn-img">
                             {sortOrderIcon}
                         </span>
                         {sortOrderValue}
@@ -190,7 +190,7 @@ function Parameters(props: {
                     <div className="parameters__item">
                         <button className="btn parameters__btn" type="button">
                             {filter ? filter.name : ''}
-                            <span className="parameters__btn__illustration">
+                            <span className="parameters__btn-illustration">
                                 {filterVariants.length
                                     ? filterVariants.length
                                     : 0}
@@ -238,10 +238,10 @@ function Parameters(props: {
                 <div className="parameters__item">
                     <button className="btn parameters__btn" type="button">
                         Цена{' '}
-                        <span className="parameters__btn__illustration">$</span>
+                        <span className="parameters__btn-illustration">$</span>
                     </button>
                     <div className="parameters__dropdown parameters__dropdown_last">
-                        <div className="parameters__dropdown__price-inputs_number">
+                        <div className="parameters__dropdown-inputs">
                             <p>От</p>
                             <input
                                 className="price-input_number"
@@ -267,7 +267,7 @@ function Parameters(props: {
                                 }}
                             />
                         </div>
-                        <div className="parameters__dropdown__price-inputs_range">
+                        <div className="parameters__dropdown-inputs-range">
                             <input
                                 className="price-input_range"
                                 type="range"
@@ -297,24 +297,26 @@ function Parameters(props: {
                         </div>
                     </div>
                 </div>
-                <button
-                    className="btn parameters__btn parameters__btn_promotions"
-                    type="button"
-                    onClick={(e): void => {
-                        (e.target as HTMLElement).classList.toggle(
-                            'parameters__btn_promotions_applied'
-                        );
-                        if (discountedProducts) {
-                            setDiscountedProducts(false);
-                        } else {
-                            setDiscountedProducts(true);
-                        }
+                <div className="parameters__item">
+                    <button
+                        className="btn parameters__btn parameters__btn_promotions"
+                        type="button"
+                        onClick={(e): void => {
+                            (e.target as HTMLElement).classList.toggle(
+                                'parameters__btn_promotions_applied'
+                            );
+                            if (discountedProducts) {
+                                setDiscountedProducts(false);
+                            } else {
+                                setDiscountedProducts(true);
+                            }
 
-                        if (!filtersApplied) setFiltersApplied(true);
-                    }}
-                >
-                    Акции
-                </button>
+                            if (!filtersApplied) setFiltersApplied(true);
+                        }}
+                    >
+                        Акции
+                    </button>
+                </div>
             </div>
 
             <button

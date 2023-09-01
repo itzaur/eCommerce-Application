@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-// import { Routes, Route } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { ProductProjection } from '@commercetools/platform-sdk';
 import { Category } from '../../types';
@@ -135,7 +134,7 @@ function Store({
                         setSelectedCategoryId={setSelectedCategoryId}
                         setSelectedCategoryPath={setSelectedCategoryPath}
                     />
-                    <div>
+                    <div className="store__cards">
                         <Parameters
                             setCards={setCards}
                             selectedType={selectedType}

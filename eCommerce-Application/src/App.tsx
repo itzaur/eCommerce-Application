@@ -7,9 +7,8 @@ import {
     Store,
     NotFound,
 } from './components';
-import Tour from './components/Store/Tour';
 import ProductDetail from './components/ProductPage/ProductPage';
-import { tours } from './utils/constants';
+import { products } from './utils/constants';
 
 function App(): JSX.Element {
     const location = useLocation();
@@ -19,7 +18,7 @@ function App(): JSX.Element {
         'registration',
         'store',
         'about',
-        ...tours.map((tour) => tour.name),
+        ...products.map((product) => product.name),
     ];
     const categories = [
         'cosmotours',
@@ -101,8 +100,8 @@ function App(): JSX.Element {
                 element={<Store type="Выбрать номер" category="Хард" />}
             />
             <Route path="/about" element={<AboutPage />} />
-            <Route path="/store/tours/:id" element={<Tour />} />
             <Route path="/store/:key" element={<ProductDetail />} />
+            <Route path="/store/cosmotours/:key" element={<ProductDetail />} />
             <Route path="*" element={<NotFound />} />
         </Routes>
     );

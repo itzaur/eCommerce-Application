@@ -10,9 +10,11 @@ function SearchBar({
     React.Dispatch<React.SetStateAction<string>>
 >): JSX.Element {
     const [value, setValue] = useState('');
+
     return (
         <Paper
             component="form"
+            id="search-bar"
             className="search-bar"
             onSubmit={(): void => {}}
             sx={{
@@ -23,12 +25,6 @@ function SearchBar({
                 mr: { sm: 5 },
             }}
         >
-            <input
-                placeholder="Поиск..."
-                onChange={(e): void => {
-                    setValue(e.target.value);
-                }}
-            />
             <IconButton
                 type="submit"
                 onClick={(e): void => {
@@ -37,6 +33,13 @@ function SearchBar({
                 }}
                 sx={{ p: '2rem', color: '#000000' }}
             >
+                <input
+                    placeholder="Поиск..."
+                    onChange={(e): void => {
+                        setValue(e.target.value);
+                    }}
+                />
+
                 <Search />
             </IconButton>
         </Paper>

@@ -1,74 +1,117 @@
 @use '../abstracts/mixins';
+
 #store {
     font-family: var(--ff-secondary);
 
     color: var(--color-white);
 
-    background-image: url('../assets/images/background-catalog.png');
+    background-image: url('../assets/images/background-catalog.jpg');
     background-size: cover;
     background-repeat: no-repeat;
+    background-attachment: fixed;
 }
-.store__main {
-    padding: 0 5.2%;
-}
-.store__content {
-    display: grid;
-    grid-template-columns: 1fr 2.6fr;
-    gap: 5%;
+
+.store {
+    &__main {
+        padding: 0 5vw;
+    }
+
+    &__content {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+
+        @include mixins.respond-to('tablet') {
+            grid-template-columns: min-content 1fr;
+            gap: 2vw;
+        }
+
+        @include mixins.respond-to('desktop') {
+            grid-template-columns: min-content 1fr;
+            gap: 5rem;
+        }
+    }
+
+    &__cards {
+        display: grid;
+        row-gap: 3rem;
+
+        padding-bottom: 4rem;
+    }
 }
 
 .bread-crumbs {
     @include mixins.flex(row, flex-start, flex-start);
-    margin: 7rem 0 4rem;
+    flex-wrap: wrap;
 
-    font-size: var(--fs-medium);
+    padding: 2rem 0 2rem;
+
+    @include mixins.respond-to('tablet') {
+        padding: 7rem 0 4rem;
+    }
 }
 
 .parameters {
-    @include mixins.flex(row, space-between, flex-start);
+    @include mixins.flex(row, center, flex-start);
+    flex-wrap: wrap;
+
     padding-bottom: 3rem;
 
-    border-bottom: 1px solid var(--color-primary-alpha);
+    border-bottom: 1px solid var(--color-white);
+    box-shadow: 0 1rem 1rem -1rem var(--color-primary);
 
-    &__left-side {
-        @include mixins.flex(row, space-between, flex-start);
-        gap: 1rem;
-        width: 100%;
+    @include mixins.respond-to('tablet') {
+        justify-content: space-between;
+    }
+
+    &__filters {
+        --gap: 2rem;
+        @include mixins.flex(row, center, center);
+        flex-wrap: wrap;
+
+        @include mixins.respond-to('tablet') {
+            justify-content: flex-start;
+        }
     }
 
     &__item {
+        --gap: 0;
+        @include mixins.flex(column, flex-start, center);
+
         position: relative;
 
-        @include mixins.flex(column, flex-start, center);
-        gap: 0;
-    }
-    &__item:first-child {
-        width: 18rem;
+        width: 80%;
+
+        @include mixins.respond-to('tablet') {
+            width: 22rem;
+        }
     }
 
     &__btn {
         position: relative;
 
-        min-width: 15rem;
+        min-width: 100%;
         height: 4.5rem;
         padding: 0rem 2rem;
 
-        font-size: var(--fs-very-small);
-        text-align: center;
         border: 1px solid var(--color-primary);
+
+        @include mixins.respond-to('tablet') {
+            min-width: 22rem;
+        }
 
         &:hover + .parameters__dropdown {
             transform: scale(1, 1);
         }
 
-        &__img {
+        &-img {
             margin-right: 0.7rem;
 
             font-size: var(--fs-medium);
             color: var(--color-primary);
         }
 
-        &__illustration {
+        &-illustration {
             position: absolute;
             top: -1.5rem;
             right: -1rem;
@@ -82,33 +125,44 @@
             color: var(--color-secondary);
         }
     }
-    &__btn_first {
-        width: 20rem;
-    }
+
     &__btn_promotions {
         background-color: var(--color-primary);
         color: var(--color-secondary);
+
         &_applied {
-            filter: drop-shadow(0 0 15px var(--color-primary));
+            filter: drop-shadow(0 0 1.5rem var(--color-primary));
         }
     }
 
     &__btn_reset {
-        background-color: var(--color-secondary);
+        min-width: 80%;
+
         color: var(--color-primary);
+        background-color: var(--color-secondary);
+
+        border-color: transparent;
+
+        @include mixins.respond-to('tablet') {
+            min-width: 22rem;
+        }
     }
 
     &__dropdown {
         position: absolute;
-        z-index: 10;
         top: 100%;
-        min-width: 20rem;
+        width: 100%;
+
         transform: scale(1, 0);
         transform-origin: top;
+
         transition: 0.3s;
 
         background-color: var(--color-white);
         color: var(--color-secondary);
+
+        z-index: 10;
+
         * {
             cursor: pointer;
         }
@@ -119,21 +173,28 @@
 
         li {
             @include mixins.flex(row, flex-start, center);
-            width: 80%;
-            margin: auto;
-            height: 6rem;
+
+            padding: 1rem 2rem;
+            height: 4rem;
 
             border-bottom: 1px solid var(--color-secondary);
             font-size: var(--fs-smallest);
+
+            @include mixins.respond-to('tablet') {
+                height: 6rem;
+            }
+
             button,
             label {
+                --gap: 1rem;
+                @include mixins.flex(row, flex-start, center);
+
                 width: 100%;
                 height: 100%;
-                @include mixins.flex(row, flex-start, center);
             }
+
             span {
                 display: inline-block;
-                font-size: var(--fs-medium-big);
             }
 
             &:last-child {
@@ -142,28 +203,38 @@
         }
 
         &_last {
-            width: 35rem;
+            width: 30rem;
             padding: 0 2rem;
         }
-        .parameters__dropdown__price-inputs_number {
+
+        &-inputs {
+            --gap: 1rem;
             @include mixins.flex(row, center, center);
-            height: 6rem;
+
+            width: 100%;
+
+            padding-block: 1rem;
 
             border-bottom: 1px solid var(--color-secondary);
-            font-size: var(--fs-smallest);
+
+            @include mixins.respond-to('tablet') {
+                font-size: var(--fs-smallest);
+            }
         }
 
         .price-input_number {
-            width: 10rem;
+            width: inherit;
             height: 3em;
-            padding: 0 2rem;
+
+            padding-inline: 1rem;
 
             background-color: var(--color-input);
         }
-        .parameters__dropdown__price-inputs_range {
+
+        .parameters__dropdown-inputs-range {
+            @include mixins.flex(column, center, fl);
             height: 6rem;
             position: relative;
-            @include mixins.flex(column, center, fl);
         }
     }
 }
@@ -172,72 +243,159 @@ input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
 }
+
 input[type='number'] {
+    appearance: textfield;
     -moz-appearance: textfield;
 }
+
 input[type='range'] {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
 }
+
 input[type='range']::-webkit-slider-runnable-track {
     position: absolute;
-    width: 30rem;
     top: 3rem;
-    border-radius: 1px;
+
+    width: 100%;
     height: 2px;
+
+    border-radius: 1px;
+
     background-color: var(--color-secondary);
 }
+
 input[type='range']::-webkit-slider-thumb {
-    pointer-events: all;
-    -webkit-appearance: none;
     position: relative;
-    z-index: 1;
-    margin-top: -0.8rem;
-    border-radius: 0.8rem;
+
     width: 1.7rem;
     height: 1.7rem;
 
-    cursor: pointer;
+    margin-top: -0.8rem;
+
+    border-radius: 0.8rem;
 
     background: var(--color-secondary);
+
+    pointer-events: all;
+
+    appearance: none;
+    -webkit-appearance: none;
+
+    z-index: 1;
+
+    cursor: pointer;
 }
 
 input[type='range']::-moz-range-track {
-    border-radius: 1px;
     height: 2px;
+
+    border-radius: 1px;
+
     background: var(--color-secondary);
 }
+
 input[type='range']::-moz-range-thumb {
-    background: var(--color-secondary);
     border-radius: 0.8rem;
+
+    background: var(--color-secondary);
+
     cursor: pointer;
 }
 
 .sidebar {
-    height: fit-content;
-    padding: 2rem 2.5rem 2rem 2rem;
+    padding: 1rem 0;
 
-    background-color: var(--color-secondary-opacity);
+    background-color: var(--color-black-alpha);
+    backdrop-filter: blur(0.3rem);
 
-    cursor: pointer;
+    box-shadow: 0 0 0 100vmax var(--color-black-alpha);
+    clip-path: inset(0 -100vmax);
+
+    @include mixins.respond-to('tablet') {
+        padding: 2rem;
+
+        box-shadow: none;
+        clip-path: 0;
+    }
+
+    &__content {
+        --header-height: 16rem;
+        position: sticky;
+        top: var(--header-height);
+    }
+
     &__title {
         &:hover {
             color: var(--color-primary);
         }
     }
+
     &__item {
-        @include mixins.flex(column, center, flex-start);
-        font-size: clamp(1.6rem, 1.3vw, 2.5rem);
+        @include mixins.flex(column, center, center);
+
+        @include mixins.respond-to('tablet') {
+            align-items: flex-start;
+        }
+
+        & a {
+            font-size: var(--fs-medium);
+        }
     }
+
     &__btns {
-        @include mixins.flex(column, center, flex-start);
+        @include mixins.flex(column, center, center);
         gap: 2rem;
+
         margin-bottom: 2rem;
+
+        @include mixins.respond-to('tablet') {
+            align-items: flex-start;
+        }
+
+        button {
+            position: relative;
+
+            @include mixins.respond-to('tablet') {
+                margin-left: 2rem;
+            }
+
+            @include mixins.respond-to('desktop') {
+                margin-left: 5rem;
+            }
+
+            &::before {
+                position: absolute;
+                content: '';
+                top: 100%;
+                left: 0;
+
+                width: 100%;
+                height: 1px;
+
+                background: currentColor;
+                pointer-events: none;
+
+                opacity: 0;
+            }
+
+            @media (hover: hover) {
+                &:hover a {
+                    animation: glitchText 0.4s linear;
+                }
+
+                &:hover::before {
+                    animation: glitchLine 0.4s steps(2, start) forwards;
+                }
+            }
+        }
     }
+
     &__category {
         @include mixins.flex(column, center, flex-start);
-        margin-left: 5rem;
+
         width: fit-content;
         border-bottom: 1px solid transparent;
 
@@ -245,110 +403,132 @@ input[type='range']::-moz-range-thumb {
         font-size: var(--fs-small);
 
         cursor: pointer;
-
-        &:hover {
-            border-bottom: 1px solid var(--color-primary);
-            color: var(--color-primary);
-        }
     }
 }
 
 .cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(22rem, 0.33fr));
-    gap: 5rem;
+    grid-template-columns: repeat(auto-fit, minmax(26rem, 1fr));
+    gap: 2vw;
 
-    margin: 4rem auto;
+    & a {
+        display: flex;
+    }
 }
 
 .card {
-    min-height: 40rem;
-    padding-bottom: 0;
+    display: grid;
+    grid-auto-rows: 1fr max-content;
+    align-items: flex-end;
 
     background-color: var(--color-primary-opacity);
-    border: 3px solid var(--color-primary);
+    border: 0.3rem solid var(--color-primary);
+
+    transition: box-shadow 0.3s ease-in;
 
     &:hover {
-        transform: translateY(-2rem);
-        transition: all 0.3s;
-
-        box-shadow: 10px 10px 100px var(--color-primary);
+        box-shadow: var(--drop-shadow-light);
     }
 
     &__content {
-        @include mixins.flex(column, space-between, flex-start);
-        min-height: 20rem;
-        gap: 0.5rem;
-        padding: 0.2rem 1rem 1rem 2rem;
+        display: grid;
+        grid-template-rows: 1fr 1fr min-content;
+        gap: 2rem;
+
+        padding: 2rem 1rem;
+
+        background: var(--color-secondary-opacity);
+        box-shadow: inset 0 0.8rem 3rem 0 var(--color-primary-alpha);
+        backdrop-filter: blur(0.2rem);
     }
 
     &__details {
         @include mixins.flex(row, space-between, center);
+
+        min-height: 5rem;
     }
 
     &__img {
-        width: 100%;
+        height: 100%;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
     }
 
     &__price {
-        width: 70%;
-        margin-top: 3rem;
-
-        font-size: var(--fs-medium-big);
+        align-self: flex-start;
 
         .old-price {
             width: fit-content;
+
+            color: var(--color-white);
+            opacity: 0.5;
 
             font-size: var(--fs-small);
         }
 
         .promotion-price {
-            color: var(--color-danger);
+            color: var(--color-white);
         }
 
         .cross-price {
             position: relative;
-            top: 1rem;
+            top: 0.6rem;
             height: 2px;
-            transform: rotate(-10deg);
 
-            background-color: var(--color-danger);
+            background-color: var(--color-white);
+
+            @include mixins.respond-to('tablet') {
+                top: 1rem;
+            }
         }
     }
 
     &__icons {
+        --gap: 1.2rem;
         @include mixins.flex(row, space-between, center);
 
-        width: 35%;
-
         img {
-            width: 100%;
+            width: 3rem;
+            aspect-ratio: 1;
         }
     }
-    &__title {
-        margin-top: 2rem;
 
-        font-size: var(--fs-very-small);
+    &__paragraph {
+        display: grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.27);
     }
+
     &__description {
-        height: 0;
-
-        transform: scale(1, 0);
-        transform-origin: top;
-
-        transition: 0.3s;
+        overflow: hidden;
 
         &_open {
-            height: auto;
-            transform: scale(1, 1);
+            &.card__paragraph {
+                grid-template-rows: 1fr;
+            }
+
+            & ~ .card__description-btn {
+                margin-top: 2rem;
+            }
         }
-        &__btn {
-            align-self: flex-end;
-            padding: 0.5rem 1rem;
 
-            background-color: var(--color-primary);
+        &-btn {
+            justify-self: center;
 
-            cursor: pointer;
+            width: min(19rem, 100%);
+
+            margin: 0;
+            padding: 0.5em;
+
+            color: var(--color-primary);
+
+            @include mixins.respond-to('tablet') {
+                padding: 0.5em 0em 0.5em 1em;
+            }
         }
     }
 }

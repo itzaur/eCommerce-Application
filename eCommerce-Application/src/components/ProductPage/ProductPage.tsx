@@ -12,7 +12,7 @@ import { Product } from '@commercetools/platform-sdk';
 import { apiRoot } from '../../commercetools/Client';
 import { Header } from '../Store';
 import { Footer } from '../MainPage';
-import { tours } from '../../utils/constants';
+import { products } from '../../utils/constants';
 import { ProductOptions } from '../../types';
 import starEmpty from '../../assets/images/review-star-empty.png';
 import avatar from '../../assets/images/user.png';
@@ -66,9 +66,11 @@ function ProductDetail(): JSX.Element {
         imageAlt: card?.masterData.current.masterVariant.images
             ? card?.masterData.current.masterVariant.images[0].label
             : '',
-        detailsTitle: tours.find((el) => el.name === card?.key)?.details?.title,
-        detailsItems: tours.find((el) => el.name === card?.key)?.details?.name,
-        reviews: tours.find((el) => el.name === card?.key)?.reviews,
+        detailsTitle: products.find((el) => el.name === card?.key)?.details
+            ?.title,
+        detailsItems: products.find((el) => el.name === card?.key)?.details
+            ?.name,
+        reviews: products.find((el) => el.name === card?.key)?.reviews,
     };
 
     product.price = card?.masterData.current.masterVariant.prices
@@ -145,7 +147,11 @@ function ProductDetail(): JSX.Element {
 
     return (
         <>
-            <Header />
+            <Header
+                setSearchValue={(): void => {
+                    throw new Error('Function not implemented.');
+                }}
+            />
             <Modal
                 active={modalActive}
                 setActive={setModalActive}
