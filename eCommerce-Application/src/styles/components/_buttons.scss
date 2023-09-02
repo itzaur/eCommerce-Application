@@ -16,31 +16,33 @@
 
         transition: box-shadow 0.3s ease;
 
-        &:hover {
-            box-shadow: 0 0 0.6rem 0.2rem var(--color-primary-alpha);
+        @media (hover: hover) {
+            &:hover {
+                box-shadow: 0 0 0.6rem 0.2rem var(--color-primary-alpha);
 
-            &::before {
-                top: 0;
-                left: 0;
+                &::before {
+                    top: 0;
+                    left: 0;
 
-                opacity: 1;
+                    opacity: 1;
 
-                transition:
-                    opacity 0.2s ease-in-out,
-                    inset 0.2s ease-in-out;
-            }
+                    transition:
+                        opacity 0.2s ease-in-out,
+                        inset 0.2s ease-in-out;
+                }
 
-            &:after {
-                bottom: 0;
-                right: 0;
+                &:after {
+                    bottom: 0;
+                    right: 0;
 
-                opacity: 1;
-            }
+                    opacity: 1;
+                }
 
-            & span::after {
-                filter: invert(95%) sepia(34%) saturate(4887%)
-                    hue-rotate(145deg) brightness(91%) contrast(96%);
-                left: calc(100% + 1.5rem);
+                & span::after {
+                    filter: invert(95%) sepia(34%) saturate(4887%)
+                        hue-rotate(145deg) brightness(91%) contrast(96%);
+                    left: calc(100% + 1.5rem);
+                }
             }
         }
 
@@ -117,8 +119,10 @@
             outline-color: transparent;
         }
 
-        &:hover {
-            box-shadow: var(--drop-shadow-light);
+        @media (hover: hover) {
+            &:hover {
+                box-shadow: var(--drop-shadow-light);
+            }
         }
     }
 
@@ -179,8 +183,10 @@
 
         transition: background-color 0.3s ease-in-out;
 
-        &:hover {
-            background-color: var(--color-primary);
+        @media (hover: hover) {
+            &:hover {
+                background-color: var(--color-primary);
+            }
         }
     }
 

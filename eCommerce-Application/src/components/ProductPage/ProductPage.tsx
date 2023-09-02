@@ -265,7 +265,7 @@ function ProductDetail(): JSX.Element {
                                 }
                             >
                                 <span>Цена со скидкой</span>
-                                <span>-10%</span>
+                                <span>-15%</span>
                             </div>
                             <div
                                 className={

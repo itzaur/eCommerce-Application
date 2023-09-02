@@ -1,10 +1,14 @@
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { ProductProjection } from '@commercetools/platform-sdk';
 import cartIcon from '../../assets/images/cart-icon.png';
 import favouriteIcon from '../../assets/images/favourite-icon.png';
 
 function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
-    const scrollToTop = (): void => {
+    const scrollToTop = (event: React.MouseEvent<HTMLElement>): void => {
+        const target = event.target as HTMLElement;
+        if (target.className.includes('btn')) return;
+
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
     };
 

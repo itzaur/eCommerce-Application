@@ -19,7 +19,7 @@
     &__content {
         display: grid;
         grid-template-columns: 1fr;
-        gap: 1rem;
+        gap: 2rem;
 
         @include mixins.respond-to('tablet') {
             grid-template-columns: min-content 1fr;
@@ -55,13 +55,15 @@
     @include mixins.flex(row, center, flex-start);
     flex-wrap: wrap;
 
-    padding-bottom: 3rem;
+    padding-bottom: 2rem;
 
     border-bottom: 1px solid var(--color-white);
     box-shadow: 0 1rem 1rem -1rem var(--color-primary);
 
     @include mixins.respond-to('tablet') {
         justify-content: space-between;
+
+        padding-bottom: 3rem;
     }
 
     &__filters {
@@ -100,8 +102,10 @@
             min-width: 22rem;
         }
 
-        &:hover + .parameters__dropdown {
-            transform: scale(1, 1);
+        @media (hover: hover) {
+            &:hover + .parameters__dropdown {
+                transform: scale(1, 1);
+            }
         }
 
         &-img {
@@ -167,8 +171,10 @@
             cursor: pointer;
         }
 
-        &:hover {
-            transform: scale(1, 1);
+        @media (hover: hover) {
+            &:hover {
+                transform: scale(1, 1);
+            }
         }
 
         li {
@@ -315,16 +321,20 @@ input[type='range']::-moz-range-thumb {
     clip-path: inset(0 -100vmax);
 
     @include mixins.respond-to('tablet') {
-        padding: 4rem 2rem;
+        padding: 2rem;
 
         box-shadow: none;
         clip-path: 0;
     }
 
     &__content {
-        --header-height: 15rem;
+        --header-height: 14rem;
         position: sticky;
         top: var(--header-height);
+
+        & .btn {
+            padding: 1.5em 0.5em 1em 1em;
+        }
     }
 
     &__title {
@@ -426,24 +436,31 @@ input[type='range']::-moz-range-thumb {
 
     transition: box-shadow 0.3s ease-in;
 
-    &:hover {
-        box-shadow: var(--drop-shadow-light);
+    @media (hover: hover) {
+        &:hover {
+            box-shadow: var(--drop-shadow-light);
 
-        img {
-            scale: 1.1 1.1;
+            .card__img img {
+                scale: 1.1 1.1;
+            }
         }
     }
 
     &__content {
         display: grid;
-        grid-template-rows: 1fr 1fr min-content;
-        gap: 2rem;
+        grid-template-rows: 1fr min-content min-content;
+        gap: 1rem;
 
         padding: 2rem 1rem;
 
         background: var(--color-secondary-opacity);
         box-shadow: inset 0 0.8rem 3rem 0 var(--color-primary-alpha);
         backdrop-filter: blur(0.2rem);
+
+        @include mixins.respond-to('tablet') {
+            grid-template-rows: 1fr 1fr min-content;
+            gap: 2rem;
+        }
     }
 
     &__details {
@@ -502,6 +519,12 @@ input[type='range']::-moz-range-thumb {
         img {
             width: 3rem;
             aspect-ratio: 1;
+
+            transition: scale 0.3s ease;
+
+            &:hover {
+                scale: 1.1;
+            }
         }
     }
 

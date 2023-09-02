@@ -73,19 +73,29 @@
 
             position: relative;
 
+            & img {
+                height: 2rem;
+
+                transition: filter 0.3s ease;
+
+                @include mixins.respond-to('desktop') {
+                    height: auto;
+                }
+            }
+
+            @media (hover: hover) {
+                &:hover {
+                    & img {
+                        filter: drop-shadow(0 0 0.5rem var(--color-primary));
+                    }
+                }
+            }
+
             & > button {
                 --gap: 1rem;
                 @include mixins.flex(column, center, center);
 
                 cursor: pointer;
-            }
-
-            img {
-                height: 2rem;
-
-                @include mixins.respond-to('desktop') {
-                    height: auto;
-                }
             }
         }
 
@@ -99,15 +109,6 @@
         &__title {
             color: var(--color-white);
         }
-
-        // a,
-        // button {
-        //     // @include mixins.flex(column, center, center);
-
-        //     font-size: var(--fs-medium);
-
-        //     cursor: pointer;
-        // }
 
         #purchases-number {
             visibility: hidden;
