@@ -24,8 +24,23 @@ import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import 'swiper/css/scrollbar';
+import BreadCrumbs from '../Store/BreadCrumbs';
 
-function ProductDetail(): JSX.Element {
+function ProductDetail({
+    type,
+    category,
+    typePath,
+    categoryPath,
+}: {
+    type: string;
+    category: string;
+    typePath: string;
+    categoryPath: string;
+}): JSX.Element {
+    const [selectedType, setSelectedType] = useState(type);
+    const selectedTypePath = typePath;
+    const [selectedCategory, setSelectedCategory] = useState(category || '');
+    const selectedCategoryPath = categoryPath;
     const [card, setCard] = useState<Product>();
     const location = useLocation().pathname.split('/').at(-1) as string;
 
@@ -171,14 +186,17 @@ function ProductDetail(): JSX.Element {
                 </div>
             </Modal>
             <section className="product">
-                <ul className="product__path">
-                    <li>
-                        <Link to="/">Главная / </Link>
-                    </li>
-                    <li>Каталог / </li>
-                    <li>Космотуры / </li>
-                    <li>{product.title}</li>
-                </ul>
+                <BreadCrumbs
+                    selectedType={selectedType}
+                    setSelectedType={setSelectedType}
+                    selectedTypePath={selectedTypePath}
+                    selectedCategory={selectedCategory}
+                    setSelectedCategory={setSelectedCategory}
+                    selectedCategoryPath={selectedCategoryPath}
+                    selectedProduct={
+                        card?.masterData.current.name['ru-RU'] || ''
+                    }
+                />
 
                 <div className="product__back">
                     <span />

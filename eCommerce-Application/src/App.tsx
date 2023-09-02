@@ -70,7 +70,14 @@ function App(): JSX.Element {
                 <Route
                     key={category.parent.name}
                     path={`/store/${category.parent.path}`}
-                    element={<Store type={category.parent.name} category="" />}
+                    element={
+                        <Store
+                            type={category.parent.name}
+                            typePath={category.parent.path}
+                            category=""
+                            categoryPath=""
+                        />
+                    }
                 />
             );
             setCategoriesRoutes([
@@ -78,7 +85,14 @@ function App(): JSX.Element {
                 <Route
                     key={category.parent.name}
                     path={`/store/${category.parent.path}`}
-                    element={<Store type={category.parent.name} category="" />}
+                    element={
+                        <Store
+                            type={category.parent.name}
+                            typePath={category.parent.path}
+                            category=""
+                            categoryPath=""
+                        />
+                    }
                 />,
             ]);
             getProductsByProductType(category.parent.name).then((data) => {
@@ -87,12 +101,26 @@ function App(): JSX.Element {
                         <Route
                             key={el.key}
                             path={`/store/${category.parent.path}/${el.key}`}
-                            element={<ProductDetail />}
+                            element={
+                                <ProductDetail
+                                    type={category.parent.name}
+                                    typePath={category.parent.path}
+                                    category=""
+                                    categoryPath=""
+                                />
+                            }
                         />,
                         <Route
                             key={el.key}
                             path={`/store/${el.key}`}
-                            element={<ProductDetail />}
+                            element={
+                                <ProductDetail
+                                    type=""
+                                    typePath=""
+                                    category=""
+                                    categoryPath=""
+                                />
+                            }
                         />
                     );
                     setCategoriesRoutes([
@@ -100,12 +128,26 @@ function App(): JSX.Element {
                         <Route
                             key={el.key}
                             path={`/store/${category.parent.path}/${el.key}`}
-                            element={<ProductDetail />}
+                            element={
+                                <ProductDetail
+                                    type={category.parent.name}
+                                    typePath={category.parent.path}
+                                    category=""
+                                    categoryPath=""
+                                />
+                            }
                         />,
                         <Route
                             key={el.key}
                             path={`/store/${el.key}`}
-                            element={<ProductDetail />}
+                            element={
+                                <ProductDetail
+                                    type=""
+                                    typePath=""
+                                    category=""
+                                    categoryPath=""
+                                />
+                            }
                         />,
                     ]);
                 });
@@ -119,7 +161,9 @@ function App(): JSX.Element {
                         element={
                             <Store
                                 type={category.parent.name}
+                                typePath={category.parent.path}
                                 category={item.name}
+                                categoryPath={item.name}
                             />
                         }
                     />
@@ -132,7 +176,9 @@ function App(): JSX.Element {
                         element={
                             <Store
                                 type={category.parent.name}
+                                typePath={category.parent.path}
                                 category={item.name}
+                                categoryPath={item.name}
                             />
                         }
                     />,
@@ -143,7 +189,14 @@ function App(): JSX.Element {
                             <Route
                                 key={el.key}
                                 path={`/store/${category.parent.path}/${item.path}/${el.key}`}
-                                element={<ProductDetail />}
+                                element={
+                                    <ProductDetail
+                                        type={category.parent.name}
+                                        typePath={category.parent.path}
+                                        category={item.name}
+                                        categoryPath={item.path}
+                                    />
+                                }
                             />
                         );
                         setCategoriesRoutes([
@@ -151,7 +204,14 @@ function App(): JSX.Element {
                             <Route
                                 key={el.key}
                                 path={`/store/${category.parent.path}/${item.path}/${el.key}`}
-                                element={<ProductDetail />}
+                                element={
+                                    <ProductDetail
+                                        type={category.parent.name}
+                                        typePath={category.parent.path}
+                                        category={item.name}
+                                        categoryPath={item.path}
+                                    />
+                                }
                             />,
                         ]);
                     });
@@ -189,7 +249,12 @@ function App(): JSX.Element {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/registration" element={<RegistrationPage />} />
-            <Route path="/store" element={<Store type="" category="" />} />
+            <Route
+                path="/store"
+                element={
+                    <Store type="" category="" typePath="" categoryPath="" />
+                }
+            />
             <Route path="/about" element={<AboutPage />} />
             <Route path="*" element={<NotFound />} />
         </Routes>

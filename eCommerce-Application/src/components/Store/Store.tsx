@@ -16,14 +16,18 @@ import { checkMinMaxPrice } from '../../utils/checkMinMaxPrice';
 function Store({
     type,
     category,
+    typePath,
+    categoryPath,
 }: {
     type: string;
     category: string;
+    typePath: string;
+    categoryPath: string;
 }): JSX.Element {
     const [selectedType, setSelectedType] = useState(type);
-    const [selectedTypePath, setSelectedTypePath] = useState('');
+    const [selectedTypePath, setSelectedTypePath] = useState(typePath);
     const [selectedCategory, setSelectedCategory] = useState(category || '');
-    const [selectedCategoryId, setSelectedCategoryId] = useState('');
+    const [selectedCategoryId, setSelectedCategoryId] = useState(categoryPath);
     const [selectedCategoryPath, setSelectedCategoryPath] = useState('');
     const [cards, setCards] = useState<ProductProjection[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
@@ -96,6 +100,7 @@ function Store({
                     selectedCategory={selectedCategory}
                     setSelectedCategory={setSelectedCategory}
                     selectedCategoryPath={selectedCategoryPath}
+                    selectedProduct=""
                 />
                 <section className="store__content">
                     <SideBar

@@ -46,8 +46,18 @@
 
     padding: 2rem 0 2rem;
 
+    font-family: var(--ff-secondary);
+
     @include mixins.respond-to('tablet') {
         padding: 7rem 0 4rem;
+    }
+
+    &_product-page {
+        width: 100vw;
+        padding: 5rem 6rem;
+        @include mixins.respond-to('tablet') {
+            padding: 5rem 6rem;
+        }
     }
 }
 

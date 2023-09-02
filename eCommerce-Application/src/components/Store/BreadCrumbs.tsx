@@ -7,6 +7,7 @@ function BreadCrumbs(props: {
     selectedCategory: string;
     setSelectedCategory: React.Dispatch<React.SetStateAction<string>>;
     selectedCategoryPath: string;
+    selectedProduct: string;
 }): JSX.Element {
     const {
         selectedType,
@@ -15,10 +16,17 @@ function BreadCrumbs(props: {
         selectedCategory,
         setSelectedCategory,
         selectedCategoryPath,
+        selectedProduct,
     } = props;
 
     return (
-        <ul className="bread-crumbs">
+        <ul
+            className={
+                selectedProduct
+                    ? 'bread-crumbs bread-crumbs_product-page '
+                    : 'bread-crumbs'
+            }
+        >
             <li>
                 <Link to="/">Главная /</Link>
             </li>
@@ -37,7 +45,9 @@ function BreadCrumbs(props: {
                 <li>
                     <Link
                         to={`/store/${selectedTypePath}`}
-                        onClick={(): void => setSelectedCategory('')}
+                        onClick={(): void => {
+                            setSelectedCategory('');
+                        }}
                     >
                         / {selectedType}{' '}
                     </Link>
@@ -47,8 +57,21 @@ function BreadCrumbs(props: {
                 <li>
                     <Link
                         to={`/store/${selectedTypePath}/${selectedCategoryPath}`}
+                        onClick={(): void => {
+                            setSelectedType(selectedType);
+                            setSelectedCategory(selectedCategory);
+                        }}
                     >
                         / {selectedCategory}
+                    </Link>
+                </li>
+            )}
+            {selectedProduct && (
+                <li>
+                    <Link
+                        to={`/store/${selectedTypePath}/${selectedCategoryPath}/${selectedProduct}`}
+                    >
+                        / {selectedProduct}
                     </Link>
                 </li>
             )}
