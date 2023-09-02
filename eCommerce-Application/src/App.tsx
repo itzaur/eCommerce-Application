@@ -1,5 +1,5 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, ReactElement } from 'react';
 import {
     Home,
     LoginPage,
@@ -11,25 +11,24 @@ import {
 import ProductDetail from './components/ProductPage/ProductPage';
 import { products } from './utils/constants';
 import { getCategories } from './commercetools/getCategories';
+import { getProductsByProductType } from './commercetools/getProductsByType';
+import { getProductsBySubcategory } from './commercetools/getProductsBySubcategory';
 import { Category } from './types';
 
 function App(): JSX.Element {
     const location = useLocation();
     const root = document.querySelector('main');
-    const paths = useMemo(
-        () => [
-            'login',
-            'registration',
-            'store',
-            'about',
-            ...products.map((product) => product.name),
-        ],
-        []
-    );
-
+    const paths = [
+        'login',
+        'registration',
+        'store',
+        'about',
+        ...products.map((product) => product.name),
+    ];
+    const tempArrCategoriesRoutes: React.ReactElement[] = [];
     const [categories, setCategories] = useState<Category[]>([]);
     const [categoriesRoutes, setCategoriesRoutes] = useState<
-        React.ReactElement[] | []
+        React.ReactElement[]
     >([]);
     const [pageLoaded, setPageLoaded] = useState(false);
     const path = location.pathname
@@ -37,22 +36,11 @@ function App(): JSX.Element {
         .filter((el) => el)
         .at(-1) as string;
 
-    useEffect(() => {
-        if (!pageLoaded) {
-            getCategories().then((data) => {
-                if (data) {
-                    setCategories(data);
-                }
-            });
-            setPageLoaded(true);
-        }
-    }, [pageLoaded]);
-
-    useEffect(() => {
+    function setMainId(categoriesArr: Category[]): void {
         if (paths.includes(path)) {
             root?.setAttribute('id', path);
-        } else if (categories) {
-            categories.forEach((category) => {
+        } else if (categoriesArr) {
+            categoriesArr.forEach((category) => {
                 if (category.parent.path === path) {
                     root?.setAttribute('id', 'store');
                     return;
@@ -68,24 +56,72 @@ function App(): JSX.Element {
         } else {
             root?.setAttribute('id', 'error-page');
         }
+    }
 
-        const tempArrCategories: React.ReactElement[] = [];
-        categories.forEach((category) => {
-            tempArrCategories.push(
+    async function getRoutes(
+        categoriesArr: Category[]
+    ): Promise<ReactElement[]> {
+        categoriesArr.forEach((category) => {
+            tempArrCategoriesRoutes.push(
+                <Route
+                    key={category.parent.name}
+                    path={`/store/${category.parent.path}`}
+                    element={<Store type={category.parent.name} category="" />}
+                />
+            );
+            setCategoriesRoutes([
+                ...tempArrCategoriesRoutes,
                 <Route
                     key={category.parent.name}
                     path={`/store/${category.parent.path}`}
                     element={<Store type={category.parent.name} category="" />}
                 />,
-                <Route
-                    key=":key"
-                    path={`/store/${category.parent.path}/:key`}
-                    element={<ProductDetail />}
-                />
-            );
+            ]);
+            getProductsByProductType(category.parent.name).then((data) => {
+                data?.forEach((el) => {
+                    tempArrCategoriesRoutes.push(
+                        <Route
+                            key={el.key}
+                            path={`/store/${category.parent.path}/${el.key}`}
+                            element={<ProductDetail />}
+                        />,
+                        <Route
+                            key={el.key}
+                            path={`/store/${el.key}`}
+                            element={<ProductDetail />}
+                        />
+                    );
+                    setCategoriesRoutes([
+                        ...tempArrCategoriesRoutes,
+                        <Route
+                            key={el.key}
+                            path={`/store/${category.parent.path}/${el.key}`}
+                            element={<ProductDetail />}
+                        />,
+                        <Route
+                            key={el.key}
+                            path={`/store/${el.key}`}
+                            element={<ProductDetail />}
+                        />,
+                    ]);
+                });
+            });
 
             category.items.forEach((item) => {
-                tempArrCategories.push(
+                tempArrCategoriesRoutes.push(
+                    <Route
+                        key={item.name}
+                        path={`/store/${category.parent.path}/${item.path}`}
+                        element={
+                            <Store
+                                type={category.parent.name}
+                                category={item.name}
+                            />
+                        }
+                    />
+                );
+                setCategoriesRoutes([
+                    ...tempArrCategoriesRoutes,
                     <Route
                         key={item.name}
                         path={`/store/${category.parent.path}/${item.path}`}
@@ -96,16 +132,50 @@ function App(): JSX.Element {
                             />
                         }
                     />,
-                    <Route
-                        key=":key"
-                        path={`/store/${category.parent.path}/${item.path}/:key`}
-                        element={<ProductDetail />}
-                    />
-                );
+                ]);
+                getProductsBySubcategory(item.name).then((data) => {
+                    data?.forEach((el) => {
+                        tempArrCategoriesRoutes.push(
+                            <Route
+                                key={el.key}
+                                path={`/store/${category.parent.path}/${item.path}/${el.key}`}
+                                element={<ProductDetail />}
+                            />
+                        );
+                        setCategoriesRoutes([
+                            ...tempArrCategoriesRoutes,
+                            <Route
+                                key={el.key}
+                                path={`/store/${category.parent.path}/${item.path}/${el.key}`}
+                                element={<ProductDetail />}
+                            />,
+                        ]);
+                    });
+                });
             });
         });
-        setCategoriesRoutes(tempArrCategories);
-    }, [categories, location.pathname, path, paths, root]);
+
+        return categoriesRoutes;
+    }
+
+    useEffect(() => {
+        if (!pageLoaded) {
+            getCategories().then((data) => {
+                if (data) {
+                    setCategories(data);
+                    setMainId(data);
+                    getRoutes(data).then((result) => {
+                        setCategoriesRoutes(result);
+                        setPageLoaded(true);
+                    });
+                }
+            });
+        }
+    });
+
+    useEffect(() => {
+        setMainId(categories);
+    });
 
     return (
         <Routes>
@@ -116,7 +186,6 @@ function App(): JSX.Element {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/registration" element={<RegistrationPage />} />
             <Route path="/store" element={<Store type="" category="" />} />
-            <Route path="/store/:key" element={<ProductDetail />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="*" element={<NotFound />} />
         </Routes>

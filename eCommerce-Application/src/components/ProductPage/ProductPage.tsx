@@ -40,7 +40,7 @@ function ProductDetail(): JSX.Element {
 
                 setCard(result.body);
             } catch (error) {
-                // console.log(error);
+                // throw Error('Product not found');
             }
         }
         getProductKey(location);

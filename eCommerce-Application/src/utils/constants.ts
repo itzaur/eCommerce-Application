@@ -427,7 +427,7 @@ export const products = [
         ],
     },
     {
-        name: 'thunderstorm_galaxy',
+        name: 'galaxy_thunderstorm',
         title: 'Гроза галактики! Полное собрание приключений Звездного Лорда',
         details: {
             title: 'Выбрать книги',
