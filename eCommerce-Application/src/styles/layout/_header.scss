@@ -27,44 +27,103 @@
     justify-content: center;
 }
 
-#store .header {
-    justify-content: space-between;
-    padding: 2rem 5.2% 3rem;
+.header-nav {
+    @include mixins.flex(column, space-between, center);
 
-    box-shadow: 0px 10px 200px var(--color-primary);
+    padding: 2rem 5vw;
 
-    nav {
-        @include mixins.flex(row, space-between, flex-end);
-        gap: 4.5rem;
+    box-shadow: 0 1rem 6rem var(--color-primary);
 
-        a,
-        button {
+    background: var(--color-header);
+
+    backdrop-filter: blur(1rem);
+
+    z-index: 2;
+
+    @include mixins.respond-to('tablet') {
+        position: sticky;
+        top: 0;
+
+        flex-direction: row;
+    }
+
+    &__logo {
+        & img {
+            min-height: 6rem;
+
+            padding-block: 0.5rem;
+        }
+    }
+
+    .nav {
+        &__list {
+            --gap: 2rem;
+            @include mixins.flex(null, center, flex-end);
+            flex-wrap: wrap;
+
+            padding-block: 1rem;
+
+            @include mixins.respond-to('desktop') {
+                --gap: 4.5rem;
+            }
+        }
+
+        &__item {
+            @include mixins.flex(null, center, center);
+
+            position: relative;
+
+            & img {
+                height: 2rem;
+
+                transition: filter 0.3s ease;
+
+                @include mixins.respond-to('desktop') {
+                    height: auto;
+                }
+            }
+
+            @media (hover: hover) {
+                &:hover {
+                    & img {
+                        filter: drop-shadow(0 0 0.5rem var(--color-primary));
+                    }
+                }
+            }
+
+            & > button {
+                --gap: 1rem;
+                @include mixins.flex(column, center, center);
+
+                cursor: pointer;
+            }
+        }
+
+        &__link {
+            --gap: 1rem;
             @include mixins.flex(column, center, center);
 
-            font-size: var(--fs-medium);
-
-            cursor: pointer;
-        }
-        .search-btn {
             position: relative;
         }
-        a:last-child {
-            position: relative;
-            #purchases-number {
-                visibility: hidden;
 
-                position: absolute;
-                top: -1rem;
-                right: 1.8rem;
-                width: 2.5rem;
-                height: 2.5rem;
+        &__title {
+            color: var(--color-white);
+        }
 
-                display: grid;
-                place-content: center;
+        #purchases-number {
+            visibility: hidden;
 
-                background-color: var(--color-primary);
-                color: var(--color-secondary);
-            }
+            position: absolute;
+            top: -1rem;
+            right: 1.8rem;
+            width: 2.5rem;
+            height: 2.5rem;
+
+            display: grid;
+            place-content: center;
+
+            background-color: var(--color-primary);
+            color: var(--color-secondary);
         }
     }
 }

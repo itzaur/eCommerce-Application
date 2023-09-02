@@ -1,8 +1,6 @@
 @use '../abstracts/mixins';
 
 .footer {
-    --scrollbar-width: 1.7rem;
-
     position: relative;
 
     display: grid;
@@ -179,4 +177,8 @@
             align-self: flex-end;
         }
     }
+}
+
+#main .footer {
+    --scrollbar-width: 1.7rem;
 }

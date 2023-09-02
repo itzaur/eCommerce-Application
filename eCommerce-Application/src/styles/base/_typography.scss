@@ -15,6 +15,21 @@
     src: url(../assets/fonts/neuropol/neuropol.otf);
 }
 
+@font-face {
+    font-family: 'Zekton Rg';
+    src: url(../assets/fonts/zekton/ZektonLt-Regular.woff2);
+}
+
+@font-face {
+    font-family: 'Stray Robotalk';
+    src: url(../assets/fonts/stray-game-font/STRAY_ROBOTALK_REGULAR.TTF);
+}
+
+@font-face {
+    font-family: 'Predator';
+    src: url(../assets/fonts/predator/predator.ttf);
+}
+
 .home {
     &__title {
         .title {
@@ -154,4 +169,177 @@
         font-size: clamp(1.3rem, 4vw, 2.3rem);
         text-align: center;
     }
+}
+
+.product {
+    &__path,
+    &__back {
+        font-family: var(--ff-secondary);
+        font-size: 1.2rem;
+        letter-spacing: 0.1em;
+    }
+
+    &__info {
+        .info-title {
+            font-family: var(--ff-secondary);
+            font-size: var(--fs-medium-big);
+        }
+
+        .info-text {
+            p {
+                font-family: var(--ff-product);
+                font-size: var(--fs-form);
+                line-height: 1.5;
+            }
+        }
+
+        .info-discount {
+            font-family: var(--ff-product);
+            font-size: var(--fs-paragraph);
+
+            & *:nth-child(2) {
+                font-family: var(--ff-secondary);
+            }
+        }
+
+        .info-value {
+            &__discount,
+            &__price {
+                font-family: var(--ff-secondary);
+            }
+
+            &__discount {
+                font-size: var(--fs-big);
+            }
+
+            &__price {
+                font-size: var(--fs-paragraph);
+                text-decoration: line-through;
+
+                &-active {
+                    font-size: var(--fs-big);
+                    text-decoration: none;
+                }
+            }
+
+            &--active {
+                font-family: var(--ff-product);
+                font-size: var(--fs-form);
+            }
+        }
+    }
+
+    &__details {
+        font-family: var(--ff-product);
+        font-size: var(--fs-small);
+
+        &-title {
+            font-size: var(--fs-paragraph);
+            text-align: center;
+
+            @include mixins.respond-to('tablet') {
+                text-align: left;
+            }
+        }
+
+        &-btns {
+            font-size: (var(--fs-medium));
+            text-align: center;
+        }
+    }
+
+    &__reviews {
+        h2 {
+            font-family: var(--ff-secondary);
+            font-size: var(--fs-small);
+        }
+    }
+}
+
+.review {
+    &__text,
+    &__autor {
+        font-family: var(--ff-product);
+        font-size: var(--fs-review);
+    }
+
+    &__text--alien {
+        font-family: var(--ff-alien);
+        font-size: var(--fs-paragraph);
+    }
+
+    &__text--predator {
+        font-family: var(--ff-predator);
+        font-size: var(--fs-paragraph);
+    }
+}
+
+.nav {
+    &__title {
+        font-family: var(--ff-secondary);
+        font-size: var(--fs-review);
+    }
+}
+
+.search-bar {
+    input {
+        font-family: var(--ff-product);
+        font-size: var(--fs-paragraph);
+        text-align: left;
+    }
+}
+
+.card {
+    &__title {
+        font-size: var(--fs-review);
+    }
+
+    &__description {
+        font-family: var(--ff-product);
+        font-size: var(--fs-review);
+
+        &-btn {
+            font-family: var(--ff-product);
+            font-size: var(--fs-small);
+        }
+    }
+
+    &__price {
+        font-size: var(--fs-paragraph);
+    }
+
+    .promotion-price {
+        font-size: var(--fs-paragraph);
+    }
+
+    .cross-price {
+        font-size: var(--fs-small);
+    }
+}
+
+.parameters {
+    &__btn {
+        font-size: var(--fs-review);
+        text-align: center;
+    }
+}
+
+.parameters__dropdown {
+    label,
+    button {
+        font-family: var(--ff-product);
+        font-size: var(--fs-small);
+    }
+
+    &-inputs {
+        font-family: var(--ff-product);
+
+        & > * {
+            font-size: var(--fs-small);
+        }
+    }
+}
+
+.bread-crumbs {
+    font-size: var(--fs-medium);
 }

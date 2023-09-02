@@ -1,28 +1,36 @@
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { ProductProjection } from '@commercetools/platform-sdk';
 import cartIcon from '../../assets/images/cart-icon.png';
 import favouriteIcon from '../../assets/images/favourite-icon.png';
 
 function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
-    // console.log(cards);
+    const scrollToTop = (event: React.MouseEvent<HTMLElement>): void => {
+        const target = event.target as HTMLElement;
+        if (target.className.includes('btn')) return;
+
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    };
+
     return (
         <div className="cards">
             {cards.map((card, i: number) => (
-                <Link key={i} to={`./${card.key}`}>
+                <Link key={i} to={`./${card.key}`} onClick={scrollToTop}>
                     <div key={i} className="card" id={card.key}>
-                        <img
-                            className="card__img"
-                            src={
-                                card.masterVariant.images
-                                    ? card.masterVariant.images[0].url
-                                    : ''
-                            }
-                            alt={
-                                card.masterVariant.images
-                                    ? card.masterVariant.images[0].label
-                                    : ''
-                            }
-                        />
+                        <figure className="card__img">
+                            <img
+                                src={
+                                    card.masterVariant.images
+                                        ? card.masterVariant.images[0].url
+                                        : ''
+                                }
+                                alt={
+                                    card.masterVariant.images
+                                        ? card.masterVariant.images[0].label
+                                        : ''
+                                }
+                            />
+                        </figure>
                         <div className="card__content">
                             <div className="card__details">
                                 {card.masterVariant.prices && (
@@ -45,6 +53,7 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
 
                                                 <h3 className="old-price">
                                                     <div className="cross-price" />
+                                                    ${' '}
                                                     {(+(
                                                         card.masterVariant
                                                             .prices[0].value
@@ -80,19 +89,23 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
                             <h2 className="card__title">
                                 {card.name['ru-RU']}
                             </h2>
-                            <p className="card__description">
-                                {card.description
-                                    ? card.description['ru-RU']
-                                    : ''}
-                            </p>
+                            <div className="card__paragraph">
+                                <p className="card__description">
+                                    {card.description
+                                        ? card.description['ru-RU']
+                                        : ''}
+                                </p>
+                            </div>
                             <button
                                 type="button"
-                                className="btn card__description__btn"
+                                className="btn card__description-btn"
                                 onClick={(e): void => {
                                     e.preventDefault();
                                     if (card.key) {
                                         document
-                                            .querySelector(`#${card.key} p`)
+                                            .querySelector(
+                                                `#${card.key} .card__paragraph`
+                                            )
                                             ?.classList.toggle(
                                                 'card__description_open'
                                             );
