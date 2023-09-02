@@ -1,10 +1,23 @@
 import { Link } from 'react-router-dom';
 import { ProductProjection } from '@commercetools/platform-sdk';
+import { MouseEvent } from 'react';
 import cartIcon from '../../assets/images/cart-icon.png';
 import favouriteIcon from '../../assets/images/favourite-icon.png';
 
 function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
-    // console.log(cards);
+    function showHideDescription(e: MouseEvent, card: ProductProjection): void {
+        e.preventDefault();
+        if (card.key) {
+            document
+                .querySelector(`#${card.key} p`)
+                ?.classList.toggle('card__description_open');
+            (e.target as HTMLElement).textContent =
+                (e.target as HTMLElement).textContent === 'Показать описание ▼'
+                    ? 'Скрыть описание ▲'
+                    : 'Показать описание ▼';
+        }
+    }
+
     return (
         <div className="cards">
             {cards.map((card, i: number) => (
@@ -89,20 +102,7 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
                                 type="button"
                                 className="btn card__description__btn"
                                 onClick={(e): void => {
-                                    e.preventDefault();
-                                    if (card.key) {
-                                        document
-                                            .querySelector(`#${card.key} p`)
-                                            ?.classList.toggle(
-                                                'card__description_open'
-                                            );
-                                        (e.target as HTMLElement).textContent =
-                                            (e.target as HTMLElement)
-                                                .textContent ===
-                                            'Показать описание ▼'
-                                                ? 'Скрыть описание ▲'
-                                                : 'Показать описание ▼';
-                                    }
+                                    showHideDescription(e, card);
                                 }}
                             >
                                 Показать описание ▼

@@ -7,7 +7,6 @@ import {
     Store,
     NotFound,
 } from './components';
-import Tour from './components/Store/Tour';
 
 function App(): JSX.Element {
     const location = useLocation();
@@ -93,7 +92,6 @@ function App(): JSX.Element {
                 element={<Store type="Выбрать номер" category="Хард" />}
             />
             <Route path="/about" element={<AboutPage />} />
-            <Route path="/store/tours/:id" element={<Tour />} />
             <Route path="*" element={<NotFound />} />
         </Routes>
     );

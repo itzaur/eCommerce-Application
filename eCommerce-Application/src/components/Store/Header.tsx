@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
 import SearchBar from './SearchBar';
 import logo from '../../assets/images/logo.png';
 import iconCatalog from '../../assets/images/icon-catalog.png';
@@ -13,6 +14,7 @@ function Header({
     'setSearchValue',
     React.Dispatch<React.SetStateAction<string>>
 >): JSX.Element {
+    const [searchBarOpen, setSearchBarOpen] = useState(false);
     return (
         <header className="header">
             <Link to="/">
@@ -30,16 +32,21 @@ function Header({
                 <div className="search-btn">
                     <button
                         type="button"
-                        onClick={(): boolean | undefined =>
-                            document
-                                .querySelector('.search-bar')
-                                ?.classList.toggle('search-bar_open')
-                        }
+                        onClick={(): void => {
+                            if (!searchBarOpen) {
+                                setSearchBarOpen(true);
+                            } else {
+                                setSearchBarOpen(false);
+                            }
+                        }}
                     >
                         <img src={iconSearch} alt="icon-search" />
                         <h3>Поиск</h3>
                     </button>
-                    <SearchBar setSearchValue={setSearchValue} />
+                    <SearchBar
+                        setSearchValue={setSearchValue}
+                        searchBarOpen={searchBarOpen}
+                    />
                 </div>
 
                 <Link to="/profile">
