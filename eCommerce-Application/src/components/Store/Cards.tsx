@@ -4,10 +4,14 @@ import cartIcon from '../../assets/images/cart-icon.png';
 import favouriteIcon from '../../assets/images/favourite-icon.png';
 
 function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
+    const scrollToTop = (): void => {
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    };
+
     return (
         <div className="cards">
             {cards.map((card, i: number) => (
-                <Link key={i} to={`./${card.key}`}>
+                <Link key={i} to={`./${card.key}`} onClick={scrollToTop}>
                     <div key={i} className="card" id={card.key}>
                         <figure className="card__img">
                             <img

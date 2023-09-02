@@ -101,7 +101,6 @@ function App(): JSX.Element {
             />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/store/:key" element={<ProductDetail />} />
-            <Route path="/store/cosmotours/:key" element={<ProductDetail />} />
             <Route path="*" element={<NotFound />} />
         </Routes>
     );

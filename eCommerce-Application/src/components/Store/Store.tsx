@@ -125,6 +125,7 @@ function Store({
                         </li>
                     )}
                 </ul>
+
                 <section className="store__content">
                     <SideBar
                         categories={categories}

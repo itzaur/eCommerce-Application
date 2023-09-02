@@ -315,14 +315,14 @@ input[type='range']::-moz-range-thumb {
     clip-path: inset(0 -100vmax);
 
     @include mixins.respond-to('tablet') {
-        padding: 2rem;
+        padding: 4rem 2rem;
 
         box-shadow: none;
         clip-path: 0;
     }
 
     &__content {
-        --header-height: 16rem;
+        --header-height: 15rem;
         position: sticky;
         top: var(--header-height);
     }
@@ -428,6 +428,10 @@ input[type='range']::-moz-range-thumb {
 
     &:hover {
         box-shadow: var(--drop-shadow-light);
+
+        img {
+            scale: 1.1 1.1;
+        }
     }
 
     &__content {
@@ -451,10 +455,14 @@ input[type='range']::-moz-range-thumb {
     &__img {
         height: 100%;
 
+        overflow: hidden;
+
         img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+
+            transition: scale 0.3s ease-in-out;
         }
     }
 

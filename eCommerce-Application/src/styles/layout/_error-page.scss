@@ -1,14 +1,5 @@
 @use '../abstracts/mixins';
 
-#error-page {
-    background-image: url('../assets/images/error-bg.png'),
-        url('../assets/images/error-bg2.png');
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: top;
-    background-color: var(--color-white);
-}
-
 .fail {
     display: grid;
     grid-template-columns: minmax(0, 1fr) repeat(6, minmax(0, 25rem)) minmax(
@@ -22,6 +13,13 @@
     place-items: center;
 
     height: 100vh;
+
+    background-image: url('../assets/images/error-bg.png'),
+        url('../assets/images/error-bg2.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: top;
+    background-color: var(--color-white);
 
     @include mixins.respond-to('tablet') {
         grid-template-rows: repeat(9, 1fr);

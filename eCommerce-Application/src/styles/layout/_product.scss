@@ -30,6 +30,11 @@
 
         opacity: 0.5;
 
+        li {
+            display: inline-block;
+            padding-block: 0.4em;
+        }
+
         @include mixins.respond-to('desktop') {
             grid-column: 2;
 

@@ -171,12 +171,15 @@ function ProductDetail(): JSX.Element {
                 </div>
             </Modal>
             <section className="product">
-                <div className="product__path">
-                    <span>Главная / </span>
-                    <span>Каталог / </span>
-                    <span>Космотуры / </span>
-                    <span>{product.title}</span>
-                </div>
+                <ul className="product__path">
+                    <li>
+                        <Link to="/">Главная / </Link>
+                    </li>
+                    <li>Каталог / </li>
+                    <li>Космотуры / </li>
+                    <li>{product.title}</li>
+                </ul>
+
                 <div className="product__back">
                     <span />
                     <Link to="/store">Назад</Link>
