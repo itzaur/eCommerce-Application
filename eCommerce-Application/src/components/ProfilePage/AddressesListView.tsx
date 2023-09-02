@@ -23,6 +23,7 @@ export function AddressesListView(props: {
     setAddAddressFormView: CallableFunction;
     // isEdit: boolean;
     setIsEdit: CallableFunction;
+    setChangeAddressIndex: CallableFunction;
 }): JSX.Element {
     const {
         typeAddresses,
@@ -40,6 +41,7 @@ export function AddressesListView(props: {
         setAddAddressFormView,
         // isEdit,
         setIsEdit,
+        setChangeAddressIndex,
     } = props;
     const [toggle, setToggle] = useState(true);
     const [isSelectAddress, setIsSelectAddress] = useState(false);
@@ -47,6 +49,8 @@ export function AddressesListView(props: {
     const removeAddress = (id: string): Address[] | undefined => {
         return typeAddresses?.filter((typeAddress) => typeAddress.id !== id);
     };
+
+    // console.log(typeAddresses);
 
     return (
         <div className="dropdown">
@@ -63,7 +67,7 @@ export function AddressesListView(props: {
                 <div className={toggle ? 'caret' : 'caret caret-rotate'} />
             </button>
             <ul className={toggle ? 'menu' : 'menu menu-open'}>
-                {typeAddresses?.map((address) => (
+                {typeAddresses?.map((address, index) => (
                     <div className="menu__wrapper" key={address.id}>
                         <button
                             type="button"
@@ -90,6 +94,8 @@ export function AddressesListView(props: {
                                 type="button"
                                 className="menu__button_edit"
                                 onClick={(): void => {
+                                    // console.log('=', index);
+                                    setChangeAddressIndex(index);
                                     setAddAddressFormView(false);
                                     setIsEdit(true);
                                     // console.log(address.city);

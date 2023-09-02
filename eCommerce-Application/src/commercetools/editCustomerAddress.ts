@@ -10,14 +10,16 @@ export async function editCustomerAddress(
     shippingCity: string,
     shippingIndex: string,
     shippingStreet: string,
-    // checkboxUseAddressAsDefault: boolean,
+    checkboxUseAddressAsDefault: boolean,
     version: number,
     setVersion: CallableFunction,
     setAddAddressFormView: CallableFunction,
     setTypeAddresses: CallableFunction,
-    addressId: string
-    // addressTypeView: boolean
-    // setDefaultAddresses: CallableFunction
+    addressId: string,
+    addressTypeView: boolean,
+    defaultAddresses: Address[] | undefined,
+    setDefaultAddresses: CallableFunction,
+    changeAddressIndex: number
 ): Promise<void> {
     let countryShippingAbbr = '';
     const countriesAbbr = [
@@ -55,55 +57,55 @@ export async function editCustomerAddress(
         const { addresses } = response.body;
         // const lastAddressIndex = addresses[addresses.length - 1].id;
 
+        // console.log(changeAddressIndex);
+
         setVersion(response.body.version);
 
-        // const addressResponse = await apiRoot
-        //     .customers()
-        //     .withId({ ID })
-        //     .post({
-        //         body: {
-        //             version: response.body.version,
-        //             actions: [
-        //                 {
-        //                     action: addressTypeView
-        //                         ? 'addShippingAddressId'
-        //                         : 'addBillingAddressId',
-        //                     addressId: `${lastAddressIndex}`,
-        //                 },
-        //             ],
-        //         },
-        //     })
-        //     .execute();
+        if (checkboxUseAddressAsDefault) {
+            const addressDefaultResponse = await apiRoot
+                .customers()
+                .withId({ ID })
+                .post({
+                    body: {
+                        version: response.body.version,
+                        actions: [
+                            {
+                                action: addressTypeView
+                                    ? 'setDefaultShippingAddress'
+                                    : 'setDefaultBillingAddress',
+                                addressId,
+                            },
+                        ],
+                    },
+                })
+                .execute();
 
-        // setVersion(addressResponse.body.version);
+            // console.log('TEST', addresses);
 
-        // if (checkboxUseAddressAsDefault) {
-        //     const addressDefaultResponse = await apiRoot
-        //         .customers()
-        //         .withId({ ID })
-        //         .post({
-        //             body: {
-        //                 version: addressResponse.body.version,
-        //                 actions: [
-        //                     {
-        //                         action: addressTypeView
-        //                             ? 'setDefaultShippingAddress'
-        //                             : 'setDefaultBillingAddress',
-        //                         addressId: `${lastAddressIndex}`,
-        //                     },
-        //                 ],
-        //             },
-        //         })
-        //         .execute();
-        //     // console.log('----', addresses[addresses.length - 1]);
-        //     setDefaultAddresses([addresses[addresses.length - 1]]);
-        //     setVersion(addressDefaultResponse.body.version);
-        // }
+            setDefaultAddresses([addresses[changeAddressIndex]]);
+            setVersion(addressDefaultResponse.body.version);
+        }
 
         setTypeAddresses((prev: Address[]) => [
-            ...prev,
-            addresses[addresses.length - 1],
+            ...prev.slice(0, changeAddressIndex),
+            addresses[changeAddressIndex],
+            ...addresses.slice(changeAddressIndex + 1, addresses.length),
         ]);
+
+        if (
+            defaultAddresses &&
+            defaultAddresses[0].id === addresses[changeAddressIndex].id
+        ) {
+            // console.log(
+            //     'defa',
+            //     defaultAddresses[0].id === addresses[changeAddressIndex].id
+            // );
+            setDefaultAddresses([addresses[changeAddressIndex]]);
+            // console.log('defa', );
+        }
+        // console.log('defa2', [addresses[changeAddressIndex]]);
+
+        // setDefaultAddresses([addresses[changeAddressIndex]]);
 
         setAddAddressFormView(true);
     } catch (err) {

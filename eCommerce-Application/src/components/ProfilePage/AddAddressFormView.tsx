@@ -20,10 +20,12 @@ export function AddAddressFormView(props: {
     version: number;
     setVersion: CallableFunction;
     setTypeAddresses: CallableFunction;
+    defaultAddresses: Address[] | undefined;
     setDefaultAddresses: CallableFunction;
     isEdit: boolean;
     setIsEdit: CallableFunction;
     currentSelectedAddress: Address;
+    changeAddressIndex: number;
 }): JSX.Element {
     const {
         userId,
@@ -32,10 +34,12 @@ export function AddAddressFormView(props: {
         version,
         setVersion,
         setTypeAddresses,
+        defaultAddresses,
         setDefaultAddresses,
         isEdit,
         setIsEdit,
         currentSelectedAddress,
+        changeAddressIndex,
     } = props;
 
     const [errorCountry, setErrorCountry] = useState(false);
@@ -345,14 +349,16 @@ export function AddAddressFormView(props: {
                                     cityValue,
                                     indexValue,
                                     streetValue,
-                                    // checkboxUseAddressAsDefault,
+                                    checkboxUseAddressAsDefault,
                                     version,
                                     setVersion,
                                     setAddAddressFormView,
                                     setTypeAddresses,
-                                    String(currentSelectedAddress.id)
-                                    // addressTypeView
-                                    // setDefaultAddresses
+                                    String(currentSelectedAddress.id),
+                                    addressTypeView,
+                                    defaultAddresses,
+                                    setDefaultAddresses,
+                                    changeAddressIndex
                                 );
                             } else {
                                 addCustomerAddress(

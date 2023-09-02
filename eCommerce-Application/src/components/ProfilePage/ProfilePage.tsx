@@ -10,18 +10,35 @@ import { getCountry } from '../../commercetools/getCountry';
 // import { getDefaultShippingAddress } from '../../commercetools/getDefaultShippingAddress';
 // import { getDefaultBillingAddress } from '../../commercetools/getDefaultBillingAddress';
 import { AddAddressFormView } from './AddAddressFormView';
+// import { EditAddressFormView } from './EditAddressFormView';
+import { EditAuthorizationDataView } from './EditAuthorizationDataView';
+import { PersonalDataView } from './PersonalDataView';
 // import { removeCustomerAddress } from '../../commercetools/removeCustomerAddress';
 
 function ProfilePage(): JSX.Element {
     const user = localStorage.getItem('user') as string;
     const userId = JSON.parse(user).id;
 
-    const [passwordView, setPasswordView] = useState('password');
+    // const [passwordView, setPasswordView] = useState('password');
     const [customer, setCustomer] = useState<Customer>();
+    const [email, setEmail] = useState('');
+    const [name, setName] = useState('');
+    const [surname, setSurname] = useState('');
+    // const [dateOfBirth, setDateOfBirth] = useState('');
+
+    const [birthDayValue, setBirthDayValue] = useState('');
+    const [birthMonthValue, setBirthMonthValue] = useState('');
+    const [birthYearValue, setBirthYearValue] = useState('');
+
     const [addressTypeView, setAddressTypeView] = useState(true);
     const [addAddressFormView, setAddAddressFormView] = useState(true);
-    const [shippingAddresses, setShippingAddresses] = useState<Address[]>();
-    const [billingAddresses, setBillingAddresses] = useState<Address[]>();
+    const [shippingAddresses, setShippingAddresses] = useState<
+        Address[] | undefined
+    >();
+    const [billingAddresses, setBillingAddresses] = useState<
+        Address[] | undefined
+    >();
+
     const [defaultShippingAddress, setDefaultShippingAddresses] =
         useState<Address[]>();
 
@@ -55,10 +72,13 @@ function ProfilePage(): JSX.Element {
     });
 
     const [isEdit, setIsEdit] = useState(false);
+    const [changeAddressIndex, setChangeAddressIndex] = useState(0);
+    const [changeAuthData, setChangeAuthData] = useState(true);
 
-    const changePasswordView = (): void => {
-        setPasswordView(passwordView === 'password' ? 'text' : 'password');
-    };
+    // console.log('-', changeAddressIndex);
+    // const changePasswordView = (): void => {
+    //     setPasswordView(passwordView === 'password' ? 'text' : 'password');
+    // };
 
     const getShippingAddresses = (data: Customer): Address[] => {
         return data.addresses.filter((item) => {
@@ -118,6 +138,13 @@ function ProfilePage(): JSX.Element {
                 // console.log('data', getDefaultShippingAddress(data));
                 setDefaultShippingAddresses(getDefaultShippingAddress(data));
                 setDefaultBillingAddresses(getDefaultBillingAddress(data));
+                setEmail(data.email);
+                setName(String(data.firstName));
+                setSurname(String(data.lastName));
+                setBirthDayValue(String(data.dateOfBirth?.split('-')[2]));
+                setBirthMonthValue(String(data.dateOfBirth?.split('-')[1]));
+                setBirthYearValue(String(data.dateOfBirth?.split('-')[0]));
+                // setDateOfBirth(String(data.dateOfBirth));
             }
         });
     }, [userId]);
@@ -263,6 +290,9 @@ function ProfilePage(): JSX.Element {
                                             }
                                             // isEdit={isEdit}
                                             setIsEdit={setIsEdit}
+                                            setChangeAddressIndex={
+                                                setChangeAddressIndex
+                                            }
                                         />
 
                                         {/* {addressTypeView ? (
@@ -339,6 +369,11 @@ function ProfilePage(): JSX.Element {
                                         ? setShippingAddresses
                                         : setBillingAddresses
                                 }
+                                defaultAddresses={
+                                    addressTypeView
+                                        ? defaultShippingAddress
+                                        : defaultBillingAddress
+                                }
                                 setDefaultAddresses={
                                     addressTypeView
                                         ? setDefaultShippingAddresses
@@ -351,11 +386,28 @@ function ProfilePage(): JSX.Element {
                                         ? currentSelectedShippingAddress
                                         : currentSelectedBillingAddress
                                 }
+                                changeAddressIndex={changeAddressIndex}
                             />
                         )}
                     </div>
 
-                    <div className="profile__info">
+                    <PersonalDataView
+                        userId={userId}
+                        version={version}
+                        setVersion={setVersion}
+                        name={name}
+                        setName={setName}
+                        surname={surname}
+                        setSurname={setSurname}
+                        birthDayValue={birthDayValue}
+                        setBirthDayValue={setBirthDayValue}
+                        birthMonthValue={birthMonthValue}
+                        setBirthMonthValue={setBirthMonthValue}
+                        birthYearValue={birthYearValue}
+                        setBirthYearValue={setBirthYearValue}
+                    />
+
+                    {/* <div className="profile__info">
                         <div className="profile__info-line">
                             <div className="profile__info-title">имя:</div>
                             <div className="profile__info-name">
@@ -410,7 +462,7 @@ function ProfilePage(): JSX.Element {
                                 </span>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                     <div className="profile__banner">
                         <img
                             src={banner}
@@ -433,66 +485,85 @@ function ProfilePage(): JSX.Element {
                     <div className="profile__private">
                         <div className="profile__private-wrapper">
                             <div className="profile__private-header">
-                                <span className="btn_action profile__button">
+                                <button
+                                    type="button"
+                                    className={
+                                        changeAuthData
+                                            ? 'btn_action profile__button'
+                                            : 'btn_action profile__button  btn_un-action'
+                                    }
+                                    onClick={(): void =>
+                                        setChangeAuthData(true)
+                                    }
+                                >
                                     конфиденциальные данные
-                                </span>
-                                <span className="btn_action btn_un-action profile__button ">
+                                </button>
+                                <button
+                                    type="button"
+                                    className={
+                                        changeAuthData
+                                            ? 'btn_action profile__button  btn_un-action'
+                                            : 'btn_action profile__button '
+                                    }
+                                    onClick={(): void =>
+                                        setChangeAuthData(false)
+                                    }
+                                >
                                     изменить
-                                </span>
+                                </button>
                             </div>
-                            <div className="profile__content">
-                                <div className="profile__content-email">
-                                    <span className="profile__content-email-name">
-                                        e-mail:
-                                    </span>
-                                    <label
-                                        className="placeholder"
-                                        htmlFor="name"
-                                    >
-                                        <input
-                                            className="profile__content-email-input"
-                                            value={customer?.email || 'loading'}
-                                            type="text"
-                                            id="email"
-                                            disabled
-                                        />
-                                        <div className="placeholder__input form_big-first-letter">
-                                            Email<span>*</span>
-                                        </div>
-                                    </label>
-                                </div>
-
-                                <div className="profile__content-password">
-                                    <span>пароль:</span>
-
-                                    <label
-                                        className="placeholder"
-                                        htmlFor="password"
-                                    >
-                                        <input
-                                            className="profile__content-password-input"
-                                            value={
-                                                customer?.password || 'loading'
-                                            }
-                                            type={passwordView}
-                                            id="password"
-                                            disabled
-                                        />
-                                        <button
-                                            type="button"
-                                            className={`profile__password password-view password-view_${passwordView}`}
-                                            onClick={(): void =>
-                                                changePasswordView()
-                                            }
-                                            onKeyDown={(): void =>
-                                                changePasswordView()
-                                            }
+                            {changeAuthData ? (
+                                <div className="profile__content">
+                                    <div className="profile__content-email">
+                                        <span className="profile__content-email-name">
+                                            e-mail:
+                                        </span>
+                                        <label
+                                            className="placeholder"
+                                            htmlFor="name"
                                         >
-                                            &nbsp;
-                                        </button>
-                                    </label>
+                                            <input
+                                                className="profile__content-email-input"
+                                                value={email}
+                                                type="text"
+                                                id="email"
+                                                disabled
+                                            />
+                                            <div className="placeholder__input form_big-first-letter">
+                                                Email<span>*</span>
+                                            </div>
+                                        </label>
+                                    </div>
+
+                                    <div className="profile__content-password">
+                                        <span>пароль:</span>
+
+                                        <label
+                                            className="placeholder"
+                                            htmlFor="password"
+                                        >
+                                            <input
+                                                className="profile__content-password-input"
+                                                value={
+                                                    customer?.password ||
+                                                    'loading'
+                                                }
+                                                type="password"
+                                                id="password"
+                                                disabled
+                                            />
+                                        </label>
+                                    </div>
                                 </div>
-                            </div>
+                            ) : (
+                                <EditAuthorizationDataView
+                                    userId={userId}
+                                    email={email}
+                                    setEmail={setEmail}
+                                    version={version}
+                                    setVersion={setVersion}
+                                />
+                            )}
                         </div>
                     </div>
                 </div>
