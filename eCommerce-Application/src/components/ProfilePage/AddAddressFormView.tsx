@@ -1,3 +1,4 @@
+import { Address } from '@commercetools/platform-sdk';
 import { useEffect, useState } from 'react';
 import {
     checkIncorrectAddressCity,
@@ -7,6 +8,8 @@ import {
 import { checkIncorrectAddressIndex } from '../../utils/validation/checkIndex';
 import { AvailableCountry } from './AvailableCountry';
 import { addCustomerAddress } from '../../commercetools/addCustomerAddress';
+import { getCountry } from '../../commercetools/getCountry';
+import { editCustomerAddress } from '../../commercetools/editCustomerAddress';
 
 const countries = ['Выберите страну*', 'Россия', 'Беларусь', 'Польша'];
 
@@ -20,6 +23,7 @@ export function AddAddressFormView(props: {
     setDefaultAddresses: CallableFunction;
     isEdit: boolean;
     setIsEdit: CallableFunction;
+    currentSelectedAddress: Address;
 }): JSX.Element {
     const {
         userId,
@@ -31,27 +35,40 @@ export function AddAddressFormView(props: {
         setDefaultAddresses,
         isEdit,
         setIsEdit,
+        currentSelectedAddress,
     } = props;
 
     const [errorCountry, setErrorCountry] = useState(false);
     const [errorMessageCountry, setErrorMessageCountry] = useState('');
-    const [country, setCountry] = useState(countries[0]);
+    const [country, setCountry] = useState(
+        isEdit
+            ? String(getCountry(currentSelectedAddress.country))
+            : countries[0]
+    );
 
     const [errorRegion, setErrorRegion] = useState(false);
     const [errorMessageRegion, setErrorMessageRegion] = useState('');
-    const [regionValue, setRegionValue] = useState('');
+    const [regionValue, setRegionValue] = useState(
+        isEdit ? currentSelectedAddress.region : ''
+    );
 
     const [errorCity, setErrorCity] = useState(false);
     const [errorMessageCity, setErrorMessageCity] = useState('');
-    const [cityValue, setCityValue] = useState('');
+    const [cityValue, setCityValue] = useState(
+        isEdit ? currentSelectedAddress.city : ''
+    );
 
     const [errorIndex, setErrorIndex] = useState(false);
     const [errorMessageIndex, setErrorMessageIndex] = useState('');
-    const [indexValue, setIndexValue] = useState('');
+    const [indexValue, setIndexValue] = useState(
+        isEdit ? String(currentSelectedAddress.postalCode) : ''
+    );
 
     const [errorStreet, setErrorStreet] = useState(false);
     const [errorMessageStreet, setErrorMessageStreet] = useState('');
-    const [streetValue, setStreetValue] = useState('123');
+    const [streetValue, setStreetValue] = useState(
+        isEdit ? currentSelectedAddress.streetName : ''
+    );
 
     const [checkboxUseAddressAsDefault, setCheckboxUseAddressAsDefault] =
         useState(false);
@@ -63,7 +80,20 @@ export function AddAddressFormView(props: {
         setErrorMessageIndex(
             checkIncorrectAddressIndex(indexValue, country).message
         );
+        // if (isEdit && currentSelectedAddress) {
+        // setCountry(currentSelectedAddress?.country);
+        // setRegionValue(currentSelectedAddress?.region);
+        // setCityValue(currentSelectedAddress?.city);
+        // setIndexValue(currentSelectedAddress?.postalCode);
+        // setStreetValue(currentSelectedAddress?.streetName);
+        // }
     }, [indexValue, country]);
+
+    // console.log('123', currentSelectedAddress.region);
+
+    // useEffect(() => {
+    //     setStreetValue('12346');
+    // }, []);
 
     return (
         <form className="profile__address-wrapper">
@@ -95,7 +125,9 @@ export function AddAddressFormView(props: {
                             errorMessageCountry={errorMessageCountry}
                             setErrorCountry={setErrorCountry}
                             setErrorMessageCountry={setErrorMessageCountry}
+                            country={country}
                             setCountry={setCountry}
+                            isEdit={isEdit}
                         />
                     </div>
                     <div className="form__inputs-wrapper">
@@ -107,6 +139,7 @@ export function AddAddressFormView(props: {
                                 required
                                 type="text"
                                 id="shipping-address-region"
+                                value={regionValue}
                                 className={
                                     errorRegion
                                         ? 'form__input profile__address-input form__input_invalid'
@@ -141,6 +174,7 @@ export function AddAddressFormView(props: {
                                 required
                                 type="text"
                                 id="shipping-address-city"
+                                value={cityValue}
                                 className={
                                     errorCity
                                         ? 'form__input profile__address-input form__input_invalid'
@@ -173,6 +207,7 @@ export function AddAddressFormView(props: {
                                 required
                                 type="text"
                                 id="shipping-address-index"
+                                value={indexValue}
                                 className={
                                     errorIndex
                                         ? 'form__input profile__address-input form__input_invalid'
@@ -197,6 +232,7 @@ export function AddAddressFormView(props: {
                             required
                             type="text"
                             id="shipping-address"
+                            value={streetValue}
                             className={
                                 errorStreet
                                     ? 'form__input profile__address-input form__input_invalid'
@@ -300,21 +336,41 @@ export function AddAddressFormView(props: {
                                 !streetValue
                             )
                                 return;
-                            addCustomerAddress(
-                                userId,
-                                country,
-                                regionValue,
-                                cityValue,
-                                indexValue,
-                                streetValue,
-                                checkboxUseAddressAsDefault,
-                                version,
-                                setVersion,
-                                setAddAddressFormView,
-                                setTypeAddresses,
-                                addressTypeView,
-                                setDefaultAddresses
-                            );
+
+                            if (isEdit) {
+                                editCustomerAddress(
+                                    userId,
+                                    country,
+                                    regionValue,
+                                    cityValue,
+                                    indexValue,
+                                    streetValue,
+                                    // checkboxUseAddressAsDefault,
+                                    version,
+                                    setVersion,
+                                    setAddAddressFormView,
+                                    setTypeAddresses,
+                                    String(currentSelectedAddress.id)
+                                    // addressTypeView
+                                    // setDefaultAddresses
+                                );
+                            } else {
+                                addCustomerAddress(
+                                    userId,
+                                    country,
+                                    regionValue,
+                                    cityValue,
+                                    indexValue,
+                                    streetValue,
+                                    checkboxUseAddressAsDefault,
+                                    version,
+                                    setVersion,
+                                    setAddAddressFormView,
+                                    setTypeAddresses,
+                                    addressTypeView,
+                                    setDefaultAddresses
+                                );
+                            }
                         }}
                     >
                         ок

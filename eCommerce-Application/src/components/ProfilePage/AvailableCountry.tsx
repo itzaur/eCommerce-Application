@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { checkIncorrectCountry } from '../../utils/validation/checkShippingCountry';
+// import { getCountry } from '../../commercetools/getCountry';
 
 const countries = ['Россия', 'Беларусь', 'Польша'];
 
@@ -8,17 +9,23 @@ export function AvailableCountry(props: {
     errorMessageCountry: string;
     setErrorCountry: CallableFunction;
     setErrorMessageCountry: CallableFunction;
+    country: string;
     setCountry: CallableFunction;
+    isEdit: boolean;
 }): JSX.Element {
     const {
         errorCountry,
         errorMessageCountry,
         setErrorCountry,
         setErrorMessageCountry,
+        country,
         setCountry,
+        isEdit,
     } = props;
     const [toggle, setToggle] = useState(true);
-    const [selectedValue, setSelectedValue] = useState('Выберите страну');
+    const [selectedValue, setSelectedValue] = useState(
+        isEdit ? country : 'Выберите страну'
+    );
 
     return (
         <>
@@ -42,24 +49,26 @@ export function AvailableCountry(props: {
                             : 'menu menu-open  profile__address-menu'
                     }
                 >
-                    {countries.map((country, index) => (
+                    {countries.map((currentCountry, index) => (
                         <button
                             type="button"
-                            key={country[index]}
+                            key={currentCountry[index]}
                             onClick={(): void => {
                                 setToggle((prev) => !prev);
-                                setSelectedValue(country);
+                                setSelectedValue(currentCountry);
 
                                 setErrorCountry(
-                                    checkIncorrectCountry(country).incorrect
+                                    checkIncorrectCountry(currentCountry)
+                                        .incorrect
                                 );
                                 setErrorMessageCountry(
-                                    checkIncorrectCountry(country).message
+                                    checkIncorrectCountry(currentCountry)
+                                        .message
                                 );
-                                setCountry(country);
+                                setCountry(currentCountry);
                             }}
                         >
-                            {`${country}`}
+                            {`${currentCountry}`}
                         </button>
                     ))}
                 </ul>

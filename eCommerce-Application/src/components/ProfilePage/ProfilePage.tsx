@@ -130,6 +130,9 @@ function ProfilePage(): JSX.Element {
 
     // console.log('edit', isEdit);
 
+    // console.log('shi', currentSelectedShippingAddress);
+    // console.log('bill', currentSelectedBillingAddress);
+
     return (
         <div>
             <section className="profile">
@@ -183,13 +186,27 @@ function ProfilePage(): JSX.Element {
                                                 {addressTypeView &&
                                                 defaultShippingAddress &&
                                                 defaultShippingAddress.length
-                                                    ? `${defaultShippingAddress[0]?.postalCode} ${defaultShippingAddress[0]?.country}, ${defaultShippingAddress[0]?.region}, ${defaultShippingAddress[0]?.city}, ${defaultShippingAddress[0]?.streetName}`
+                                                    ? `${defaultShippingAddress[0]
+                                                          ?.postalCode} ${getCountry(
+                                                          defaultShippingAddress[0]
+                                                              ?.country
+                                                      )}, ${defaultShippingAddress[0]
+                                                          ?.region}, ${defaultShippingAddress[0]
+                                                          ?.city}, ${defaultShippingAddress[0]
+                                                          ?.streetName}`
                                                     : ''}
                                                 {
                                                     !addressTypeView &&
                                                     defaultBillingAddress &&
                                                     defaultBillingAddress.length
-                                                        ? `${defaultBillingAddress[0]?.postalCode} ${defaultBillingAddress[0]?.country}, ${defaultBillingAddress[0]?.region}, ${defaultBillingAddress[0]?.city}, ${defaultBillingAddress[0]?.streetName}`
+                                                        ? `${defaultBillingAddress[0]
+                                                              ?.postalCode} ${getCountry(
+                                                              defaultBillingAddress[0]
+                                                                  ?.country
+                                                          )}, ${defaultBillingAddress[0]
+                                                              ?.region}, ${defaultBillingAddress[0]
+                                                              ?.city}, ${defaultBillingAddress[0]
+                                                              ?.streetName}`
                                                         : ''
 
                                                     // ? getDefaultShippingAddress(
@@ -329,6 +346,11 @@ function ProfilePage(): JSX.Element {
                                 }
                                 isEdit={isEdit}
                                 setIsEdit={setIsEdit}
+                                currentSelectedAddress={
+                                    addressTypeView
+                                        ? currentSelectedShippingAddress
+                                        : currentSelectedBillingAddress
+                                }
                             />
                         )}
                     </div>

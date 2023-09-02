@@ -4,6 +4,7 @@ import trash from '../../assets/icons/trash.svg';
 import edit from '../../assets/icons/edit.svg';
 
 import { removeCustomerAddress } from '../../commercetools/removeCustomerAddress';
+import { getCountry } from '../../commercetools/getCountry';
 // import { EditAddressFormView } from './EditAddressFormView';
 
 export function AddressesListView(props: {
@@ -79,7 +80,9 @@ export function AddressesListView(props: {
                                 });
                             }}
                         >
-                            {`${address?.postalCode}, ${address?.country}, ${address?.region}, ${address?.city}, ${address?.streetName}`}
+                            {`${address?.postalCode}, ${getCountry(
+                                address?.country
+                            )}, ${address?.region}, ${address?.city}, ${address?.streetName}`}
                         </button>
 
                         <div className="menu__wrapper">
@@ -90,6 +93,14 @@ export function AddressesListView(props: {
                                     setAddAddressFormView(false);
                                     setIsEdit(true);
                                     // console.log(address.city);
+                                    setCurrentSelectedFullAddress({
+                                        id: `${address.id}`,
+                                        postalCode: `${address.postalCode}`,
+                                        country: `${address.country}`,
+                                        region: `${address.region}`,
+                                        city: `${address.city}`,
+                                        streetName: `${address.streetName}`,
+                                    });
                                 }}
                             >
                                 <img src={edit} alt="edit" />
