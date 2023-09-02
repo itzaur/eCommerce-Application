@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { ProductProjection } from '@commercetools/platform-sdk';
-import { MouseEvent } from 'react';
+
 import cartIcon from '../../assets/images/cart-icon.png';
 import favouriteIcon from '../../assets/images/favourite-icon.png';
 
