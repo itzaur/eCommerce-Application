@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { ProductProjection } from '@commercetools/platform-sdk';
 import { Category } from '../../types';
 import Header from './Header';
-import { Cards, SideBar, Parameters } from './index';
+import { Cards, SideBar, Parameters, BreadCrumbs } from './index';
 import { getCategories } from '../../commercetools/getCategories';
 import { getProductsByProductType } from '../../commercetools/getProductsByType';
 import {
@@ -90,42 +89,14 @@ function Store({
         <>
             <Header setSearchValue={setSearchValue} />
             <section className="store__main">
-                <ul className="bread-crumbs">
-                    <li>
-                        <Link to="/">Главная /</Link>
-                    </li>
-                    <li>
-                        <Link
-                            to="/store"
-                            onClick={(): void => {
-                                setSelectedType('');
-                                setSelectedCategory('');
-                            }}
-                        >
-                            Каталог
-                        </Link>
-                    </li>
-                    {selectedType && (
-                        <li>
-                            <Link
-                                to={`/store/${selectedTypePath}`}
-                                onClick={(): void => setSelectedCategory('')}
-                            >
-                                / {selectedType}{' '}
-                            </Link>
-                        </li>
-                    )}
-                    {selectedCategory && (
-                        <li>
-                            <Link
-                                to={`/store/${selectedTypePath}/${selectedCategoryPath}`}
-                            >
-                                / {selectedCategory}
-                            </Link>
-                        </li>
-                    )}
-                </ul>
-
+                <BreadCrumbs
+                    selectedType={selectedType}
+                    setSelectedType={setSelectedType}
+                    selectedTypePath={selectedTypePath}
+                    selectedCategory={selectedCategory}
+                    setSelectedCategory={setSelectedCategory}
+                    selectedCategoryPath={selectedCategoryPath}
+                />
                 <section className="store__content">
                     <SideBar
                         categories={categories}

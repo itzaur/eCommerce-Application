@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, ChangeEvent } from 'react';
 import { ProductProjection } from '@commercetools/platform-sdk';
 import { filterSortSearcProducts } from '../../commercetools/filterSortSearchProducts';
 
@@ -49,6 +49,37 @@ function Parameters(props: {
         filter = { name: 'Форма', key: 'shape' };
     }
 
+    function checkFilters(e: ChangeEvent, el: string): void {
+        if (e.target instanceof HTMLInputElement) {
+            if (e.target.checked) {
+                setSelectedCategoriesList([
+                    ...selectedCategoriesList,
+                    `"${el}"`,
+                ]);
+                if (!filtersApplied) setFiltersApplied(true);
+            } else if (!e.target.checked) {
+                const indexEl = selectedCategoriesList.indexOf(`"${el}"`);
+                const temp = [...selectedCategoriesList];
+                temp.splice(indexEl, 1);
+                setSelectedCategoriesList(temp);
+            }
+        }
+    }
+
+    function resetFilters(): void {
+        setMinSelectedPrice(minPrice);
+        setMaxSelectedPrice(maxPrice);
+        setSelectedCategoriesList([]);
+        setDiscountedProducts(false);
+        setDiscountedProducts(false);
+        document.querySelectorAll('input[data-type="filter"').forEach((el) => {
+            if (el instanceof HTMLInputElement) {
+                const elCopy = el;
+                elCopy.checked = false;
+            }
+        });
+    }
+
     useEffect(() => {
         setSelectedCategoriesList([]);
         setDiscountedProducts(false);
@@ -70,6 +101,7 @@ function Parameters(props: {
                 elCopy.value = '';
             }
         });
+        setDiscountedProducts(false);
     }, [selectedType, selectedCategory]);
 
     useEffect(() => {
@@ -206,26 +238,7 @@ function Parameters(props: {
                                             defaultChecked={false}
                                             id={el}
                                             onChange={(e): void => {
-                                                if (e.target.checked) {
-                                                    setSelectedCategoriesList([
-                                                        ...selectedCategoriesList,
-                                                        `"${el}"`,
-                                                    ]);
-                                                    if (!filtersApplied)
-                                                        setFiltersApplied(true);
-                                                } else if (!e.target.checked) {
-                                                    const indexEl =
-                                                        selectedCategoriesList.indexOf(
-                                                            `"${el}"`
-                                                        );
-                                                    const temp = [
-                                                        ...selectedCategoriesList,
-                                                    ];
-                                                    temp.splice(indexEl, 1);
-                                                    setSelectedCategoriesList(
-                                                        temp
-                                                    );
-                                                }
+                                                checkFilters(e, el);
                                             }}
                                         />
                                         {el}
@@ -299,12 +312,13 @@ function Parameters(props: {
                 </div>
                 <div className="parameters__item">
                     <button
-                        className="btn parameters__btn parameters__btn_promotions"
+                        className={
+                            discountedProducts
+                                ? 'btn parameters__btn parameters__btn_promotions parameters__btn_promotions_applied'
+                                : 'btn parameters__btn parameters__btn_promotions'
+                        }
                         type="button"
-                        onClick={(e): void => {
-                            (e.target as HTMLElement).classList.toggle(
-                                'parameters__btn_promotions_applied'
-                            );
+                        onClick={(): void => {
                             if (discountedProducts) {
                                 setDiscountedProducts(false);
                             } else {
@@ -323,23 +337,7 @@ function Parameters(props: {
                 className="btn parameters__btn parameters__btn_reset"
                 type="button"
                 onClick={(): void => {
-                    setMinSelectedPrice(minPrice);
-                    setMaxSelectedPrice(maxPrice);
-                    setSelectedCategoriesList([]);
-                    setDiscountedProducts(false);
-                    document
-                        .querySelector('.parameters__btn_promotions_applied')
-                        ?.classList.remove(
-                            'parameters__btn_promotions_applied'
-                        );
-                    document
-                        .querySelectorAll('input[data-type="filter"')
-                        .forEach((el) => {
-                            if (el instanceof HTMLInputElement) {
-                                const elCopy = el;
-                                elCopy.checked = false;
-                            }
-                        });
+                    resetFilters();
                 }}
             >
                 Очистить фильтры
