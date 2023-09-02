@@ -58,19 +58,24 @@ function Store({
                 });
 
         if (selectedCategory) {
-            getProductsBySubcategory(selectedCategory).then((data) => {
-                if (data) {
-                    if (data.length) {
-                        setFilterVariants(checkFilterVariants(data));
-                    }
+            getProductsBySubcategory(selectedCategory)
+                .then((data) => {
+                    if (data) {
+                        if (data.length) {
+                            setFilterVariants(checkFilterVariants(data));
+                        }
 
-                    setCards(data);
-                    setMinPrice(checkMinMaxPrice(data)[0]);
-                    setMaxPrice(checkMinMaxPrice(data)[1]);
-                    setMinSelectedPrice(checkMinMaxPrice(data)[0]);
-                    setMaxSelectedPrice(checkMinMaxPrice(data)[1]);
-                }
-            });
+                        setCards(data);
+                        setMinPrice(checkMinMaxPrice(data)[0]);
+                        setMaxPrice(checkMinMaxPrice(data)[1]);
+                        setMinSelectedPrice(checkMinMaxPrice(data)[0]);
+                        setMaxSelectedPrice(checkMinMaxPrice(data)[1]);
+                    }
+                })
+                .catch((err: Error) => {
+                    document.body.textContent = err.message;
+                    document.body.classList.add('error-connection');
+                });
         } else if (selectedType) {
             getProductsByProductType(selectedType)
                 .then((data) => {
