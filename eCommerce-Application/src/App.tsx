@@ -1,4 +1,5 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
+import { useState, useEffect, useMemo } from 'react';
 import {
     Home,
     LoginPage,
@@ -9,98 +10,114 @@ import {
 } from './components';
 import ProductDetail from './components/ProductPage/ProductPage';
 import { products } from './utils/constants';
+import { getCategories } from './commercetools/getCategories';
+import { Category } from './types';
 
 function App(): JSX.Element {
     const location = useLocation();
     const root = document.querySelector('main');
-    const paths = [
-        'login',
-        'registration',
-        'store',
-        'about',
-        ...products.map((product) => product.name),
-    ];
-    const categories = [
-        'cosmotours',
-        'hotel',
-        'souvenirs',
-        'relax',
-        'hobby',
-        'active',
-        'hard',
-        'classic',
-        'glass',
-        'robotic',
-        'other',
-    ];
-    // const path = location.pathname.slice(1);
+    const paths = useMemo(
+        () => [
+            'login',
+            'registration',
+            'store',
+            'about',
+            ...products.map((product) => product.name),
+        ],
+        []
+    );
+
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [categoriesRoutes, setCategoriesRoutes] = useState<
+        React.ReactElement[] | []
+    >([]);
+    const [pageLoaded, setPageLoaded] = useState(false);
     const path = location.pathname
         .split('/')
         .filter((el) => el)
         .at(-1) as string;
-    if (categories.includes(path)) {
-        root?.setAttribute('id', 'store');
-    } else if (paths.includes(path)) {
-        root?.setAttribute('id', path);
-    } else if (location.pathname === '/') {
-        root?.setAttribute('id', 'main');
-    } else {
-        root?.setAttribute('id', 'error-page');
-    }
 
-    // localStorage.clear();
+    useEffect(() => {
+        if (!pageLoaded) {
+            getCategories().then((data) => {
+                if (data) {
+                    setCategories(data);
+                }
+            });
+            setPageLoaded(true);
+        }
+    }, [pageLoaded]);
+
+    useEffect(() => {
+        if (paths.includes(path)) {
+            root?.setAttribute('id', path);
+        } else if (categories) {
+            categories.forEach((category) => {
+                if (category.parent.path === path) {
+                    root?.setAttribute('id', 'store');
+                    return;
+                }
+                category.items.forEach((child) => {
+                    if (child.path === path) {
+                        root?.setAttribute('id', 'store');
+                    }
+                });
+            });
+        } else if (location.pathname === '/') {
+            root?.setAttribute('id', 'main');
+        } else {
+            root?.setAttribute('id', 'error-page');
+        }
+
+        const tempArrCategories: React.ReactElement[] = [];
+        categories.forEach((category) => {
+            tempArrCategories.push(
+                <Route
+                    key={category.parent.name}
+                    path={`/store/${category.parent.path}`}
+                    element={<Store type={category.parent.name} category="" />}
+                />,
+                <Route
+                    key=":key"
+                    path={`/store/${category.parent.path}/:key`}
+                    element={<ProductDetail />}
+                />
+            );
+
+            category.items.forEach((item) => {
+                tempArrCategories.push(
+                    <Route
+                        key={item.name}
+                        path={`/store/${category.parent.path}/${item.path}`}
+                        element={
+                            <Store
+                                type={category.parent.name}
+                                category={item.name}
+                            />
+                        }
+                    />,
+                    <Route
+                        key=":key"
+                        path={`/store/${category.parent.path}/${item.path}/:key`}
+                        element={<ProductDetail />}
+                    />
+                );
+            });
+        });
+        setCategoriesRoutes(tempArrCategories);
+    }, [categories, location.pathname, path, paths, root]);
+
     return (
         <Routes>
+            {categoriesRoutes.map((route) => {
+                return route;
+            })}
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/registration" element={<RegistrationPage />} />
             <Route path="/store" element={<Store type="" category="" />} />
-            <Route
-                path="/store/cosmotours"
-                element={<Store type="Космотуры" category="" />}
-            />
-            <Route
-                path="/store/cosmotours/relax"
-                element={<Store type="Космотуры" category="Релакс" />}
-            />
-            <Route
-                path="/store/cosmotours/hobby"
-                element={<Store type="Космотуры" category="Хобби" />}
-            />
-            <Route
-                path="/store/cosmotours/active"
-                element={<Store type="Космотуры" category="Активный Отдых" />}
-            />
-            <Route
-                path="/store/souvenirs"
-                element={<Store type="Сувениры" category="" />}
-            />
-            <Route
-                path="/store/souvenirs/glass"
-                element={<Store type="Сувениры" category="Стеклянные" />}
-            />
-            <Route
-                path="/store/souvenirs/robotic"
-                element={<Store type="Сувениры" category="Роботизированные" />}
-            />
-            <Route
-                path="/store/souvenirs/other"
-                element={<Store type="Сувениры" category="Прочие" />}
-            />
-            <Route
-                path="/store/hotel"
-                element={<Store type="Выбрать номер" category="" />}
-            />
-            <Route
-                path="/store/hotel/classic"
-                element={<Store type="Выбрать номер" category="Классик" />}
-            />
-            <Route
-                path="/store/hotel/hard"
-                element={<Store type="Выбрать номер" category="Хард" />}
-            />
-            <Route path="/about" element={<AboutPage />} />
             <Route path="/store/:key" element={<ProductDetail />} />
+            <Route path="/about" element={<AboutPage />} />
             <Route path="*" element={<NotFound />} />
         </Routes>
     );

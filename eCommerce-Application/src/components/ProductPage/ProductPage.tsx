@@ -40,7 +40,7 @@ function ProductDetail(): JSX.Element {
 
                 setCard(result.body);
             } catch (error) {
-                console.log(error);
+                // console.log(error);
             }
         }
         getProductKey(location);
@@ -238,7 +238,9 @@ function ProductDetail(): JSX.Element {
                                 <div
                                     tabIndex={0}
                                     role="button"
-                                    onKeyDown={(e): void => console.log(e)}
+                                    onKeyDown={(): void => {
+                                        // console.log(e);
+                                    }}
                                     key={i}
                                     onClick={(e): void => {
                                         setModalActive(true);
