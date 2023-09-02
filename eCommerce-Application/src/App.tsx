@@ -39,22 +39,26 @@ function App(): JSX.Element {
     function setMainId(categoriesArr: Category[]): void {
         if (paths.includes(path)) {
             root?.setAttribute('id', path);
-        } else if (categoriesArr) {
+        } else if (location.pathname === '/') {
+            root?.setAttribute('id', 'main');
+        } else if (categoriesArr.length) {
+            let categoryFound = false;
             categoriesArr.forEach((category) => {
                 if (category.parent.path === path) {
+                    categoryFound = true;
                     root?.setAttribute('id', 'store');
                     return;
                 }
                 category.items.forEach((child) => {
                     if (child.path === path) {
+                        categoryFound = true;
                         root?.setAttribute('id', 'store');
                     }
                 });
             });
-        } else if (location.pathname === '/') {
-            root?.setAttribute('id', 'main');
-        } else {
-            root?.setAttribute('id', 'error-page');
+            if (!categoryFound) {
+                root?.setAttribute('id', 'error-page');
+            }
         }
     }
 
