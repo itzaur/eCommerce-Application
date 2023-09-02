@@ -81,7 +81,7 @@ export async function filterSortSearcProducts(
             .execute();
         return result.body.results;
     } catch {
-        //
+        throw new Error('Cервер улетел в космос, попробуйте позже');
     }
     return undefined;
 }

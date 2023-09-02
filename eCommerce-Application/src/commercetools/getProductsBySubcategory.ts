@@ -11,7 +11,7 @@ export async function getSubCategoryId(
             .execute();
         return category.body.results[0].id;
     } catch {
-        //
+        throw new Error('Cервер улетел в космос, попробуйте позже');
     }
     return undefined;
 }
@@ -28,7 +28,7 @@ export async function getProductsBySubcategory(
             .execute();
         return result.body.results;
     } catch {
-        //
+        throw new Error('Cервер улетел в космос, попробуйте позже');
     }
     return undefined;
 }

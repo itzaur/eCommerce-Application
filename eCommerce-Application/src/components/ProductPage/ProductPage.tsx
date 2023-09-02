@@ -55,10 +55,13 @@ function ProductDetail({
 
                 setCard(result.body);
             } catch (error) {
-                // throw Error('Product not found');
+                throw new Error('Сервер улетел в космос, попробуйте позже');
             }
         }
-        getProductKey(location);
+        getProductKey(location).catch((err: Error) => {
+            document.body.textContent = err.message;
+            document.body.classList.add('error-connection');
+        });
     }, [location]);
 
     const product: ProductOptions = {

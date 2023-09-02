@@ -30,7 +30,7 @@ export async function getCategories(): Promise<Category[] | undefined> {
         });
         return result;
     } catch {
-        //
+        throw new Error('Cервер улетел в космос, попробуйте позже');
     }
     return undefined;
 }

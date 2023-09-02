@@ -8,7 +8,7 @@ export async function getAllProducts(): Promise<
         const result = await apiRoot.productProjections().get().execute();
         return result.body.results;
     } catch {
-        //
+        throw new Error('Cервер улетел в космос, попробуйте позже');
     }
     return undefined;
 }

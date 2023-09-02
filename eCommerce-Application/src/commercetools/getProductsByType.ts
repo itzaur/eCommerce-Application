@@ -12,7 +12,7 @@ export async function getTypeId(
 
         return productType.body.results[0].id;
     } catch {
-        //
+        throw new Error('Cервер улетел в космос, попробуйте позже');
     }
     return undefined;
 }
@@ -31,7 +31,7 @@ export async function getProductsByProductType(
 
         return result.body.results;
     } catch {
-        //
+        throw new Error('Cервер улетел в космос, попробуйте позже');
     }
     return undefined;
 }

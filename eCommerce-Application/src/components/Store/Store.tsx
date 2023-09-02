@@ -39,13 +39,23 @@ function Store({
     const [searchValue, setSearchValue] = useState('');
 
     useEffect(() => {
-        getCategories().then((data) => {
-            if (data) setCategories(data);
-        });
-        if (category)
-            getSubCategoryId(category).then((data) => {
-                if (data) setSelectedCategoryId(data);
+        getCategories()
+            .then((data) => {
+                if (data) setCategories(data);
+            })
+            .catch((err: Error) => {
+                document.body.textContent = err.message;
+                document.body.classList.add('error-connection');
             });
+        if (category)
+            getSubCategoryId(category)
+                .then((data) => {
+                    if (data) setSelectedCategoryId(data);
+                })
+                .catch((err: Error) => {
+                    document.body.textContent = err.message;
+                    document.body.classList.add('error-connection');
+                });
 
         if (selectedCategory) {
             getProductsBySubcategory(selectedCategory).then((data) => {
@@ -62,30 +72,40 @@ function Store({
                 }
             });
         } else if (selectedType) {
-            getProductsByProductType(selectedType).then((data) => {
-                if (data) {
-                    if (data.length) {
-                        setFilterVariants(checkFilterVariants(data));
+            getProductsByProductType(selectedType)
+                .then((data) => {
+                    if (data) {
+                        if (data.length) {
+                            setFilterVariants(checkFilterVariants(data));
+                        }
+                        setCards(data);
+                        setSelectedCategoryId('');
+                        setMinPrice(checkMinMaxPrice(data)[0]);
+                        setMaxPrice(checkMinMaxPrice(data)[1]);
+                        setMinSelectedPrice(checkMinMaxPrice(data)[0]);
+                        setMaxSelectedPrice(checkMinMaxPrice(data)[1]);
                     }
-                    setCards(data);
-                    setSelectedCategoryId('');
-                    setMinPrice(checkMinMaxPrice(data)[0]);
-                    setMaxPrice(checkMinMaxPrice(data)[1]);
-                    setMinSelectedPrice(checkMinMaxPrice(data)[0]);
-                    setMaxSelectedPrice(checkMinMaxPrice(data)[1]);
-                }
-            });
+                })
+                .catch((err: Error) => {
+                    document.body.textContent = err.message;
+                    document.body.classList.add('error-connection');
+                });
         } else {
-            getAllProducts().then((data) => {
-                if (data) {
-                    setCards(data);
-                    setSelectedCategoryId('');
-                    setMinPrice(checkMinMaxPrice(data)[0]);
-                    setMaxPrice(checkMinMaxPrice(data)[1]);
-                    setMinSelectedPrice(checkMinMaxPrice(data)[0]);
-                    setMaxSelectedPrice(checkMinMaxPrice(data)[1]);
-                }
-            });
+            getAllProducts()
+                .then((data) => {
+                    if (data) {
+                        setCards(data);
+                        setSelectedCategoryId('');
+                        setMinPrice(checkMinMaxPrice(data)[0]);
+                        setMaxPrice(checkMinMaxPrice(data)[1]);
+                        setMinSelectedPrice(checkMinMaxPrice(data)[0]);
+                        setMaxSelectedPrice(checkMinMaxPrice(data)[1]);
+                    }
+                })
+                .catch((err: Error) => {
+                    document.body.textContent = err.message;
+                    document.body.classList.add('error-connection');
+                });
         }
     }, [selectedCategory, selectedType, category]);
 
@@ -126,7 +146,13 @@ function Store({
                             setMaxSelectedPrice={setMaxSelectedPrice}
                             searchValue={searchValue}
                         />
-                        {cards.length && <Cards cards={cards} />}
+                        {!cards.length && (
+                            <h2 className="no-cards">
+                                Вселенная бесконечна, а наши продукты нет. Мы
+                                ничего не нашли :(
+                            </h2>
+                        )}
+                        {cards.length > 0 && <Cards cards={cards} />}
                     </div>
                 </section>
             </section>

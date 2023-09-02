@@ -423,6 +423,10 @@ input[type='range']::-moz-range-thumb {
         font-size: var(--fs-small);
 
         cursor: pointer;
+
+        &_active {
+            color: var(--color-primary);
+        }
     }
 }
 
@@ -572,4 +576,7 @@ input[type='range']::-moz-range-thumb {
             }
         }
     }
+}
+.no-cards {
+    font-size: var(--fs-medium-big);
 }

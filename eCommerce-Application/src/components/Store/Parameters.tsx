@@ -115,9 +115,14 @@ function Parameters(props: {
                 sort,
                 searchValue,
                 discountedProducts,
-            }).then((data) => {
-                if (data) setCards(data);
-            });
+            })
+                .then((data) => {
+                    if (data) setCards(data);
+                })
+                .catch((err: Error) => {
+                    document.body.textContent = err.message;
+                    document.body.classList.add('error-connection');
+                });
         }
     }, [
         minSelectedPrice,
