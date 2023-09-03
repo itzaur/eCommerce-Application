@@ -1,15 +1,13 @@
 import { Address } from '@commercetools/platform-sdk';
 import { apiRoot } from './Client';
-// import { getCustomer } from './getCustomer';
-// import { ICustomer } from '../types';
 
 export async function addCustomerAddress(
     ID: string,
-    countryShipping: string,
-    shippingRegion: string,
-    shippingCity: string,
-    shippingIndex: string,
-    shippingStreet: string,
+    country: string,
+    regionValue: string,
+    cityValue: string,
+    indexValue: string,
+    streetValue: string,
     checkboxUseAddressAsDefault: boolean,
     version: number,
     setVersion: CallableFunction,
@@ -25,7 +23,7 @@ export async function addCustomerAddress(
         { long: 'Польша', short: 'PL' },
     ];
     countriesAbbr.forEach((el) => {
-        if (el.long === countryShipping) countryShippingAbbr = el.short;
+        if (el.long === country) countryShippingAbbr = el.short;
     });
     try {
         const response = await apiRoot
@@ -39,10 +37,10 @@ export async function addCustomerAddress(
                             action: 'addAddress',
                             address: {
                                 country: countryShippingAbbr,
-                                region: shippingRegion,
-                                city: shippingCity,
-                                postalCode: shippingIndex,
-                                streetName: shippingStreet,
+                                region: regionValue,
+                                city: cityValue,
+                                postalCode: indexValue,
+                                streetName: streetValue,
                             },
                         },
                     ],
@@ -93,7 +91,6 @@ export async function addCustomerAddress(
                     },
                 })
                 .execute();
-            // console.log('----', addresses[addresses.length - 1]);
             setDefaultAddresses([addresses[addresses.length - 1]]);
             setVersion(addressDefaultResponse.body.version);
         }

@@ -1,6 +1,5 @@
 import { Customer } from '@commercetools/platform-sdk';
 import { apiRoot } from './Client';
-// import { ICustomer } from '../types';
 
 export async function getCustomer(ID: string): Promise<Customer | undefined> {
     try {

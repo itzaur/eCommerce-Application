@@ -24,7 +24,6 @@ export async function removeCustomerAddress(
             .execute();
         setVersion(response.body.version);
     } catch (err) {
-        // console.log('test2');
         // console.log(err);
     }
     return undefined;

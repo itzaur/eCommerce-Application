@@ -5,23 +5,18 @@ import edit from '../../assets/icons/edit.svg';
 
 import { removeCustomerAddress } from '../../commercetools/removeCustomerAddress';
 import { getCountry } from '../../commercetools/getCountry';
-// import { EditAddressFormView } from './EditAddressFormView';
 
 export function AddressesListView(props: {
     typeAddresses: Address[] | undefined;
     setTypeAddresses: CallableFunction;
     currentSelectedAddress: Address;
     setCurrentSelectedFullAddress: CallableFunction;
-    // currentSelectedShippingAddress: Address;
-    // setCurrentSelectedShippingFullAddress: CallableFunction;
     userId: string;
     version: number;
     setVersion: CallableFunction;
     defaultAddress: Address[] | undefined;
     setDefaultAddresses: CallableFunction;
-    // addAddressFormView: boolean;
     setAddAddressFormView: CallableFunction;
-    // isEdit: boolean;
     setIsEdit: CallableFunction;
     setChangeAddressIndex: CallableFunction;
 }): JSX.Element {
@@ -30,16 +25,12 @@ export function AddressesListView(props: {
         setTypeAddresses,
         currentSelectedAddress,
         setCurrentSelectedFullAddress,
-        // currentSelectedShippingAddress,
-        // setCurrentSelectedShippingFullAddress,
         userId,
         version,
         setVersion,
         defaultAddress,
         setDefaultAddresses,
-        // addAddressFormView,
         setAddAddressFormView,
-        // isEdit,
         setIsEdit,
         setChangeAddressIndex,
     } = props;
@@ -49,8 +40,6 @@ export function AddressesListView(props: {
     const removeAddress = (id: string): Address[] | undefined => {
         return typeAddresses?.filter((typeAddress) => typeAddress.id !== id);
     };
-
-    // console.log(typeAddresses);
 
     return (
         <div className="dropdown">
@@ -94,11 +83,9 @@ export function AddressesListView(props: {
                                 type="button"
                                 className="menu__button_edit"
                                 onClick={(): void => {
-                                    // console.log('=', index);
                                     setChangeAddressIndex(index);
                                     setAddAddressFormView(false);
                                     setIsEdit(true);
-                                    // console.log(address.city);
                                     setCurrentSelectedFullAddress({
                                         id: `${address.id}`,
                                         postalCode: `${address.postalCode}`,
@@ -128,15 +115,10 @@ export function AddressesListView(props: {
                                             setVersion
                                         );
                                     }
-                                    // console.log(add);
-                                    // console.log(defaultAddress[0].id);
-                                    // console.log(add === defaultAddress[0].id);
-                                    // const defaultAddress = defaultAddress[0].id;
                                     if (defaultAddress?.length) {
                                         if (add === defaultAddress[0].id)
                                             setDefaultAddresses('');
                                     }
-                                    // console.log(true);
                                 }}
                             >
                                 <img src={trash} alt="trash" />

@@ -49,31 +49,18 @@ export function PersonalDataView(props: {
 
     const [errorName, setErrorName] = useState(false);
     const [errorMessageName, setErrorMessageName] = useState('');
-    // const [name, setName] = useState(customer?.firstName);
 
     const [errorSurname, setErrorSurname] = useState(false);
     const [errorMessageSurname, setErrorMessageSurname] = useState('');
-    // const [surname, setSurname] = useState('');
-
-    // console.log(dateOfBirth.split('-'));
 
     const [errorBirthDay, setErrorBirthDay] = useState(false);
     const [errorMessageBirthDay, setErrorMessageBirthDay] = useState('');
-    // const [birthDayValue, setBirthDayValue] = useState(
-    //     dateOfBirth.split('-')[2]
-    // );
 
     const [errorBirthMonth, setErrorBirthMonth] = useState(false);
     const [errorMessageBirthMonth, setErrorMessageBirthMonth] = useState('');
-    // const [birthMonthValue, setBirthMonthValue] = useState(
-    //     dateOfBirth.split('-')[1]
-    // );
 
     const [errorBirthYear, setErrorBirthYear] = useState(false);
     const [errorMessageBirthYear, setErrorMessageBirthYear] = useState('');
-    // const [birthYearValue, setBirthYearValue] = useState(
-    //     dateOfBirth.split('-')[0]
-    // );
 
     const [isEditName, setIsEditName] = useState(false);
     const [isEditSurname, setIsEditSurname] = useState(false);
@@ -81,7 +68,6 @@ export function PersonalDataView(props: {
 
     const [errorAge, setErrorAge] = useState(false);
     const [errorMessageAge, setErrorMessageAge] = useState('');
-    // const [resultMessage, setResultMessage] = useState('');
 
     return (
         <div className="profile__info">
@@ -154,7 +140,6 @@ export function PersonalDataView(props: {
             <div className="profile__info-line">
                 <div className="profile__info-title">фамилия:</div>
                 <div className="profile__info-name">
-                    {/* <span>{customer?.lastName}</span> */}
                     <label className="placeholder" htmlFor="surname">
                         <input
                             disabled={!isEditSurname}
@@ -225,7 +210,6 @@ export function PersonalDataView(props: {
                 <div className="form__inputs-wrapper">
                     <label className="placeholder" htmlFor="birth-day">
                         <input
-                            // required
                             disabled={!isEditBirth}
                             value={birthDayValue}
                             type="text"

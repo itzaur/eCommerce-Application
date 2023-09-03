@@ -23,8 +23,6 @@ export async function editCustomerPassword(
             })
             .execute();
 
-        // const { addresses } = response.body;
-        // const lastAddressIndex = addresses[addresses.length - 1].id;
         setVersion(response.body.version);
     } catch (err) {
         // console.log(err);

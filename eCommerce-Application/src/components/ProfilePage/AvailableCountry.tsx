@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { checkIncorrectCountry } from '../../utils/validation/checkShippingCountry';
-// import { getCountry } from '../../commercetools/getCountry';
 
 const countries = ['Россия', 'Беларусь', 'Польша'];
 

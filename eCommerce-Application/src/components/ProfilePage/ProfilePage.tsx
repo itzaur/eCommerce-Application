@@ -7,24 +7,19 @@ import favorite from '../../assets/images/favorite.png';
 import { getCustomer } from '../../commercetools/getCustomer';
 import { AddressesListView } from './AddressesListView';
 import { getCountry } from '../../commercetools/getCountry';
-// import { getDefaultShippingAddress } from '../../commercetools/getDefaultShippingAddress';
-// import { getDefaultBillingAddress } from '../../commercetools/getDefaultBillingAddress';
+
 import { AddAddressFormView } from './AddAddressFormView';
-// import { EditAddressFormView } from './EditAddressFormView';
 import { EditAuthorizationDataView } from './EditAuthorizationDataView';
 import { PersonalDataView } from './PersonalDataView';
-// import { removeCustomerAddress } from '../../commercetools/removeCustomerAddress';
 
 function ProfilePage(): JSX.Element {
     const user = localStorage.getItem('user') as string;
     const userId = JSON.parse(user).id;
 
-    // const [passwordView, setPasswordView] = useState('password');
     const [customer, setCustomer] = useState<Customer>();
     const [email, setEmail] = useState('');
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('');
-    // const [dateOfBirth, setDateOfBirth] = useState('');
 
     const [birthDayValue, setBirthDayValue] = useState('');
     const [birthMonthValue, setBirthMonthValue] = useState('');
@@ -75,11 +70,6 @@ function ProfilePage(): JSX.Element {
     const [changeAddressIndex, setChangeAddressIndex] = useState(0);
     const [changeAuthData, setChangeAuthData] = useState(true);
 
-    // console.log('-', changeAddressIndex);
-    // const changePasswordView = (): void => {
-    //     setPasswordView(passwordView === 'password' ? 'text' : 'password');
-    // };
-
     const getShippingAddresses = (data: Customer): Address[] => {
         return data.addresses.filter((item) => {
             const addressesId = item.id;
@@ -108,10 +98,6 @@ function ProfilePage(): JSX.Element {
             }
             return undefined;
         });
-        // if (shippingAddresses?.length) {
-        //     return `${shippingAddresses[0].postalCode}, ${shippingAddresses[0].country}, ${shippingAddresses[0].region}, ${shippingAddresses[0].city}, ${shippingAddresses[0].streetName}`;
-        // }
-        // return undefined;
     };
 
     const getDefaultBillingAddress = (data: Customer): Address[] => {
@@ -122,10 +108,6 @@ function ProfilePage(): JSX.Element {
             }
             return undefined;
         });
-        // if (shippingAddresses?.length) {
-        //     return `${shippingAddresses[0].postalCode}, ${shippingAddresses[0].country}, ${shippingAddresses[0].region}, ${shippingAddresses[0].city}, ${shippingAddresses[0].streetName}`;
-        // }
-        // return undefined;
     };
 
     useEffect(() => {
@@ -135,7 +117,6 @@ function ProfilePage(): JSX.Element {
                 setBillingAddresses(getBillingAddresses(data));
                 setCustomer(data);
                 setVersion(data.version);
-                // console.log('data', getDefaultShippingAddress(data));
                 setDefaultShippingAddresses(getDefaultShippingAddress(data));
                 setDefaultBillingAddresses(getDefaultBillingAddress(data));
                 setEmail(data.email);
@@ -144,26 +125,14 @@ function ProfilePage(): JSX.Element {
                 setBirthDayValue(String(data.dateOfBirth?.split('-')[2]));
                 setBirthMonthValue(String(data.dateOfBirth?.split('-')[1]));
                 setBirthYearValue(String(data.dateOfBirth?.split('-')[0]));
-                // setDateOfBirth(String(data.dateOfBirth));
             }
         });
     }, [userId]);
-    // console.log(customer);
-
-    // console.log(shippingAddresses);
-    // console.log(defaultShippingAddress ? defaultShippingAddress[0].id : '');
-    // console.log(defaultShippingAddress);
-    // console.log(defaultBillingAddress);
-
-    // console.log('edit', isEdit);
-
-    // console.log('shi', currentSelectedShippingAddress);
-    // console.log('bill', currentSelectedBillingAddress);
 
     return (
         <div>
             <section className="profile">
-                <h2 className="profile__title">Привет</h2>
+                <h2 className="profile__title">Привет {customer?.firstName}</h2>
                 <div className="profile__wrapper">
                     <img
                         src={userPhoto}
@@ -222,27 +191,18 @@ function ProfilePage(): JSX.Element {
                                                           ?.city}, ${defaultShippingAddress[0]
                                                           ?.streetName}`
                                                     : ''}
-                                                {
-                                                    !addressTypeView &&
-                                                    defaultBillingAddress &&
-                                                    defaultBillingAddress.length
-                                                        ? `${defaultBillingAddress[0]
-                                                              ?.postalCode} ${getCountry(
-                                                              defaultBillingAddress[0]
-                                                                  ?.country
-                                                          )}, ${defaultBillingAddress[0]
-                                                              ?.region}, ${defaultBillingAddress[0]
-                                                              ?.city}, ${defaultBillingAddress[0]
-                                                              ?.streetName}`
-                                                        : ''
-
-                                                    // ? getDefaultShippingAddress(
-                                                    //       customer
-                                                    //   )
-                                                    // : getDefaultBillingAddress(
-                                                    //       customer
-                                                    //   )}
-                                                }
+                                                {!addressTypeView &&
+                                                defaultBillingAddress &&
+                                                defaultBillingAddress.length
+                                                    ? `${defaultBillingAddress[0]
+                                                          ?.postalCode} ${getCountry(
+                                                          defaultBillingAddress[0]
+                                                              ?.country
+                                                      )}, ${defaultBillingAddress[0]
+                                                          ?.region}, ${defaultBillingAddress[0]
+                                                          ?.city}, ${defaultBillingAddress[0]
+                                                          ?.streetName}`
+                                                    : ''}
                                             </span>
                                         </div>
                                     </div>
@@ -282,54 +242,14 @@ function ProfilePage(): JSX.Element {
                                                     ? setDefaultShippingAddresses
                                                     : setDefaultBillingAddresses
                                             }
-                                            // addAddressFormView={
-                                            //     addAddressFormView
-                                            // }
                                             setAddAddressFormView={
                                                 setAddAddressFormView
                                             }
-                                            // isEdit={isEdit}
                                             setIsEdit={setIsEdit}
                                             setChangeAddressIndex={
                                                 setChangeAddressIndex
                                             }
                                         />
-
-                                        {/* {addressTypeView ? (
-                                            <AddressesListView
-                                                typeAddresses={
-                                                    shippingAddresses
-                                                }
-                                                setTypeAddresses={
-                                                    setShippingAddresses
-                                                }
-                                                currentSelectedShippingAddress={
-                                                    currentSelectedShippingAddress
-                                                }
-                                                setCurrentSelectedShippingFullAddress={
-                                                    setCurrentSelectedShippingFullAddress
-                                                }
-                                                userId={userId}
-                                                version={version}
-                                                setVersion={setVersion}
-                                            />
-                                        ) : (
-                                            <AddressesListView
-                                                typeAddresses={billingAddresses}
-                                                setTypeAddresses={
-                                                    setBillingAddresses
-                                                }
-                                                currentSelectedShippingAddress={
-                                                    currentSelectedShippingAddress
-                                                }
-                                                setCurrentSelectedShippingFullAddress={
-                                                    setCurrentSelectedShippingFullAddress
-                                                }
-                                                userId={userId}
-                                                version={version}
-                                                setVersion={setVersion}
-                                            />
-                                        )} */}
                                     </div>
 
                                     <div className="profile__address-action">
@@ -342,18 +262,6 @@ function ProfilePage(): JSX.Element {
                                         >
                                             добавить новый адрес
                                         </button>
-                                        {/* <button
-                                            type="button"
-                                            className="btn_action btn_un-action profile__button profile__button_small"
-                                            onClick={(): Promise<void> =>
-                                                removeCustomerAddress(
-                                                    userId,
-                                                    currentSelectedShippingAddress.id
-                                                )
-                                            }
-                                        >
-                                            удалить
-                                        </button> */}
                                     </div>
                                 </div>
                             </div>
@@ -364,6 +272,11 @@ function ProfilePage(): JSX.Element {
                                 addressTypeView={addressTypeView}
                                 version={version}
                                 setVersion={setVersion}
+                                typeAddresses={
+                                    addressTypeView
+                                        ? shippingAddresses
+                                        : billingAddresses
+                                }
                                 setTypeAddresses={
                                     addressTypeView
                                         ? setShippingAddresses
@@ -387,6 +300,11 @@ function ProfilePage(): JSX.Element {
                                         : currentSelectedBillingAddress
                                 }
                                 changeAddressIndex={changeAddressIndex}
+                                getTypeAddress={
+                                    addressTypeView
+                                        ? getShippingAddresses
+                                        : getBillingAddresses
+                                }
                             />
                         )}
                     </div>
@@ -406,63 +324,6 @@ function ProfilePage(): JSX.Element {
                         birthYearValue={birthYearValue}
                         setBirthYearValue={setBirthYearValue}
                     />
-
-                    {/* <div className="profile__info">
-                        <div className="profile__info-line">
-                            <div className="profile__info-title">имя:</div>
-                            <div className="profile__info-name">
-                                <span>{customer?.firstName}</span>
-                            </div>
-                        </div>
-                        <div className="profile__info-line">
-                            <div className="profile__info-title">фамилия:</div>
-                            <div className="profile__info-name">
-                                <span>{customer?.lastName}</span>
-                            </div>
-                        </div>
-                        <div className="profile__info-line">
-                            <div className="profile__info-title">
-                                дата рождения:
-                            </div>
-                            <div className="profile__info-name">
-                                <span>{customer?.dateOfBirth}</span>
-                            </div>
-                        </div>
-                        <div className="profile__info-line">
-                            <div className="profile__info-title">страна:</div>
-                            <div className="profile__info-name">
-                                <span>
-                                    {getCountry(
-                                        customer?.addresses[0]?.country
-                                    )}
-                                </span>
-                            </div>
-                        </div>
-                        <div className="profile__info-line">
-                            <div className="profile__info-title">регион:</div>
-                            <div className="profile__info-name">
-                                <span>{customer?.addresses[0]?.region}</span>
-                            </div>
-                        </div>
-                        <div className="profile__info-line">
-                            <div className="profile__info-title">город:</div>
-                            <div className="profile__info-name">
-                                <span>{customer?.addresses[0]?.city}</span>
-                            </div>
-                        </div>
-                        <div className="profile__info-line">
-                            <div className="profile__info-title">
-                                форма жизни:
-                            </div>
-                            <div className="profile__info-name">
-                                <span>
-                                    {customer?.salutation
-                                        ?.split(' ')
-                                        .slice(1, 2)}
-                                </span>
-                            </div>
-                        </div>
-                    </div> */}
                     <div className="profile__banner">
                         <img
                             src={banner}

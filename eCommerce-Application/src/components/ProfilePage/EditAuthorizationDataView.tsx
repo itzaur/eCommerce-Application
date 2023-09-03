@@ -3,7 +3,6 @@ import edit from '../../assets/icons/edit.svg';
 import check from '../../assets/icons/check.svg';
 import { checkIncorrectEmail } from '../../utils/validation/checkCorrectEmail';
 import { checkIncorrectPassword } from '../../utils/validation/checkPassword';
-// import { version } from 'react-dom/server';
 import { editCustomerEmail } from '../../commercetools/editCustomerEmail';
 import { editCustomerPassword } from '../../commercetools/editCustomerPassword';
 
@@ -18,7 +17,6 @@ export function EditAuthorizationDataView(props: {
 
     const [errorEmail, setErrorEmail] = useState(false);
     const [errorMessageEmail, setErrorMessageEmail] = useState('');
-    // const [email, setEmail] = useState('');
 
     const [errorOldPassword, setErrorOldPassword] = useState(false);
     const [errorMessageOldPassword, setErrorMessageOldPassword] = useState('');

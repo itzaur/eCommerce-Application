@@ -19,6 +19,7 @@ export function AddAddressFormView(props: {
     addressTypeView: boolean;
     version: number;
     setVersion: CallableFunction;
+    typeAddresses: Address[] | undefined;
     setTypeAddresses: CallableFunction;
     defaultAddresses: Address[] | undefined;
     setDefaultAddresses: CallableFunction;
@@ -26,6 +27,7 @@ export function AddAddressFormView(props: {
     setIsEdit: CallableFunction;
     currentSelectedAddress: Address;
     changeAddressIndex: number;
+    getTypeAddress: CallableFunction;
 }): JSX.Element {
     const {
         userId,
@@ -33,6 +35,7 @@ export function AddAddressFormView(props: {
         addressTypeView,
         version,
         setVersion,
+        typeAddresses,
         setTypeAddresses,
         defaultAddresses,
         setDefaultAddresses,
@@ -40,6 +43,7 @@ export function AddAddressFormView(props: {
         setIsEdit,
         currentSelectedAddress,
         changeAddressIndex,
+        getTypeAddress,
     } = props;
 
     const [errorCountry, setErrorCountry] = useState(false);
@@ -84,20 +88,7 @@ export function AddAddressFormView(props: {
         setErrorMessageIndex(
             checkIncorrectAddressIndex(indexValue, country).message
         );
-        // if (isEdit && currentSelectedAddress) {
-        // setCountry(currentSelectedAddress?.country);
-        // setRegionValue(currentSelectedAddress?.region);
-        // setCityValue(currentSelectedAddress?.city);
-        // setIndexValue(currentSelectedAddress?.postalCode);
-        // setStreetValue(currentSelectedAddress?.streetName);
-        // }
     }, [indexValue, country]);
-
-    // console.log('123', currentSelectedAddress.region);
-
-    // useEffect(() => {
-    //     setStreetValue('12346');
-    // }, []);
 
     return (
         <form className="profile__address-wrapper">
@@ -352,13 +343,15 @@ export function AddAddressFormView(props: {
                                     checkboxUseAddressAsDefault,
                                     version,
                                     setVersion,
+                                    typeAddresses,
                                     setAddAddressFormView,
                                     setTypeAddresses,
                                     String(currentSelectedAddress.id),
                                     addressTypeView,
                                     defaultAddresses,
                                     setDefaultAddresses,
-                                    changeAddressIndex
+                                    changeAddressIndex,
+                                    getTypeAddress
                                 );
                             } else {
                                 addCustomerAddress(

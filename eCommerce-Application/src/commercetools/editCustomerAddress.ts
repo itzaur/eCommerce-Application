@@ -1,25 +1,25 @@
 import { Address } from '@commercetools/platform-sdk';
 import { apiRoot } from './Client';
-// import { getCustomer } from './getCustomer';
-// import { ICustomer } from '../types';
 
 export async function editCustomerAddress(
     ID: string,
-    countryShipping: string,
-    shippingRegion: string,
-    shippingCity: string,
-    shippingIndex: string,
-    shippingStreet: string,
+    country: string,
+    regionValue: string,
+    cityValue: string,
+    indexValue: string,
+    streetValue: string,
     checkboxUseAddressAsDefault: boolean,
     version: number,
     setVersion: CallableFunction,
+    typeAddresses: Address[] | undefined,
     setAddAddressFormView: CallableFunction,
     setTypeAddresses: CallableFunction,
     addressId: string,
     addressTypeView: boolean,
     defaultAddresses: Address[] | undefined,
     setDefaultAddresses: CallableFunction,
-    changeAddressIndex: number
+    changeAddressIndex: number,
+    getTypeAddress: CallableFunction
 ): Promise<void> {
     let countryShippingAbbr = '';
     const countriesAbbr = [
@@ -28,8 +28,9 @@ export async function editCustomerAddress(
         { long: 'Польша', short: 'PL' },
     ];
     countriesAbbr.forEach((el) => {
-        if (el.long === countryShipping) countryShippingAbbr = el.short;
+        if (el.long === country) countryShippingAbbr = el.short;
     });
+
     try {
         const response = await apiRoot
             .customers()
@@ -43,21 +44,16 @@ export async function editCustomerAddress(
                             addressId,
                             address: {
                                 country: countryShippingAbbr,
-                                region: shippingRegion,
-                                city: shippingCity,
-                                postalCode: shippingIndex,
-                                streetName: shippingStreet,
+                                region: regionValue,
+                                city: cityValue,
+                                postalCode: indexValue,
+                                streetName: streetValue,
                             },
                         },
                     ],
                 },
             })
             .execute();
-
-        const { addresses } = response.body;
-        // const lastAddressIndex = addresses[addresses.length - 1].id;
-
-        // console.log(changeAddressIndex);
 
         setVersion(response.body.version);
 
@@ -80,32 +76,30 @@ export async function editCustomerAddress(
                 })
                 .execute();
 
-            // console.log('TEST', addresses);
-
-            setDefaultAddresses([addresses[changeAddressIndex]]);
+            if (typeAddresses) {
+                setDefaultAddresses([typeAddresses[changeAddressIndex]]);
+            }
             setVersion(addressDefaultResponse.body.version);
         }
 
-        setTypeAddresses((prev: Address[]) => [
-            ...prev.slice(0, changeAddressIndex),
-            addresses[changeAddressIndex],
-            ...addresses.slice(changeAddressIndex + 1, addresses.length),
-        ]);
+        if (typeAddresses) {
+            setTypeAddresses((prev: Address[]) => [
+                ...prev.slice(0, changeAddressIndex),
+                getTypeAddress(response.body)[changeAddressIndex],
+                ...prev.slice(changeAddressIndex + 1, typeAddresses.length),
+            ]);
+        }
 
         if (
             defaultAddresses &&
-            defaultAddresses[0].id === addresses[changeAddressIndex].id
+            !checkboxUseAddressAsDefault &&
+            typeAddresses &&
+            defaultAddresses[0].id === typeAddresses[changeAddressIndex].id
         ) {
-            // console.log(
-            //     'defa',
-            //     defaultAddresses[0].id === addresses[changeAddressIndex].id
-            // );
-            setDefaultAddresses([addresses[changeAddressIndex]]);
-            // console.log('defa', );
+            setDefaultAddresses([
+                getTypeAddress(response.body)[changeAddressIndex],
+            ]);
         }
-        // console.log('defa2', [addresses[changeAddressIndex]]);
-
-        // setDefaultAddresses([addresses[changeAddressIndex]]);
 
         setAddAddressFormView(true);
     } catch (err) {
