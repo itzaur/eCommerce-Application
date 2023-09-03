@@ -56,12 +56,14 @@ function Header({
                             />
                         </li>
                     )}
-                    <li className="nav__item">
-                        <Link className="nav__link" to="/profile">
-                            <img src={iconUser} alt="icon-user" />
-                            <h3 className="nav__title">Пользователь</h3>
-                        </Link>
-                    </li>
+                    {localStorage.getItem('user') && (
+                        <li className="nav__item">
+                            <Link className="nav__link" to="/profile">
+                                <img src={iconUser} alt="icon-user" />
+                                <h3 className="nav__title">Пользователь</h3>
+                            </Link>
+                        </li>
+                    )}
                     <li className="nav__item">
                         <Link className="nav__link" to="/cart">
                             <img src={iconCart} alt="icon-cart" />
