@@ -16,11 +16,8 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
         e.preventDefault();
         if (card.key) {
             document
-                .querySelector(`#${card.key} p`)
+                .querySelector(`#${card.key} .card__paragraph`)
                 ?.classList.toggle('card__description_open');
-            document
-                .querySelector(`#${card.key} p`)
-                ?.classList.toggle('card__description');
 
             (e.target as HTMLElement).textContent =
                 (e.target as HTMLElement).textContent === 'Показать описание ▼'
