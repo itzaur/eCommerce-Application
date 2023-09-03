@@ -28,8 +28,13 @@ export async function editCustomerAge(
             .execute();
 
         setVersion(response.body.version);
-    } catch (err) {
-        // console.log(err);
+    } catch (e) {
+        const error = e as Error;
+        if (error.message === 'Failed to fetch') {
+            throw new Error('Ошибка сервера', {
+                cause: 'ServerError',
+            });
+        }
     }
     return undefined;
 }

@@ -12,8 +12,20 @@ export function EditAuthorizationDataView(props: {
     setEmail: CallableFunction;
     version: number;
     setVersion: CallableFunction;
+    setChangeAuthData: CallableFunction;
+    setResultMessageEmail: CallableFunction;
+    setResultMessagePassword: CallableFunction;
 }): JSX.Element {
-    const { userId, email, setEmail, version, setVersion } = props;
+    const {
+        userId,
+        email,
+        setEmail,
+        version,
+        setVersion,
+        setChangeAuthData,
+        setResultMessageEmail,
+        setResultMessagePassword,
+    } = props;
 
     const [errorEmail, setErrorEmail] = useState(false);
     const [errorMessageEmail, setErrorMessageEmail] = useState('');
@@ -62,7 +74,6 @@ export function EditAuthorizationDataView(props: {
                 <span className="profile__content-email-name">e-mail:</span>
                 <label className="placeholder" htmlFor="name">
                     <input
-                        // className="profile__content-email-input"
                         className={
                             errorEmail
                                 ? 'form__input form__input_invalid'
@@ -89,7 +100,6 @@ export function EditAuthorizationDataView(props: {
                             className="menu__button_edit"
                             onClick={(e): void => {
                                 e.preventDefault();
-                                setIsEditEmail(false);
                                 if (!email) {
                                     setErrorEmail(true);
                                     setErrorMessageEmail(
@@ -97,12 +107,37 @@ export function EditAuthorizationDataView(props: {
                                     );
                                 }
                                 if (errorEmail || !email) return;
+                                setIsEditEmail(false);
                                 editCustomerEmail(
                                     userId,
                                     email,
                                     version,
                                     setVersion
-                                );
+                                )
+                                    .then(() => {
+                                        setChangeAuthData(true);
+                                        setResultMessageEmail(
+                                            'e-mail успешно обновлен'
+                                        );
+                                        setTimeout(() => {
+                                            setResultMessageEmail('');
+                                        }, 1500);
+                                    })
+                                    .catch((err) => {
+                                        if (err.cause === 'emailError') {
+                                            setErrorEmail(true);
+                                            setErrorMessageEmail(
+                                                'такая почта уже существует'
+                                            );
+                                        }
+                                        if (err.cause === 'ServerError') {
+                                            document.body.textContent =
+                                                err.message;
+                                            document.body.classList.add(
+                                                'error-connection'
+                                            );
+                                        }
+                                    });
                             }}
                         >
                             <img src={check} alt="check" />
@@ -236,7 +271,6 @@ export function EditAuthorizationDataView(props: {
                         className="menu__button_edit"
                         onClick={(e): void => {
                             e.preventDefault();
-                            setIsEditPassword(false);
                             if (!passwordOld) {
                                 setErrorOldPassword(true);
                                 setErrorMessageOldPassword(
@@ -270,13 +304,38 @@ export function EditAuthorizationDataView(props: {
                                 !passwordRepeat
                             )
                                 return;
+                            setIsEditPassword(false);
+
                             editCustomerPassword(
                                 userId,
                                 passwordOld,
                                 passwordRepeat,
                                 version,
                                 setVersion
-                            );
+                            )
+                                .then(() => {
+                                    setChangeAuthData(true);
+                                    setResultMessagePassword(
+                                        'пароль успешно обновлен'
+                                    );
+                                    setTimeout(() => {
+                                        setResultMessagePassword('');
+                                    }, 1500);
+                                })
+                                .catch((err) => {
+                                    if (err.cause === 'passwordError') {
+                                        setErrorOldPassword(true);
+                                        setErrorMessageOldPassword(
+                                            'текущий пароль не верный'
+                                        );
+                                    }
+                                    if (err.cause === 'ServerError') {
+                                        document.body.textContent = err.message;
+                                        document.body.classList.add(
+                                            'error-connection'
+                                        );
+                                    }
+                                });
                         }}
                     >
                         <img src={check} alt="check" />

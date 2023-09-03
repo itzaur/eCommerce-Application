@@ -115,14 +115,26 @@ export function AddressesListView(props: {
                                             address.id,
                                             version,
                                             setVersion
-                                        ).then(() => {
-                                            setResultMessageAddress(
-                                                'адрес успешно удален'
-                                            );
-                                            setTimeout(() => {
-                                                setResultMessageAddress('');
-                                            }, 1500);
-                                        });
+                                        )
+                                            .then(() => {
+                                                setResultMessageAddress(
+                                                    'адрес успешно удален'
+                                                );
+                                                setTimeout(() => {
+                                                    setResultMessageAddress('');
+                                                }, 1500);
+                                            })
+                                            .catch((err) => {
+                                                if (
+                                                    err.cause === 'ServerError'
+                                                ) {
+                                                    document.body.textContent =
+                                                        err.message;
+                                                    document.body.classList.add(
+                                                        'error-connection'
+                                                    );
+                                                }
+                                            });
                                     }
                                     if (defaultAddress?.length) {
                                         if (add === defaultAddress[0].id)

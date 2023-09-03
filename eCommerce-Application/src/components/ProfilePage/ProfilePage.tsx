@@ -16,6 +16,9 @@ function ProfilePage(): JSX.Element {
     const user = localStorage.getItem('user') as string;
     const userId = JSON.parse(user).id;
 
+    const [errorCustomer, setErrorCustomer] = useState(false);
+    const [errorMessageCustomer, setErrorMessageCustomer] = useState('');
+
     const [customer, setCustomer] = useState<Customer>();
     const [email, setEmail] = useState('');
     const [name, setName] = useState('');
@@ -70,6 +73,11 @@ function ProfilePage(): JSX.Element {
     const [changeAddressIndex, setChangeAddressIndex] = useState(0);
     const [changeAuthData, setChangeAuthData] = useState(true);
     const [resultMessageAddress, setResultMessageAddress] = useState('');
+    const [resultMessageEmail, setResultMessageEmail] = useState('');
+    const [resultMessagePassword, setResultMessagePassword] = useState('');
+    const [resultMessageName, setResultMessageName] = useState('');
+    const [resultMessageSurname, setResultMessageSurname] = useState('');
+    const [resultMessageBirthDay, setResultMessageBirthDay] = useState('');
 
     const getShippingAddresses = (data: Customer): Address[] => {
         return data.addresses.filter((item) => {
@@ -112,26 +120,42 @@ function ProfilePage(): JSX.Element {
     };
 
     useEffect(() => {
-        getCustomer(userId).then((data) => {
-            if (data) {
-                setShippingAddresses(getShippingAddresses(data));
-                setBillingAddresses(getBillingAddresses(data));
-                setCustomer(data);
-                setVersion(data.version);
-                setDefaultShippingAddresses(getDefaultShippingAddress(data));
-                setDefaultBillingAddresses(getDefaultBillingAddress(data));
-                setEmail(data.email);
-                setName(String(data.firstName));
-                setSurname(String(data.lastName));
-                setBirthDayValue(String(data.dateOfBirth?.split('-')[2]));
-                setBirthMonthValue(String(data.dateOfBirth?.split('-')[1]));
-                setBirthYearValue(String(data.dateOfBirth?.split('-')[0]));
-            }
-        });
+        getCustomer(userId)
+            .then((data) => {
+                if (data) {
+                    setShippingAddresses(getShippingAddresses(data));
+                    setBillingAddresses(getBillingAddresses(data));
+                    setCustomer(data);
+                    setVersion(data.version);
+                    setDefaultShippingAddresses(
+                        getDefaultShippingAddress(data)
+                    );
+                    setDefaultBillingAddresses(getDefaultBillingAddress(data));
+                    setEmail(data.email);
+                    setName(String(data.firstName));
+                    setSurname(String(data.lastName));
+                    setBirthDayValue(String(data.dateOfBirth?.split('-')[2]));
+                    setBirthMonthValue(String(data.dateOfBirth?.split('-')[1]));
+                    setBirthYearValue(String(data.dateOfBirth?.split('-')[0]));
+                }
+            })
+            .catch((err) => {
+                if (err.cause === 'ServerCustomerError') {
+                    setErrorCustomer(true);
+                    setErrorMessageCustomer('такой пользователь не существует');
+                }
+                if (err.cause === 'ServerError') {
+                    document.body.textContent = err.message;
+                    document.body.classList.add('error-connection');
+                }
+            });
     }, [userId]);
 
     return (
         <div>
+            <p className="error-message">
+                {errorCustomer ? errorMessageCustomer : ''}
+            </p>
             <section className="profile">
                 <h2 className="profile__title">Привет {customer?.firstName}</h2>
                 <div className="profile__wrapper">
@@ -334,6 +358,13 @@ function ProfilePage(): JSX.Element {
                         birthYearValue={birthYearValue}
                         setBirthYearValue={setBirthYearValue}
                         customer={customer}
+                        defaultShippingAddress={defaultShippingAddress}
+                        resultMessageName={resultMessageName}
+                        setResultMessageName={setResultMessageName}
+                        resultMessageSurname={resultMessageSurname}
+                        setResultMessageSurname={setResultMessageSurname}
+                        resultMessageBirthDay={resultMessageBirthDay}
+                        setResultMessageBirthDay={setResultMessageBirthDay}
                     />
                     <div className="profile__banner">
                         <img
@@ -401,11 +432,14 @@ function ProfilePage(): JSX.Element {
                                                 id="email"
                                                 disabled
                                             />
-                                            <div className="placeholder__input form_big-first-letter">
+                                            {/* <div className="placeholder__input form_big-first-letter">
                                                 Email<span>*</span>
-                                            </div>
+                                            </div> */}
                                         </label>
                                     </div>
+                                    <p className="success-message">
+                                        {resultMessageEmail}
+                                    </p>
 
                                     <div className="profile__content-password">
                                         <span>пароль:</span>
@@ -426,6 +460,9 @@ function ProfilePage(): JSX.Element {
                                             />
                                         </label>
                                     </div>
+                                    <p className="success-message">
+                                        {resultMessagePassword}
+                                    </p>
                                 </div>
                             ) : (
                                 <EditAuthorizationDataView
@@ -434,6 +471,13 @@ function ProfilePage(): JSX.Element {
                                     setEmail={setEmail}
                                     version={version}
                                     setVersion={setVersion}
+                                    setChangeAuthData={setChangeAuthData}
+                                    setResultMessageEmail={
+                                        setResultMessageEmail
+                                    }
+                                    setResultMessagePassword={
+                                        setResultMessagePassword
+                                    }
                                 />
                             )}
                         </div>

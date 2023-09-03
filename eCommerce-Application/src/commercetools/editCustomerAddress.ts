@@ -101,8 +101,13 @@ export async function editCustomerAddress(
                 getTypeAddress(response.body)[changeAddressIndex],
             ]);
         }
-    } catch (err) {
-        // console.log(err);
+    } catch (e) {
+        const error = e as Error;
+        if (error.message === 'Failed to fetch') {
+            throw new Error('Ошибка сервера', {
+                cause: 'ServerError',
+            });
+        }
     }
     return undefined;
 }

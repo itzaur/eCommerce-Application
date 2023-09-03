@@ -1,4 +1,4 @@
-import { Customer } from '@commercetools/platform-sdk';
+import { Address, Customer } from '@commercetools/platform-sdk';
 import { useState } from 'react';
 import edit from '../../assets/icons/edit.svg';
 import check from '../../assets/icons/check.svg';
@@ -33,6 +33,13 @@ export function PersonalDataView(props: {
     birthYearValue: string;
     setBirthYearValue: CallableFunction;
     customer: Customer | undefined;
+    defaultShippingAddress: Address[] | undefined;
+    resultMessageName: string;
+    setResultMessageName: CallableFunction;
+    resultMessageSurname: string;
+    setResultMessageSurname: CallableFunction;
+    resultMessageBirthDay: string;
+    setResultMessageBirthDay: CallableFunction;
 }): JSX.Element {
     const {
         version,
@@ -49,6 +56,13 @@ export function PersonalDataView(props: {
         birthYearValue,
         setBirthYearValue,
         customer,
+        defaultShippingAddress,
+        resultMessageName,
+        setResultMessageName,
+        resultMessageSurname,
+        setResultMessageSurname,
+        resultMessageBirthDay,
+        setResultMessageBirthDay,
     } = props;
 
     const [errorName, setErrorName] = useState(false);
@@ -103,6 +117,7 @@ export function PersonalDataView(props: {
                         <p className="error-message">
                             {errorName ? errorMessageName : ''}
                         </p>
+                        <p className="success-message">{resultMessageName}</p>
                     </label>
                     {isEditName ? (
                         <button
@@ -123,7 +138,22 @@ export function PersonalDataView(props: {
                                     name,
                                     version,
                                     setVersion
-                                );
+                                )
+                                    .then(() => {
+                                        setResultMessageName('имя изменено');
+                                        setTimeout(() => {
+                                            setResultMessageName('');
+                                        }, 1500);
+                                    })
+                                    .catch((err) => {
+                                        if (err.cause === 'ServerError') {
+                                            document.body.textContent =
+                                                err.message;
+                                            document.body.classList.add(
+                                                'error-connection'
+                                            );
+                                        }
+                                    });
                             }}
                         >
                             <img src={check} alt="check" />
@@ -151,7 +181,7 @@ export function PersonalDataView(props: {
                             type="text"
                             id="surname"
                             className={
-                                errorName
+                                errorSurname
                                     ? 'form__input form__input_invalid'
                                     : 'form__input'
                             }
@@ -170,6 +200,9 @@ export function PersonalDataView(props: {
                         </div>
                         <p className="error-message">
                             {errorSurname ? errorMessageSurname : ''}
+                        </p>
+                        <p className="success-message">
+                            {resultMessageSurname}
                         </p>
                     </label>
                     {isEditSurname ? (
@@ -191,7 +224,24 @@ export function PersonalDataView(props: {
                                     surname,
                                     version,
                                     setVersion
-                                );
+                                )
+                                    .then(() => {
+                                        setResultMessageSurname(
+                                            'фамилия изменена'
+                                        );
+                                        setTimeout(() => {
+                                            setResultMessageSurname('');
+                                        }, 1500);
+                                    })
+                                    .catch((err) => {
+                                        if (err.cause === 'ServerError') {
+                                            document.body.textContent =
+                                                err.message;
+                                            document.body.classList.add(
+                                                'error-connection'
+                                            );
+                                        }
+                                    });
                             }}
                         >
                             <img src={check} alt="check" />
@@ -269,6 +319,9 @@ export function PersonalDataView(props: {
                         <p className="error-message">
                             {errorBirthMonth ? errorMessageBirthMonth : ''}
                         </p>
+                        <p className="success-message">
+                            {resultMessageBirthDay}
+                        </p>
                     </label>
                 </div>
                 <div className="form__inputs-wrapper">
@@ -336,7 +389,7 @@ export function PersonalDataView(props: {
                             !birthMonthValue ||
                             errorBirthYear ||
                             !birthYearValue ||
-                            getAge() < 19
+                            getAge() < 18
                         )
                             return;
                         editCustomerAge(
@@ -346,7 +399,23 @@ export function PersonalDataView(props: {
                             birthYearValue,
                             version,
                             setVersion
-                        );
+                        )
+                            .then(() => {
+                                setResultMessageBirthDay(
+                                    'дата рождения изменена'
+                                );
+                                setTimeout(() => {
+                                    setResultMessageBirthDay('');
+                                }, 1500);
+                            })
+                            .catch((err) => {
+                                if (err.cause === 'ServerError') {
+                                    document.body.textContent = err.message;
+                                    document.body.classList.add(
+                                        'error-connection'
+                                    );
+                                }
+                            });
                     }}
                 >
                     <img src={check} alt="check" />
@@ -372,19 +441,33 @@ export function PersonalDataView(props: {
             <div className="profile__info-line">
                 <div className="profile__info-title">страна:</div>
                 <div className="profile__info-name">
-                    <span>{getCountry(customer?.addresses[0]?.country)}</span>
+                    <span>
+                        {getCountry(
+                            defaultShippingAddress
+                                ? defaultShippingAddress[0]?.country
+                                : ''
+                        )}
+                    </span>
                 </div>
             </div>
             <div className="profile__info-line">
                 <div className="profile__info-title">регион:</div>
                 <div className="profile__info-name">
-                    <span>{customer?.addresses[0]?.region}</span>
+                    <span>
+                        {defaultShippingAddress
+                            ? defaultShippingAddress[0]?.region
+                            : ''}
+                    </span>
                 </div>
             </div>
             <div className="profile__info-line">
                 <div className="profile__info-title">город:</div>
                 <div className="profile__info-name">
-                    <span>{customer?.addresses[0]?.city}</span>
+                    <span>
+                        {defaultShippingAddress
+                            ? defaultShippingAddress[0]?.city
+                            : ''}
+                    </span>
                 </div>
             </div>
             <div className="profile__info-line">

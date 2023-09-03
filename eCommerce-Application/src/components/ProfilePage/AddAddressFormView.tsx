@@ -48,8 +48,6 @@ export function AddAddressFormView(props: {
         setResultMessageAddress,
     } = props;
 
-    // console.log('Выбран', currentSelectedAddress);
-
     const [errorCountry, setErrorCountry] = useState(false);
     const [errorMessageCountry, setErrorMessageCountry] = useState('');
     const [country, setCountry] = useState(
@@ -356,15 +354,25 @@ export function AddAddressFormView(props: {
                                     setDefaultAddresses,
                                     changeAddressIndex,
                                     getTypeAddress
-                                ).then(() => {
-                                    setResultMessageAddress(
-                                        'адрес успешно изменен'
-                                    );
-                                    setTimeout(() => {
-                                        setResultMessageAddress('');
-                                    }, 1500);
-                                    setIsEdit(false);
-                                });
+                                )
+                                    .then(() => {
+                                        setResultMessageAddress(
+                                            'адрес успешно изменен'
+                                        );
+                                        setTimeout(() => {
+                                            setResultMessageAddress('');
+                                        }, 1500);
+                                        setIsEdit(false);
+                                    })
+                                    .catch((err) => {
+                                        if (err.cause === 'ServerError') {
+                                            document.body.textContent =
+                                                err.message;
+                                            document.body.classList.add(
+                                                'error-connection'
+                                            );
+                                        }
+                                    });
                             } else {
                                 addCustomerAddress(
                                     userId,
@@ -380,14 +388,24 @@ export function AddAddressFormView(props: {
                                     setTypeAddresses,
                                     addressTypeView,
                                     setDefaultAddresses
-                                ).then(() => {
-                                    setResultMessageAddress(
-                                        'адрес успешно добавлен'
-                                    );
-                                    setTimeout(() => {
-                                        setResultMessageAddress('');
-                                    }, 1500);
-                                });
+                                )
+                                    .then(() => {
+                                        setResultMessageAddress(
+                                            'адрес успешно добавлен'
+                                        );
+                                        setTimeout(() => {
+                                            setResultMessageAddress('');
+                                        }, 1500);
+                                    })
+                                    .catch((err) => {
+                                        if (err.cause === 'ServerError') {
+                                            document.body.textContent =
+                                                err.message;
+                                            document.body.classList.add(
+                                                'error-connection'
+                                            );
+                                        }
+                                    });
                             }
                         }}
                     >

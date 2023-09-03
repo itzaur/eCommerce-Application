@@ -26,8 +26,21 @@ export async function editCustomerEmail(
             .execute();
 
         setVersion(response.body.version);
-    } catch (err) {
-        // console.log(err);
+    } catch (e) {
+        const error = e as Error;
+        if (
+            error.message ===
+            'There is already an existing customer with the provided email.'
+        ) {
+            throw new Error('Такая почта уже существует', {
+                cause: 'emailError',
+            });
+        }
+        if (error.message === 'Failed to fetch') {
+            throw new Error('Ошибка сервера', {
+                cause: 'ServerError',
+            });
+        }
     }
     return undefined;
 }
