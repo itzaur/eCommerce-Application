@@ -1,3 +1,4 @@
+import { Customer } from '@commercetools/platform-sdk';
 import { useState } from 'react';
 import edit from '../../assets/icons/edit.svg';
 import check from '../../assets/icons/check.svg';
@@ -15,6 +16,7 @@ import {
     getAge,
 } from '../../utils/validation/checkFullYears';
 import { editCustomerAge } from '../../commercetools/editCustomerAge';
+import { getCountry } from '../../commercetools/getCountry';
 
 export function PersonalDataView(props: {
     userId: string;
@@ -30,6 +32,7 @@ export function PersonalDataView(props: {
     setBirthMonthValue: CallableFunction;
     birthYearValue: string;
     setBirthYearValue: CallableFunction;
+    customer: Customer | undefined;
 }): JSX.Element {
     const {
         version,
@@ -45,6 +48,7 @@ export function PersonalDataView(props: {
         setBirthMonthValue,
         birthYearValue,
         setBirthYearValue,
+        customer,
     } = props;
 
     const [errorName, setErrorName] = useState(false);
@@ -359,13 +363,13 @@ export function PersonalDataView(props: {
                 </button>
             )}
 
-            {/* <div className="profile__info-line">
+            <div className="profile__info-line">
                 <div className="profile__info-title">дата рождения:</div>
                 <div className="profile__info-name">
                     <span>{customer?.dateOfBirth}</span>
                 </div>
-            </div> */}
-            {/* <div className="profile__info-line">
+            </div>
+            <div className="profile__info-line">
                 <div className="profile__info-title">страна:</div>
                 <div className="profile__info-name">
                     <span>{getCountry(customer?.addresses[0]?.country)}</span>
@@ -388,7 +392,7 @@ export function PersonalDataView(props: {
                 <div className="profile__info-name">
                     <span>{customer?.salutation?.split(' ').slice(1, 2)}</span>
                 </div>
-            </div> */}
+            </div>
         </div>
     );
 }

@@ -323,6 +323,7 @@ function ProfilePage(): JSX.Element {
                         setBirthMonthValue={setBirthMonthValue}
                         birthYearValue={birthYearValue}
                         setBirthYearValue={setBirthYearValue}
+                        customer={customer}
                     />
                     <div className="profile__banner">
                         <img
