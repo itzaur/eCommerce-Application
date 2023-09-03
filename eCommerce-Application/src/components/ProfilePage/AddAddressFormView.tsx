@@ -28,6 +28,7 @@ export function AddAddressFormView(props: {
     currentSelectedAddress: Address;
     changeAddressIndex: number;
     getTypeAddress: CallableFunction;
+    setResultMessageAddress: CallableFunction;
 }): JSX.Element {
     const {
         userId,
@@ -44,7 +45,10 @@ export function AddAddressFormView(props: {
         currentSelectedAddress,
         changeAddressIndex,
         getTypeAddress,
+        setResultMessageAddress,
     } = props;
+
+    // console.log('Выбран', currentSelectedAddress);
 
     const [errorCountry, setErrorCountry] = useState(false);
     const [errorMessageCountry, setErrorMessageCountry] = useState('');
@@ -352,7 +356,15 @@ export function AddAddressFormView(props: {
                                     setDefaultAddresses,
                                     changeAddressIndex,
                                     getTypeAddress
-                                );
+                                ).then(() => {
+                                    setResultMessageAddress(
+                                        'адрес успешно изменен'
+                                    );
+                                    setTimeout(() => {
+                                        setResultMessageAddress('');
+                                    }, 1500);
+                                    setIsEdit(false);
+                                });
                             } else {
                                 addCustomerAddress(
                                     userId,
@@ -368,7 +380,14 @@ export function AddAddressFormView(props: {
                                     setTypeAddresses,
                                     addressTypeView,
                                     setDefaultAddresses
-                                );
+                                ).then(() => {
+                                    setResultMessageAddress(
+                                        'адрес успешно добавлен'
+                                    );
+                                    setTimeout(() => {
+                                        setResultMessageAddress('');
+                                    }, 1500);
+                                });
                             }
                         }}
                     >

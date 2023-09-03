@@ -89,6 +89,7 @@ export async function editCustomerAddress(
                 ...prev.slice(changeAddressIndex + 1, typeAddresses.length),
             ]);
         }
+        setAddAddressFormView(true);
 
         if (
             defaultAddresses &&
@@ -100,8 +101,6 @@ export async function editCustomerAddress(
                 getTypeAddress(response.body)[changeAddressIndex],
             ]);
         }
-
-        setAddAddressFormView(true);
     } catch (err) {
         // console.log(err);
     }

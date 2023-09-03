@@ -69,6 +69,7 @@ function ProfilePage(): JSX.Element {
     const [isEdit, setIsEdit] = useState(false);
     const [changeAddressIndex, setChangeAddressIndex] = useState(0);
     const [changeAuthData, setChangeAuthData] = useState(true);
+    const [resultMessageAddress, setResultMessageAddress] = useState('');
 
     const getShippingAddresses = (data: Customer): Address[] => {
         return data.addresses.filter((item) => {
@@ -249,6 +250,9 @@ function ProfilePage(): JSX.Element {
                                             setChangeAddressIndex={
                                                 setChangeAddressIndex
                                             }
+                                            setResultMessageAddress={
+                                                setResultMessageAddress
+                                            }
                                         />
                                     </div>
 
@@ -263,6 +267,9 @@ function ProfilePage(): JSX.Element {
                                             добавить новый адрес
                                         </button>
                                     </div>
+                                    <p className="success-message">
+                                        {resultMessageAddress}
+                                    </p>
                                 </div>
                             </div>
                         ) : (
@@ -304,6 +311,9 @@ function ProfilePage(): JSX.Element {
                                     addressTypeView
                                         ? getShippingAddresses
                                         : getBillingAddresses
+                                }
+                                setResultMessageAddress={
+                                    setResultMessageAddress
                                 }
                             />
                         )}

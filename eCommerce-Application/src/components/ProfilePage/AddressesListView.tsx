@@ -19,6 +19,7 @@ export function AddressesListView(props: {
     setAddAddressFormView: CallableFunction;
     setIsEdit: CallableFunction;
     setChangeAddressIndex: CallableFunction;
+    setResultMessageAddress: CallableFunction;
 }): JSX.Element {
     const {
         typeAddresses,
@@ -33,6 +34,7 @@ export function AddressesListView(props: {
         setAddAddressFormView,
         setIsEdit,
         setChangeAddressIndex,
+        setResultMessageAddress,
     } = props;
     const [toggle, setToggle] = useState(true);
     const [isSelectAddress, setIsSelectAddress] = useState(false);
@@ -113,7 +115,14 @@ export function AddressesListView(props: {
                                             address.id,
                                             version,
                                             setVersion
-                                        );
+                                        ).then(() => {
+                                            setResultMessageAddress(
+                                                'адрес успешно удален'
+                                            );
+                                            setTimeout(() => {
+                                                setResultMessageAddress('');
+                                            }, 1500);
+                                        });
                                     }
                                     if (defaultAddress?.length) {
                                         if (add === defaultAddress[0].id)
