@@ -6,7 +6,7 @@ function SearchBar({
     setSearchValue,
     searchBarOpen,
 }: {
-    setSearchValue: React.Dispatch<React.SetStateAction<string>>;
+    setSearchValue: React.Dispatch<React.SetStateAction<string>> | undefined;
     searchBarOpen: boolean;
 }): JSX.Element {
     const [value, setValue] = useState('');
@@ -31,7 +31,7 @@ function SearchBar({
                 type="submit"
                 onClick={(e): void => {
                     e.preventDefault();
-                    setSearchValue(value);
+                    if (setSearchValue) setSearchValue(value);
                 }}
                 sx={{ p: '2rem', color: '#000000' }}
             >

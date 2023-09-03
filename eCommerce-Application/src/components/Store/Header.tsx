@@ -9,11 +9,12 @@ import iconCart from '../../assets/images/icon-cart.png';
 import iconUser from '../../assets/images/icon-user.png';
 
 function Header({
+    withSearchValue,
     setSearchValue,
-}: Record<
-    'setSearchValue',
-    React.Dispatch<React.SetStateAction<string>>
->): JSX.Element {
+}: {
+    setSearchValue: React.Dispatch<React.SetStateAction<string>> | undefined;
+    withSearchValue: boolean;
+}): JSX.Element {
     const [searchBarOpen, setSearchBarOpen] = useState(false);
     return (
         <header className="header-nav">
@@ -34,25 +35,27 @@ function Header({
                             <h3 className="nav__title">О нас</h3>
                         </Link>
                     </li>
-                    <li className="nav__item">
-                        <button
-                            type="button"
-                            onClick={(): void => {
-                                if (!searchBarOpen) {
-                                    setSearchBarOpen(true);
-                                } else {
-                                    setSearchBarOpen(false);
-                                }
-                            }}
-                        >
-                            <img src={iconSearch} alt="icon-search" />
-                            <h3 className="nav__title">Поиск</h3>
-                        </button>
-                        <SearchBar
-                            setSearchValue={setSearchValue}
-                            searchBarOpen={searchBarOpen}
-                        />
-                    </li>
+                    {withSearchValue && (
+                        <li className="nav__item">
+                            <button
+                                type="button"
+                                onClick={(): void => {
+                                    if (!searchBarOpen) {
+                                        setSearchBarOpen(true);
+                                    } else {
+                                        setSearchBarOpen(false);
+                                    }
+                                }}
+                            >
+                                <img src={iconSearch} alt="icon-search" />
+                                <h3 className="nav__title">Поиск</h3>
+                            </button>
+                            <SearchBar
+                                setSearchValue={setSearchValue}
+                                searchBarOpen={searchBarOpen}
+                            />
+                        </li>
+                    )}
                     <li className="nav__item">
                         <Link className="nav__link" to="/profile">
                             <img src={iconUser} alt="icon-user" />

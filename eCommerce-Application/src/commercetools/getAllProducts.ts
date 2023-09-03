@@ -1,5 +1,6 @@
 import { ProductProjection } from '@commercetools/platform-sdk';
 import { apiRoot } from './Client';
+import { serverErrorMessage } from '../utils/constants';
 
 export async function getAllProducts(): Promise<
     ProductProjection[] | undefined
@@ -8,7 +9,7 @@ export async function getAllProducts(): Promise<
         const result = await apiRoot.productProjections().get().execute();
         return result.body.results;
     } catch {
-        throw new Error('Cервер улетел в космос, попробуйте позже');
+        throw new Error(serverErrorMessage);
     }
     return undefined;
 }

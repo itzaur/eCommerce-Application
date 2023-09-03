@@ -105,25 +105,23 @@ function Parameters(props: {
     }, [selectedType, selectedCategory]);
 
     useEffect(() => {
-        if (filtersApplied || searchValue) {
-            filterSortSearcProducts({
-                selectedCategoryId,
-                filter: filter.key,
-                selectedCategoriesList,
-                minSelectedPrice,
-                maxSelectedPrice,
-                sort,
-                searchValue,
-                discountedProducts,
+        filterSortSearcProducts({
+            selectedCategoryId,
+            filter: filter.key,
+            selectedCategoriesList,
+            minSelectedPrice,
+            maxSelectedPrice,
+            sort,
+            searchValue,
+            discountedProducts,
+        })
+            .then((data) => {
+                if (data) setCards(data);
             })
-                .then((data) => {
-                    if (data) setCards(data);
-                })
-                .catch((err: Error) => {
-                    document.body.textContent = err.message;
-                    document.body.classList.add('error-connection');
-                });
-        }
+            .catch((err: Error) => {
+                document.body.textContent = err.message;
+                document.body.classList.add('error-connection');
+            });
     }, [
         minSelectedPrice,
         maxSelectedPrice,

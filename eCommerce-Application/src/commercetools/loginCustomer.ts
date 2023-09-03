@@ -1,5 +1,6 @@
 import { constructClientPasswordFlow, tokenInstance } from './PasswordClient';
 import { apiRoot } from './Client';
+import { serverErrorMessage } from '../utils/constants';
 
 export async function loginCustomer(
     email: string,
@@ -33,7 +34,7 @@ export async function loginCustomer(
             if (error.cause === 'passwordError' || error.cause === 'emailError')
                 throw error;
             else {
-                throw new Error('Сервер улетел в космос, попробуйте позже', {
+                throw new Error(serverErrorMessage, {
                     cause: 'emailError',
                 });
             }

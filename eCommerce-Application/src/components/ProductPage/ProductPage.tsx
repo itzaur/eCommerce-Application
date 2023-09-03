@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import ModalSwiper from 'swiper';
 import {
@@ -12,19 +12,19 @@ import { Product } from '@commercetools/platform-sdk';
 import { apiRoot } from '../../commercetools/Client';
 import { Header } from '../Store';
 import { Footer } from '../MainPage';
-import { products } from '../../utils/constants';
+import { products, serverErrorMessage } from '../../utils/constants';
 import { ProductOptions } from '../../types';
 import starEmpty from '../../assets/images/review-star-empty.png';
 import avatar from '../../assets/images/user.png';
 import star from '../../assets/images/review-star.png';
 import Modal from '../NotFoundPage/Modal';
+import BreadCrumbs from '../Store/BreadCrumbs';
 
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import 'swiper/css/scrollbar';
-import BreadCrumbs from '../Store/BreadCrumbs';
 
 function ProductDetail({
     type,
@@ -55,7 +55,7 @@ function ProductDetail({
 
                 setCard(result.body);
             } catch (error) {
-                throw new Error('Сервер улетел в космос, попробуйте позже');
+                throw new Error(serverErrorMessage);
             }
         }
         getProductKey(location).catch((err: Error) => {
@@ -165,11 +165,7 @@ function ProductDetail({
 
     return (
         <>
-            <Header
-                setSearchValue={(): void => {
-                    throw new Error('Function not implemented.');
-                }}
-            />
+            <Header withSearchValue={false} setSearchValue={undefined} />
             <Modal
                 active={modalActive}
                 setActive={setModalActive}
@@ -201,10 +197,17 @@ function ProductDetail({
                     }
                 />
 
-                <div className="product__back">
+                <button
+                    className="product__back"
+                    type="button"
+                    onClick={(): void => {
+                        window.history.back();
+                    }}
+                >
                     <span />
-                    <Link to="/store">Назад</Link>
-                </div>
+                    Назад
+                </button>
+
                 <div className="product__box">
                     <div className="product__imgs">
                         <div className="slider">

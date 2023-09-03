@@ -54,6 +54,8 @@
 
         transition: opacity 0.3s linear;
 
+        cursor: pointer;
+
         &:hover {
             opacity: 1;
         }

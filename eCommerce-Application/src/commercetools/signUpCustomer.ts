@@ -1,4 +1,5 @@
 import { apiRoot } from './Client';
+import { serverErrorMessage } from '../utils/constants';
 
 export async function signUpCustomer(
     userName: string,
@@ -92,7 +93,7 @@ export async function signUpCustomer(
                 cause: 'emailError',
             });
         } else {
-            throw new Error('Сервер улетел в космос, попробуйте позже', {
+            throw new Error(serverErrorMessage, {
                 cause: 'serverError',
             });
         }

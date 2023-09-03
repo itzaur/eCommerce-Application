@@ -116,7 +116,7 @@ function Store({
 
     return (
         <>
-            <Header setSearchValue={setSearchValue} />
+            <Header setSearchValue={setSearchValue} withSearchValue />
             <section className="store__main">
                 <BreadCrumbs
                     selectedType={selectedType}

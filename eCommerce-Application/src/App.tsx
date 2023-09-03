@@ -250,6 +250,7 @@ function App(): JSX.Element {
                             });
                     }
                 })
+
                 .catch((err: Error) => {
                     document.body.textContent = err.message;
                     document.body.classList.add('error-connection');

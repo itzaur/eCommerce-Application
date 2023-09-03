@@ -1,6 +1,7 @@
 import { ProductProjection } from '@commercetools/platform-sdk';
 import { apiRoot } from './Client';
 import { FilterSortSearcParameters } from '../types/index';
+import { serverErrorMessage } from '../utils/constants';
 
 export async function filterSortSearcProducts(
     parameters: FilterSortSearcParameters
@@ -81,7 +82,7 @@ export async function filterSortSearcProducts(
             .execute();
         return result.body.results;
     } catch {
-        throw new Error('Cервер улетел в космос, попробуйте позже');
+        throw new Error(serverErrorMessage);
     }
     return undefined;
 }

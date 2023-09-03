@@ -585,3 +585,5 @@ export const products = [
         },
     },
 ];
+
+export const serverErrorMessage = 'Сервер улетел в космос, попробуйте позже';
