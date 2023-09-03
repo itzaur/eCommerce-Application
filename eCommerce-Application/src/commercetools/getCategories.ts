@@ -1,5 +1,6 @@
 import { apiRoot } from './Client';
 import { Category } from '../types';
+import { serverErrorMessage } from '../utils/constants';
 
 export async function getCategories(): Promise<Category[] | undefined> {
     try {
@@ -30,7 +31,7 @@ export async function getCategories(): Promise<Category[] | undefined> {
         });
         return result;
     } catch {
-        //
+        throw new Error(serverErrorMessage);
     }
     return undefined;
 }

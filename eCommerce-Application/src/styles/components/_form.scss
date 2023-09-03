@@ -200,6 +200,13 @@
 
     z-index: -1;
 
+    @include mixins.respond-to('mobile') {
+        left: 4rem;
+    }
+    @include mixins.respond-to('tablet') {
+        left: auto;
+    }
+
     & input {
         width: 100%;
         order: 1;

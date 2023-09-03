@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
 import SearchBar from './SearchBar';
 import logo from '../../assets/images/logo.png';
 import iconCatalog from '../../assets/images/icon-catalog.png';
@@ -8,11 +9,13 @@ import iconCart from '../../assets/images/icon-cart.png';
 import iconUser from '../../assets/images/icon-user.png';
 
 function Header({
+    withSearchValue,
     setSearchValue,
-}: Record<
-    'setSearchValue',
-    React.Dispatch<React.SetStateAction<string>>
->): JSX.Element {
+}: {
+    setSearchValue: React.Dispatch<React.SetStateAction<string>> | undefined;
+    withSearchValue: boolean;
+}): JSX.Element {
+    const [searchBarOpen, setSearchBarOpen] = useState(false);
     return (
         <header className="header-nav">
             <Link className="header-nav__logo" to="/">
@@ -32,20 +35,27 @@ function Header({
                             <h3 className="nav__title">О нас</h3>
                         </Link>
                     </li>
-                    <li className="nav__item">
-                        <button
-                            type="button"
-                            onClick={(): boolean | undefined =>
-                                document
-                                    .querySelector('.search-bar')
-                                    ?.classList.toggle('search-bar_open')
-                            }
-                        >
-                            <img src={iconSearch} alt="icon-search" />
-                            <h3 className="nav__title">Поиск</h3>
-                        </button>
-                        <SearchBar setSearchValue={setSearchValue} />
-                    </li>
+                    {withSearchValue && (
+                        <li className="nav__item">
+                            <button
+                                type="button"
+                                onClick={(): void => {
+                                    if (!searchBarOpen) {
+                                        setSearchBarOpen(true);
+                                    } else {
+                                        setSearchBarOpen(false);
+                                    }
+                                }}
+                            >
+                                <img src={iconSearch} alt="icon-search" />
+                                <h3 className="nav__title">Поиск</h3>
+                            </button>
+                            <SearchBar
+                                setSearchValue={setSearchValue}
+                                searchBarOpen={searchBarOpen}
+                            />
+                        </li>
+                    )}
                     <li className="nav__item">
                         <Link className="nav__link" to="/profile">
                             <img src={iconUser} alt="icon-user" />

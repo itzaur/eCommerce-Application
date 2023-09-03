@@ -70,7 +70,14 @@ function App(): JSX.Element {
                 <Route
                     key={category.parent.name}
                     path={`/store/${category.parent.path}`}
-                    element={<Store type={category.parent.name} category="" />}
+                    element={
+                        <Store
+                            type={category.parent.name}
+                            typePath={category.parent.path}
+                            category=""
+                            categoryPath=""
+                        />
+                    }
                 />
             );
             setCategoriesRoutes([
@@ -78,38 +85,78 @@ function App(): JSX.Element {
                 <Route
                     key={category.parent.name}
                     path={`/store/${category.parent.path}`}
-                    element={<Store type={category.parent.name} category="" />}
+                    element={
+                        <Store
+                            type={category.parent.name}
+                            typePath={category.parent.path}
+                            category=""
+                            categoryPath=""
+                        />
+                    }
                 />,
             ]);
-            getProductsByProductType(category.parent.name).then((data) => {
-                data?.forEach((el) => {
-                    tempArrCategoriesRoutes.push(
-                        <Route
-                            key={el.key}
-                            path={`/store/${category.parent.path}/${el.key}`}
-                            element={<ProductDetail />}
-                        />,
-                        <Route
-                            key={el.key}
-                            path={`/store/${el.key}`}
-                            element={<ProductDetail />}
-                        />
-                    );
-                    setCategoriesRoutes([
-                        ...tempArrCategoriesRoutes,
-                        <Route
-                            key={el.key}
-                            path={`/store/${category.parent.path}/${el.key}`}
-                            element={<ProductDetail />}
-                        />,
-                        <Route
-                            key={el.key}
-                            path={`/store/${el.key}`}
-                            element={<ProductDetail />}
-                        />,
-                    ]);
+            getProductsByProductType(category.parent.name)
+                .then((data) => {
+                    data?.forEach((el) => {
+                        tempArrCategoriesRoutes.push(
+                            <Route
+                                key={el.key}
+                                path={`/store/${category.parent.path}/${el.key}`}
+                                element={
+                                    <ProductDetail
+                                        type={category.parent.name}
+                                        typePath={category.parent.path}
+                                        category=""
+                                        categoryPath=""
+                                    />
+                                }
+                            />,
+                            <Route
+                                key={el.key}
+                                path={`/store/${el.key}`}
+                                element={
+                                    <ProductDetail
+                                        type=""
+                                        typePath=""
+                                        category=""
+                                        categoryPath=""
+                                    />
+                                }
+                            />
+                        );
+                        setCategoriesRoutes([
+                            ...tempArrCategoriesRoutes,
+                            <Route
+                                key={el.key}
+                                path={`/store/${category.parent.path}/${el.key}`}
+                                element={
+                                    <ProductDetail
+                                        type={category.parent.name}
+                                        typePath={category.parent.path}
+                                        category=""
+                                        categoryPath=""
+                                    />
+                                }
+                            />,
+                            <Route
+                                key={el.key}
+                                path={`/store/${el.key}`}
+                                element={
+                                    <ProductDetail
+                                        type=""
+                                        typePath=""
+                                        category=""
+                                        categoryPath=""
+                                    />
+                                }
+                            />,
+                        ]);
+                    });
+                })
+                .catch((err: Error) => {
+                    document.body.textContent = err.message;
+                    document.body.classList.add('error-connection');
                 });
-            });
 
             category.items.forEach((item) => {
                 tempArrCategoriesRoutes.push(
@@ -119,7 +166,9 @@ function App(): JSX.Element {
                         element={
                             <Store
                                 type={category.parent.name}
+                                typePath={category.parent.path}
                                 category={item.name}
+                                categoryPath={item.name}
                             />
                         }
                     />
@@ -132,30 +181,51 @@ function App(): JSX.Element {
                         element={
                             <Store
                                 type={category.parent.name}
+                                typePath={category.parent.path}
                                 category={item.name}
+                                categoryPath={item.name}
                             />
                         }
                     />,
                 ]);
-                getProductsBySubcategory(item.name).then((data) => {
-                    data?.forEach((el) => {
-                        tempArrCategoriesRoutes.push(
-                            <Route
-                                key={el.key}
-                                path={`/store/${category.parent.path}/${item.path}/${el.key}`}
-                                element={<ProductDetail />}
-                            />
-                        );
-                        setCategoriesRoutes([
-                            ...tempArrCategoriesRoutes,
-                            <Route
-                                key={el.key}
-                                path={`/store/${category.parent.path}/${item.path}/${el.key}`}
-                                element={<ProductDetail />}
-                            />,
-                        ]);
+                getProductsBySubcategory(item.name)
+                    .then((data) => {
+                        data?.forEach((el) => {
+                            tempArrCategoriesRoutes.push(
+                                <Route
+                                    key={el.key}
+                                    path={`/store/${category.parent.path}/${item.path}/${el.key}`}
+                                    element={
+                                        <ProductDetail
+                                            type={category.parent.name}
+                                            typePath={category.parent.path}
+                                            category={item.name}
+                                            categoryPath={item.path}
+                                        />
+                                    }
+                                />
+                            );
+                            setCategoriesRoutes([
+                                ...tempArrCategoriesRoutes,
+                                <Route
+                                    key={el.key}
+                                    path={`/store/${category.parent.path}/${item.path}/${el.key}`}
+                                    element={
+                                        <ProductDetail
+                                            type={category.parent.name}
+                                            typePath={category.parent.path}
+                                            category={item.name}
+                                            categoryPath={item.path}
+                                        />
+                                    }
+                                />,
+                            ]);
+                        });
+                    })
+                    .catch((err: Error) => {
+                        document.body.textContent = err.message;
+                        document.body.classList.add('error-connection');
                     });
-                });
             });
         });
 
@@ -164,16 +234,27 @@ function App(): JSX.Element {
 
     useEffect(() => {
         if (!pageLoaded) {
-            getCategories().then((data) => {
-                if (data) {
-                    setCategories(data);
-                    setMainId(data);
-                    getRoutes(data).then((result) => {
-                        setCategoriesRoutes(result);
-                        setPageLoaded(true);
-                    });
-                }
-            });
+            getCategories()
+                .then((data) => {
+                    if (data) {
+                        setCategories(data);
+                        setMainId(data);
+                        getRoutes(data)
+                            .then((result) => {
+                                setCategoriesRoutes(result);
+                                setPageLoaded(true);
+                            })
+                            .catch((err: Error) => {
+                                document.body.textContent = err.message;
+                                document.body.classList.add('error-connection');
+                            });
+                    }
+                })
+
+                .catch((err: Error) => {
+                    document.body.textContent = err.message;
+                    document.body.classList.add('error-connection');
+                });
         }
     });
 
@@ -189,7 +270,12 @@ function App(): JSX.Element {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/registration" element={<RegistrationPage />} />
-            <Route path="/store" element={<Store type="" category="" />} />
+            <Route
+                path="/store"
+                element={
+                    <Store type="" category="" typePath="" categoryPath="" />
+                }
+            />
             <Route path="/about" element={<AboutPage />} />
             <Route path="*" element={<NotFound />} />
         </Routes>

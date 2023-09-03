@@ -28,10 +28,24 @@ function SideBar(props: {
                                 id={category.parent.id}
                                 className="sidebar__title"
                                 to={`/store/${category.parent.path}`}
-                                onClick={(): void => {
+                                onClick={(e): void => {
                                     setSelectedCategory('');
                                     setSelectedType(category.parent.name);
                                     setSelectedTypePath(category.parent.path);
+                                    if (e.target instanceof HTMLElement) {
+                                        (
+                                            document.querySelectorAll(
+                                                '.sidebar__category_active'
+                                            ) as NodeListOf<HTMLElement>
+                                        ).forEach((el) => {
+                                            el.classList.remove(
+                                                'sidebar__category_active'
+                                            );
+                                        });
+                                        e.target.classList.add(
+                                            'sidebar__category_active'
+                                        );
+                                    }
                                 }}
                             >
                                 {String(category.parent.name)}
@@ -47,7 +61,7 @@ function SideBar(props: {
                                         className="sidebar__category"
                                         key={el.name}
                                         type="button"
-                                        onClick={(): void => {
+                                        onClick={(e): void => {
                                             setSelectedType(
                                                 category.parent.name
                                             );
@@ -57,6 +71,22 @@ function SideBar(props: {
                                             setSelectedCategory(el.name);
                                             setSelectedCategoryId(el.id);
                                             setSelectedCategoryPath(el.path);
+                                            if (
+                                                e.target instanceof HTMLElement
+                                            ) {
+                                                (
+                                                    document.querySelectorAll(
+                                                        '.sidebar__category_active'
+                                                    ) as NodeListOf<HTMLElement>
+                                                ).forEach((elem) => {
+                                                    elem.classList.remove(
+                                                        'sidebar__category_active'
+                                                    );
+                                                });
+                                                e.target.classList.add(
+                                                    'sidebar__category_active'
+                                                );
+                                            }
                                         }}
                                     >
                                         {el.name}

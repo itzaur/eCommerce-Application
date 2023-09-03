@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import ModalSwiper from 'swiper';
 import {
@@ -12,12 +12,13 @@ import { Product } from '@commercetools/platform-sdk';
 import { apiRoot } from '../../commercetools/Client';
 import { Header } from '../Store';
 import { Footer } from '../MainPage';
-import { products } from '../../utils/constants';
+import { products, serverErrorMessage } from '../../utils/constants';
 import { ProductOptions } from '../../types';
 import starEmpty from '../../assets/images/review-star-empty.png';
 import avatar from '../../assets/images/user.png';
 import star from '../../assets/images/review-star.png';
 import Modal from '../NotFoundPage/Modal';
+import BreadCrumbs from '../Store/BreadCrumbs';
 
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
@@ -25,7 +26,21 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import 'swiper/css/scrollbar';
 
-function ProductDetail(): JSX.Element {
+function ProductDetail({
+    type,
+    category,
+    typePath,
+    categoryPath,
+}: {
+    type: string;
+    category: string;
+    typePath: string;
+    categoryPath: string;
+}): JSX.Element {
+    const [selectedType, setSelectedType] = useState(type);
+    const selectedTypePath = typePath;
+    const [selectedCategory, setSelectedCategory] = useState(category || '');
+    const selectedCategoryPath = categoryPath;
     const [card, setCard] = useState<Product>();
     const location = useLocation().pathname.split('/').at(-1) as string;
 
@@ -40,10 +55,13 @@ function ProductDetail(): JSX.Element {
 
                 setCard(result.body);
             } catch (error) {
-                // throw Error('Product not found');
+                throw new Error(serverErrorMessage);
             }
         }
-        getProductKey(location);
+        getProductKey(location).catch((err: Error) => {
+            document.body.textContent = err.message;
+            document.body.classList.add('error-connection');
+        });
     }, [location]);
 
     const product: ProductOptions = {
@@ -147,11 +165,7 @@ function ProductDetail(): JSX.Element {
 
     return (
         <>
-            <Header
-                setSearchValue={(): void => {
-                    throw new Error('Function not implemented.');
-                }}
-            />
+            <Header withSearchValue={false} setSearchValue={undefined} />
             <Modal
                 active={modalActive}
                 setActive={setModalActive}
@@ -171,19 +185,29 @@ function ProductDetail(): JSX.Element {
                 </div>
             </Modal>
             <section className="product">
-                <ul className="product__path">
-                    <li>
-                        <Link to="/">Главная / </Link>
-                    </li>
-                    <li>Каталог / </li>
-                    <li>Космотуры / </li>
-                    <li>{product.title}</li>
-                </ul>
+                <BreadCrumbs
+                    selectedType={selectedType}
+                    setSelectedType={setSelectedType}
+                    selectedTypePath={selectedTypePath}
+                    selectedCategory={selectedCategory}
+                    setSelectedCategory={setSelectedCategory}
+                    selectedCategoryPath={selectedCategoryPath}
+                    selectedProduct={
+                        card?.masterData.current.name['ru-RU'] || ''
+                    }
+                />
 
-                <div className="product__back">
+                <button
+                    className="product__back"
+                    type="button"
+                    onClick={(): void => {
+                        window.history.back();
+                    }}
+                >
                     <span />
-                    <Link to="/store">Назад</Link>
-                </div>
+                    Назад
+                </button>
+
                 <div className="product__box">
                     <div className="product__imgs">
                         <div className="slider">

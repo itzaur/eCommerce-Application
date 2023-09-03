@@ -1,21 +1,23 @@
-// import { useState } from 'react';
 import { useState } from 'react';
 import { Search } from '@mui/icons-material';
 import { Paper, IconButton } from '@mui/material';
 
 function SearchBar({
     setSearchValue,
-}: Record<
-    'setSearchValue',
-    React.Dispatch<React.SetStateAction<string>>
->): JSX.Element {
+    searchBarOpen,
+}: {
+    setSearchValue: React.Dispatch<React.SetStateAction<string>> | undefined;
+    searchBarOpen: boolean;
+}): JSX.Element {
     const [value, setValue] = useState('');
 
     return (
         <Paper
             component="form"
             id="search-bar"
-            className="search-bar"
+            className={
+                searchBarOpen ? 'search-bar search-bar_open' : 'search-bar'
+            }
             onSubmit={(): void => {}}
             sx={{
                 boxShadow: 'none',
@@ -29,7 +31,7 @@ function SearchBar({
                 type="submit"
                 onClick={(e): void => {
                     e.preventDefault();
-                    setSearchValue(value);
+                    if (setSearchValue) setSearchValue(value);
                 }}
                 sx={{ p: '2rem', color: '#000000' }}
             >
