@@ -102,7 +102,7 @@ export const checkIncorrectBirthMonth = (
     if (!/^\d+$/.test(value)) {
         return {
             incorrect: true,
-            message: 'Месяц должна содердажать только цифры',
+            message: 'Месяц должен содердажать только цифры',
         };
     }
 

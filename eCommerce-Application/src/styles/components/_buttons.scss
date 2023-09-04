@@ -125,10 +125,15 @@
                 box-shadow: var(--drop-shadow-light);
             }
         }
+
+        &--close {
+            width: min(100%, 10rem);
+        }
     }
+
     &_un-action {
         background-color: var(--color-secondary);
-        color: var(--color-secondary-opacity);
+        color: var(--color-input);
 
         &:hover {
             box-shadow: var(--drop-shadow-dark);

@@ -48,15 +48,28 @@
 
     font-family: var(--ff-secondary);
 
+    color: var(--color-white);
+
     @include mixins.respond-to('tablet') {
         padding: 7rem 0 4rem;
     }
 
     &_product-page {
-        width: 100vw;
-        padding: 5rem 6rem;
-        @include mixins.respond-to('tablet') {
-            padding: 5rem 6rem;
+        grid-column: 2 / span 2;
+        padding: 2rem 0 2rem;
+
+        & a {
+            opacity: 0.5;
+
+            transition: opacity 0.3s linear;
+
+            &:hover {
+                opacity: 1;
+            }
+        }
+
+        & li:last-child {
+            pointer-events: none;
         }
     }
 }
@@ -432,11 +445,17 @@ input[type='range']::-moz-range-thumb {
 
 .cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(26rem, 0.333fr));
-    gap: 2vw;
+    grid-template-columns: repeat(auto-fit, minmax(26rem, 1fr));
+    gap: 2rem;
 
     & a {
         display: flex;
+    }
+
+    @include mixins.respond-to('tablet') {
+        grid-template-columns: repeat(auto-fit, minmax(26rem, 0.333fr));
+        place-content: center;
+        gap: 2vw;
     }
 }
 
@@ -467,9 +486,10 @@ input[type='range']::-moz-range-thumb {
 
         padding: 2rem 1rem;
 
-        background: var(--color-secondary-opacity);
-        box-shadow: inset 0 0.8rem 3rem 0 var(--color-primary-alpha);
+        background-color: var(--color-black-alpha);
         backdrop-filter: blur(0.2rem);
+
+        box-shadow: inset var(--drop-shadow-light);
 
         @include mixins.respond-to('tablet') {
             grid-template-rows: 1fr 1fr min-content;

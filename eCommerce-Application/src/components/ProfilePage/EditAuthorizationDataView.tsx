@@ -80,7 +80,7 @@ export function EditAuthorizationDataView(props: {
     };
 
     return (
-        <div className="profile__content">
+        <div className="profile__content profile__content--change">
             <div className="profile__content-email">
                 <span className="profile__content-email-name">e-mail:</span>
                 <label className="placeholder" htmlFor="name">
@@ -105,185 +105,75 @@ export function EditAuthorizationDataView(props: {
                     <p className="error-message">
                         {errorEmail ? errorMessageEmail : ''}
                     </p>
-                    {isEditEmail ? (
-                        <button
-                            type="button"
-                            className="menu__button_edit"
-                            onClick={(e): void => {
-                                e.preventDefault();
-                                if (!editEmail) {
-                                    setErrorEmail(true);
-                                    setErrorMessageEmail(
-                                        'Это обязатальное поле'
-                                    );
-                                }
-                                if (errorEmail || !editEmail) return;
-                                setIsEditEmail(false);
-                                editCustomerEmail(
-                                    userId,
-                                    editEmail,
-                                    version,
-                                    setVersion
-                                )
-                                    .then(() => {
-                                        setChangeAuthData(true);
-                                        setEmail(editEmail);
-
-                                        setResultMessageEmail(
-                                            'e-mail успешно обновлен'
-                                        );
-                                        setTimeout(() => {
-                                            setResultMessageEmail('');
-                                        }, 1500);
-                                    })
-                                    .catch((err) => {
-                                        if (err.cause === 'emailError') {
-                                            setErrorEmail(true);
-                                            setErrorMessageEmail(
-                                                'такая почта уже существует'
-                                            );
-                                        }
-                                        if (err.cause === 'ServerError') {
-                                            document.body.textContent =
-                                                err.message;
-                                            document.body.classList.add(
-                                                'error-connection'
-                                            );
-                                        }
-                                    });
-                            }}
-                        >
-                            <img src={check} alt="check" />
-                        </button>
-                    ) : (
-                        <button
-                            type="submit"
-                            className="menu__button_edit"
-                            onClick={(): void => {
-                                setIsEditEmail(true);
-                            }}
-                        >
-                            <img src={edit} alt="edit" />
-                        </button>
-                    )}
                 </label>
-            </div>
-
-            <div className="profile__content-password">
-                <span>введите пароль:</span>
-                <label className="placeholder" htmlFor="password">
-                    <input
-                        className={
-                            errorOldPassword
-                                ? 'form__input form__input_invalid form__password'
-                                : 'form__input'
-                        }
-                        type="password"
-                        id="password"
-                        disabled={!isEditPassword}
-                        onChange={(e): void => {
-                            setErrorOldPassword(
-                                checkIncorrectPassword(e).incorrect
-                            );
-                            setErrorMessageOldPassword(
-                                checkIncorrectPassword(e).message
-                            );
-                            setOldPassword(e.target.value);
-                        }}
-                    />
-                    <p className="error-message">
-                        {errorOldPassword ? errorMessageOldPassword : ''}
-                    </p>
-                </label>
-            </div>
-            <div className="profile__content-password">
-                <span>введите новый пароль:</span>
-                <label className="placeholder" htmlFor="user-password">
-                    <input
-                        required
-                        type="password"
-                        id="user-password"
-                        className={
-                            errorPassword
-                                ? 'form__input form__input_invalid form__password'
-                                : 'form__input'
-                        }
-                        disabled={!isEditPassword}
-                        onChange={(e): void => {
-                            setPassword(e.target.value);
-
-                            const checkPasswordError =
-                                checkIncorrectPassword(e).incorrect;
-
-                            if (checkPasswordError) {
-                                setErrorPassword(checkPasswordError);
-
-                                setErrorMessagePassword(
-                                    checkIncorrectPassword(e).message
-                                );
-                            } else {
-                                comparePassword(
-                                    e.target.value,
-                                    passwordRepeat,
-                                    'First password'
-                                );
-                            }
-                        }}
-                    />
-                    <div className="placeholder__input form_big-first-letter">
-                        создайте пароль<span>*</span>
-                    </div>
-                    <p className="error-message">
-                        {errorPassword ? errorMessagePassword : ''}
-                    </p>
-                </label>
-            </div>
-            <div className="profile__content-password">
-                <span>повторите пароль:</span>
-                <label className="placeholder" htmlFor="user-password-repeat">
-                    <input
-                        required
-                        type="password"
-                        id="user-password-repeat"
-                        className={
-                            errorPasswordRepeat
-                                ? 'form__input form__input_invalid'
-                                : 'form__input'
-                        }
-                        disabled={!isEditPassword}
-                        onChange={(e): void => {
-                            setPasswordRepeat(e.target.value);
-
-                            const checkPasswordError =
-                                checkIncorrectPassword(e).incorrect;
-
-                            if (checkPasswordError) {
-                                setErrorPasswordRepeat(checkPasswordError);
-                                setErrorMessagePasswordRepeat(
-                                    checkIncorrectPassword(e).message
-                                );
-                            } else {
-                                comparePassword(
-                                    password,
-                                    e.target.value,
-                                    'Second password'
-                                );
-                            }
-                        }}
-                    />
-                    <div className="placeholder__input form_big-first-letter">
-                        повторите пароль<span>*</span>
-                    </div>
-                    <p className="error-message">
-                        {errorPasswordRepeat ? errorMessagePasswordRepeat : ''}
-                    </p>
-                </label>
-                {isEditPassword ? (
+                {isEditEmail ? (
                     <button
-                        type="submit"
+                        type="button"
                         className="menu__button_edit"
                         onClick={(e): void => {
                             e.preventDefault();
+                            setIsEditEmail(false);
+                            if (!editEmail) {
+                                setErrorEmail(true);
+                                setErrorMessageEmail('Это обязатальное поле');
+                            }
+                            if (errorEmail || !editEmail) return;
+                            editCustomerEmail(
+                                userId,
+                                editEmail,
+                                version,
+                                setVersion
+                            )
+                                .then(() => {
+                                    setChangeAuthData(true);
+                                    setEmail(editEmail);
+
+                                    setResultMessageEmail(
+                                        'e-mail успешно обновлен'
+                                    );
+                                    setTimeout(() => {
+                                        setResultMessageEmail('');
+                                    }, 1500);
+                                })
+                                .catch((err) => {
+                                    if (err.cause === 'emailError') {
+                                        setErrorEmail(true);
+                                        setErrorMessageEmail(
+                                            'такая почта уже существует'
+                                        );
+                                    }
+                                    if (err.cause === 'ServerError') {
+                                        document.body.textContent = err.message;
+                                        document.body.classList.add(
+                                            'error-connection'
+                                        );
+                                    }
+                                });
+                        }}
+                    >
+                        <img src={check} alt="check" />
+                    </button>
+                ) : (
+                    <button
+                        type="submit"
+                        className="menu__button_edit"
+                        onClick={(): void => {
+                            setIsEditEmail(true);
+                        }}
+                    >
+                        <img src={edit} alt="edit" />
+                    </button>
+                )}
+            </div>
+
+            <div className="profile__content-password-container">
+                {isEditPassword ? (
+                    <button
+                        type="submit"
+                        className="menu__button_edit menu__button_password"
+                        onClick={(e): void => {
+                            e.preventDefault();
+                            setIsEditPassword(false);
                             if (!passwordOld) {
                                 setErrorOldPassword(true);
                                 setErrorMessageOldPassword(
@@ -317,8 +207,6 @@ export function EditAuthorizationDataView(props: {
                                 !passwordRepeat
                             )
                                 return;
-                            setIsEditPassword(false);
-
                             editCustomerPassword(
                                 userId,
                                 passwordOld,
@@ -351,19 +239,229 @@ export function EditAuthorizationDataView(props: {
                                 });
                         }}
                     >
+                        <span>Изменить пароль</span>
                         <img src={check} alt="check" />
                     </button>
                 ) : (
                     <button
                         type="button"
-                        className="menu__button_edit"
+                        className="menu__button_edit menu__button_password"
                         onClick={(): void => {
                             setIsEditPassword(true);
                         }}
                     >
+                        <span>Изменить пароль</span>
                         <img src={edit} alt="edit" />
                     </button>
                 )}
+                <div className="profile__content-password">
+                    <span>введите пароль:</span>
+                    <label className="placeholder" htmlFor="password">
+                        <input
+                            required
+                            className={
+                                errorOldPassword
+                                    ? 'form__input form__input_invalid form__password'
+                                    : 'form__input'
+                            }
+                            type="password"
+                            id="password"
+                            disabled={!isEditPassword}
+                            onChange={(e): void => {
+                                setErrorOldPassword(
+                                    checkIncorrectPassword(e).incorrect
+                                );
+                                setErrorMessageOldPassword(
+                                    checkIncorrectPassword(e).message
+                                );
+                                setOldPassword(e.target.value);
+                            }}
+                        />
+                        <div className="placeholder__input form_big-first-letter">
+                            введите пароль<span data-name="anchor">*</span>
+                        </div>
+                        <p className="error-message">
+                            {errorOldPassword ? errorMessageOldPassword : ''}
+                        </p>
+                    </label>
+                </div>
+
+                <div className="profile__content-password">
+                    <span>введите новый пароль:</span>
+                    <label className="placeholder" htmlFor="user-password">
+                        <input
+                            required
+                            type="password"
+                            id="user-password"
+                            className={
+                                errorPassword
+                                    ? 'form__input form__input_invalid form__password'
+                                    : 'form__input'
+                            }
+                            disabled={!isEditPassword}
+                            onChange={(e): void => {
+                                setPassword(e.target.value);
+
+                                const checkPasswordError =
+                                    checkIncorrectPassword(e).incorrect;
+
+                                if (checkPasswordError) {
+                                    setErrorPassword(checkPasswordError);
+
+                                    setErrorMessagePassword(
+                                        checkIncorrectPassword(e).message
+                                    );
+                                } else {
+                                    comparePassword(
+                                        e.target.value,
+                                        passwordRepeat,
+                                        'First password'
+                                    );
+                                }
+                            }}
+                        />
+                        <div className="placeholder__input form_big-first-letter">
+                            создайте пароль<span data-name="anchor">*</span>
+                        </div>
+                        <p className="error-message">
+                            {errorPassword ? errorMessagePassword : ''}
+                        </p>
+                    </label>
+                </div>
+                <div className="profile__content-password">
+                    <span>повторите пароль:</span>
+                    <label
+                        className="placeholder"
+                        htmlFor="user-password-repeat"
+                    >
+                        <input
+                            required
+                            type="password"
+                            id="user-password-repeat"
+                            className={
+                                errorPasswordRepeat
+                                    ? 'form__input form__input_invalid'
+                                    : 'form__input'
+                            }
+                            disabled={!isEditPassword}
+                            onChange={(e): void => {
+                                setPasswordRepeat(e.target.value);
+
+                                const checkPasswordError =
+                                    checkIncorrectPassword(e).incorrect;
+
+                                if (checkPasswordError) {
+                                    setErrorPasswordRepeat(checkPasswordError);
+                                    setErrorMessagePasswordRepeat(
+                                        checkIncorrectPassword(e).message
+                                    );
+                                } else {
+                                    comparePassword(
+                                        password,
+                                        e.target.value,
+                                        'Second password'
+                                    );
+                                }
+                            }}
+                        />
+                        <div className="placeholder__input form_big-first-letter">
+                            повторите пароль<span>*</span>
+                        </div>
+                        <p className="error-message">
+                            {errorPasswordRepeat
+                                ? errorMessagePasswordRepeat
+                                : ''}
+                        </p>
+                    </label>
+                    {isEditPassword ? (
+                        <button
+                            type="submit"
+                            className="menu__button_edit"
+                            onClick={(e): void => {
+                                e.preventDefault();
+                                setIsEditPassword(false);
+                                if (!passwordOld) {
+                                    setErrorOldPassword(true);
+                                    setErrorMessageOldPassword(
+                                        'Это обязатальное поле'
+                                    );
+                                }
+                                if (!password) {
+                                    setErrorPassword(true);
+                                    setErrorMessagePassword(
+                                        'Это обязатальное поле'
+                                    );
+                                }
+                                if (!passwordRepeat) {
+                                    setErrorPasswordRepeat(true);
+                                    setErrorMessagePasswordRepeat(
+                                        'Это обязатальное поле'
+                                    );
+                                }
+                                if (password !== passwordRepeat) {
+                                    setErrorPasswordRepeat(true);
+                                    setErrorMessagePasswordRepeat(
+                                        'Пароли не совпадают'
+                                    );
+                                }
+                                if (
+                                    errorOldPassword ||
+                                    !passwordOld ||
+                                    errorPassword ||
+                                    !password ||
+                                    errorPasswordRepeat ||
+                                    !passwordRepeat
+                                )
+                                    return;
+                                setIsEditPassword(false);
+
+                                editCustomerPassword(
+                                    userId,
+                                    passwordOld,
+                                    passwordRepeat,
+                                    version,
+                                    setVersion
+                                )
+                                    .then(() => {
+                                        setChangeAuthData(true);
+                                        setResultMessagePassword(
+                                            'пароль успешно обновлен'
+                                        );
+                                        setTimeout(() => {
+                                            setResultMessagePassword('');
+                                        }, 1500);
+                                    })
+                                    .catch((err) => {
+                                        if (err.cause === 'passwordError') {
+                                            setErrorOldPassword(true);
+                                            setErrorMessageOldPassword(
+                                                'текущий пароль не верный'
+                                            );
+                                        }
+                                        if (err.cause === 'ServerError') {
+                                            document.body.textContent =
+                                                err.message;
+                                            document.body.classList.add(
+                                                'error-connection'
+                                            );
+                                        }
+                                    });
+                            }}
+                        >
+                            <img src={check} alt="check" />
+                        </button>
+                    ) : (
+                        <button
+                            type="button"
+                            className="menu__button_edit"
+                            onClick={(): void => {
+                                setIsEditPassword(true);
+                            }}
+                        >
+                            <img src={edit} alt="edit" />
+                        </button>
+                    )}
+                </div>
             </div>
         </div>
     );

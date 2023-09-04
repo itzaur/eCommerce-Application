@@ -16,17 +16,6 @@ function Footer(): JSX.Element {
                             <img src={rsschoolLogo} alt="logo" />
                         </Link>
                     </figure>
-                    <div className="social-logo">
-                        <Link to="/">
-                            <img src={githubLogo} alt="logo" />
-                        </Link>
-                        <Link to="/">
-                            <img src={githubLogo} alt="logo" />
-                        </Link>
-                        <Link to="/">
-                            <img src={githubLogo} alt="logo" />
-                        </Link>
-                    </div>
                 </div>
             </div>
             <div className="footer__title">
@@ -41,22 +30,38 @@ function Footer(): JSX.Element {
             <nav className="footer__nav">
                 <ul className="footer__nav-list">
                     <li className="footer__nav-item">
+                        <Link to="/">
+                            <span>Связаться с нами</span>
+                        </Link>
+                        <div className="social-logo">
+                            <Link to="/">
+                                <img src={githubLogo} alt="logo" />
+                            </Link>
+                            <Link to="/">
+                                <img src={githubLogo} alt="logo" />
+                            </Link>
+                            <Link to="/">
+                                <img src={githubLogo} alt="logo" />
+                            </Link>
+                        </div>
+                    </li>
+                    <li className="footer__nav-item">
                         <Link to="/about">
                             <span>О нас</span>
                         </Link>
                     </li>
                     <li className="footer__nav-item">
-                        <Link to="/store">
+                        <Link to="/store/souvenirs">
                             <span>Сувениры</span>
                         </Link>
                     </li>
                     <li className="footer__nav-item">
-                        <Link to="/store">
+                        <Link to="/store/cosmotours">
                             <span>Выбрать космотур</span>
                         </Link>
                     </li>
                     <li className="footer__nav-item">
-                        <Link to="/store">
+                        <Link to="/store/hotel">
                             <span>Выбрать номер</span>
                         </Link>
                     </li>
