@@ -320,6 +320,9 @@ function ProfilePage(): JSX.Element {
                                                     setResultMessageAddress
                                                 }
                                             />
+                                            <p className="success-message success-message--address">
+                                                {resultMessageAddress}
+                                            </p>
                                         </div>
 
                                         <div className="profile__address-action">
@@ -333,9 +336,6 @@ function ProfilePage(): JSX.Element {
                                                 добавить новый адрес
                                             </button>
                                         </div>
-                                        <p className="success-message">
-                                            {resultMessageAddress}
-                                        </p>
                                     </div>
                                 </div>
                             ) : (
@@ -397,9 +397,9 @@ function ProfilePage(): JSX.Element {
                                                 ? 'btn_action profile__button'
                                                 : 'btn_action profile__button  btn_un-action'
                                         }
-                                        onClick={(): void =>
-                                            setChangeAuthData(true)
-                                        }
+                                        onClick={(): void => {
+                                            setChangeAuthData(true);
+                                        }}
                                     >
                                         конфиденциальные данные
                                     </button>
@@ -410,9 +410,10 @@ function ProfilePage(): JSX.Element {
                                                 ? 'btn_action profile__button  btn_un-action'
                                                 : 'btn_action profile__button '
                                         }
-                                        onClick={(): void =>
-                                            setChangeAuthData(false)
-                                        }
+                                        onClick={(): void => {
+                                            setEditEmail(email);
+                                            setChangeAuthData(false);
+                                        }}
                                     >
                                         изменить
                                     </button>

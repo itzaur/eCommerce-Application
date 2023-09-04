@@ -8,6 +8,7 @@ function BreadCrumbs(props: {
     setSelectedCategory: React.Dispatch<React.SetStateAction<string>>;
     selectedCategoryPath: string;
     selectedProduct: string;
+    selectedProductPath: string;
 }): JSX.Element {
     const {
         selectedType,
@@ -17,6 +18,7 @@ function BreadCrumbs(props: {
         setSelectedCategory,
         selectedCategoryPath,
         selectedProduct,
+        selectedProductPath,
     } = props;
 
     return (
@@ -69,7 +71,7 @@ function BreadCrumbs(props: {
             {selectedProduct && (
                 <li>
                     <Link
-                        to={`/store/${selectedTypePath}/${selectedCategoryPath}/${selectedProduct}`}
+                        to={`/store/${selectedTypePath}/${selectedCategoryPath}/${selectedProductPath}`}
                     >
                         / {selectedProduct}
                     </Link>

@@ -195,6 +195,7 @@ function ProductDetail({
                     selectedProduct={
                         card?.masterData.current.name['ru-RU'] || ''
                     }
+                    selectedProductPath={card?.key || ''}
                 />
 
                 <button

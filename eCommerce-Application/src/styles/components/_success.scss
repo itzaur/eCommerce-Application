@@ -3,8 +3,7 @@
 .success-message {
     position: absolute;
 
-    left: 50%;
-    transform: translateX(-50%);
+    z-index: 20;
 
     padding-top: 0.5rem;
 
@@ -17,5 +16,10 @@
 
     @include mixins.respond-to('tablet') {
         padding-top: 1rem;
+    }
+
+    &--address {
+        right: 6rem;
+        top: 3rem;
     }
 }
