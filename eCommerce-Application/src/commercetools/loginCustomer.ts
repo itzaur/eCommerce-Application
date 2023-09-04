@@ -14,6 +14,10 @@ export async function loginCustomer(
             .execute();
         localStorage.setItem('token', JSON.stringify(tokenInstance.get()));
         localStorage.setItem('user', JSON.stringify(response.body.customer));
+        localStorage.setItem(
+            'version',
+            JSON.stringify(response.body.customer.version)
+        );
     } catch {
         try {
             const checkEmailExistResponse = await apiRoot

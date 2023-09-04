@@ -7,6 +7,7 @@ import {
     AboutPage,
     Store,
     NotFound,
+    ProfilePage,
 } from './components';
 import ProductDetail from './components/ProductPage/ProductPage';
 import { products } from './utils/constants';
@@ -23,6 +24,7 @@ function App(): JSX.Element {
         'registration',
         'store',
         'about',
+        'profile',
         ...products.map((product) => product.name),
     ];
     const tempArrCategoriesRoutes: React.ReactElement[] = [];
@@ -277,6 +279,7 @@ function App(): JSX.Element {
                 }
             />
             <Route path="/about" element={<AboutPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
             <Route path="*" element={<NotFound />} />
         </Routes>
     );

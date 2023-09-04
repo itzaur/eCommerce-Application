@@ -6,7 +6,7 @@
     --color-primary-alpha: hsl(181, 73%, 60%, 0.7);
     --color-primary-opacity: hsl(181, 73%, 60%, 0.15);
     --color-secondary: hsl(252, 12%, 40%);
-    --color-secondary-opacity: hsla(253, 12%, 40%, 0.502);
+    --color-secondary-opacity: hsla(0, 0%, 100%, 0.25);
     --color-error: hsl(0, 100%, 61%);
     --color-white: hsl(0, 0%, 100%);
     --color-white-alpha: hsla(0, 0%, 100%, 80%);
@@ -19,6 +19,8 @@
         0 0 0.2rem var(--color-white);
     --drop-shadow-light: 0 0 2rem var(--color-primary),
         0 0 0.6rem var(--color-primary);
+    --drop-shadow-dark: 0 0 2rem var(--color-secondary),
+        0 0 0.6rem var(--color-secondary);
     --footer-gradient: linear-gradient(
         to bottom,
         var(--color-black),

@@ -29,6 +29,9 @@ function Info(): JSX.Element {
                                 <img src={userLogo} alt="userIcon" />
                                 <h2>{user.salutation}</h2>
                             </div>
+                            <button className="btn" type="button">
+                                <Link to="/profile">Профиль</Link>
+                            </button>
                             <button
                                 className="btn btn--exit"
                                 type="button"
