@@ -21,6 +21,7 @@ function ProfilePage(): JSX.Element {
 
     const [customer, setCustomer] = useState<Customer>();
     const [email, setEmail] = useState('');
+    const [editEmail, setEditEmail] = useState('');
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('');
 
@@ -78,6 +79,11 @@ function ProfilePage(): JSX.Element {
     const [resultMessageName, setResultMessageName] = useState('');
     const [resultMessageSurname, setResultMessageSurname] = useState('');
     const [resultMessageBirthDay, setResultMessageBirthDay] = useState('');
+
+    const [errorEmail, setErrorEmail] = useState(false);
+    const [errorOldPassword, setErrorOldPassword] = useState(false);
+    const [errorPassword, setErrorPassword] = useState(false);
+    const [errorPasswordRepeat, setErrorPasswordRepeat] = useState(false);
 
     const getShippingAddresses = (data: Customer): Address[] => {
         return data.addresses.filter((item) => {
@@ -389,6 +395,12 @@ function ProfilePage(): JSX.Element {
                         <div className="profile__private-wrapper">
                             <div className="profile__private-header">
                                 <button
+                                    disabled={
+                                        !!errorEmail ||
+                                        !!errorOldPassword ||
+                                        !!errorPassword ||
+                                        !!errorPasswordRepeat
+                                    }
                                     type="button"
                                     className={
                                         changeAuthData
@@ -402,15 +414,22 @@ function ProfilePage(): JSX.Element {
                                     конфиденциальные данные
                                 </button>
                                 <button
+                                    disabled={
+                                        !!errorEmail ||
+                                        !!errorOldPassword ||
+                                        !!errorPassword ||
+                                        !!errorPasswordRepeat
+                                    }
                                     type="button"
                                     className={
                                         changeAuthData
                                             ? 'btn_action profile__button  btn_un-action'
                                             : 'btn_action profile__button '
                                     }
-                                    onClick={(): void =>
-                                        setChangeAuthData(false)
-                                    }
+                                    onClick={(): void => {
+                                        setEditEmail(email);
+                                        setChangeAuthData(false);
+                                    }}
                                 >
                                     изменить
                                 </button>
@@ -467,7 +486,8 @@ function ProfilePage(): JSX.Element {
                             ) : (
                                 <EditAuthorizationDataView
                                     userId={userId}
-                                    email={email}
+                                    editEmail={editEmail}
+                                    setEditEmail={setEditEmail}
                                     setEmail={setEmail}
                                     version={version}
                                     setVersion={setVersion}
@@ -477,6 +497,16 @@ function ProfilePage(): JSX.Element {
                                     }
                                     setResultMessagePassword={
                                         setResultMessagePassword
+                                    }
+                                    errorEmail={errorEmail}
+                                    setErrorEmail={setErrorEmail}
+                                    errorOldPassword={errorOldPassword}
+                                    setErrorOldPassword={setErrorOldPassword}
+                                    errorPassword={errorPassword}
+                                    setErrorPassword={setErrorPassword}
+                                    errorPasswordRepeat={errorPasswordRepeat}
+                                    setErrorPasswordRepeat={
+                                        setErrorPasswordRepeat
                                     }
                                 />
                             )}

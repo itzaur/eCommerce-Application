@@ -8,37 +8,48 @@ import { editCustomerPassword } from '../../commercetools/editCustomerPassword';
 
 export function EditAuthorizationDataView(props: {
     userId: string;
-    email: string;
+    editEmail: string;
+    setEditEmail: CallableFunction;
     setEmail: CallableFunction;
     version: number;
     setVersion: CallableFunction;
     setChangeAuthData: CallableFunction;
     setResultMessageEmail: CallableFunction;
     setResultMessagePassword: CallableFunction;
+    errorEmail: boolean;
+    setErrorEmail: CallableFunction;
+    errorOldPassword: boolean;
+    setErrorOldPassword: CallableFunction;
+    errorPassword: boolean;
+    setErrorPassword: CallableFunction;
+    errorPasswordRepeat: boolean;
+    setErrorPasswordRepeat: CallableFunction;
 }): JSX.Element {
     const {
         userId,
-        email,
+        editEmail,
+        setEditEmail,
         setEmail,
         version,
         setVersion,
         setChangeAuthData,
         setResultMessageEmail,
         setResultMessagePassword,
+        errorEmail,
+        setErrorEmail,
+        errorOldPassword,
+        setErrorOldPassword,
+        errorPassword,
+        setErrorPassword,
+        errorPasswordRepeat,
+        setErrorPasswordRepeat,
     } = props;
 
-    const [errorEmail, setErrorEmail] = useState(false);
     const [errorMessageEmail, setErrorMessageEmail] = useState('');
-
-    const [errorOldPassword, setErrorOldPassword] = useState(false);
     const [errorMessageOldPassword, setErrorMessageOldPassword] = useState('');
     const [passwordOld, setOldPassword] = useState('');
-
-    const [errorPassword, setErrorPassword] = useState(false);
     const [errorMessagePassword, setErrorMessagePassword] = useState('');
     const [password, setPassword] = useState('');
-
-    const [errorPasswordRepeat, setErrorPasswordRepeat] = useState(false);
     const [errorMessagePasswordRepeat, setErrorMessagePasswordRepeat] =
         useState('');
     const [passwordRepeat, setPasswordRepeat] = useState('');
@@ -81,14 +92,14 @@ export function EditAuthorizationDataView(props: {
                         }
                         type="text"
                         id="email"
-                        value={email}
+                        value={editEmail}
                         disabled={!isEditEmail}
                         onChange={(e): void => {
                             setErrorEmail(checkIncorrectEmail(e).incorrect);
                             setErrorMessageEmail(
                                 checkIncorrectEmail(e).message
                             );
-                            setEmail(e.target.value);
+                            setEditEmail(e.target.value);
                         }}
                     />
                     <p className="error-message">
@@ -100,22 +111,24 @@ export function EditAuthorizationDataView(props: {
                             className="menu__button_edit"
                             onClick={(e): void => {
                                 e.preventDefault();
-                                if (!email) {
+                                if (!editEmail) {
                                     setErrorEmail(true);
                                     setErrorMessageEmail(
                                         'Это обязатальное поле'
                                     );
                                 }
-                                if (errorEmail || !email) return;
+                                if (errorEmail || !editEmail) return;
                                 setIsEditEmail(false);
                                 editCustomerEmail(
                                     userId,
-                                    email,
+                                    editEmail,
                                     version,
                                     setVersion
                                 )
                                     .then(() => {
                                         setChangeAuthData(true);
+                                        setEmail(editEmail);
+
                                         setResultMessageEmail(
                                             'e-mail успешно обновлен'
                                         );
