@@ -285,7 +285,6 @@ export function EditAuthorizationDataView(props: {
                         </p>
                     </label>
                 </div>
-
                 <div className="profile__content-password">
                     <span>введите новый пароль:</span>
                     <label className="placeholder" htmlFor="user-password">
@@ -365,7 +364,7 @@ export function EditAuthorizationDataView(props: {
                             }}
                         />
                         <div className="placeholder__input form_big-first-letter">
-                            повторите пароль<span>*</span>
+                            повторите пароль<span data-name="anchor">*</span>
                         </div>
                         <p className="error-message">
                             {errorPasswordRepeat
@@ -373,94 +372,6 @@ export function EditAuthorizationDataView(props: {
                                 : ''}
                         </p>
                     </label>
-                    {isEditPassword ? (
-                        <button
-                            type="submit"
-                            className="menu__button_edit"
-                            onClick={(e): void => {
-                                e.preventDefault();
-                                setIsEditPassword(false);
-                                if (!passwordOld) {
-                                    setErrorOldPassword(true);
-                                    setErrorMessageOldPassword(
-                                        'Это обязатальное поле'
-                                    );
-                                }
-                                if (!password) {
-                                    setErrorPassword(true);
-                                    setErrorMessagePassword(
-                                        'Это обязатальное поле'
-                                    );
-                                }
-                                if (!passwordRepeat) {
-                                    setErrorPasswordRepeat(true);
-                                    setErrorMessagePasswordRepeat(
-                                        'Это обязатальное поле'
-                                    );
-                                }
-                                if (password !== passwordRepeat) {
-                                    setErrorPasswordRepeat(true);
-                                    setErrorMessagePasswordRepeat(
-                                        'Пароли не совпадают'
-                                    );
-                                }
-                                if (
-                                    errorOldPassword ||
-                                    !passwordOld ||
-                                    errorPassword ||
-                                    !password ||
-                                    errorPasswordRepeat ||
-                                    !passwordRepeat
-                                )
-                                    return;
-                                setIsEditPassword(false);
-
-                                editCustomerPassword(
-                                    userId,
-                                    passwordOld,
-                                    passwordRepeat,
-                                    version,
-                                    setVersion
-                                )
-                                    .then(() => {
-                                        setChangeAuthData(true);
-                                        setResultMessagePassword(
-                                            'пароль успешно обновлен'
-                                        );
-                                        setTimeout(() => {
-                                            setResultMessagePassword('');
-                                        }, 1500);
-                                    })
-                                    .catch((err) => {
-                                        if (err.cause === 'passwordError') {
-                                            setErrorOldPassword(true);
-                                            setErrorMessageOldPassword(
-                                                'текущий пароль не верный'
-                                            );
-                                        }
-                                        if (err.cause === 'ServerError') {
-                                            document.body.textContent =
-                                                err.message;
-                                            document.body.classList.add(
-                                                'error-connection'
-                                            );
-                                        }
-                                    });
-                            }}
-                        >
-                            <img src={check} alt="check" />
-                        </button>
-                    ) : (
-                        <button
-                            type="button"
-                            className="menu__button_edit"
-                            onClick={(): void => {
-                                setIsEditPassword(true);
-                            }}
-                        >
-                            <img src={edit} alt="edit" />
-                        </button>
-                    )}
                 </div>
             </div>
         </div>

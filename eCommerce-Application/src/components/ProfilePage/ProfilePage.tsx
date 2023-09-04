@@ -387,29 +387,6 @@ function ProfilePage(): JSX.Element {
                             )}
                         </div>
 
-                        <PersonalDataView
-                            userId={userId}
-                            version={version}
-                            setVersion={setVersion}
-                            name={name}
-                            setName={setName}
-                            surname={surname}
-                            setSurname={setSurname}
-                            birthDayValue={birthDayValue}
-                            setBirthDayValue={setBirthDayValue}
-                            birthMonthValue={birthMonthValue}
-                            setBirthMonthValue={setBirthMonthValue}
-                            birthYearValue={birthYearValue}
-                            setBirthYearValue={setBirthYearValue}
-                            customer={customer}
-                            defaultShippingAddress={defaultShippingAddress}
-                            resultMessageName={resultMessageName}
-                            setResultMessageName={setResultMessageName}
-                            resultMessageSurname={resultMessageSurname}
-                            setResultMessageSurname={setResultMessageSurname}
-                            resultMessageBirthDay={resultMessageBirthDay}
-                            setResultMessageBirthDay={setResultMessageBirthDay}
-                        />
                         <div className="profile__private">
                             <div className="profile__private-wrapper">
                                 <div className="profile__private-header">
