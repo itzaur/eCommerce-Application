@@ -19,7 +19,9 @@ function Modal({
                     type="button"
                     onClick={(): void => {
                         setActive(false);
-                        onClick();
+                        if (onClick) {
+                            onClick();
+                        }
                     }}
                 >
                     Закрыть

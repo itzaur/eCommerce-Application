@@ -71,7 +71,13 @@ function BreadCrumbs(props: {
             {selectedProduct && (
                 <li>
                     <Link
-                        to={`/store/${selectedTypePath}/${selectedCategoryPath}/${selectedProductPath}`}
+                        to={`/store${
+                            selectedTypePath ? `/${selectedTypePath}` : ''
+                        }${
+                            selectedCategoryPath
+                                ? `/${selectedCategoryPath}`
+                                : ''
+                        }/${selectedProductPath}`}
                     >
                         / {selectedProduct}
                     </Link>

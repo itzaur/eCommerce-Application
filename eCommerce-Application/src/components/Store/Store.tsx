@@ -126,6 +126,7 @@ function Store({
                     setSelectedCategory={setSelectedCategory}
                     selectedCategoryPath={selectedCategoryPath}
                     selectedProduct=""
+                    selectedProductPath=""
                 />
                 <section className="store__content">
                     <SideBar

@@ -4,6 +4,7 @@ export type ModalProps = {
     children: React.ReactNode;
     onClick?: () => void;
 };
+
 export type Category = {
     parent: { name: string; path: string; id: string };
     items: { name: string; path: string; id: string }[];
