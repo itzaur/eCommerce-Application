@@ -7,11 +7,14 @@
 .select {
     @include mixins.flex(null, space-between, center);
     width: 100%;
-    padding: 1rem;
     min-height: 6rem;
-    border-radius: 0.5rem;
+
+    padding: 1rem;
+
     background-color: var(--color-white);
+
     cursor: pointer;
+
     transition: background-color 0.3s;
 
     &-clicked {
@@ -26,6 +29,7 @@
 .caret {
     width: 0;
     height: 0;
+
     border-left: 0.5rem solid transparent;
     border-right: 0.5rem solid transparent;
     border-top: 0.6rem solid var(--color-black);
@@ -37,40 +41,94 @@
 }
 
 .menu {
-    padding: 1rem 2rem;
-    background-color: var(--color-white);
-    border: 1px var(--color-secondary) solid;
-    box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.5);
-    border-radius: 0.5rem;
-    // color: #9fa5b5;
     position: absolute;
-    top: 7rem;
+    top: 6rem;
     left: 50%;
+
     width: 100%;
     transform: translate(-50%);
+
+    padding: 0.5rem;
+
+    background-color: var(--color-white);
+    border: 1px var(--color-secondary) solid;
+    box-shadow: 0 0.5rem 2rem var(--color-header);
+
     opacity: 0;
+
     pointer-events: none;
-    // display: none;
+
     transition: all 0.5s;
+
     z-index: 3;
+
+    @include mixins.respond-to('tablet') {
+        padding: 1rem 2rem;
+    }
+
+    &__wrapper {
+        --gap: 0;
+        @include mixins.flex(null, space-between, center);
+        flex-wrap: wrap;
+
+        @include mixins.respond-to('tablet') {
+            --gap: 1rem;
+            flex-wrap: nowrap;
+        }
+
+        & button {
+            filter: invert(0);
+            align-self: center;
+        }
+    }
+
+    &__button_edit {
+        align-self: flex-start;
+
+        filter: invert(1);
+
+        cursor: pointer;
+
+        order: -1;
+
+        @include mixins.respond-to('tablet') {
+            align-self: flex-end;
+
+            order: 0;
+        }
+
+        img {
+            height: 2rem;
+            width: 2rem;
+            min-width: 2rem;
+        }
+    }
+
+    &__button_trash {
+        & img {
+            width: 3rem;
+            min-width: 3rem;
+            height: 3rem;
+        }
+    }
 
     &-open {
         pointer-events: auto;
-        // display: block;
+
         opacity: 1;
     }
 
     & button {
         display: block;
-        // width: 100%;
+
         padding: 1rem 1rem;
-        // margin: 0.3rem 0;
-        border-radius: 0.5rem;
+
         cursor: pointer;
+
         &:after {
             display: block;
             content: '';
-            border-bottom: 2px solid var(--color-primary);
+            border-bottom: 1px solid var(--color-primary);
             transform: scaleX(0);
             transition: transform 0.3s ease-in-out;
         }
@@ -79,22 +137,21 @@
             &:after {
                 transform: scaleX(1);
             }
-            // scale: 0.9;
-            // background-color: #2a2d35;
         }
     }
-    &__wrapper {
-        @include mixins.flex(null, space-between, center);
-    }
 
-    &__button {
-        &_trash {
-            // width: 0;
-            // display: inline-block;
+    &__button_password {
+        margin-top: 1rem;
+
+        filter: invert(0);
+
+        & img {
+            filter: invert(1);
+        }
+
+        & span {
+            margin-right: 1rem;
+            color: var(--color-primary);
         }
     }
-}
-
-.active {
-    // background-color: #23242a;
 }

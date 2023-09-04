@@ -127,8 +127,8 @@
 }
 
 .footer {
-    font-family: var(--ff-primary);
-    font-size: var(--fs-small);
+    font-family: var(--ff-product);
+    font-size: var(--fs-paragraph);
     text-align: center;
 
     @include mixins.respond-to('desktop') {
@@ -140,13 +140,17 @@
             width: 100%;
 
             @include mixins.respond-to('desktop') {
-                width: min(20ch, 100%);
+                width: min(30ch, 100%);
             }
         }
     }
 
     &__accent {
         text-align: right;
+    }
+
+    &__nav span {
+        text-transform: capitalize;
     }
 }
 
@@ -345,16 +349,57 @@
 }
 
 .profile {
-    &__title {
-        font-family: var(--fs-secondary);
-        font-size: var(--fs-big);
-        color: var(--color-white);
+    & span {
+        font-family: var(--ff-secondary);
+        font-size: var(--fs-small);
     }
 
-    &__info-title {
-        font-family: var(--fs-secondary);
-        font-size: 1rem;
-        // font-size: var(--fs-small);
-        color: var(--color-primary);
+    & label {
+        font-family: var(--ff-product);
+        font-size: var(--fs-small);
+    }
+
+    &__title {
+        font-family: var(--ff-secondary);
+        font-size: var(--fs-paragraph);
+    }
+
+    &__info {
+        &-title {
+            font-family: var(--ff-secondary);
+            font-size: var(--fs-small);
+        }
+
+        &-name {
+            span {
+                font-family: var(--ff-product);
+            }
+
+            & .placeholder {
+                overflow: visible;
+            }
+        }
+    }
+
+    &__address-header,
+    &__private-header {
+        button {
+            font-size: var(--fs-small);
+        }
+    }
+
+    .selected {
+        font-size: var(--fs-small);
+    }
+
+    .menu {
+        & button {
+            font-family: var(--ff-product);
+            font-size: var(--fs-small);
+        }
+    }
+
+    &__button {
+        font-size: var(--fs-small);
     }
 }

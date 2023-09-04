@@ -13,10 +13,6 @@
 
     color: var(--color-white);
 
-    box-shadow:
-        inset 0rem 3.8rem 4rem -4rem var(--color-primary),
-        inset 0rem -3.8rem 4rem -4rem var(--color-primary);
-
     @include mixins.respond-to('desktop') {
         column-gap: 5rem;
 

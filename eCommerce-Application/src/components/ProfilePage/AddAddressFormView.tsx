@@ -94,7 +94,7 @@ export function AddAddressFormView(props: {
 
     return (
         <form className="profile__address-wrapper">
-            <div className="form__input-pair">
+            <div className="form__input-pair form__input-pair--profile">
                 <div className="profile__info-title">
                     {addressTypeView
                         ? `${isEdit ? 'Изменить' : 'Добавить'} адрес доставки`
@@ -104,18 +104,18 @@ export function AddAddressFormView(props: {
                 </div>
                 <button
                     type="button"
-                    className="btn_action"
+                    className="btn_action btn_action--close"
                     onClick={(): void => {
                         setAddAddressFormView(true);
                         setIsEdit(false);
                     }}
                 >
-                    Close
+                    Закрыть
                 </button>
             </div>
 
             <fieldset className="form__input-group profile__address-form">
-                <div className="form__input-pair">
+                <div className="form__input-pair form__input-pair--profile">
                     <div className="form__inputs-wrapper">
                         <AvailableCountry
                             errorCountry={errorCountry}
@@ -161,7 +161,7 @@ export function AddAddressFormView(props: {
                         </label>
                     </div>
                 </div>
-                <div className="form__input-pair">
+                <div className="form__input-pair form__input-pair--profile">
                     <div className="form__inputs-wrapper">
                         <label
                             className="placeholder"
@@ -253,7 +253,7 @@ export function AddAddressFormView(props: {
                         </p>
                     </label>
                 </div>
-                <div className="form__input-pair">
+                <div className="form__input-pair form__input-pair--profile">
                     <label
                         className="form__input_checkbox"
                         htmlFor="shipping-address-checkbox"

@@ -36,7 +36,7 @@ function Header({
                         </Link>
                     </li>
                     {withSearchValue && (
-                        <li className="nav__item">
+                        <li className="nav__item nav__item--search">
                             <button
                                 type="button"
                                 onClick={(): void => {

@@ -260,182 +260,186 @@ export function PersonalDataView(props: {
                 </div>
             </div>
 
-            <div className="form__input-trio">
-                <div className="form__inputs-wrapper">
-                    <label className="placeholder" htmlFor="birth-day">
-                        <input
-                            disabled={!isEditBirth}
-                            value={birthDayValue}
-                            type="text"
-                            id="birth-day"
-                            className={
-                                errorBirthDay
-                                    ? 'form__input form__input_invalid'
-                                    : 'form__input'
-                            }
-                            onChange={(e): void => {
-                                setErrorBirthDay(
-                                    checkIncorrectBirthDay(e).incorrect
-                                );
-                                setErrorMessageBirthDay(
-                                    checkIncorrectBirthDay(e).message
-                                );
-                                setBirthDayValue(e.target.value);
-                            }}
-                        />
-                        <div className="placeholder__input form_big-first-letter">
-                            число<span>*</span>
-                        </div>
-                        <p className="error-message">
-                            {errorBirthDay ? errorMessageBirthDay : ''}
-                        </p>
-                    </label>
+            <div className="profile__info-line">
+                <div className="profile__info-title profile-birthday">
+                    дата рождения:
                 </div>
-                <div className="form__inputs-wrapper">
-                    <label className="placeholder" htmlFor="birth-month">
-                        <input
-                            disabled={!isEditBirth}
-                            value={birthMonthValue}
-                            type="text"
-                            id="birth-month"
-                            className={
-                                errorBirthMonth
-                                    ? 'form__input form__input_invalid'
-                                    : 'form__input'
-                            }
-                            onChange={(e): void => {
-                                setErrorBirthMonth(
-                                    checkIncorrectBirthMonth(e).incorrect
-                                );
-                                setErrorMessageBirthMonth(
-                                    checkIncorrectBirthMonth(e).message
-                                );
-                                setBirthMonthValue(e.target.value);
-                            }}
-                        />
-                        <div className="placeholder__input form_big-first-letter">
-                            месяц<span>*</span>
-                        </div>
-                        <p className="error-message">
-                            {errorBirthMonth ? errorMessageBirthMonth : ''}
-                        </p>
-                        <p className="success-message">
-                            {resultMessageBirthDay}
-                        </p>
-                    </label>
-                </div>
-                <div className="form__inputs-wrapper">
-                    <label className="placeholder" htmlFor="birth-year">
-                        <input
-                            disabled={!isEditBirth}
-                            value={birthYearValue}
-                            type="text"
-                            id="birth-year"
-                            className={
-                                errorBirthYear
-                                    ? 'form__input form__input_invalid'
-                                    : 'form__input'
-                            }
-                            onChange={(e): void => {
-                                setErrorBirthYear(
-                                    checkIncorrectBirthYear(e).incorrect
-                                );
-                                setErrorMessageBirthYear(
-                                    checkIncorrectBirthYear(e).message
-                                );
-                                setBirthYearValue(e.target.value);
-                            }}
-                        />
-                        <div className="placeholder__input form_big-first-letter">
-                            год<span>*</span>
-                        </div>
-                        <p className="error-message">
-                            {errorBirthYear ? errorMessageBirthYear : ''}
-                        </p>
-                    </label>
-                </div>
-                <p className="error-message error-message--age">
-                    {errorAge ? errorMessageAge : ''}
-                </p>
-            </div>
+                <div className="form__input-trio form__input-trio--profile">
+                    <div className="form__inputs-wrapper form__inputs-wrapper--profile">
+                        <label className="placeholder" htmlFor="birth-day">
+                            <input
+                                disabled={!isEditBirth}
+                                value={birthDayValue}
+                                type="text"
+                                id="birth-day"
+                                className={
+                                    errorBirthDay
+                                        ? 'form__input form__input_invalid'
+                                        : 'form__input'
+                                }
+                                onChange={(e): void => {
+                                    setErrorBirthDay(
+                                        checkIncorrectBirthDay(e).incorrect
+                                    );
+                                    setErrorMessageBirthDay(
+                                        checkIncorrectBirthDay(e).message
+                                    );
+                                    setBirthDayValue(e.target.value);
+                                }}
+                            />
+                            <div className="placeholder__input form_big-first-letter">
+                                число<span>*</span>
+                            </div>
+                            <p className="error-message">
+                                {errorBirthDay ? errorMessageBirthDay : ''}
+                            </p>
+                        </label>
+                    </div>
+                    <div className="form__inputs-wrapper form__inputs-wrapper--profile">
+                        <label className="placeholder" htmlFor="birth-month">
+                            <input
+                                disabled={!isEditBirth}
+                                value={birthMonthValue}
+                                type="text"
+                                id="birth-month"
+                                className={
+                                    errorBirthMonth
+                                        ? 'form__input form__input_invalid'
+                                        : 'form__input'
+                                }
+                                onChange={(e): void => {
+                                    setErrorBirthMonth(
+                                        checkIncorrectBirthMonth(e).incorrect
+                                    );
+                                    setErrorMessageBirthMonth(
+                                        checkIncorrectBirthMonth(e).message
+                                    );
+                                    setBirthMonthValue(e.target.value);
+                                }}
+                            />
+                            <div className="placeholder__input form_big-first-letter">
+                                месяц<span>*</span>
+                            </div>
+                            <p className="error-message">
+                                {errorBirthMonth ? errorMessageBirthMonth : ''}
+                            </p>
+                            <p className="success-message">
+                                {resultMessageBirthDay}
+                            </p>
+                        </label>
+                    </div>
+                    <div className="form__inputs-wrapper form__inputs-wrapper--profile">
+                        <label className="placeholder" htmlFor="birth-year">
+                            <input
+                                disabled={!isEditBirth}
+                                value={birthYearValue}
+                                type="text"
+                                id="birth-year"
+                                className={
+                                    errorBirthYear
+                                        ? 'form__input form__input_invalid'
+                                        : 'form__input'
+                                }
+                                onChange={(e): void => {
+                                    setErrorBirthYear(
+                                        checkIncorrectBirthYear(e).incorrect
+                                    );
+                                    setErrorMessageBirthYear(
+                                        checkIncorrectBirthYear(e).message
+                                    );
+                                    setBirthYearValue(e.target.value);
+                                }}
+                            />
+                            <div className="placeholder__input form_big-first-letter">
+                                год<span>*</span>
+                            </div>
+                            <p className="error-message">
+                                {errorBirthYear ? errorMessageBirthYear : ''}
+                            </p>
+                        </label>
+                    </div>
+                    <p className="error-message error-message--age">
+                        {errorAge ? errorMessageAge : ''}
+                    </p>
+                    {isEditBirth ? (
+                        <button
+                            type="submit"
+                            className="menu__button_edit"
+                            onClick={(e): void => {
+                                e.preventDefault();
+                                setIsEditBirth(false);
+                                setErrorAge(checkIncorrectAge().incorrect);
+                                setErrorMessageAge(checkIncorrectAge().message);
 
-            {isEditBirth ? (
-                <button
-                    type="submit"
-                    className="menu__button_edit"
-                    onClick={(e): void => {
-                        e.preventDefault();
-                        setIsEditBirth(false);
-                        setErrorAge(checkIncorrectAge().incorrect);
-                        setErrorMessageAge(checkIncorrectAge().message);
-
-                        if (!birthDayValue) {
-                            setErrorBirthDay(true);
-                            setErrorMessageBirthDay('Это обязатальное поле');
-                        }
-                        if (!birthMonthValue) {
-                            setErrorBirthMonth(true);
-                            setErrorMessageBirthMonth('Это обязатальное поле');
-                        }
-                        if (!birthYearValue) {
-                            setErrorBirthYear(true);
-                            setErrorMessageBirthYear('Это обязатальное поле');
-                        }
-
-                        if (
-                            errorBirthDay ||
-                            !birthDayValue ||
-                            errorBirthMonth ||
-                            !birthMonthValue ||
-                            errorBirthYear ||
-                            !birthYearValue ||
-                            getAge() < 18
-                        )
-                            return;
-                        editCustomerAge(
-                            userId,
-                            birthDayValue,
-                            birthMonthValue,
-                            birthYearValue,
-                            version,
-                            setVersion
-                        )
-                            .then(() => {
-                                setResultMessageBirthDay(
-                                    'дата рождения изменена'
-                                );
-                                setTimeout(() => {
-                                    setResultMessageBirthDay('');
-                                }, 1500);
-                            })
-                            .catch((err) => {
-                                if (err.cause === 'ServerError') {
-                                    document.body.textContent = err.message;
-                                    document.body.classList.add(
-                                        'error-connection'
+                                if (!birthDayValue) {
+                                    setErrorBirthDay(true);
+                                    setErrorMessageBirthDay(
+                                        'Это обязатальное поле'
                                     );
                                 }
-                            });
-                    }}
-                >
-                    <img src={check} alt="check" />
-                </button>
-            ) : (
-                <button
-                    type="button"
-                    className="menu__button_edit"
-                    onClick={(): void => {
-                        setIsEditBirth(true);
-                    }}
-                >
-                    <img src={edit} alt="edit" />
-                </button>
-            )}
+                                if (!birthMonthValue) {
+                                    setErrorBirthMonth(true);
+                                    setErrorMessageBirthMonth(
+                                        'Это обязатальное поле'
+                                    );
+                                }
+                                if (!birthYearValue) {
+                                    setErrorBirthYear(true);
+                                    setErrorMessageBirthYear(
+                                        'Это обязатальное поле'
+                                    );
+                                }
 
-            <div className="profile__info-line">
-                <div className="profile__info-title">дата рождения:</div>
-                <div className="profile__info-name">
-                    <span>{customer?.dateOfBirth}</span>
+                                if (
+                                    errorBirthDay ||
+                                    !birthDayValue ||
+                                    errorBirthMonth ||
+                                    !birthMonthValue ||
+                                    errorBirthYear ||
+                                    !birthYearValue ||
+                                    getAge() < 18
+                                )
+                                    return;
+                                editCustomerAge(
+                                    userId,
+                                    birthDayValue,
+                                    birthMonthValue,
+                                    birthYearValue,
+                                    version,
+                                    setVersion
+                                )
+                                    .then(() => {
+                                        setResultMessageBirthDay(
+                                            'дата рождения изменена'
+                                        );
+                                        setTimeout(() => {
+                                            setResultMessageBirthDay('');
+                                        }, 1500);
+                                    })
+                                    .catch((err) => {
+                                        if (err.cause === 'ServerError') {
+                                            document.body.textContent =
+                                                err.message;
+                                            document.body.classList.add(
+                                                'error-connection'
+                                            );
+                                        }
+                                    });
+                            }}
+                        >
+                            <img src={check} alt="check" />
+                        </button>
+                    ) : (
+                        <button
+                            type="button"
+                            className="menu__button_edit"
+                            onClick={(): void => {
+                                setIsEditBirth(true);
+                            }}
+                        >
+                            <img src={edit} alt="edit" />
+                        </button>
+                    )}
                 </div>
             </div>
             <div className="profile__info-line">

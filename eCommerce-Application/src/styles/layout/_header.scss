@@ -56,16 +56,14 @@
     }
 
     .nav {
-        @include mixins.respond-to('mobile') {
-            height: 20rem;
-        }
         @include mixins.respond-to('tablet') {
             height: auto;
         }
+
         &__list {
             position: relative;
             --gap: 2rem;
-            @include mixins.flex(null, center, flex-start);
+            @include mixins.flex(null, center, flex-end);
             flex-wrap: wrap;
 
             padding-block: 1rem;
@@ -101,6 +99,29 @@
                 @include mixins.flex(column, center, center);
 
                 cursor: pointer;
+            }
+
+            &--search {
+                order: 1;
+
+                & button img,
+                & button h3 {
+                    width: 0;
+
+                    visibility: hidden;
+                    opacity: 0;
+
+                    @include mixins.respond-to('tablet') {
+                        width: auto;
+                        visibility: visible;
+                        opacity: 1;
+                        order: 0;
+                    }
+                }
+
+                @include mixins.respond-to('tablet') {
+                    order: 0;
+                }
             }
         }
 
