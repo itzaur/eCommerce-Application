@@ -101,13 +101,8 @@ function ProductDetail({
           })
         : '';
     product.discount = card?.masterData.current.masterVariant.prices
-        ? (
-              (card?.masterData.current.masterVariant.prices[0].discounted
-                  ?.value.centAmount || 0) / 100
-          ).toLocaleString(product.currency, {
-              style: 'currency',
-              currency: product.currency,
-          })
+        ? (card?.masterData.current.masterVariant.prices[0].discounted?.value
+              .centAmount || 0) / 100
         : '';
 
     const [modalActive, setModalActive] = useState(false);
@@ -286,7 +281,7 @@ function ProductDetail({
                         <div className="info-price">
                             <div
                                 className={
-                                    product.discount !== '$0.00'
+                                    product.discount !== 0
                                         ? 'info-discount'
                                         : 'info-discount--inactive'
                                 }
@@ -296,7 +291,7 @@ function ProductDetail({
                             </div>
                             <div
                                 className={
-                                    product.discount !== '$0.00'
+                                    product.discount !== 0
                                         ? 'info-value--inactive'
                                         : 'info-value info-value--active'
                                 }
@@ -305,13 +300,19 @@ function ProductDetail({
                             </div>
                             <div className="info-value">
                                 <span className="info-value__discount">
-                                    {product.discount !== '$0.00'
-                                        ? product.discount
+                                    {product.discount !== 0
+                                        ? product.discount.toLocaleString(
+                                              product.currency,
+                                              {
+                                                  style: 'currency',
+                                                  currency: product.currency,
+                                              }
+                                          )
                                         : ''}
                                 </span>
                                 <span
                                     className={
-                                        product.discount !== '$0.00'
+                                        product.discount !== 0
                                             ? 'info-value__price'
                                             : 'info-value__price info-value__price-active'
                                     }
