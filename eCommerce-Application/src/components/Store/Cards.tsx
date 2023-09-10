@@ -1,4 +1,4 @@
-import React, { MouseEvent } from 'react';
+import React, { MouseEvent, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ProductProjection } from '@commercetools/platform-sdk';
 
@@ -6,44 +6,43 @@ import cartIcon from '../../assets/images/cart-icon.png';
 import favouriteIcon from '../../assets/images/favourite-icon.png';
 
 function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
+    const currentCardRef = useRef<Element | null>(null);
+    const [buttonDescriptionTexcontent, setButtonDescriptionTexcontent] =
+        useState('Показать описание ▼');
+
     const scrollToTop = (event: React.MouseEvent<HTMLElement>): void => {
         const target = event.target as HTMLElement;
         if (target.className.includes('btn')) return;
 
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
     };
-    function showHideDescription(e: MouseEvent, card: ProductProjection): void {
+    function showHideDescription(e: MouseEvent): void {
         e.preventDefault();
-        if (card.key) {
-            document
-                .querySelector(`#${card.key} .card__paragraph`)
-                ?.classList.toggle('card__description_open');
+        if (e.target instanceof HTMLElement) {
+            currentCardRef.current = e.target.previousElementSibling;
 
-            (e.target as HTMLElement).textContent =
-                (e.target as HTMLElement).textContent === 'Показать описание ▼'
+            currentCardRef.current?.classList.toggle('card__description_open');
+
+            setButtonDescriptionTexcontent(
+                buttonDescriptionTexcontent === 'Показать описание ▼'
                     ? 'Скрыть описание ▲'
-                    : 'Показать описание ▼';
+                    : 'Показать описание ▼'
+            );
         }
     }
 
     return (
         <div className="cards">
             {cards.map((card, i: number) => (
-                <Link key={i} to={`./${card.key}`} onClick={scrollToTop}>
+                <Link key={card.id} to={`./${card.key}`} onClick={scrollToTop}>
                     <div key={i} className="card" id={card.key}>
                         <figure className="card__img">
-                            <img
-                                src={
-                                    card.masterVariant.images
-                                        ? card.masterVariant.images[0].url
-                                        : ''
-                                }
-                                alt={
-                                    card.masterVariant.images
-                                        ? card.masterVariant.images[0].label
-                                        : ''
-                                }
-                            />
+                            {card.masterVariant.images && (
+                                <img
+                                    src={card.masterVariant.images[0].url}
+                                    alt={card.masterVariant.images[0].label}
+                                />
+                            )}
                         </figure>
                         <div className="card__content">
                             <div className="card__details">
@@ -93,11 +92,20 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
                                     </div>
                                 )}
                                 <div className="card__icons">
-                                    <img src={cartIcon} alt="cart-icon" />
-                                    <img
-                                        src={favouriteIcon}
-                                        alt="favourite-icon"
-                                    />
+                                    <button
+                                        type="button"
+                                        onClick={(): void => {
+                                            //
+                                        }}
+                                    >
+                                        <img src={cartIcon} alt="cart-icon" />
+                                    </button>
+                                    <button type="button">
+                                        <img
+                                            src={favouriteIcon}
+                                            alt="favourite-icon"
+                                        />
+                                    </button>
                                 </div>
                             </div>
                             <h2 className="card__title">
@@ -105,19 +113,17 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
                             </h2>
                             <div className="card__paragraph">
                                 <p className="card__description">
-                                    {card.description
-                                        ? card.description['ru-RU']
-                                        : ''}
+                                    {card?.description?.['ru-RU'] || ''}
                                 </p>
                             </div>
                             <button
                                 type="button"
                                 className="btn card__description-btn"
                                 onClick={(e): void => {
-                                    showHideDescription(e, card);
+                                    showHideDescription(e);
                                 }}
                             >
-                                Показать описание ▼
+                                {buttonDescriptionTexcontent}
                             </button>
                         </div>
                     </div>

@@ -10,11 +10,11 @@ import {
     ProfilePage,
 } from './components';
 import ProductDetail from './components/ProductPage/ProductPage';
-import { products } from './utils/constants';
+import { products, setErrorBodyDOM } from './utils/constants';
 import { getCategories } from './commercetools/getCategories';
 import { getProductsByProductType } from './commercetools/getProductsByType';
 import { getProductsBySubcategory } from './commercetools/getProductsBySubcategory';
-import { Category } from './types';
+import { CategoryCustom } from './types';
 
 function App(): JSX.Element {
     const location = useLocation();
@@ -28,7 +28,7 @@ function App(): JSX.Element {
         ...products.map((product) => product.name),
     ];
     const tempArrCategoriesRoutes: React.ReactElement[] = [];
-    const [categories, setCategories] = useState<Category[]>([]);
+    const [categories, setCategories] = useState<CategoryCustom[]>([]);
     const [categoriesRoutes, setCategoriesRoutes] = useState<
         React.ReactElement[]
     >([]);
@@ -38,23 +38,24 @@ function App(): JSX.Element {
         .filter((el) => el)
         .at(-1) as string;
 
-    function setMainId(categoriesArr: Category[]): void {
+    function setMainId(categoriesArr: CategoryCustom[]): void {
         if (paths.includes(path)) {
             root?.setAttribute('id', path);
         } else if (location.pathname === '/') {
             root?.setAttribute('id', 'main');
         } else if (categoriesArr.length) {
             let categoryFound = false;
+            const setIdAttribute = (): void => {
+                categoryFound = true;
+                root?.setAttribute('id', 'store');
+            };
             categoriesArr.forEach((category) => {
                 if (category.parent.path === path) {
-                    categoryFound = true;
-                    root?.setAttribute('id', 'store');
-                    return;
+                    setIdAttribute();
                 }
                 category.items.forEach((child) => {
                     if (child.path === path) {
-                        categoryFound = true;
-                        root?.setAttribute('id', 'store');
+                        setIdAttribute();
                     }
                 });
             });
@@ -65,7 +66,7 @@ function App(): JSX.Element {
     }
 
     async function getRoutes(
-        categoriesArr: Category[]
+        categoriesArr: CategoryCustom[]
     ): Promise<ReactElement[]> {
         categoriesArr.forEach((category) => {
             tempArrCategoriesRoutes.push(
@@ -156,8 +157,7 @@ function App(): JSX.Element {
                     });
                 })
                 .catch((err: Error) => {
-                    document.body.textContent = err.message;
-                    document.body.classList.add('error-connection');
+                    setErrorBodyDOM(err);
                 });
 
             category.items.forEach((item) => {
@@ -225,8 +225,7 @@ function App(): JSX.Element {
                         });
                     })
                     .catch((err: Error) => {
-                        document.body.textContent = err.message;
-                        document.body.classList.add('error-connection');
+                        setErrorBodyDOM(err);
                     });
             });
         });
@@ -247,15 +246,13 @@ function App(): JSX.Element {
                                 setPageLoaded(true);
                             })
                             .catch((err: Error) => {
-                                document.body.textContent = err.message;
-                                document.body.classList.add('error-connection');
+                                setErrorBodyDOM(err);
                             });
                     }
                 })
 
                 .catch((err: Error) => {
-                    document.body.textContent = err.message;
-                    document.body.classList.add('error-connection');
+                    setErrorBodyDOM(err);
                 });
         }
     });

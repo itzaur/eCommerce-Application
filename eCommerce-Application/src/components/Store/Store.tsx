@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ProductProjection } from '@commercetools/platform-sdk';
-import { Category } from '../../types';
+import { CategoryCustom } from '../../types';
 import Header from './Header';
 import { Cards, SideBar, Parameters, BreadCrumbs } from './index';
 import { getCategories } from '../../commercetools/getCategories';
@@ -12,6 +12,7 @@ import {
 import { getAllProducts } from '../../commercetools/getAllProducts';
 import { checkFilterVariants } from '../../utils/checkFilterVariants';
 import { checkMinMaxPrice } from '../../utils/checkMinMaxPrice';
+import { setErrorBodyDOM } from '../../utils/constants';
 
 function Store({
     type,
@@ -30,7 +31,7 @@ function Store({
     const [selectedCategoryId, setSelectedCategoryId] = useState(categoryPath);
     const [selectedCategoryPath, setSelectedCategoryPath] = useState('');
     const [cards, setCards] = useState<ProductProjection[]>([]);
-    const [categories, setCategories] = useState<Category[]>([]);
+    const [categories, setCategories] = useState<CategoryCustom[]>([]);
     const [filterVariants, setFilterVariants] = useState<string[]>([]);
     const [minPrice, setMinPrice] = useState(0);
     const [maxPrice, setMaxPrice] = useState(0);
@@ -44,8 +45,7 @@ function Store({
                 if (data) setCategories(data);
             })
             .catch((err: Error) => {
-                document.body.textContent = err.message;
-                document.body.classList.add('error-connection');
+                setErrorBodyDOM(err);
             });
         if (category)
             getSubCategoryId(category)
@@ -53,8 +53,7 @@ function Store({
                     if (data) setSelectedCategoryId(data);
                 })
                 .catch((err: Error) => {
-                    document.body.textContent = err.message;
-                    document.body.classList.add('error-connection');
+                    setErrorBodyDOM(err);
                 });
 
         if (selectedCategory) {
@@ -73,8 +72,7 @@ function Store({
                     }
                 })
                 .catch((err: Error) => {
-                    document.body.textContent = err.message;
-                    document.body.classList.add('error-connection');
+                    setErrorBodyDOM(err);
                 });
         } else if (selectedType) {
             getProductsByProductType(selectedType)
@@ -92,8 +90,7 @@ function Store({
                     }
                 })
                 .catch((err: Error) => {
-                    document.body.textContent = err.message;
-                    document.body.classList.add('error-connection');
+                    setErrorBodyDOM(err);
                 });
         } else {
             getAllProducts()
@@ -108,8 +105,7 @@ function Store({
                     }
                 })
                 .catch((err: Error) => {
-                    document.body.textContent = err.message;
-                    document.body.classList.add('error-connection');
+                    setErrorBodyDOM(err);
                 });
         }
     }, [selectedCategory, selectedType, category]);

@@ -1,11 +1,6 @@
 import { ModalProps } from '../../types';
 
-function Modal({
-    active,
-    setActive,
-    children,
-    onClick,
-}: ModalProps): JSX.Element {
+function Modal({ active, setActive, children }: ModalProps): JSX.Element {
     return (
         <div className={active ? 'modal active' : 'modal'} role="presentation">
             <div
@@ -19,9 +14,6 @@ function Modal({
                     type="button"
                     onClick={(): void => {
                         setActive(false);
-                        if (onClick) {
-                            onClick();
-                        }
                     }}
                 >
                     Закрыть

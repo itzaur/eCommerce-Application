@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Category } from '../../types';
+import { CategoryCustom } from '../../types';
 
 function SideBar(props: {
     setSelectedType: React.Dispatch<React.SetStateAction<string>>;
@@ -7,7 +7,7 @@ function SideBar(props: {
     setSelectedTypePath: React.Dispatch<React.SetStateAction<string>>;
     setSelectedCategoryId: React.Dispatch<React.SetStateAction<string>>;
     setSelectedCategoryPath: React.Dispatch<React.SetStateAction<string>>;
-    categories: Category[];
+    categories: CategoryCustom[];
 }): JSX.Element {
     const {
         categories,

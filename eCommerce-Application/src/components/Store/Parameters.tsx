@@ -1,6 +1,7 @@
 import { useEffect, useState, ChangeEvent } from 'react';
 import { ProductProjection } from '@commercetools/platform-sdk';
 import { filterSortSearcProducts } from '../../commercetools/filterSortSearchProducts';
+import { setErrorBodyDOM } from '../../utils/constants';
 
 function Parameters(props: {
     selectedType: string;
@@ -30,38 +31,43 @@ function Parameters(props: {
         setMaxSelectedPrice,
         searchValue,
     } = props;
-    const [selectedCategoriesList, setSelectedCategoriesList] = useState<
-        string[]
-    >([]);
+    const [selectedFiltersList, setselectedFiltersList] = useState<string[]>(
+        []
+    );
 
     let filter: { name: string; key: string } = { name: '', key: '' };
     const [filtersApplied, setFiltersApplied] = useState(false);
     const [discountedProducts, setDiscountedProducts] = useState(false);
-    const [sort, setSort] = useState('');
-    const [sortOrderValue, setSortOrderValue] = useState('По умолчанию');
-    const [sortOrderIcon, setSortOrderIcon] = useState('↓↑');
+    const [sort, setSort] = useState({
+        order: '',
+        value: 'По умолчанию',
+        icon: '↓↑',
+    });
 
-    if (selectedType === 'Космотуры') {
-        filter = { name: 'Локация', key: 'location' };
-    } else if (selectedType === 'Выбрать номер') {
-        filter = { name: 'Цвет', key: 'color' };
-    } else if (selectedType === 'Сувениры') {
-        filter = { name: 'Форма', key: 'shape' };
+    switch (selectedType) {
+        case 'Космотуры':
+            filter = { name: 'Локация', key: 'location' };
+            break;
+        case 'Выбрать номер':
+            filter = { name: 'Цвет', key: 'color' };
+            break;
+        case 'Сувениры':
+            filter = { name: 'Форма', key: 'shape' };
+            break;
+        default:
+            filter = { name: '', key: '' };
     }
 
     function checkFilters(e: ChangeEvent, el: string): void {
         if (e.target instanceof HTMLInputElement) {
             if (e.target.checked) {
-                setSelectedCategoriesList([
-                    ...selectedCategoriesList,
-                    `"${el}"`,
-                ]);
+                setselectedFiltersList([...selectedFiltersList, `"${el}"`]);
                 if (!filtersApplied) setFiltersApplied(true);
-            } else if (!e.target.checked) {
-                const indexEl = selectedCategoriesList.indexOf(`"${el}"`);
-                const temp = [...selectedCategoriesList];
+            } else {
+                const indexEl = selectedFiltersList.indexOf(`"${el}"`);
+                const temp = [...selectedFiltersList];
                 temp.splice(indexEl, 1);
-                setSelectedCategoriesList(temp);
+                setselectedFiltersList(temp);
             }
         }
     }
@@ -69,7 +75,7 @@ function Parameters(props: {
     function resetFilters(): void {
         setMinSelectedPrice(minPrice);
         setMaxSelectedPrice(maxPrice);
-        setSelectedCategoriesList([]);
+        setselectedFiltersList([]);
         setDiscountedProducts(false);
         setDiscountedProducts(false);
         document.querySelectorAll('input[data-type="filter"').forEach((el) => {
@@ -81,7 +87,7 @@ function Parameters(props: {
     }
 
     useEffect(() => {
-        setSelectedCategoriesList([]);
+        setselectedFiltersList([]);
         setDiscountedProducts(false);
         document.querySelectorAll('input[data-type="filter"').forEach((el) => {
             if (el instanceof HTMLInputElement) {
@@ -89,43 +95,39 @@ function Parameters(props: {
                 elCopy.checked = false;
             }
         });
-        document.querySelectorAll('input[type="number"').forEach((el) => {
-            if (el instanceof HTMLInputElement) {
-                const elCopy = el;
-                elCopy.value = '';
-            }
-        });
-        document.querySelectorAll('input[type="range"').forEach((el) => {
-            if (el instanceof HTMLInputElement) {
-                const elCopy = el;
-                elCopy.value = '';
-            }
-        });
+        setMinSelectedPrice(minPrice);
+        setMaxSelectedPrice(maxPrice);
         setDiscountedProducts(false);
-    }, [selectedType, selectedCategory]);
+    }, [
+        selectedType,
+        selectedCategory,
+        maxPrice,
+        minPrice,
+        setMaxSelectedPrice,
+        setMinSelectedPrice,
+    ]);
 
     useEffect(() => {
         filterSortSearcProducts({
             selectedCategoryId,
-            filter: filter.key,
-            selectedCategoriesList,
+            attributesToFilter: filter.key,
+            selectedFiltersList,
             minSelectedPrice,
             maxSelectedPrice,
-            sort,
-            searchValue,
+            attributesToSort: sort.order,
+            attributesToSearch: searchValue,
             discountedProducts,
         })
             .then((data) => {
                 if (data) setCards(data);
             })
             .catch((err: Error) => {
-                document.body.textContent = err.message;
-                document.body.classList.add('error-connection');
+                setErrorBodyDOM(err);
             });
     }, [
         minSelectedPrice,
         maxSelectedPrice,
-        selectedCategoriesList,
+        selectedFiltersList,
         filtersApplied,
         filter.key,
         selectedCategoryId,
@@ -143,19 +145,19 @@ function Parameters(props: {
                         className="btn parameters__btn parameters__btn_first"
                         type="button"
                     >
-                        <span className="parameters__btn-img">
-                            {sortOrderIcon}
-                        </span>
-                        {sortOrderValue}
+                        <span className="parameters__btn-img">{sort.icon}</span>
+                        {sort.value}
                     </button>
                     <ul className="parameters__dropdown">
                         <li>
                             <button
                                 type="button"
                                 onClick={(): void => {
-                                    setSort('');
-                                    setSortOrderIcon('↑');
-                                    setSortOrderValue('По умолчанию');
+                                    setSort({
+                                        order: '',
+                                        value: 'По умолчанию',
+                                        icon: '↑',
+                                    });
                                     if (!filtersApplied)
                                         setFiltersApplied(true);
                                 }}
@@ -167,9 +169,11 @@ function Parameters(props: {
                             <button
                                 type="button"
                                 onClick={(): void => {
-                                    setSort('name.ru-RU asc');
-                                    setSortOrderIcon('↓');
-                                    setSortOrderValue('А - Я');
+                                    setSort({
+                                        order: 'name.ru-RU asc',
+                                        value: 'А - Я',
+                                        icon: '↓',
+                                    });
                                     if (!filtersApplied)
                                         setFiltersApplied(true);
                                 }}
@@ -181,9 +185,11 @@ function Parameters(props: {
                             <button
                                 type="button"
                                 onClick={(): void => {
-                                    setSort('name.ru-RU desc');
-                                    setSortOrderIcon('↑');
-                                    setSortOrderValue('Я - А');
+                                    setSort({
+                                        order: 'name.ru-RU desc',
+                                        value: 'Я - А',
+                                        icon: '↑',
+                                    });
                                     if (!filtersApplied)
                                         setFiltersApplied(true);
                                 }}
@@ -195,9 +201,11 @@ function Parameters(props: {
                             <button
                                 type="button"
                                 onClick={(): void => {
-                                    setSort('price asc');
-                                    setSortOrderIcon('↑');
-                                    setSortOrderValue('По возрастанию цены');
+                                    setSort({
+                                        order: 'price asc',
+                                        value: 'По возрастанию цены',
+                                        icon: '↑',
+                                    });
                                     if (!filtersApplied)
                                         setFiltersApplied(true);
                                 }}
@@ -209,9 +217,11 @@ function Parameters(props: {
                             <button
                                 type="button"
                                 onClick={(): void => {
-                                    setSort('price desc');
-                                    setSortOrderIcon('↓');
-                                    setSortOrderValue('По убыванию цены');
+                                    setSort({
+                                        order: 'price desc',
+                                        value: 'По убыванию цены',
+                                        icon: '↓',
+                                    });
                                     if (!filtersApplied)
                                         setFiltersApplied(true);
                                 }}
@@ -263,7 +273,7 @@ function Parameters(props: {
                                 className="price-input_number"
                                 type="number"
                                 id="price-min"
-                                placeholder={minSelectedPrice.toString()}
+                                value={minSelectedPrice || ''}
                                 onChange={(e): void => {
                                     setMinSelectedPrice(+e.target.value);
                                     if (!filtersApplied)
@@ -275,7 +285,7 @@ function Parameters(props: {
                                 className="price-input_number"
                                 type="number"
                                 id="price-max"
-                                placeholder={maxSelectedPrice.toString()}
+                                value={maxSelectedPrice || ''}
                                 onChange={(e): void => {
                                     setMaxSelectedPrice(+e.target.value);
                                     if (!filtersApplied)
@@ -322,11 +332,7 @@ function Parameters(props: {
                         }
                         type="button"
                         onClick={(): void => {
-                            if (discountedProducts) {
-                                setDiscountedProducts(false);
-                            } else {
-                                setDiscountedProducts(true);
-                            }
+                            setDiscountedProducts(!discountedProducts);
 
                             if (!filtersApplied) setFiltersApplied(true);
                         }}

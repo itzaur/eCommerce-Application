@@ -37,5 +37,4 @@ export async function editCustomerPassword(
             });
         }
     }
-    return undefined;
 }
