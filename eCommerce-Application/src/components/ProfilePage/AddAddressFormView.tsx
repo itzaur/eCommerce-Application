@@ -10,8 +10,7 @@ import { AvailableCountry } from './AvailableCountry';
 import { addCustomerAddress } from '../../commercetools/addCustomerAddress';
 import { getCountry } from '../../commercetools/getCountry';
 import { editCustomerAddress } from '../../commercetools/editCustomerAddress';
-
-const countries = ['Выберите страну*', 'Россия', 'Беларусь', 'Польша'];
+import { countries } from '../../utils/constants';
 
 export function AddAddressFormView(props: {
     userId: string;
@@ -82,6 +81,8 @@ export function AddAddressFormView(props: {
 
     const [checkboxUseAddressAsDefault, setCheckboxUseAddressAsDefault] =
         useState(false);
+
+    const mandatoryMessage = 'Это обязатальное поле';
 
     useEffect(() => {
         setErrorIndex(
@@ -275,11 +276,11 @@ export function AddAddressFormView(props: {
                         type="submit"
                         onClick={(e): void => {
                             e.preventDefault();
-                            if (country === 'Выберите страну*') {
+                            if (country === countries[0]) {
                                 setErrorCountry(true);
-                                setErrorMessageCountry('Это обязатальное поле');
+                                setErrorMessageCountry(mandatoryMessage);
                             }
-                            if (country === 'Россия') {
+                            if (country === countries[1]) {
                                 if (!/^\d{6}$/.test(indexValue)) {
                                     setErrorIndex(true);
                                     setErrorMessageIndex(
@@ -287,7 +288,7 @@ export function AddAddressFormView(props: {
                                     );
                                 }
                             }
-                            if (country === 'Беларусь') {
+                            if (country === countries[2]) {
                                 if (!/^\d{6}$/.test(indexValue)) {
                                     setErrorIndex(true);
                                     setErrorMessageIndex(
@@ -295,7 +296,7 @@ export function AddAddressFormView(props: {
                                     );
                                 }
                             }
-                            if (country === 'Польша') {
+                            if (country === countries[3]) {
                                 if (!/^\d{2}-\d{3}$/.test(indexValue)) {
                                     setErrorIndex(true);
                                     setErrorMessageIndex(
@@ -306,19 +307,19 @@ export function AddAddressFormView(props: {
 
                             if (!regionValue) {
                                 setErrorRegion(true);
-                                setErrorMessageRegion('Это обязатальное поле');
+                                setErrorMessageRegion(mandatoryMessage);
                             }
                             if (!cityValue) {
                                 setErrorCity(true);
-                                setErrorMessageCity('Это обязатальное поле');
+                                setErrorMessageCity(mandatoryMessage);
                             }
                             if (!indexValue) {
                                 setErrorIndex(true);
-                                setErrorMessageIndex('Это обязатальное поле');
+                                setErrorMessageIndex(mandatoryMessage);
                             }
                             if (!streetValue) {
                                 setErrorStreet(true);
-                                setErrorMessageStreet('Это обязатальное поле');
+                                setErrorMessageStreet(mandatoryMessage);
                             }
                             if (
                                 errorCountry ||
@@ -345,15 +346,15 @@ export function AddAddressFormView(props: {
                                     checkboxUseAddressAsDefault,
                                     version,
                                     setVersion,
-                                    typeAddresses,
                                     setAddAddressFormView,
                                     setTypeAddresses,
                                     String(currentSelectedAddress.id),
                                     addressTypeView,
-                                    defaultAddresses,
                                     setDefaultAddresses,
                                     changeAddressIndex,
-                                    getTypeAddress
+                                    getTypeAddress,
+                                    typeAddresses,
+                                    defaultAddresses
                                 )
                                     .then(() => {
                                         setResultMessageAddress(

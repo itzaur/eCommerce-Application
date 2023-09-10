@@ -9,6 +9,7 @@ import React from 'react';
 import RegistrationPage from '../src/components/RegistrationPage/RegistrationPage';
 import { BrowserRouter } from 'react-router-dom';
 import '@testing-library/jest-dom/extend-expect';
+import { countries } from '../src/utils/constants';
 
 let page: null | RenderResult<
     typeof import('../node_modules/@testing-library/dom/types/queries'),
@@ -108,7 +109,7 @@ describe('Registration tests', () => {
         ).toBeInTheDocument();
         expect(
             document.getElementById('billing-country') as HTMLElement
-        ).toHaveValue('Выберите страну*');
+        ).toHaveValue(countries[0]);
         fireEvent.click(
             document.getElementById(
                 'billing-address-default-checkbox'

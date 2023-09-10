@@ -36,7 +36,8 @@ export function AddressesListView(props: {
         setChangeAddressIndex,
         setResultMessageAddress,
     } = props;
-    const [toggle, setToggle] = useState(true);
+
+    const [toggleDropdownMenu, setToggleDropdownMenu] = useState(true);
     const [isSelectAddress, setIsSelectAddress] = useState(false);
 
     const removeAddress = (id: string): Address[] | undefined => {
@@ -47,23 +48,29 @@ export function AddressesListView(props: {
         <div className="dropdown">
             <button
                 type="button"
-                className={toggle ? 'select' : 'select select-clicked'}
-                onClick={(): void => setToggle((prev) => !prev)}
+                className={
+                    toggleDropdownMenu ? 'select' : 'select select-clicked'
+                }
+                onClick={(): void => setToggleDropdownMenu((prev) => !prev)}
             >
                 <span className="selected">
                     {isSelectAddress && currentSelectedAddress.postalCode !== ''
                         ? `${currentSelectedAddress.postalCode}, ${currentSelectedAddress.country}, ${currentSelectedAddress.region}, ${currentSelectedAddress.city}, ${currentSelectedAddress.streetName}`
                         : 'список доступных адресов'}
                 </span>
-                <div className={toggle ? 'caret' : 'caret caret-rotate'} />
+                <div
+                    className={
+                        toggleDropdownMenu ? 'caret' : 'caret caret-rotate'
+                    }
+                />
             </button>
-            <ul className={toggle ? 'menu' : 'menu menu-open'}>
+            <ul className={toggleDropdownMenu ? 'menu' : 'menu menu-open'}>
                 {typeAddresses?.map((address, index) => (
                     <div className="menu__wrapper" key={address.id}>
                         <button
                             type="button"
                             onClick={(): void => {
-                                setToggle((prev) => !prev);
+                                setToggleDropdownMenu((prev) => !prev);
                                 setIsSelectAddress(true);
                                 setCurrentSelectedFullAddress({
                                     id: `${address.id}`,
@@ -105,8 +112,9 @@ export function AddressesListView(props: {
                                 type="button"
                                 className="menu__button_trash"
                                 onClick={(): void => {
-                                    const add = address.id;
-                                    if (add) {
+                                    const addressID = address.id;
+
+                                    if (addressID) {
                                         setTypeAddresses(
                                             removeAddress(address.id)
                                         );
@@ -136,10 +144,9 @@ export function AddressesListView(props: {
                                                 }
                                             });
                                     }
-                                    if (defaultAddress?.length) {
-                                        if (add === defaultAddress[0].id)
-                                            setDefaultAddresses('');
-                                    }
+
+                                    if (addressID === defaultAddress?.[0]?.id)
+                                        setDefaultAddresses('');
                                 }}
                             >
                                 <img src={trash} alt="trash" />

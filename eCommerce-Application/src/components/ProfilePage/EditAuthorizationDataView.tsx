@@ -113,11 +113,14 @@ export function EditAuthorizationDataView(props: {
                         onClick={(e): void => {
                             e.preventDefault();
                             setIsEditEmail(false);
+
                             if (!editEmail) {
                                 setErrorEmail(true);
                                 setErrorMessageEmail('Это обязатальное поле');
                             }
+
                             if (errorEmail || !editEmail) return;
+
                             editCustomerEmail(
                                 userId,
                                 editEmail,
@@ -142,6 +145,7 @@ export function EditAuthorizationDataView(props: {
                                             'такая почта уже существует'
                                         );
                                     }
+
                                     if (err.cause === 'ServerError') {
                                         document.body.textContent = err.message;
                                         document.body.classList.add(

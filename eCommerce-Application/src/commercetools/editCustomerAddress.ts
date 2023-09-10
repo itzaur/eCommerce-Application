@@ -11,15 +11,15 @@ export async function editCustomerAddress(
     checkboxUseAddressAsDefault: boolean,
     version: number,
     setVersion: CallableFunction,
-    typeAddresses: Address[] | undefined,
     setAddAddressFormView: CallableFunction,
     setTypeAddresses: CallableFunction,
     addressId: string,
     addressTypeView: boolean,
-    defaultAddresses: Address[] | undefined,
     setDefaultAddresses: CallableFunction,
     changeAddressIndex: number,
-    getTypeAddress: CallableFunction
+    getTypeAddress: CallableFunction,
+    typeAddresses?: Address[],
+    defaultAddresses?: Address[]
 ): Promise<void> {
     let countryShippingAbbr = '';
     const countriesAbbr = [

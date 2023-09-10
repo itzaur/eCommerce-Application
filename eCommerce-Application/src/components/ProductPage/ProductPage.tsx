@@ -43,6 +43,8 @@ function ProductDetail({
     const selectedCategoryPath = categoryPath;
     const [card, setCard] = useState<Product>();
     const location = useLocation().pathname.split('/').at(-1) as string;
+    const cardOptions = card?.masterData.current;
+    const cardDetails = card?.masterData.current.masterVariant;
 
     useEffect(() => {
         async function getProductKey(key: string): Promise<void> {
@@ -65,25 +67,16 @@ function ProductDetail({
     }, [location]);
 
     const product: ProductOptions = {
-        title: card?.masterData.current.name
-            ? card.masterData.current.name['ru-RU']
+        title: cardOptions?.name ? cardOptions?.name['ru-RU'] : '',
+        description: cardOptions?.description
+            ? cardOptions.description['ru-RU']
             : '',
-        description: card?.masterData.current.description
-            ? card.masterData.current.description['ru-RU']
+        currency: cardDetails?.prices
+            ? cardDetails.prices[0].value.currencyCode
             : '',
-        currency: card?.masterData.current.masterVariant.prices
-            ? card?.masterData.current.masterVariant.prices[0].value
-                  .currencyCode
-            : '',
-        images: card?.masterData.current.masterVariant.images?.map(
-            (el) => el.url
-        ),
-        imageSrc: card?.masterData.current.masterVariant.images
-            ? card?.masterData.current.masterVariant.images[0].url
-            : '',
-        imageAlt: card?.masterData.current.masterVariant.images
-            ? card?.masterData.current.masterVariant.images[0].label
-            : '',
+        images: cardDetails?.images?.map((el) => el.url),
+        imageSrc: cardDetails?.images ? cardDetails.images[0].url : '',
+        imageAlt: cardDetails?.images ? cardDetails.images[0].label : '',
         detailsTitle: products.find((el) => el.name === card?.key)?.details
             ?.title,
         detailsItems: products.find((el) => el.name === card?.key)?.details
@@ -91,29 +84,28 @@ function ProductDetail({
         reviews: products.find((el) => el.name === card?.key)?.reviews,
     };
 
-    product.price = card?.masterData.current.masterVariant.prices
-        ? (
-              (card?.masterData.current.masterVariant.prices[0].value
-                  .centAmount || 0) / 100
-          ).toLocaleString(product.currency, {
-              style: 'currency',
-              currency: product.currency,
-          })
+    product.price = cardDetails?.prices
+        ? ((cardDetails.prices[0].value.centAmount || 0) / 100).toLocaleString(
+              product.currency,
+              {
+                  style: 'currency',
+                  currency: product.currency,
+              }
+          )
         : '';
-    product.discount = card?.masterData.current.masterVariant.prices
-        ? (card?.masterData.current.masterVariant.prices[0].discounted?.value
-              .centAmount || 0) / 100
+    product.discount = cardDetails?.prices
+        ? (cardDetails.prices[0].discounted?.value.centAmount || 0) / 100
         : '';
 
     const [modalActive, setModalActive] = useState(false);
 
     // Slider functionality
-    const [index, setIndex] = useState(0);
+    const [slideIndex, setSlideIndex] = useState(0);
 
     function handleClickSlideIndex(event: React.MouseEvent<HTMLElement>): void {
         const target = event.target as HTMLElement;
 
-        setIndex(Number(target.dataset.num));
+        setSlideIndex(Number(target.dataset.num));
     }
 
     const modalSwiper = new ModalSwiper('.swiper-container2', {
@@ -127,7 +119,7 @@ function ProductDetail({
             depth: 100,
             modifier: 2.5,
         },
-        initialSlide: index,
+        initialSlide: slideIndex,
         slidesPerView: 'auto',
         spaceBetween: 20,
         grabCursor: true,
@@ -169,8 +161,12 @@ function ProductDetail({
                 <div className="swiper-container2">
                     <div className="swiper-wrapper">
                         {product.images?.map((img, i) => (
-                            <div className="swiper-slide" key={i}>
-                                <img src={img} alt="img" data-num={i} />
+                            <div className="swiper-slide" key={img}>
+                                <img
+                                    src={img}
+                                    alt="product illustration"
+                                    data-num={i}
+                                />
                             </div>
                         ))}
                     </div>
@@ -235,14 +231,18 @@ function ProductDetail({
                             >
                                 {product.images?.map((img, i) => (
                                     <SwiperSlide
-                                        key={i}
+                                        key={img}
                                         onClick={(e): void => {
                                             setModalActive(true);
                                             handleClickSlideIndex(e);
                                             sliderState();
                                         }}
                                     >
-                                        <img src={img} alt="img" data-num={i} />
+                                        <img
+                                            src={img}
+                                            alt="product illustration"
+                                            data-num={i}
+                                        />
                                     </SwiperSlide>
                                 ))}
 
@@ -258,17 +258,19 @@ function ProductDetail({
                                 <div
                                     tabIndex={0}
                                     role="button"
-                                    onKeyDown={(): void => {
-                                        // console.log(e);
-                                    }}
-                                    key={i}
+                                    onKeyDown={undefined}
+                                    key={img}
                                     onClick={(e): void => {
                                         setModalActive(true);
                                         handleClickSlideIndex(e);
                                         sliderState();
                                     }}
                                 >
-                                    <img src={img} alt="" data-num={i} />
+                                    <img
+                                        src={img}
+                                        alt="product illustration"
+                                        data-num={i}
+                                    />
                                 </div>
                             ))}
                         </div>
@@ -281,9 +283,9 @@ function ProductDetail({
                         <div className="info-price">
                             <div
                                 className={
-                                    product.discount !== 0
-                                        ? 'info-discount'
-                                        : 'info-discount--inactive'
+                                    product.discount === 0
+                                        ? 'info-discount--inactive'
+                                        : 'info-discount'
                                 }
                             >
                                 <span>Цена со скидкой</span>
@@ -291,30 +293,30 @@ function ProductDetail({
                             </div>
                             <div
                                 className={
-                                    product.discount !== 0
-                                        ? 'info-value--inactive'
-                                        : 'info-value info-value--active'
+                                    product.discount === 0
+                                        ? 'info-value info-value--active'
+                                        : 'info-value--inactive'
                                 }
                             >
                                 <span>Ваша цена:</span>
                             </div>
                             <div className="info-value">
                                 <span className="info-value__discount">
-                                    {product.discount !== 0
-                                        ? product.discount.toLocaleString(
+                                    {product.discount === 0
+                                        ? ''
+                                        : product.discount.toLocaleString(
                                               product.currency,
                                               {
                                                   style: 'currency',
                                                   currency: product.currency,
                                               }
-                                          )
-                                        : ''}
+                                          )}
                                 </span>
                                 <span
                                     className={
-                                        product.discount !== 0
-                                            ? 'info-value__price'
-                                            : 'info-value__price info-value__price-active'
+                                        product.discount === 0
+                                            ? 'info-value__price info-value__price-active'
+                                            : 'info-value__price'
                                     }
                                 >
                                     {product.price}
