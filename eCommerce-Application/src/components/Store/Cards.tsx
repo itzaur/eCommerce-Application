@@ -1,6 +1,7 @@
 import React, { MouseEvent, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ProductProjection } from '@commercetools/platform-sdk';
+import { updateCart } from '../../commercetools/updateCart';
 
 import cartIcon from '../../assets/images/cart-icon.png';
 import favouriteIcon from '../../assets/images/favourite-icon.png';
@@ -29,6 +30,10 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
                     : 'Показать описание ▼'
             );
         }
+    }
+    function updateCartDOM(e: MouseEvent, cardId: string): void {
+        e.preventDefault();
+        updateCart(cardId);
     }
 
     return (
@@ -94,8 +99,8 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
                                 <div className="card__icons">
                                     <button
                                         type="button"
-                                        onClick={(): void => {
-                                            //
+                                        onClick={(e): void => {
+                                            updateCartDOM(e, card.id);
                                         }}
                                     >
                                         <img src={cartIcon} alt="cart-icon" />
