@@ -17,14 +17,17 @@ export async function addCustomerAddress(
     setDefaultAddresses: CallableFunction
 ): Promise<void> {
     let countryShippingAbbr = '';
+
     const countriesAbbr = [
         { long: 'Россия', short: 'RU' },
         { long: 'Беларусь', short: 'BY' },
         { long: 'Польша', short: 'PL' },
     ];
+
     countriesAbbr.forEach((el) => {
         if (el.long === country) countryShippingAbbr = el.short;
     });
+
     try {
         const response = await apiRoot
             .customers()
@@ -109,5 +112,4 @@ export async function addCustomerAddress(
             });
         }
     }
-    return undefined;
 }

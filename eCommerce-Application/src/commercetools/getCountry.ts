@@ -1,15 +1,14 @@
 export function getCountry(
     country: string | undefined
 ): 'Россия' | 'Беларусь' | 'Польша' | undefined {
-    if (country === 'RU') {
-        return 'Россия';
+    switch (country) {
+        case 'RU':
+            return 'Россия';
+        case 'BY':
+            return 'Беларусь';
+        case 'PL':
+            return 'Польша';
+        default:
+            return undefined;
     }
-    if (country === 'BY') {
-        return 'Беларусь';
-    }
-    if (country === 'PL') {
-        return 'Польша';
-    }
-
-    return undefined;
 }

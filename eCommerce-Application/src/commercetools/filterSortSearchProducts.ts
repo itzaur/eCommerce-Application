@@ -5,15 +5,15 @@ import { serverErrorMessage } from '../utils/constants';
 
 export async function filterSortSearcProducts(
     parameters: FilterSortSearcParameters
-): Promise<ProductProjection[] | undefined> {
+): Promise<ProductProjection[]> {
     const {
         selectedCategoryId,
-        filter,
-        selectedCategoriesList,
+        attributesToFilter,
+        selectedFiltersList,
         minSelectedPrice,
         maxSelectedPrice,
-        sort,
-        searchValue,
+        attributesToSort,
+        attributesToSearch,
         discountedProducts,
     } = parameters;
     const queryArgs: {
@@ -23,40 +23,28 @@ export async function filterSortSearcProducts(
         ['text.ru-RU']?: string;
         fuzzy?: boolean;
     } = {
-        filter: [] as string | string[] | undefined,
+        filter: [],
         limit: 100,
     };
     if (Array.isArray(queryArgs.filter)) {
         if (selectedCategoryId) {
             queryArgs.filter.push(`categories.id:"${selectedCategoryId}"`);
         }
-        if (filter && selectedCategoriesList.length) {
+        if (attributesToFilter && selectedFiltersList.length) {
             queryArgs.filter.push(
-                `variants.attributes.${filter}:${[...selectedCategoriesList]}`
+                `variants.attributes.${attributesToFilter}:${selectedFiltersList}`
             );
         }
-        if (filter && !selectedCategoriesList.length) {
-            queryArgs.filter.push(`variants.attributes.${filter}:exists`);
+        if (attributesToFilter && !selectedFiltersList.length) {
+            queryArgs.filter.push(
+                `variants.attributes.${attributesToFilter}:exists`
+            );
         }
-        if (minSelectedPrice && !maxSelectedPrice) {
+        if (minSelectedPrice || maxSelectedPrice) {
             queryArgs.filter.push(
                 `variants.price.centAmount:range (${
-                    minSelectedPrice * 100
-                } to * )`
-            );
-        }
-        if (!minSelectedPrice && maxSelectedPrice) {
-            queryArgs.filter.push(
-                `variants.price.centAmount:range (* to ${
-                    maxSelectedPrice * 100
-                })`
-            );
-        }
-        if (minSelectedPrice && maxSelectedPrice) {
-            queryArgs.filter.push(
-                `variants.price.centAmount:range (${
-                    minSelectedPrice * 100
-                } to ${maxSelectedPrice * 100})`
+                    minSelectedPrice ? minSelectedPrice * 100 : '*'
+                } to ${maxSelectedPrice ? maxSelectedPrice * 100 : '*'})`
             );
         }
         if (discountedProducts) {
@@ -64,11 +52,11 @@ export async function filterSortSearcProducts(
         }
     }
 
-    if (queryArgs && sort) {
-        queryArgs.sort = [sort];
+    if (queryArgs && attributesToSort) {
+        queryArgs.sort = [attributesToSort];
     }
-    if (queryArgs && searchValue) {
-        queryArgs['text.ru-RU'] = searchValue;
+    if (queryArgs && attributesToSearch) {
+        queryArgs['text.ru-RU'] = attributesToSearch;
         queryArgs.fuzzy = true;
     }
 
@@ -84,5 +72,4 @@ export async function filterSortSearcProducts(
     } catch {
         throw new Error(serverErrorMessage);
     }
-    return undefined;
 }

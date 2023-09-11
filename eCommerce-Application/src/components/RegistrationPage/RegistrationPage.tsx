@@ -25,8 +25,7 @@ import { checkIncorrectShippingCountry } from '../../utils/validation/checkShipp
 import { checkIncorrectBillingCountry } from '../../utils/validation/checkBillingCountry';
 import { signUpCustomer } from '../../commercetools/signUpCustomer';
 import { loginCustomer } from '../../commercetools/loginCustomer';
-
-const countries = ['Выберите страну*', 'Россия', 'Беларусь', 'Польша'];
+import { countries } from '../../utils/constants';
 
 function RegistrationDetail(): JSX.Element {
     const [errorUserName, setErrorUserName] = useState(false);
@@ -1185,7 +1184,7 @@ function RegistrationDetail(): JSX.Element {
                                         'Это обязатальное поле'
                                     );
                                 }
-                                if (countryShipping === 'Выберите страну*') {
+                                if (countryShipping === countries[0]) {
                                     setErrorCountryShipping(true);
                                     setErrorMessageCountryShipping(
                                         'Это обязатальное поле'
@@ -1244,7 +1243,7 @@ function RegistrationDetail(): JSX.Element {
                                         'Это обязатальное поле'
                                     );
                                 }
-                                if (countryBilling === 'Выберите страну*') {
+                                if (countryBilling === countries[0]) {
                                     setErrorCountryBilling(true);
                                     setErrorMessageCountryBilling(
                                         'Это обязатальное поле'
@@ -1366,8 +1365,8 @@ function RegistrationDetail(): JSX.Element {
                                     !birthYearValue ||
                                     errorFormLife ||
                                     !formLifeValue ||
-                                    countryShipping === 'Выберите страну*' ||
-                                    countryBilling === 'Выберите страну*' ||
+                                    countryShipping === countries[0] ||
+                                    countryBilling === countries[0] ||
                                     getAge() < 18 ||
                                     password !== passwordRepeat
                                 )

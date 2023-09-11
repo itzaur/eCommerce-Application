@@ -1,6 +1,4 @@
 import { apiRoot } from './Client';
-// import { getCustomer } from './getCustomer';
-// import { ICustomer } from '../types';
 
 export async function editCustomerAge(
     ID: string,
@@ -36,5 +34,4 @@ export async function editCustomerAge(
             });
         }
     }
-    return undefined;
 }

@@ -15,7 +15,10 @@ function Header({
     setSearchValue: React.Dispatch<React.SetStateAction<string>> | undefined;
     withSearchValue: boolean;
 }): JSX.Element {
+    const user = localStorage.getItem('user');
+
     const [searchBarOpen, setSearchBarOpen] = useState(false);
+
     return (
         <header className="header-nav">
             <Link className="header-nav__logo" to="/">
@@ -40,11 +43,7 @@ function Header({
                             <button
                                 type="button"
                                 onClick={(): void => {
-                                    if (!searchBarOpen) {
-                                        setSearchBarOpen(true);
-                                    } else {
-                                        setSearchBarOpen(false);
-                                    }
+                                    setSearchBarOpen(!searchBarOpen);
                                 }}
                             >
                                 <img src={iconSearch} alt="icon-search" />
@@ -56,7 +55,7 @@ function Header({
                             />
                         </li>
                     )}
-                    {localStorage.getItem('user') && (
+                    {user && (
                         <li className="nav__item">
                             <Link className="nav__link" to="/profile">
                                 <img src={iconUser} alt="icon-user" />

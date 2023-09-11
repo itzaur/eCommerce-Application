@@ -1,6 +1,4 @@
 import { apiRoot } from './Client';
-// import { getCustomer } from './getCustomer';
-// import { ICustomer } from '../types';
 
 export async function editCustomerName(
     ID: string,
@@ -34,5 +32,4 @@ export async function editCustomerName(
             });
         }
     }
-    return undefined;
 }

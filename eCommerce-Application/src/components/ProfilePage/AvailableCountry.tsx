@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { checkIncorrectCountry } from '../../utils/validation/checkShippingCountry';
-
-const countries = ['Россия', 'Беларусь', 'Польша'];
+import { countries } from '../../utils/constants';
 
 export function AvailableCountry(props: {
     errorCountry: boolean;
@@ -21,9 +20,10 @@ export function AvailableCountry(props: {
         setCountry,
         isEdit,
     } = props;
-    const [toggle, setToggle] = useState(true);
+
+    const [toggleCaret, setToggleCaret] = useState(true);
     const [selectedValue, setSelectedValue] = useState(
-        isEdit ? country : 'Выберите страну'
+        isEdit ? country : countries[0].slice(0, -1)
     );
 
     return (
@@ -36,24 +36,26 @@ export function AvailableCountry(props: {
                             ? 'select profile__address-country profile__address_invalid'
                             : 'select profile__address-country'
                     }
-                    onClick={(): void => setToggle((prev) => !prev)}
+                    onClick={(): void => setToggleCaret((prev) => !prev)}
                 >
                     <span>{selectedValue}</span>
-                    <div className={toggle ? 'caret' : 'caret caret-rotate'} />
+                    <div
+                        className={toggleCaret ? 'caret' : 'caret caret-rotate'}
+                    />
                 </button>
                 <ul
                     className={
-                        toggle
+                        toggleCaret
                             ? 'menu profile__address-menu'
                             : 'menu menu-open  profile__address-menu'
                     }
                 >
-                    {countries.map((currentCountry, index) => (
+                    {countries.slice(1).map((currentCountry, index) => (
                         <button
                             type="button"
                             key={currentCountry[index]}
                             onClick={(): void => {
-                                setToggle((prev) => !prev);
+                                setToggleCaret((prev) => !prev);
                                 setSelectedValue(currentCountry);
 
                                 setErrorCountry(

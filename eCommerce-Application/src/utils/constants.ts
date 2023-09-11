@@ -13,6 +13,8 @@ export const categories = [
     },
 ];
 
+export const countries = ['Выберите страну*', 'Россия', 'Беларусь', 'Польша'];
+
 export const products = [
     {
         name: 'fire_sun_tours',
@@ -587,3 +589,8 @@ export const products = [
 ];
 
 export const serverErrorMessage = 'Сервер улетел в космос, попробуйте позже';
+
+export function setErrorBodyDOM(err: Error): void {
+    document.body.textContent = err.message;
+    document.body.classList.add('error-connection');
+}
