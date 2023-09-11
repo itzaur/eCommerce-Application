@@ -1,12 +1,13 @@
 import { Cart } from '@commercetools/platform-sdk';
-import { apiRoot } from './AnonimousClient';
+import { apiRootAnonimous } from './AnonimousClient';
+import { constructClientRefresh } from './withRefreshTokenClient';
+import { tokenInstance } from './apiConstants';
 
-let cartId: Cart | null = null;
-let cartVersion = 1;
+let apiRootForRequest = apiRootAnonimous;
 
 async function createNewCart(): Promise<Cart> {
     try {
-        const result = await apiRoot
+        const result = await apiRootAnonimous
             .me()
             .carts()
             .post({
@@ -16,23 +17,33 @@ async function createNewCart(): Promise<Cart> {
                 },
             })
             .execute();
-        cartVersion = result.body.version;
+        localStorage.setItem(
+            'token',
+            JSON.stringify(tokenInstance.get().token)
+        );
+        localStorage.setItem(
+            'refreshToken',
+            JSON.stringify(tokenInstance.get().refreshToken)
+        );
         return result.body;
     } catch {
         throw new Error('Мяу');
     }
 }
 
-export async function updateCart(cardId: string): Promise<void> {
+export async function addNewProductInCart(
+    cardId: string,
+    cartData: Cart | null
+): Promise<Cart> {
     try {
-        if (!cartId) cartId = await createNewCart();
-        await apiRoot
+        const cartForRequest = cartData || (await createNewCart());
+        await apiRootForRequest
             .me()
             .carts()
-            .withId({ ID: cartId.id })
+            .withId({ ID: cartForRequest.id })
             .post({
                 body: {
-                    version: cartVersion,
+                    version: cartForRequest.version,
                     actions: [
                         {
                             action: 'addLineItem',
@@ -42,13 +53,26 @@ export async function updateCart(cardId: string): Promise<void> {
                     ],
                 },
             })
-            .execute()
-            .then((data) => {
-                cartVersion = data.body.version;
-                const activeCart = apiRoot.me().activeCart().get().execute();
-                return activeCart;
-            });
-    } catch {
+            .execute();
+        const activeCart = await apiRootForRequest
+            .me()
+            .activeCart()
+            .get()
+            .execute();
+        localStorage.setItem('activeCart', JSON.stringify(activeCart.body));
+        return activeCart.body;
+    } catch (e) {
+        if (
+            e instanceof Error &&
+            e.message.startsWith('URI not found: /odyssey4165/me/carts/')
+        ) {
+            apiRootForRequest = constructClientRefresh();
+            localStorage.setItem(
+                'token',
+                JSON.stringify(tokenInstance.get().token)
+            );
+            return addNewProductInCart(cardId, cartData);
+        }
         throw new Error('Мяу');
     }
 }

@@ -260,6 +260,9 @@ function App(): JSX.Element {
     useEffect(() => {
         setMainId(categories);
     });
+    // localStorage.removeItem('activeCart');
+    // localStorage.removeItem('token');
+    // localStorage.removeItem('refreshToken');
 
     return (
         <Routes>
