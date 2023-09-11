@@ -1,15 +1,22 @@
-import React, { MouseEvent, useRef, useState } from 'react';
+import React, { MouseEvent, useRef, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ProductProjection } from '@commercetools/platform-sdk';
-import { updateCart } from '../../commercetools/updateCart';
+import { Cart, ProductProjection } from '@commercetools/platform-sdk';
+import { addNewProductInCart } from '../../commercetools/updateCart';
 
 import cartIcon from '../../assets/images/cart-icon.png';
+import cartIconInactive from '../../assets/images/cart-icon-inactive.png';
 import favouriteIcon from '../../assets/images/favourite-icon.png';
 
 function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
     const currentCardRef = useRef<Element | null>(null);
     const [buttonDescriptionTexcontent, setButtonDescriptionTexcontent] =
         useState('Показать описание ▼');
+    const [productsIdInCart, setProductIdInCart] = useState<string[]>([]);
+    const cartFirst = localStorage.getItem('activeCart')
+        ? JSON.parse(localStorage.getItem('activeCart') as string)
+        : null;
+
+    const [activeCart, setActiveCart] = useState<Cart | null>(cartFirst);
 
     const scrollToTop = (event: React.MouseEvent<HTMLElement>): void => {
         const target = event.target as HTMLElement;
@@ -31,10 +38,20 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
             );
         }
     }
-    function updateCartDOM(e: MouseEvent, cardId: string): void {
+    function addNewProductInCartDOM(e: MouseEvent, cardId: string): void {
         e.preventDefault();
-        updateCart(cardId);
+
+        addNewProductInCart(cardId, activeCart).then((data) => {
+            if (data) setActiveCart(data);
+        });
     }
+
+    useEffect(() => {
+        const tempIDs = activeCart?.lineItems
+            ? activeCart.lineItems.map((product) => product.productId)
+            : [];
+        setProductIdInCart(tempIDs);
+    }, [activeCart]);
 
     return (
         <div className="cards">
@@ -99,11 +116,23 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
                                 <div className="card__icons">
                                     <button
                                         type="button"
+                                        disabled={
+                                            !!productsIdInCart.includes(card.id)
+                                        }
                                         onClick={(e): void => {
-                                            updateCartDOM(e, card.id);
+                                            addNewProductInCartDOM(e, card.id);
                                         }}
                                     >
-                                        <img src={cartIcon} alt="cart-icon" />
+                                        <img
+                                            src={
+                                                productsIdInCart.includes(
+                                                    card.id
+                                                )
+                                                    ? cartIconInactive
+                                                    : cartIcon
+                                            }
+                                            alt="cart-icon"
+                                        />
                                     </button>
                                     <button type="button">
                                         <img
