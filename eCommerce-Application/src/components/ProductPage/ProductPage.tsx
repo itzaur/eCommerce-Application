@@ -1,13 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import ModalSwiper from 'swiper';
-import {
-    EffectCoverflow,
-    Pagination,
-    Navigation,
-    Scrollbar,
-} from 'swiper/modules';
+import { EffectCoverflow, Pagination, Navigation } from 'swiper/modules';
 import { Product } from '@commercetools/platform-sdk';
 import { apiRoot } from '../../commercetools/Client';
 import { Header } from '../Store';
@@ -19,6 +13,7 @@ import avatar from '../../assets/images/user.png';
 import star from '../../assets/images/review-star.png';
 import Modal from '../NotFoundPage/Modal';
 import BreadCrumbs from '../Store/BreadCrumbs';
+import createSlider from '../Slider/Slider';
 
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
@@ -108,45 +103,13 @@ function ProductDetail({
         setSlideIndex(Number(target.dataset.num));
     }
 
-    const modalSwiper = new ModalSwiper('.swiper-container2', {
-        observer: true,
-        observeParents: true,
-        slideToClickedSlide: true,
-        effect: 'coverflow',
-        coverflowEffect: {
-            rotate: 0,
-            stretch: 0,
-            depth: 100,
-            modifier: 2.5,
-        },
-        initialSlide: slideIndex,
-        slidesPerView: 'auto',
-        spaceBetween: 20,
-        grabCursor: true,
-        scrollbar: { el: '.swiper-scrollbar' },
-        pagination: {
-            el: '.swiper-pagination2',
-            clickable: true,
-            type: 'bullets',
-        },
-        navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-        },
-        modules: [Navigation, Pagination, Scrollbar, EffectCoverflow],
-    });
-
-    modalSwiper.on('slideChange', () => {
-        modalSwiper.pagination.render();
-        modalSwiper.pagination.update();
-        modalSwiper.navigation.update();
-    });
+    const slider = createSlider('.swiper-container2', slideIndex);
 
     const sliderState = (): void => {
         if (modalActive) {
-            modalSwiper.destroy();
+            slider.destroy();
         } else {
-            modalSwiper.init();
+            slider.init();
         }
     };
 

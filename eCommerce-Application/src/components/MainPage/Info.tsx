@@ -1,8 +1,15 @@
 import { Link, Outlet } from 'react-router-dom';
 import { useState } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, EffectCube } from 'swiper/modules';
 import slide1 from '../../assets/images/slide1.png';
+import slide2 from '../../assets/images/slide2.png';
+import slide3 from '../../assets/images/slide3.png';
 import arrow from '../../assets/images/arrow.png';
 import userLogo from '../../assets/images/user.png';
+
+import 'swiper/css';
+import 'swiper/css/effect-cube';
 
 function Info(): JSX.Element {
     const [user, setUser] = useState(
@@ -71,10 +78,33 @@ function Info(): JSX.Element {
                 </div>
             </div>
             <div className="home__info">
-                <div className="home__slides">
-                    <figure>
-                        <img src={slide1} alt="slide" />
-                    </figure>
+                <div className="home__slides swiper-container">
+                    <Swiper
+                        autoplay={{
+                            delay: 2500,
+                            disableOnInteraction: false,
+                        }}
+                        loop
+                        effect="cube"
+                        cubeEffect={{
+                            shadow: true,
+                            slideShadows: true,
+                            shadowOffset: 20,
+                            shadowScale: 0.94,
+                        }}
+                        grabCursor
+                        modules={[Autoplay, EffectCube]}
+                    >
+                        <SwiperSlide>
+                            <img src={slide1} alt="catalog illustration" />
+                        </SwiperSlide>
+                        <SwiperSlide>
+                            <img src={slide2} alt="catalog illustration" />
+                        </SwiperSlide>
+                        <SwiperSlide>
+                            <img src={slide3} alt="catalog illustration" />
+                        </SwiperSlide>
+                    </Swiper>
                 </div>
                 <div className="home__text">
                     <h2 className="home__text-title">Что мы предлагаем?</h2>
