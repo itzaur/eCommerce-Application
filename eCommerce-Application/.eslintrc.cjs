@@ -32,6 +32,7 @@ module.exports = {
             'warn',
             { allowConstantExport: true },
         ],
+        'react/no-array-index-key': 'off',
         'prettier/prettier': 'error',
         'import/prefer-default-export': 'off',
         '@typescript-eslint/no-explicit-any': 'error',

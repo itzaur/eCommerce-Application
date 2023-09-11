@@ -1,3 +1,5 @@
+import { countries } from '../constants';
+
 export const checkIncorrectBillingCountry = (
     e: React.ChangeEvent<HTMLSelectElement>
 ): { incorrect: boolean; message: string } => {
@@ -7,10 +9,10 @@ export const checkIncorrectBillingCountry = (
         return { incorrect: false, message: '' };
     }
 
-    if (value === 'Выберите страну*') {
+    if (value === countries[0]) {
         return {
             incorrect: true,
-            message: 'Выберите страну',
+            message: countries[0].slice(0, -1),
         };
     }
 

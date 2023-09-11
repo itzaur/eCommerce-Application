@@ -40,7 +40,7 @@ function Catalog(): JSX.Element {
                     >
                         <Link
                             className="catalog__link catalog__link--1"
-                            to="/store"
+                            to="/store/souvenirs"
                             data-num="1"
                         >
                             <span className="sr-only">Сувениры</span>
@@ -54,7 +54,7 @@ function Catalog(): JSX.Element {
                     >
                         <Link
                             className="catalog__link catalog__link--2"
-                            to="/store"
+                            to="/store/cosmotours"
                             data-num="2"
                         >
                             <span className="sr-only">Выбрать космотур</span>
@@ -70,7 +70,7 @@ function Catalog(): JSX.Element {
                     >
                         <Link
                             className="catalog__link catalog__link--3"
-                            to="/store"
+                            to="/store/hotel"
                             data-num="3"
                         >
                             <span className="sr-only">Выбрать номер</span>

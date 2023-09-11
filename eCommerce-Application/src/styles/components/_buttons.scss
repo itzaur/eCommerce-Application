@@ -16,31 +16,33 @@
 
         transition: box-shadow 0.3s ease;
 
-        &:hover {
-            box-shadow: 0 0 0.6rem 0.2rem var(--color-primary-alpha);
+        @media (hover: hover) {
+            &:hover {
+                box-shadow: 0 0 0.6rem 0.2rem var(--color-primary-alpha);
 
-            &::before {
-                top: 0;
-                left: 0;
+                &::before {
+                    top: 0;
+                    left: 0;
 
-                opacity: 1;
+                    opacity: 1;
 
-                transition:
-                    opacity 0.2s ease-in-out,
-                    inset 0.2s ease-in-out;
-            }
+                    transition:
+                        opacity 0.2s ease-in-out,
+                        inset 0.2s ease-in-out;
+                }
 
-            &:after {
-                bottom: 0;
-                right: 0;
+                &:after {
+                    bottom: 0;
+                    right: 0;
 
-                opacity: 1;
-            }
+                    opacity: 1;
+                }
 
-            & span::after {
-                filter: invert(95%) sepia(34%) saturate(4887%)
-                    hue-rotate(145deg) brightness(91%) contrast(96%);
-                left: calc(100% + 1.5rem);
+                & span::after {
+                    filter: invert(95%) sepia(34%) saturate(4887%)
+                        hue-rotate(145deg) brightness(91%) contrast(96%);
+                    left: calc(100% + 1.5rem);
+                }
             }
         }
 
@@ -103,6 +105,7 @@
         text-align: center;
 
         background-color: var(--color-primary);
+        color: var(--color-secondary);
 
         cursor: pointer;
 
@@ -117,8 +120,23 @@
             outline-color: transparent;
         }
 
+        @media (hover: hover) {
+            &:hover {
+                box-shadow: var(--drop-shadow-light);
+            }
+        }
+
+        &--close {
+            width: min(100%, 10rem);
+        }
+    }
+
+    &_un-action {
+        background-color: var(--color-secondary);
+        color: var(--color-input);
+
         &:hover {
-            box-shadow: var(--drop-shadow-light);
+            box-shadow: var(--drop-shadow-dark);
         }
     }
 
@@ -155,6 +173,45 @@
         @include mixins.respond-to('tablet') {
             margin-left: -0.5em;
         }
+    }
+
+    &--product {
+        width: min-content;
+        min-width: 15ch;
+        background-color: var(--color-secondary);
+
+        @include mixins.respond-to('tablet') {
+            padding-inline: 2em;
+        }
+    }
+
+    &--basket {
+        background-color: var(--color-primary);
+        color: var(--color-secondary);
+        font-weight: bold;
+    }
+
+    &--item {
+        padding: 0.5em 1.5em;
+        border: 2px solid var(--color-primary);
+
+        transition: background-color 0.3s ease-in-out;
+
+        @media (hover: hover) {
+            &:hover {
+                background-color: var(--color-primary);
+            }
+        }
+    }
+
+    &--close {
+        color: var(--color-secondary);
+        background-color: var(--color-primary);
+
+        padding: 0.5em 2em;
+
+        font-family: var(--ff-product);
+        font-size: var(--fs-paragraph);
     }
 }
 

@@ -26,3 +26,10 @@
         }
     }
 }
+.error-connection {
+    @include mixins.flex(row, center, center);
+
+    text-align: center;
+    font-size: var(--fs-big);
+    color: var(--color-white);
+}

@@ -1,0 +1,157 @@
+@use '../abstracts/mixins';
+
+.dropdown {
+    position: relative;
+}
+
+.select {
+    @include mixins.flex(null, space-between, center);
+    width: 100%;
+    min-height: 6rem;
+
+    padding: 1rem;
+
+    background-color: var(--color-white);
+
+    cursor: pointer;
+
+    transition: background-color 0.3s;
+
+    &-clicked {
+        opacity: 0.5;
+    }
+
+    &:hover {
+        background-color: var(--color-primary);
+    }
+}
+
+.caret {
+    width: 0;
+    height: 0;
+
+    border-left: 0.5rem solid transparent;
+    border-right: 0.5rem solid transparent;
+    border-top: 0.6rem solid var(--color-black);
+    transition: 0.3s;
+
+    &-rotate {
+        transform: rotate(180deg);
+    }
+}
+
+.menu {
+    position: absolute;
+    top: 6rem;
+    left: 50%;
+
+    width: 100%;
+    transform: translate(-50%);
+
+    padding: 0.5rem;
+
+    background-color: var(--color-white);
+    border: 1px var(--color-secondary) solid;
+    box-shadow: 0 0.5rem 2rem var(--color-header);
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition: all 0.5s;
+
+    z-index: 3;
+
+    @include mixins.respond-to('tablet') {
+        padding: 1rem 2rem;
+    }
+
+    &__wrapper {
+        --gap: 0;
+        @include mixins.flex(null, space-between, center);
+        flex-wrap: wrap;
+
+        @include mixins.respond-to('tablet') {
+            --gap: 1rem;
+            flex-wrap: nowrap;
+        }
+
+        & button {
+            filter: invert(0);
+            align-self: center;
+        }
+    }
+
+    &__button_edit {
+        align-self: flex-start;
+
+        filter: invert(1);
+
+        cursor: pointer;
+
+        order: -1;
+
+        @include mixins.respond-to('tablet') {
+            align-self: flex-end;
+
+            order: 0;
+        }
+
+        img {
+            height: 2rem;
+            width: 2rem;
+            min-width: 2rem;
+        }
+    }
+
+    &__button_trash {
+        & img {
+            width: 3rem;
+            min-width: 3rem;
+            height: 3rem;
+        }
+    }
+
+    &-open {
+        pointer-events: auto;
+
+        opacity: 1;
+    }
+
+    & button {
+        display: block;
+
+        padding: 1rem 1rem;
+
+        cursor: pointer;
+
+        &:after {
+            display: block;
+            content: '';
+            border-bottom: 1px solid var(--color-primary);
+            transform: scaleX(0);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        &:hover {
+            &:after {
+                transform: scaleX(1);
+            }
+        }
+    }
+
+    &__button_password {
+        margin-top: 1rem;
+
+        filter: invert(0);
+
+        & img {
+            filter: invert(1);
+        }
+
+        & span {
+            margin-right: 1rem;
+            color: var(--color-primary);
+        }
+    }
+}
