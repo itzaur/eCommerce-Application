@@ -22,7 +22,7 @@ export function constructClientRefresh(): ByProjectKeyRequestBuilder {
             clientId: VITE_CTP_CLIENT_ID,
             clientSecret: VITE_CTP_CLIENT_SECRET,
         },
-        refreshToken: localStorage.getItem('refreshToken')?.slice(1, -1) || '',
+        refreshToken: localStorage.getItem('refreshToken') || '',
         fetch,
     };
 
