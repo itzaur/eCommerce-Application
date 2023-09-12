@@ -8,6 +8,7 @@ import {
     Store,
     NotFound,
     ProfilePage,
+    CartPage,
 } from './components';
 import ProductDetail from './components/ProductPage/ProductPage';
 import { products, setErrorBodyDOM } from './utils/constants';
@@ -25,6 +26,7 @@ function App(): JSX.Element {
         'store',
         'about',
         'profile',
+        'cart',
         ...products.map((product) => product.name),
     ];
     const tempArrCategoriesRoutes: React.ReactElement[] = [];
@@ -271,6 +273,7 @@ function App(): JSX.Element {
             })}
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/cart" element={<CartPage />} />
             <Route path="/registration" element={<RegistrationPage />} />
             <Route
                 path="/store"

@@ -17,13 +17,10 @@ async function createNewCart(): Promise<Cart> {
                 },
             })
             .execute();
-        localStorage.setItem(
-            'token',
-            JSON.stringify(tokenInstance.get().token)
-        );
+        localStorage.setItem('token', tokenInstance.get().token);
         localStorage.setItem(
             'refreshToken',
-            JSON.stringify(tokenInstance.get().refreshToken)
+            tokenInstance.get().refreshToken || ''
         );
         return result.body;
     } catch {
@@ -67,12 +64,17 @@ export async function addNewProductInCart(
             e.message.startsWith('URI not found: /odyssey4165/me/carts/')
         ) {
             apiRootForRequest = constructClientRefresh();
-            localStorage.setItem(
-                'token',
-                JSON.stringify(tokenInstance.get().token)
-            );
+            localStorage.setItem('token', tokenInstance.get().token);
             return addNewProductInCart(cardId, cartData);
         }
         throw new Error('Мяу');
+    }
+}
+
+export async function getActiveCart(): Promise<Cart> {
+    try {
+        return (await apiRootForRequest.me().activeCart().get().execute()).body;
+    } catch {
+        throw Error('Мяу');
     }
 }
