@@ -3,18 +3,19 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCoverflow, Pagination, Navigation } from 'swiper/modules';
-import { Product } from '@commercetools/platform-sdk';
+import { Product, Cart, LineItem } from '@commercetools/platform-sdk';
 import { apiRoot } from '../../commercetools/Client';
 import { Header } from '../Store';
 import { Footer } from '../MainPage';
 import { products, serverErrorMessage } from '../../utils/constants';
-import { ProductOptions } from '../../types';
+import { ProductOptions, UpdateCartMode } from '../../types';
 import starEmpty from '../../assets/images/review-star-empty.png';
 import avatar from '../../assets/images/user.png';
 import star from '../../assets/images/review-star.png';
 import Modal from '../NotFoundPage/Modal';
 import BreadCrumbs from '../Store/BreadCrumbs';
 import createSlider from '../Slider/Slider';
+import { addNewProductInCartOrUpdateQuantity } from '../../commercetools/updateCart';
 
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
@@ -43,6 +44,12 @@ function ProductDetail({
     const cardDetails = card?.masterData.current.masterVariant;
 
     const [isFetching, setIsFetching] = useState(true);
+    const cartFirst = localStorage.getItem('activeCart')
+        ? JSON.parse(localStorage.getItem('activeCart') as string)
+        : null;
+
+    const [activeCart, setActiveCart] = useState<Cart | null>(cartFirst);
+    const [cardInCart, setCardInCart] = useState(false);
 
     useEffect(() => {
         async function getProductKey(key: string): Promise<void> {
@@ -55,6 +62,11 @@ function ProductDetail({
 
                 setCard(result.body);
                 setIsFetching(false);
+                setCardInCart(
+                    !!cartFirst.lineItems
+                        .map((el: LineItem) => el.productId)
+                        .includes(result.body.id)
+                );
             } catch (error) {
                 throw new Error(serverErrorMessage);
             }
@@ -63,7 +75,7 @@ function ProductDetail({
             document.body.textContent = err.message;
             document.body.classList.add('error-connection');
         });
-    }, [location]);
+    }, [location, cartFirst.lineItems]);
 
     const product: ProductOptions = {
         title: cardOptions?.name ? cardOptions?.name['ru-RU'] : '',
@@ -116,6 +128,24 @@ function ProductDetail({
             slider.init();
         }
     };
+
+    function addRemoveProductInCartDOM(mode: UpdateCartMode): void {
+        const quantity = mode === 'new' ? 1 : 0;
+        if (card)
+            addNewProductInCartOrUpdateQuantity(
+                card.id,
+                activeCart,
+                mode,
+                quantity
+            ).then((data) => {
+                if (data) setActiveCart(data);
+                if (mode === 'new') {
+                    setCardInCart(true);
+                } else {
+                    setCardInCart(false);
+                }
+            });
+    }
 
     return (
         <>
@@ -325,11 +355,32 @@ function ProductDetail({
                                         Продолжить покупки
                                     </button>
                                     <button
-                                        className="btn btn--product btn--basket"
+                                        className={
+                                            cardInCart
+                                                ? 'btn--product'
+                                                : 'btn btn--product btn--basket'
+                                        }
                                         type="button"
+                                        disabled={!!cardInCart}
+                                        onClick={(): void => {
+                                            addRemoveProductInCartDOM('new');
+                                        }}
                                     >
                                         В корзину
                                     </button>
+                                    {cardInCart && (
+                                        <button
+                                            className="btn btn--product btn--basket"
+                                            type="button"
+                                            onClick={(): void => {
+                                                addRemoveProductInCartDOM(
+                                                    'update'
+                                                );
+                                            }}
+                                        >
+                                            Удалить из корзины
+                                        </button>
+                                    )}
                                 </div>
                             </div>
                             <div className="product__reviews">

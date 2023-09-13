@@ -47,3 +47,5 @@ export interface IAddress {
     region: string;
     streetName: string;
 }
+
+export type UpdateCartMode = 'new' | 'update';

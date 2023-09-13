@@ -1,7 +1,12 @@
-import { Cart } from '@commercetools/platform-sdk';
+import {
+    Cart,
+    MyCartAddLineItemAction,
+    MyCartChangeLineItemQuantityAction,
+} from '@commercetools/platform-sdk';
 import { apiRootAnonimous } from './AnonimousClient';
 import { constructClientRefresh } from './withRefreshTokenClient';
 import { tokenInstance } from './apiConstants';
+import { UpdateCartMode } from '../types';
 
 let apiRootForRequest = apiRootAnonimous;
 
@@ -28,10 +33,26 @@ async function createNewCart(): Promise<Cart> {
     }
 }
 
-export async function addNewProductInCart(
+export async function addNewProductInCartOrUpdateQuantity(
     cardId: string,
-    cartData: Cart | null
+    cartData: Cart | null,
+    mode: UpdateCartMode,
+    quantity: number
 ): Promise<Cart> {
+    const action: MyCartAddLineItemAction | MyCartChangeLineItemQuantityAction =
+        mode === 'new'
+            ? {
+                  action: 'addLineItem',
+                  productId: cardId,
+                  quantity,
+              }
+            : {
+                  action: 'changeLineItemQuantity',
+                  lineItemId: cartData?.lineItems.find((el) => {
+                      return el.productId === cardId;
+                  })?.id,
+                  quantity,
+              };
     try {
         const cartForRequest = cartData || (await createNewCart());
         await apiRootForRequest
@@ -41,13 +62,7 @@ export async function addNewProductInCart(
             .post({
                 body: {
                     version: cartForRequest.version,
-                    actions: [
-                        {
-                            action: 'addLineItem',
-                            productId: cardId,
-                            quantity: 1,
-                        },
-                    ],
+                    actions: [action],
                 },
             })
             .execute();
@@ -65,16 +80,41 @@ export async function addNewProductInCart(
         ) {
             apiRootForRequest = constructClientRefresh();
             localStorage.setItem('token', tokenInstance.get().token);
-            return addNewProductInCart(cardId, cartData);
+            return addNewProductInCartOrUpdateQuantity(
+                cardId,
+                cartData,
+                mode,
+                quantity
+            );
+        }
+        if (
+            e instanceof Error &&
+            e.message === 'Missing required option (refreshToken)'
+        ) {
+            addNewProductInCartOrUpdateQuantity(cardId, null, mode, quantity);
         }
         throw new Error('Мяу');
     }
 }
 
-export async function getActiveCart(): Promise<Cart> {
+export async function getActiveCart(): Promise<Cart | null> {
     try {
         return (await apiRootForRequest.me().activeCart().get().execute()).body;
-    } catch {
-        throw Error('Мяу');
+    } catch (e) {
+        if (
+            e instanceof Error &&
+            e.message === 'URI not found: /odyssey4165/me/active-cart'
+        ) {
+            apiRootForRequest = constructClientRefresh();
+            localStorage.setItem('token', tokenInstance.get().token);
+            return getActiveCart();
+        }
+        if (
+            e instanceof Error &&
+            e.message === 'Missing required option (refreshToken)'
+        ) {
+            return null;
+        }
+        throw new Error('Мяу');
     }
 }

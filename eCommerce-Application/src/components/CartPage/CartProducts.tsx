@@ -1,10 +1,30 @@
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Cart } from '@commercetools/platform-sdk';
+import { addNewProductInCartOrUpdateQuantity } from '../../commercetools/updateCart';
 
 function CartProducts(props: {
     activeCart: Cart | null;
-    // setActiveCart: React.Dispatch<React.SetStateAction<Cart | null>>;
+    setActiveCart: React.Dispatch<React.SetStateAction<Cart | null>>;
 }): JSX.Element {
-    const { activeCart } = props;
+    const { activeCart, setActiveCart } = props;
+    const [cartLoading, setCartLoading] = useState(false);
+
+    function changeQuantity(cardId: string, newValue: number): void {
+        setCartLoading(true);
+        addNewProductInCartOrUpdateQuantity(
+            cardId,
+            activeCart,
+            'update',
+            newValue
+        )
+            .then((data) => {
+                setActiveCart(data);
+            })
+            .finally(() => {
+                setCartLoading(false);
+            });
+    }
 
     return (
         <div className="cart__products">
@@ -23,17 +43,32 @@ function CartProducts(props: {
                                     <button
                                         className="btn purchase__btn"
                                         type="button"
+                                        onClick={(): void => {
+                                            changeQuantity(
+                                                purchase.productId,
+                                                0
+                                            );
+                                        }}
                                     >
                                         ✕
                                     </button>
+
                                     {purchase.variant.images && (
-                                        <img
-                                            className="purchase__img"
-                                            src={purchase.variant.images[0].url}
-                                            alt={
-                                                purchase.variant.images[0].label
-                                            }
-                                        />
+                                        <Link
+                                            to={`/store/${purchase.productKey}`}
+                                        >
+                                            <img
+                                                className="purchase__img"
+                                                src={
+                                                    purchase.variant.images[0]
+                                                        .url
+                                                }
+                                                alt={
+                                                    purchase.variant.images[0]
+                                                        .label
+                                                }
+                                            />
+                                        </Link>
                                     )}
                                 </div>
                                 <div className="purchase__name-block">
@@ -44,16 +79,37 @@ function CartProducts(props: {
                                         <button
                                             className="btn purchase__btn"
                                             type="button"
+                                            disabled={!!cartLoading}
+                                            onClick={(): void => {
+                                                const newValue =
+                                                    purchase.quantity - 1;
+                                                changeQuantity(
+                                                    purchase.productId,
+                                                    newValue
+                                                );
+                                            }}
                                         >
                                             —
                                         </button>
                                         <input
                                             type="number"
+                                            readOnly
                                             className="quantity__input"
+                                            value={purchase.quantity}
+                                            disabled={false}
                                         />
                                         <button
                                             className="btn purchase__btn"
                                             type="button"
+                                            disabled={!!cartLoading}
+                                            onClick={(): void => {
+                                                const newValue =
+                                                    purchase.quantity + 1;
+                                                changeQuantity(
+                                                    purchase.productId,
+                                                    newValue
+                                                );
+                                            }}
                                         >
                                             +
                                         </button>
@@ -61,14 +117,18 @@ function CartProducts(props: {
                                 </div>
                                 <h2 className="purchase__price">
                                     {`$ ${(
-                                        purchase.price.value.centAmount / 100
+                                        (purchase.price.value.centAmount *
+                                            purchase.quantity) /
+                                        100
                                     ).toLocaleString('ru')}.00`}
                                 </h2>
                                 {purchase.price.discounted && (
                                     <h2 className="purchase__price purchase__price_discounted">
                                         {`$ ${(
-                                            purchase.price.discounted.value
-                                                .centAmount / 100
+                                            (purchase.price.discounted.value
+                                                .centAmount *
+                                                purchase.quantity) /
+                                            100
                                         ).toLocaleString('ru')}.00`}
                                     </h2>
                                 )}

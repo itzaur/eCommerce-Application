@@ -4,6 +4,7 @@ import { Cart } from '@commercetools/platform-sdk';
 import { Header } from '../Store';
 import CartProducts from './CartProducts';
 import PricesBlock from './PriceBlock';
+import NoCart from './NoCart';
 import { getActiveCart } from '../../commercetools/updateCart';
 import { Footer } from '../MainPage';
 
@@ -30,20 +31,23 @@ function CartPage(): JSX.Element {
                         <Link to="/cart">Корзина</Link>
                     </li>
                 </ul>
-                <div className="cart__content">
-                    {activeCart && (
-                        <>
-                            <CartProducts
-                                activeCart={activeCart}
-                                // setActiveCart={setActiveCart}
-                            />
-                            <PricesBlock
-                                activeCart={activeCart}
-                                // setActiveCart={setActiveCart}
-                            />
-                        </>
-                    )}
-                </div>
+
+                {activeCart && activeCart.lineItems.length ? (
+                    <div className="cart__content">
+                        <CartProducts
+                            activeCart={activeCart}
+                            setActiveCart={setActiveCart}
+                        />
+                        <PricesBlock
+                            activeCart={activeCart}
+                            // setActiveCart={setActiveCart}
+                        />
+                    </div>
+                ) : (
+                    ''
+                )}
+
+                {!activeCart || (!activeCart.lineItems.length && <NoCart />)}
             </section>
             <Footer />
         </>

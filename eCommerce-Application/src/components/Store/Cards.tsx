@@ -1,7 +1,7 @@
 import React, { MouseEvent, useRef, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Cart, ProductProjection } from '@commercetools/platform-sdk';
-import { addNewProductInCart } from '../../commercetools/updateCart';
+import { addNewProductInCartOrUpdateQuantity } from '../../commercetools/updateCart';
 
 import cartIcon from '../../assets/images/cart-icon.png';
 import cartIconInactive from '../../assets/images/cart-icon-inactive.png';
@@ -41,9 +41,11 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
     function addNewProductInCartDOM(e: MouseEvent, cardId: string): void {
         e.preventDefault();
 
-        addNewProductInCart(cardId, activeCart).then((data) => {
-            if (data) setActiveCart(data);
-        });
+        addNewProductInCartOrUpdateQuantity(cardId, activeCart, 'new', 1).then(
+            (data) => {
+                if (data) setActiveCart(data);
+            }
+        );
     }
 
     useEffect(() => {
