@@ -95,6 +95,7 @@
             padding: 1rem 0.7rem;
 
             color: var(--color-black);
+            text-align: center;
 
             background-color: var(--color-white);
         }
@@ -189,4 +190,24 @@
 
 .cart__btn_submit {
     margin-right: 4rem;
+}
+
+.no-cart {
+    @include mixins.flex(column, center, center);
+    margin-bottom: 10rem;
+
+    &__p {
+        font-family: var(--ff-product);
+        font-size: var(--fs-medium-semibig);
+        margin-bottom: 2rem;
+    }
+
+    &__h2 {
+        font-size: var(--fs-big);
+        color: var(--color-primary);
+    }
+
+    &__img {
+        width: 30rem;
+    }
 }

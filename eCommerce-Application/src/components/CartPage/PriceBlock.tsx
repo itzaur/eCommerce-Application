@@ -1,19 +1,34 @@
 import { Cart } from '@commercetools/platform-sdk';
+import { useEffect, useState } from 'react';
 
 function PriceBlock(props: {
     activeCart: Cart | null;
     // setActiveCart: React.Dispatch<React.SetStateAction<Cart | null>>;
 }): JSX.Element {
     const { activeCart } = props;
-    const priceWithoutDiscount = activeCart
-        ? activeCart.lineItems.reduce((acc, cur) => {
-              return acc + cur.price.value.centAmount / 100;
-          }, 0)
-        : '';
-    const discount =
-        priceWithoutDiscount && activeCart
-            ? priceWithoutDiscount - activeCart.totalPrice.centAmount / 100
+    const [priceWithoutDiscount, setPriceWithoutDiscount] = useState<
+        number | ''
+    >('');
+    const [discount, setDiscount] = useState<number | ''>('');
+
+    useEffect(() => {
+        const newPriceWithoutDiscount: number | '' = activeCart
+            ? activeCart.lineItems.reduce((acc, cur) => {
+                  return (
+                      acc + (cur.price.value.centAmount * cur.quantity) / 100
+                  );
+              }, 0)
             : '';
+        setPriceWithoutDiscount(newPriceWithoutDiscount);
+        setDiscount(
+            newPriceWithoutDiscount &&
+                typeof newPriceWithoutDiscount === 'number' &&
+                activeCart
+                ? newPriceWithoutDiscount -
+                      activeCart.totalPrice.centAmount / 100
+                : ''
+        );
+    }, [activeCart]);
 
     return (
         <section className="price-section">
