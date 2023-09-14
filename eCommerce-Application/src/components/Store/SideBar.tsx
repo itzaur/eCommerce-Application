@@ -8,6 +8,9 @@ function SideBar(props: {
     setSelectedCategoryId: React.Dispatch<React.SetStateAction<string>>;
     setSelectedCategoryPath: React.Dispatch<React.SetStateAction<string>>;
     categories: CategoryCustom[];
+    setIsFetching: CallableFunction;
+    setCurrentPage: CallableFunction;
+    setIsBreadCrumbsClicked: CallableFunction;
 }): JSX.Element {
     const {
         categories,
@@ -16,8 +19,12 @@ function SideBar(props: {
         setSelectedCategoryId,
         setSelectedCategoryPath,
         setSelectedTypePath,
+        setIsFetching,
+        setCurrentPage,
+        setIsBreadCrumbsClicked,
     } = props;
 
+    // const breadCrumbs = document.querySelector('.bread-crumbs');
     return (
         <aside className="sidebar">
             <div className="sidebar__content">
@@ -30,8 +37,12 @@ function SideBar(props: {
                                 to={`/store/${category.parent.path}`}
                                 onClick={(e): void => {
                                     setSelectedCategory('');
+                                    setIsFetching(true);
+                                    setCurrentPage(0);
                                     setSelectedType(category.parent.name);
                                     setSelectedTypePath(category.parent.path);
+                                    setIsBreadCrumbsClicked(false);
+
                                     if (e.target instanceof HTMLElement) {
                                         (
                                             document.querySelectorAll(
@@ -46,6 +57,9 @@ function SideBar(props: {
                                             'sidebar__category_active'
                                         );
                                     }
+                                    // breadCrumbs?.lastElementChild?.classList.add(
+                                    //     'sidebar__category_active'
+                                    // );
                                 }}
                             >
                                 {String(category.parent.name)}
@@ -62,6 +76,9 @@ function SideBar(props: {
                                         key={el.name}
                                         type="button"
                                         onClick={(e): void => {
+                                            setIsFetching(true);
+                                            setCurrentPage(0);
+
                                             setSelectedType(
                                                 category.parent.name
                                             );
@@ -71,6 +88,8 @@ function SideBar(props: {
                                             setSelectedCategory(el.name);
                                             setSelectedCategoryId(el.id);
                                             setSelectedCategoryPath(el.path);
+                                            setIsBreadCrumbsClicked(false);
+
                                             if (
                                                 e.target instanceof HTMLElement
                                             ) {
@@ -87,6 +106,10 @@ function SideBar(props: {
                                                     'sidebar__category_active'
                                                 );
                                             }
+
+                                            // breadCrumbs?.lastElementChild?.classList.add(
+                                            //     'sidebar__category_active'
+                                            // );
                                         }}
                                     >
                                         {el.name}

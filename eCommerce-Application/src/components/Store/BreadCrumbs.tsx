@@ -9,6 +9,9 @@ function BreadCrumbs(props: {
     selectedCategoryPath: string;
     selectedProduct: string;
     selectedProductPath: string;
+    setIsFetching: CallableFunction;
+    setCurrentPage: CallableFunction;
+    setIsBreadCrumbsClicked: CallableFunction;
 }): JSX.Element {
     const {
         selectedType,
@@ -19,6 +22,9 @@ function BreadCrumbs(props: {
         selectedCategoryPath,
         selectedProduct,
         selectedProductPath,
+        setIsFetching,
+        setCurrentPage,
+        setIsBreadCrumbsClicked,
     } = props;
 
     return (
@@ -36,8 +42,19 @@ function BreadCrumbs(props: {
                 <Link
                     to="/store"
                     onClick={(): void => {
+                        setIsFetching(true);
+                        setIsBreadCrumbsClicked(true);
+
                         setSelectedType('');
                         setSelectedCategory('');
+                        setCurrentPage(0);
+                        (
+                            document.querySelectorAll(
+                                '.sidebar__category_active'
+                            ) as NodeListOf<HTMLElement>
+                        ).forEach((el) => {
+                            el.classList.remove('sidebar__category_active');
+                        });
                     }}
                 >
                     Каталог
@@ -48,7 +65,18 @@ function BreadCrumbs(props: {
                     <Link
                         to={`/store/${selectedTypePath}`}
                         onClick={(): void => {
+                            setIsFetching(true);
+                            setIsBreadCrumbsClicked(true);
+
                             setSelectedCategory('');
+
+                            (
+                                document.querySelectorAll(
+                                    '.sidebar__category_active'
+                                ) as NodeListOf<HTMLElement>
+                            ).forEach((el) => {
+                                el.classList.remove('sidebar__category_active');
+                            });
                         }}
                     >
                         / {selectedType}{' '}
@@ -60,8 +88,19 @@ function BreadCrumbs(props: {
                     <Link
                         to={`/store/${selectedTypePath}/${selectedCategoryPath}`}
                         onClick={(): void => {
+                            setIsFetching(true);
+                            setIsBreadCrumbsClicked(true);
+
                             setSelectedType(selectedType);
                             setSelectedCategory(selectedCategory);
+
+                            (
+                                document.querySelectorAll(
+                                    '.sidebar__category_active'
+                                ) as NodeListOf<HTMLElement>
+                            ).forEach((el) => {
+                                el.classList.remove('sidebar__category_active');
+                            });
                         }}
                     >
                         / {selectedCategory}

@@ -1,6 +1,7 @@
 @use '../abstracts/mixins';
 
 #store {
+    min-height: 100vh;
     font-family: var(--ff-secondary);
 
     color: var(--color-white);
@@ -37,6 +38,22 @@
         row-gap: 3rem;
 
         padding-bottom: 4rem;
+    }
+
+    &__navigation {
+        @include mixins.flex(null, null, null);
+    }
+
+    &__pages {
+        @include mixins.flex(null, null, center);
+    }
+
+    &__next-page {
+        @include mixins.flex(null, center, center);
+        transform: rotate(180deg);
+    }
+    &__loader {
+        margin: 0 auto;
     }
 }
 
@@ -435,6 +452,7 @@ input[type='range']::-moz-range-thumb {
 
         &_active {
             color: var(--color-primary);
+            pointer-events: none;
         }
     }
 }

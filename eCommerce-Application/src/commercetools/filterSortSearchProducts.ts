@@ -4,7 +4,11 @@ import { FilterSortSearcParameters } from '../types/index';
 import { serverErrorMessage } from '../utils/constants';
 
 export async function filterSortSearcProducts(
-    parameters: FilterSortSearcParameters
+    parameters: FilterSortSearcParameters,
+    currentPage: number
+    // setCountCards: CallableFunction,
+    // setIsFetching: CallableFunction,
+    // isFetching: boolean
 ): Promise<ProductProjection[]> {
     const {
         selectedCategoryId,
@@ -18,13 +22,15 @@ export async function filterSortSearcProducts(
     } = parameters;
     const queryArgs: {
         filter: string | string[] | undefined;
+        offset: number;
         limit: number;
         sort?: string[];
         ['text.ru-RU']?: string;
         fuzzy?: boolean;
     } = {
         filter: [],
-        limit: 100,
+        offset: currentPage,
+        limit: 8,
     };
     if (Array.isArray(queryArgs.filter)) {
         if (selectedCategoryId) {
@@ -60,6 +66,8 @@ export async function filterSortSearcProducts(
         queryArgs.fuzzy = true;
     }
 
+    // console.log('OOOO++++');
+
     try {
         const result = await apiRoot
             .productProjections()
@@ -68,6 +76,7 @@ export async function filterSortSearcProducts(
                 queryArgs,
             })
             .execute();
+        // console.log('filetr');
         return result.body.results;
     } catch {
         throw new Error(serverErrorMessage);

@@ -36,6 +36,8 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
         updateCart(cardId);
     }
 
+    // console.log('cards', cards);
+
     return (
         <div className="cards">
             {cards.map((card, i: number) => (
