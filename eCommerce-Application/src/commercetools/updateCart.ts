@@ -2,11 +2,12 @@ import {
     Cart,
     MyCartAddLineItemAction,
     MyCartChangeLineItemQuantityAction,
+    MyCartRemoveLineItemAction,
 } from '@commercetools/platform-sdk';
 import { apiRootAnonimous } from './AnonimousClient';
 import { constructClientRefresh } from './withRefreshTokenClient';
 import { tokenInstance } from './apiConstants';
-import { UpdateCartMode } from '../types';
+import { UpdateCartParams } from '../types';
 
 let apiRootForRequest = apiRootAnonimous;
 
@@ -34,25 +35,45 @@ async function createNewCart(): Promise<Cart> {
 }
 
 export async function addNewProductInCartOrUpdateQuantity(
-    cardId: string,
-    cartData: Cart | null,
-    mode: UpdateCartMode,
-    quantity: number
+    props: UpdateCartParams
 ): Promise<Cart> {
-    const action: MyCartAddLineItemAction | MyCartChangeLineItemQuantityAction =
-        mode === 'new'
-            ? {
-                  action: 'addLineItem',
-                  productId: cardId,
-                  quantity,
-              }
-            : {
-                  action: 'changeLineItemQuantity',
-                  lineItemId: cartData?.lineItems.find((el) => {
-                      return el.productId === cardId;
-                  })?.id,
-                  quantity,
-              };
+    const { cartData, mode, cardId, quantity, firstFunctionCall } = props;
+
+    let tempActions:
+        | MyCartAddLineItemAction
+        | MyCartChangeLineItemQuantityAction
+        | MyCartRemoveLineItemAction[] = [];
+    switch (mode) {
+        case 'new':
+            tempActions = {
+                action: 'addLineItem',
+                productId: cardId,
+                quantity,
+            };
+            break;
+        case 'update':
+            tempActions = {
+                action: 'changeLineItemQuantity',
+                lineItemId: cartData?.lineItems.find((el) => {
+                    return el.productId === cardId;
+                })?.id,
+                quantity,
+            };
+            break;
+        case 'remove':
+            if (cartData)
+                tempActions = cartData.lineItems.map((el) => {
+                    return {
+                        action: 'removeLineItem',
+                        lineItemId: el.id,
+                    };
+                });
+            localStorage.removeItem('activeCart');
+            break;
+        default: //
+    }
+    const actions = tempActions;
+
     try {
         const cartForRequest = cartData || (await createNewCart());
         await apiRootForRequest
@@ -62,7 +83,7 @@ export async function addNewProductInCartOrUpdateQuantity(
             .post({
                 body: {
                     version: cartForRequest.version,
-                    actions: [action],
+                    actions: Array.isArray(actions) ? [...actions] : [actions],
                 },
             })
             .execute();
@@ -76,22 +97,32 @@ export async function addNewProductInCartOrUpdateQuantity(
     } catch (e) {
         if (
             e instanceof Error &&
-            e.message.startsWith('URI not found: /odyssey4165/me/carts/')
+            e.message.startsWith('URI not found: /odyssey4165/me/carts/') &&
+            firstFunctionCall
         ) {
             apiRootForRequest = constructClientRefresh();
             localStorage.setItem('token', tokenInstance.get().token);
-            return addNewProductInCartOrUpdateQuantity(
-                cardId,
+
+            addNewProductInCartOrUpdateQuantity({
                 cartData,
                 mode,
-                quantity
-            );
+                cardId,
+                quantity,
+                firstFunctionCall: false,
+            });
         }
         if (
             e instanceof Error &&
-            e.message === 'Missing required option (refreshToken)'
+            e.message === 'Missing required option (refreshToken)' &&
+            firstFunctionCall
         ) {
-            addNewProductInCartOrUpdateQuantity(cardId, null, mode, quantity);
+            addNewProductInCartOrUpdateQuantity({
+                cartData: null,
+                mode,
+                cardId,
+                quantity,
+                firstFunctionCall: false,
+            });
         }
         throw new Error('Мяу');
     }
