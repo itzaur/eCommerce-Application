@@ -41,11 +41,15 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
     function addNewProductInCartDOM(e: MouseEvent, cardId: string): void {
         e.preventDefault();
 
-        addNewProductInCartOrUpdateQuantity(cardId, activeCart, 'new', 1).then(
-            (data) => {
-                if (data) setActiveCart(data);
-            }
-        );
+        addNewProductInCartOrUpdateQuantity({
+            cartData: activeCart,
+            mode: 'new',
+            cardId,
+            quantity: 1,
+            firstFunctionCall: true,
+        }).then((data) => {
+            if (data) setActiveCart(data);
+        });
     }
 
     useEffect(() => {

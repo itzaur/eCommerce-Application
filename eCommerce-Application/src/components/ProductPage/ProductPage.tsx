@@ -132,12 +132,13 @@ function ProductDetail({
     function addRemoveProductInCartDOM(mode: UpdateCartMode): void {
         const quantity = mode === 'new' ? 1 : 0;
         if (card)
-            addNewProductInCartOrUpdateQuantity(
-                card.id,
-                activeCart,
+            addNewProductInCartOrUpdateQuantity({
+                cartData: activeCart,
                 mode,
-                quantity
-            ).then((data) => {
+                cardId: card.id,
+                quantity,
+                firstFunctionCall: true,
+            }).then((data) => {
                 if (data) setActiveCart(data);
                 if (mode === 'new') {
                     setCardInCart(true);
