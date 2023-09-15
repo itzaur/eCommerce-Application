@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Cart } from '@commercetools/platform-sdk';
 import { addNewProductInCartOrUpdateQuantity } from '../../commercetools/updateCart';
+import { setErrorBodyDOM } from '../../utils/constants';
 
 function CartProducts(props: {
     activeCart: Cart | null;
@@ -23,6 +24,9 @@ function CartProducts(props: {
             .then((data) => {
                 setActiveCart(data);
             })
+            .catch((err) => {
+                setErrorBodyDOM(err);
+            })
             .finally(() => {
                 setCartLoading(false);
             });
@@ -34,10 +38,14 @@ function CartProducts(props: {
             cardId: '',
             quantity: 0,
             firstFunctionCall: true,
-        }).then((data) => {
-            setActiveCart(data);
-            setModalConfirmVisible(false);
-        });
+        })
+            .then((data) => {
+                setActiveCart(data);
+                setModalConfirmVisible(false);
+            })
+            .catch((err) => {
+                setErrorBodyDOM(err);
+            });
     }
 
     return (
@@ -52,9 +60,9 @@ function CartProducts(props: {
                     >
                         Очистить корзину
                     </button>
-                    <h3>Товар</h3>
-                    <h3>Цена</h3>
-                    <h3>Цена со скидкой</h3>
+                    <p>Товар</p>
+                    <p>Цена</p>
+                    <p>Цена со скидкой</p>
                 </div>
                 <div className="purchases__items">
                     {activeCart &&
@@ -137,22 +145,87 @@ function CartProducts(props: {
                                             </button>
                                         </div>
                                     </div>
-                                    <h2 className="purchase__price">
-                                        {`$ ${(
-                                            (purchase.price.value.centAmount *
-                                                purchase.quantity) /
-                                            100
-                                        ).toLocaleString('ru')}.00`}
-                                    </h2>
+                                    {!purchase.price.discounted && (
+                                        <div className="purchase__price-block">
+                                            <p className="purchase__price-type">
+                                                Цена за единицу:
+                                            </p>
+                                            <h2 className="purchase__price">
+                                                {`$ ${Math.round(
+                                                    purchase.price.value
+                                                        .centAmount / 100
+                                                ).toLocaleString('ru')}.00`}
+                                            </h2>
+                                            <p className="purchase__price-type">
+                                                Стоимость:
+                                            </p>
+                                            <h2 className="purchase__price">
+                                                {`$ ${Math.round(
+                                                    (purchase.price.value
+                                                        .centAmount *
+                                                        purchase.quantity) /
+                                                        100
+                                                ).toLocaleString('ru')}.00`}
+                                            </h2>
+                                        </div>
+                                    )}
                                     {purchase.price.discounted && (
-                                        <h2 className="purchase__price purchase__price_discounted">
-                                            {`$ ${(
-                                                (purchase.price.discounted.value
-                                                    .centAmount *
-                                                    purchase.quantity) /
-                                                100
-                                            ).toLocaleString('ru')}.00`}
-                                        </h2>
+                                        <div className="purchase__price-block">
+                                            <p className="purchase__price-type">
+                                                Цена за единицу:
+                                            </p>
+                                            <h2 className="purchase__price">
+                                                {`$ ${Math.round(
+                                                    purchase.price.discounted
+                                                        .value.centAmount / 100
+                                                ).toLocaleString('ru')}.00`}
+                                            </h2>
+                                            <p className="purchase__price-type">
+                                                Стоимость:
+                                            </p>
+                                            <h2 className="purchase__price">
+                                                {`$ ${Math.round(
+                                                    (purchase.price.discounted
+                                                        .value.centAmount *
+                                                        purchase.quantity) /
+                                                        100
+                                                ).toLocaleString('ru')}.00`}
+                                            </h2>
+                                        </div>
+                                    )}
+                                    {purchase.discountedPricePerQuantity
+                                        .length ? (
+                                        <div className="purchase__price purchase__price_discounted">
+                                            <div className="purchase__price-block">
+                                                <p className="purchase__price-type">
+                                                    Цена за единицу:
+                                                </p>
+                                                <h2>
+                                                    {`$ ${Math.round(
+                                                        purchase
+                                                            .discountedPricePerQuantity[0]
+                                                            .discountedPrice
+                                                            .value.centAmount /
+                                                            100
+                                                    ).toLocaleString('ru')}.00`}
+                                                </h2>
+                                                <p className="purchase__price-type">
+                                                    Стоимость:
+                                                </p>
+                                                <h2>
+                                                    {`$ ${Math.round(
+                                                        (purchase
+                                                            .discountedPricePerQuantity[0]
+                                                            .discountedPrice
+                                                            .value.centAmount /
+                                                            100) *
+                                                            purchase.quantity
+                                                    ).toLocaleString('ru')}.00`}
+                                                </h2>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        ''
                                     )}
                                 </div>
                             );

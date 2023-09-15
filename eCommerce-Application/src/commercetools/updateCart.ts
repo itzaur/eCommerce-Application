@@ -8,6 +8,7 @@ import { apiRootAnonimous } from './AnonimousClient';
 import { constructClientRefresh } from './withRefreshTokenClient';
 import { tokenInstance } from './apiConstants';
 import { UpdateCartParams } from '../types';
+import { serverErrorMessage } from '../utils/constants';
 
 let apiRootForRequest = apiRootAnonimous;
 
@@ -36,7 +37,7 @@ async function createNewCart(): Promise<Cart> {
 
 export async function addNewProductInCartOrUpdateQuantity(
     props: UpdateCartParams
-): Promise<Cart> {
+): Promise<Cart | null> {
     const { cartData, mode, cardId, quantity, firstFunctionCall } = props;
 
     let tempActions:
@@ -124,7 +125,10 @@ export async function addNewProductInCartOrUpdateQuantity(
                 firstFunctionCall: false,
             });
         }
-        throw new Error('Мяу');
+        if (e instanceof Error && e.message === 'Failed to fetch') {
+            throw new Error(serverErrorMessage);
+        }
+        return null;
     }
 }
 
@@ -146,6 +150,42 @@ export async function getActiveCart(): Promise<Cart | null> {
         ) {
             return null;
         }
-        throw new Error('Мяу');
+        if (e instanceof Error && e.message === 'Failed to fetch') {
+            throw new Error(serverErrorMessage);
+        }
+        return null;
+    }
+}
+
+export async function applyDiscount(
+    cartData: Cart,
+    promocode: string
+): Promise<Cart> {
+    try {
+        const cartWithPromocode = await apiRootForRequest
+            .me()
+            .carts()
+            .withId({ ID: cartData.id })
+            .post({
+                body: {
+                    version: cartData.version,
+                    actions: [{ action: 'addDiscountCode', code: promocode }],
+                },
+            })
+            .execute();
+        localStorage.setItem(
+            'activeCart',
+            JSON.stringify(cartWithPromocode.body)
+        );
+        return cartWithPromocode.body;
+    } catch (e) {
+        const error = e as Error;
+        if (
+            error.message === `The discount code '${promocode}' was not found.`
+        ) {
+            throw new Error('Промокод не найден:(');
+        } else {
+            throw new Error('Сервер в космосе, не обещал вернуться:(');
+        }
     }
 }

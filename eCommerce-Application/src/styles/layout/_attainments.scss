@@ -52,4 +52,16 @@
             }
         }
     }
+
+    &__promocodes {
+        gap: 1rem;
+        p {
+            display: block;
+            width: 100%;
+
+            b {
+                font-weight: bolder;
+            }
+        }
+    }
 }

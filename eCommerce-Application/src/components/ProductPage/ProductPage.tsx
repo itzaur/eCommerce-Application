@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCoverflow, Pagination, Navigation } from 'swiper/modules';
 import { Product, Cart, LineItem } from '@commercetools/platform-sdk';
+import CircleLoader from 'react-spinners/CircleLoader';
 import { apiRoot } from '../../commercetools/Client';
 import { Header } from '../Store';
 import { Footer } from '../MainPage';
@@ -50,6 +51,7 @@ function ProductDetail({
 
     const [activeCart, setActiveCart] = useState<Cart | null>(cartFirst);
     const [cardInCart, setCardInCart] = useState(false);
+    const [cartLoading, setCartLoading] = useState(false);
 
     useEffect(() => {
         async function getProductKey(key: string): Promise<void> {
@@ -75,7 +77,8 @@ function ProductDetail({
             document.body.textContent = err.message;
             document.body.classList.add('error-connection');
         });
-    }, [location, cartFirst.lineItems]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [location]);
 
     const product: ProductOptions = {
         title: cardOptions?.name ? cardOptions?.name['ru-RU'] : '',
@@ -131,21 +134,29 @@ function ProductDetail({
 
     function addRemoveProductInCartDOM(mode: UpdateCartMode): void {
         const quantity = mode === 'new' ? 1 : 0;
-        if (card)
+        if (card) {
+            setCartLoading(true);
+
             addNewProductInCartOrUpdateQuantity({
                 cartData: activeCart,
                 mode,
                 cardId: card.id,
                 quantity,
                 firstFunctionCall: true,
-            }).then((data) => {
-                if (data) setActiveCart(data);
-                if (mode === 'new') {
-                    setCardInCart(true);
-                } else {
-                    setCardInCart(false);
-                }
-            });
+            })
+                .then((data) => {
+                    if (data) setActiveCart(data);
+                    if (mode === 'new') {
+                        setCardInCart(true);
+                    } else {
+                        setCardInCart(false);
+                    }
+                })
+                .catch(() => {})
+                .finally(() => {
+                    setCartLoading(false);
+                });
+        }
     }
 
     return (
@@ -355,6 +366,7 @@ function ProductDetail({
                                     >
                                         Продолжить покупки
                                     </button>
+
                                     <button
                                         className={
                                             cardInCart
@@ -367,9 +379,17 @@ function ProductDetail({
                                             addRemoveProductInCartDOM('new');
                                         }}
                                     >
-                                        В корзину
+                                        {!cartLoading && <span>В корзину</span>}
+                                        {cartLoading && (
+                                            <CircleLoader
+                                                color="hsl(0, 0%, 100%)"
+                                                loading={cartLoading}
+                                                size={40}
+                                            />
+                                        )}
                                     </button>
-                                    {cardInCart && (
+
+                                    {cardInCart && !cartLoading && (
                                         <button
                                             className="btn btn--product btn--basket"
                                             type="button"
@@ -379,7 +399,16 @@ function ProductDetail({
                                                 );
                                             }}
                                         >
-                                            Удалить из корзины
+                                            {!cartLoading && (
+                                                <span>Удалить из корзины</span>
+                                            )}
+                                            {cartLoading && (
+                                                <CircleLoader
+                                                    color="hsl(252, 12%, 40%);"
+                                                    loading={cartLoading}
+                                                    size={40}
+                                                />
+                                            )}
                                         </button>
                                     )}
                                 </div>

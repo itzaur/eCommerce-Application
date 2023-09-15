@@ -65,6 +65,18 @@ function Attainment(): JSX.Element {
                     <p>При наличии мультипаспорта скидка 10%</p>
                 </div>
             </div>
+
+            <div className="attainment__item attainment__promocodes">
+                <h3 className="attainment__title">Активные промокоды</h3>
+                <p>
+                    <b>cosmosales</b> - дополнительная скидка на космотуры 10%
+                    при покупке от 10 000.00 USD
+                </p>
+                <p>
+                    <b>nemanglass</b> - cкидка на стеклянные сувениры от
+                    cтеклозавода &ldquo;Нёман&ldquo;
+                </p>
+            </div>
         </section>
     );
 }
