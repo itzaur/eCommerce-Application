@@ -1,22 +1,33 @@
 import { Cart } from '@commercetools/platform-sdk';
 import { useEffect, useState } from 'react';
+import { applyDiscount } from '../../commercetools/updateCart';
 
 function PriceBlock(props: {
     activeCart: Cart | null;
-    // setActiveCart: React.Dispatch<React.SetStateAction<Cart | null>>;
+    setActiveCart: React.Dispatch<React.SetStateAction<Cart | null>>;
 }): JSX.Element {
-    const { activeCart } = props;
+    const { activeCart, setActiveCart } = props;
     const [priceWithoutDiscount, setPriceWithoutDiscount] = useState<
         number | ''
     >('');
     const [discount, setDiscount] = useState<number | ''>('');
+    const [promocode, setPromocode] = useState('');
+    const [promocodeSuccess, setPromocodeSuccess] = useState(false);
+    const [promocodeErrorMessage, setPromocodeErrorMessage] = useState('');
 
     useEffect(() => {
         const newPriceWithoutDiscount: number | '' = activeCart
             ? activeCart.lineItems.reduce((acc, cur) => {
-                  return (
-                      acc + (cur.price.value.centAmount * cur.quantity) / 100
-                  );
+                  const variantPrice = cur.price?.discounted
+                      ? cur.price?.discounted?.value.centAmount
+                      : cur.price?.value.centAmount;
+
+                  if (variantPrice) {
+                      return Math.round(
+                          acc + (variantPrice * cur.quantity) / 100
+                      );
+                  }
+                  return 0;
               }, 0)
             : '';
         setPriceWithoutDiscount(newPriceWithoutDiscount);
@@ -25,10 +36,30 @@ function PriceBlock(props: {
                 typeof newPriceWithoutDiscount === 'number' &&
                 activeCart
                 ? newPriceWithoutDiscount -
-                      activeCart.totalPrice.centAmount / 100
+                      Math.round(activeCart.totalPrice.centAmount / 100)
                 : ''
         );
     }, [activeCart]);
+
+    function applyPromocode(): void {
+        if (promocode && activeCart)
+            applyDiscount(activeCart, promocode)
+                .then((data) => {
+                    if (data) {
+                        setActiveCart(data);
+                        setPromocodeSuccess(true);
+                        setTimeout(() => {
+                            setPromocodeSuccess(false);
+                        }, 2000);
+                    }
+                })
+                .catch((e: Error) => {
+                    setPromocodeErrorMessage(e.message);
+                    setTimeout(() => {
+                        setPromocodeErrorMessage('');
+                    }, 2000);
+                });
+    }
 
     return (
         <section className="price-section">
@@ -53,7 +84,7 @@ function PriceBlock(props: {
                     </h2>
                     <h2 className="price-total__value">
                         {activeCart
-                            ? `$ ${(
+                            ? `$ ${Math.round(
                                   activeCart.totalPrice.centAmount / 100
                               ).toLocaleString('ru')}.00`
                             : ''}
@@ -62,10 +93,30 @@ function PriceBlock(props: {
                 <div className="promocode">
                     <div>
                         <p className="promocode__label">Ввести промокод</p>
-                        <input className="promocode__input" type="text" />
+                        <input
+                            className="promocode__input"
+                            type="text"
+                            onChange={(e): void => setPromocode(e.target.value)}
+                        />
+                        {promocodeSuccess && (
+                            <p className="promocode_success">
+                                Промокод применён!
+                            </p>
+                        )}
+                        {promocodeErrorMessage && (
+                            <p className="error-message error-message_static">
+                                {promocodeErrorMessage}
+                            </p>
+                        )}
                     </div>
-
-                    <button className="btn cart__btn" type="button">
+                    <div />
+                    <button
+                        className="btn cart__btn"
+                        type="button"
+                        onClick={(): void => {
+                            applyPromocode();
+                        }}
+                    >
                         Применить
                     </button>
                 </div>

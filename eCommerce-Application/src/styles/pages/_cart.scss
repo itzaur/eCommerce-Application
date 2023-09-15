@@ -120,6 +120,15 @@
             color: var(--color-primary);
         }
     }
+    &__price-block {
+        @include mixins.flex(column, space-between, center);
+        padding-bottom: 1rem;
+    }
+
+    &__price-type {
+        font-family: var(--ff-product);
+        font-size: var(--fs-small);
+    }
 }
 
 .price-section {
@@ -165,13 +174,18 @@
 }
 
 .promocode {
-    @include mixins.flex(row, space-between, flex-end);
+    @include mixins.flex(row, space-between, center);
     gap: 2rem;
 
     padding-top: 4rem;
 
     div {
-        @include mixins.flex(column, space-between, flex-start);
+        @include mixins.flex(column, flex-start, flex-start);
+        min-height: 10rem;
+
+        .promocode_success {
+            color: var(--color-primary);
+        }
     }
 
     &__label {

@@ -7,16 +7,21 @@ import PricesBlock from './PriceBlock';
 import NoCart from './NoCart';
 import { getActiveCart } from '../../commercetools/updateCart';
 import { Footer } from '../MainPage';
+import { setErrorBodyDOM } from '../../utils/constants';
 
 function CartPage(): JSX.Element {
     const [activeCart, setActiveCart] = useState<Cart | null>(null);
     const [pageLoaded, setPageloaded] = useState(false);
 
     useEffect(() => {
-        getActiveCart().then((data) => {
-            if (data) setActiveCart(data);
-            setPageloaded(true);
-        });
+        getActiveCart()
+            .then((data) => {
+                if (data) setActiveCart(data);
+                setPageloaded(true);
+            })
+            .catch((err) => {
+                setErrorBodyDOM(err);
+            });
     }, [pageLoaded, setActiveCart]);
 
     return (
@@ -40,7 +45,7 @@ function CartPage(): JSX.Element {
                         />
                         <PricesBlock
                             activeCart={activeCart}
-                            // setActiveCart={setActiveCart}
+                            setActiveCart={setActiveCart}
                         />
                     </div>
                 ) : (

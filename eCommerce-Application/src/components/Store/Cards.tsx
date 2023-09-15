@@ -1,6 +1,7 @@
 import React, { MouseEvent, useRef, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Cart, ProductProjection } from '@commercetools/platform-sdk';
+import { CircleLoader } from 'react-spinners';
 import { addNewProductInCartOrUpdateQuantity } from '../../commercetools/updateCart';
 
 import cartIcon from '../../assets/images/cart-icon.png';
@@ -17,13 +18,15 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
         : null;
 
     const [activeCart, setActiveCart] = useState<Cart | null>(cartFirst);
+    const [cartLoading, setCartLoading] = useState(false);
+    const [cartLoadingElement, setCartLoadingElement] = useState('');
 
-    const scrollToTop = (event: React.MouseEvent<HTMLElement>): void => {
-        const target = event.target as HTMLElement;
-        if (target.className.includes('btn')) return;
+    // const scrollToTop = (event: React.MouseEvent<HTMLElement>): void => {
+    //     const target = event.target as HTMLElement;
+    //     if (target.className.includes('btn')) return;
 
-        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-    };
+    //     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    // };
     function showHideDescription(e: MouseEvent): void {
         e.preventDefault();
         if (e.target instanceof HTMLElement) {
@@ -40,6 +43,10 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
     }
     function addNewProductInCartDOM(e: MouseEvent, cardId: string): void {
         e.preventDefault();
+        if (e.target instanceof HTMLElement && e.target.parentElement) {
+            setCartLoadingElement(e.target.parentElement.id);
+            setCartLoading(true);
+        }
 
         addNewProductInCartOrUpdateQuantity({
             cartData: activeCart,
@@ -47,9 +54,17 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
             cardId,
             quantity: 1,
             firstFunctionCall: true,
-        }).then((data) => {
-            if (data) setActiveCart(data);
-        });
+        })
+            .then((data) => {
+                if (data) {
+                    setActiveCart(data);
+                }
+            })
+            .catch(() => {})
+            .finally(() => {
+                setCartLoadingElement('');
+                setCartLoading(false);
+            });
     }
 
     useEffect(() => {
@@ -62,7 +77,7 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
     return (
         <div className="cards">
             {cards.map((card, i: number) => (
-                <Link key={card.id} to={`./${card.key}`} onClick={scrollToTop}>
+                <Link key={card.id} to={`./${card.key}`}>
                     <div key={i} className="card" id={card.key}>
                         <figure className="card__img">
                             {card.masterVariant.images && (
@@ -122,6 +137,7 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
                                 <div className="card__icons">
                                     <button
                                         type="button"
+                                        id={`btn-cart-${card.key}`}
                                         disabled={
                                             !!productsIdInCart.includes(card.id)
                                         }
@@ -129,17 +145,29 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
                                             addNewProductInCartDOM(e, card.id);
                                         }}
                                     >
-                                        <img
-                                            src={
-                                                productsIdInCart.includes(
-                                                    card.id
-                                                )
-                                                    ? cartIconInactive
-                                                    : cartIcon
-                                            }
-                                            alt="cart-icon"
-                                        />
+                                        {cartLoadingElement !==
+                                            `btn-cart-${card.key}` && (
+                                            <img
+                                                src={
+                                                    productsIdInCart.includes(
+                                                        card.id
+                                                    )
+                                                        ? cartIconInactive
+                                                        : cartIcon
+                                                }
+                                                alt="cart-icon"
+                                            />
+                                        )}
+                                        {cartLoadingElement ===
+                                            `btn-cart-${card.key}` && (
+                                            <CircleLoader
+                                                color="hsl(181, 73%, 60%)"
+                                                loading={cartLoading}
+                                                size={40}
+                                            />
+                                        )}
                                     </button>
+
                                     <button type="button">
                                         <img
                                             src={favouriteIcon}
