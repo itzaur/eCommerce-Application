@@ -43,11 +43,15 @@ function Info(): JSX.Element {
                                 className="btn btn--exit"
                                 type="button"
                                 onClick={(): void => {
-                                    localStorage.clear();
+                                    localStorage.removeItem('user');
+                                    localStorage.removeItem('version');
+                                    localStorage.removeItem('activeCart');
                                     setUser(null);
                                 }}
                                 onKeyDown={(): void => {
-                                    localStorage.clear();
+                                    localStorage.removeItem('user');
+                                    localStorage.removeItem('version');
+                                    localStorage.removeItem('activeCart');
                                     setUser(null);
                                 }}
                             >

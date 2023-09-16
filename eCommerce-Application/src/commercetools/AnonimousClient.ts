@@ -35,4 +35,3 @@ export function constructClientAnonimousFlow(): ByProjectKeyRequestBuilder {
     });
     return apiRoot;
 }
-export const apiRootAnonimous = constructClientAnonimousFlow();

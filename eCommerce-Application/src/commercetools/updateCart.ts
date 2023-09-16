@@ -4,17 +4,38 @@ import {
     MyCartChangeLineItemQuantityAction,
     MyCartRemoveLineItemAction,
 } from '@commercetools/platform-sdk';
-import { apiRootAnonimous } from './AnonimousClient';
+import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
+import { constructClientAnonimousFlow } from './AnonimousClient';
 import { constructClientRefresh } from './withRefreshTokenClient';
+import { apirootPassword } from './withPasswordClient';
 import { tokenInstance } from './apiConstants';
 import { UpdateCartParams } from '../types';
 import { serverErrorMessage } from '../utils/constants';
+import { loginCustomer } from './loginCustomer';
 
-let apiRootForRequest = apiRootAnonimous;
+const user = JSON.parse(localStorage.getItem('user') as string);
+
+async function getCorrectApiRoot(): Promise<ByProjectKeyRequestBuilder> {
+    if (apirootPassword) {
+        return apirootPassword;
+    }
+    if (user && user.email && user.password) {
+        return loginCustomer(user.email, user.password)
+            .then((apiroot) => {
+                if (apiroot) return apiroot;
+                return constructClientAnonimousFlow();
+            })
+            .catch(() => {
+                return constructClientAnonimousFlow();
+            });
+    }
+    return constructClientAnonimousFlow();
+}
+let apiRootForRequest: ByProjectKeyRequestBuilder = await getCorrectApiRoot();
 
 async function createNewCart(): Promise<Cart> {
     try {
-        const result = await apiRootAnonimous
+        const result = await apiRootForRequest
             .me()
             .carts()
             .post({
@@ -31,13 +52,13 @@ async function createNewCart(): Promise<Cart> {
         );
         return result.body;
     } catch {
-        throw new Error('Мяу');
+        throw new Error(serverErrorMessage);
     }
 }
 
 export async function addNewProductInCartOrUpdateQuantity(
     props: UpdateCartParams
-): Promise<Cart | null> {
+): Promise<Cart | null | void> {
     const { cartData, mode, cardId, quantity, firstFunctionCall } = props;
 
     let tempActions:
@@ -77,6 +98,7 @@ export async function addNewProductInCartOrUpdateQuantity(
 
     try {
         const cartForRequest = cartData || (await createNewCart());
+        if (!apiRootForRequest || !cartForRequest) return;
         await apiRootForRequest
             .me()
             .carts()
@@ -93,7 +115,9 @@ export async function addNewProductInCartOrUpdateQuantity(
             .activeCart()
             .get()
             .execute();
-        localStorage.setItem('activeCart', JSON.stringify(activeCart.body));
+        if (mode !== 'remove')
+            localStorage.setItem('activeCart', JSON.stringify(activeCart.body));
+        // eslint-disable-next-line
         return activeCart.body;
     } catch (e) {
         if (
@@ -103,8 +127,8 @@ export async function addNewProductInCartOrUpdateQuantity(
         ) {
             apiRootForRequest = constructClientRefresh();
             localStorage.setItem('token', tokenInstance.get().token);
-
-            addNewProductInCartOrUpdateQuantity({
+            // eslint-disable-next-line
+            return addNewProductInCartOrUpdateQuantity({
                 cartData,
                 mode,
                 cardId,
@@ -114,10 +138,13 @@ export async function addNewProductInCartOrUpdateQuantity(
         }
         if (
             e instanceof Error &&
-            e.message === 'Missing required option (refreshToken)' &&
+            e.message ===
+                ('Missing required option (refreshToken)' ||
+                    'The refresh token was not found. It may have expired.') &&
             firstFunctionCall
         ) {
-            addNewProductInCartOrUpdateQuantity({
+            // eslint-disable-next-line
+            return addNewProductInCartOrUpdateQuantity({
                 cartData: null,
                 mode,
                 cardId,
@@ -128,25 +155,32 @@ export async function addNewProductInCartOrUpdateQuantity(
         if (e instanceof Error && e.message === 'Failed to fetch') {
             throw new Error(serverErrorMessage);
         }
-        return null;
     }
 }
 
-export async function getActiveCart(): Promise<Cart | null> {
+export async function getActiveCart(
+    firstFunctionCall: boolean
+): Promise<Cart | null> {
     try {
         return (await apiRootForRequest.me().activeCart().get().execute()).body;
     } catch (e) {
         if (
             e instanceof Error &&
-            e.message === 'URI not found: /odyssey4165/me/active-cart'
+            e.message === 'URI not found: /odyssey4165/me/active-cart' &&
+            firstFunctionCall
         ) {
-            apiRootForRequest = constructClientRefresh();
-            localStorage.setItem('token', tokenInstance.get().token);
-            return getActiveCart();
+            if (localStorage.getItem('refreshToken')) {
+                apiRootForRequest = constructClientRefresh();
+                localStorage.setItem('token', tokenInstance.get().token);
+                return getActiveCart(false);
+            }
+            return null;
         }
         if (
             e instanceof Error &&
-            e.message === 'Missing required option (refreshToken)'
+            e.message ===
+                ('Missing required option (refreshToken)' ||
+                    'The refresh token was not found. It may have expired.')
         ) {
             return null;
         }
@@ -160,7 +194,7 @@ export async function getActiveCart(): Promise<Cart | null> {
 export async function applyDiscount(
     cartData: Cart,
     promocode: string
-): Promise<Cart> {
+): Promise<Cart | undefined> {
     try {
         const cartWithPromocode = await apiRootForRequest
             .me()

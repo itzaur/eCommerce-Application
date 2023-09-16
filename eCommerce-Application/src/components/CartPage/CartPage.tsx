@@ -14,9 +14,9 @@ function CartPage(): JSX.Element {
     const [pageLoaded, setPageloaded] = useState(false);
 
     useEffect(() => {
-        getActiveCart()
+        getActiveCart(true)
             .then((data) => {
-                if (data) setActiveCart(data);
+                setActiveCart(data);
                 setPageloaded(true);
             })
             .catch((err) => {
@@ -52,7 +52,7 @@ function CartPage(): JSX.Element {
                     ''
                 )}
 
-                {!activeCart || (!activeCart.lineItems.length && <NoCart />)}
+                {(!activeCart || !activeCart.lineItems.length) && <NoCart />}
             </section>
             <Footer />
         </>
