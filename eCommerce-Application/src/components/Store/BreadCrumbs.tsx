@@ -1,3 +1,4 @@
+/* eslint-disable react/require-default-props */
 import { Link } from 'react-router-dom';
 
 function BreadCrumbs(props: {
@@ -9,9 +10,9 @@ function BreadCrumbs(props: {
     selectedCategoryPath: string;
     selectedProduct: string;
     selectedProductPath: string;
-    setIsFetching: CallableFunction;
-    setCurrentPage: CallableFunction;
-    setIsBreadCrumbsClicked: CallableFunction;
+    setIsFetching?: CallableFunction;
+    setCurrentPage?: CallableFunction;
+    setIsBreadCrumbsClicked?: CallableFunction;
 }): JSX.Element {
     const {
         selectedType,
@@ -42,12 +43,18 @@ function BreadCrumbs(props: {
                 <Link
                     to="/store"
                     onClick={(): void => {
-                        setIsFetching(true);
-                        setIsBreadCrumbsClicked(true);
+                        if (setIsFetching) {
+                            setIsFetching(true);
+                        }
+                        if (setIsBreadCrumbsClicked) {
+                            setIsBreadCrumbsClicked(true);
+                        }
+                        if (setCurrentPage) {
+                            setCurrentPage(0);
+                        }
 
                         setSelectedType('');
                         setSelectedCategory('');
-                        setCurrentPage(0);
                         (
                             document.querySelectorAll(
                                 '.sidebar__category_active'
@@ -65,8 +72,12 @@ function BreadCrumbs(props: {
                     <Link
                         to={`/store/${selectedTypePath}`}
                         onClick={(): void => {
-                            setIsFetching(true);
-                            setIsBreadCrumbsClicked(true);
+                            if (setIsFetching) {
+                                setIsFetching(true);
+                            }
+                            if (setIsBreadCrumbsClicked) {
+                                setIsBreadCrumbsClicked(true);
+                            }
 
                             setSelectedCategory('');
 
@@ -88,8 +99,12 @@ function BreadCrumbs(props: {
                     <Link
                         to={`/store/${selectedTypePath}/${selectedCategoryPath}`}
                         onClick={(): void => {
-                            setIsFetching(true);
-                            setIsBreadCrumbsClicked(true);
+                            if (setIsFetching) {
+                                setIsFetching(true);
+                            }
+                            if (setIsBreadCrumbsClicked) {
+                                setIsBreadCrumbsClicked(true);
+                            }
 
                             setSelectedType(selectedType);
                             setSelectedCategory(selectedCategory);

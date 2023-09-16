@@ -113,6 +113,7 @@ function ProductDetail({
         }
     };
 
+    // console.log('PRODUCNT DETAIL');
     return (
         <>
             <Header withSearchValue={false} setSearchValue={undefined} />

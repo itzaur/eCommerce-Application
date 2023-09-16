@@ -51,15 +51,9 @@ function Store({
 
     const breadCrumbs = document.querySelector('.bread-crumbs');
 
-    // console.log(isBreadCrumbsClicked);
-
-    // console.log('до', cards);
-
     useEffect(() => {
         getCategories()
             .then((data) => {
-                // console.log('1');
-
                 if (data) setCategories(data);
             })
             .catch((err: Error) => {
@@ -71,8 +65,6 @@ function Store({
             );
             getSubCategoryId(category)
                 .then((data) => {
-                    // console.log('2');
-
                     if (data) setSelectedCategoryId(data);
                     setIsFetching(false);
 
@@ -88,12 +80,12 @@ function Store({
             breadCrumbs?.lastElementChild?.classList.add(
                 'sidebar__category_active'
             );
-            // console.log('3');
             // setCurrentPage(0);
             getProductsBySubcategory(
                 selectedCategory,
                 setCountCards,
-                currentPage
+                currentPage,
+                itemPerPage
             )
                 .then((data) => {
                     if (data) {
@@ -112,19 +104,22 @@ function Store({
                     setErrorBodyDOM(err);
                 });
         } else if (selectedType && !isBreadCrumbsClicked) {
-            // console.log('4');
             breadCrumbs?.lastElementChild?.classList.add(
                 'sidebar__category_active'
             );
-            getProductsByProductType(selectedType, setCountCards, currentPage)
+            getProductsByProductType(
+                selectedType,
+                setCountCards,
+                currentPage,
+                countCards
+            )
                 .then((data) => {
                     if (data) {
                         if (data.length) {
                             setFilterVariants(checkFilterVariants(data));
                         }
                         setCards(data);
-                        // setSelectedCategoryId('');
-
+                        setSelectedCategoryId('');
                         setMinPrice(checkMinMaxPrice(data)[0]);
                         setMaxPrice(checkMinMaxPrice(data)[1]);
                         setMinSelectedPrice(checkMinMaxPrice(data)[0]);
@@ -136,11 +131,10 @@ function Store({
                     setErrorBodyDOM(err);
                 });
         } else {
-            // console.log('5');
             breadCrumbs?.lastElementChild?.classList.add(
                 'sidebar__category_active'
             );
-            getAllProducts(setCountCards, currentPage)
+            getAllProducts(setCountCards, currentPage, itemPerPage)
                 .then((data) => {
                     if (data) {
                         // setCountCards(data.length);
@@ -164,7 +158,10 @@ function Store({
         currentPage,
         isBreadCrumbsClicked,
         breadCrumbs?.lastElementChild?.classList,
+        countCards,
     ]);
+
+    // console.log(currentPage);
 
     return (
         <>
@@ -210,9 +207,10 @@ function Store({
                             setMaxSelectedPrice={setMaxSelectedPrice}
                             searchValue={searchValue}
                             currentPage={currentPage}
-                            setCountCards={setCountCards}
+                            // setCountCards={setCountCards}
                             setIsFetching={setIsFetching}
-                            isFetching={isFetching}
+                            // isFetching={isFetching}
+                            itemPerPage={itemPerPage}
                         />
 
                         {!cards.length && !isFetching && (

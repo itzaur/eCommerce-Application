@@ -20,7 +20,8 @@ export async function getSubCategoryId(
 export async function getProductsBySubcategory(
     categoryExternalId: string,
     setCountCards?: CallableFunction,
-    currentPage?: number
+    currentPage?: number,
+    itemPerPage?: number
 ): Promise<ProductProjection[] | undefined> {
     try {
         // console.log('getProductsBySubcategory+++++++');
@@ -31,7 +32,7 @@ export async function getProductsBySubcategory(
                 queryArgs: {
                     where: `categories(id="${categoryId}")`,
                     offset: currentPage,
-                    limit: 8,
+                    limit: itemPerPage,
                 },
             })
             .execute();

@@ -5,10 +5,11 @@ import { serverErrorMessage } from '../utils/constants';
 
 export async function filterSortSearcProducts(
     parameters: FilterSortSearcParameters,
-    currentPage: number
+    currentPage: number,
     // setCountCards: CallableFunction,
     // setIsFetching: CallableFunction,
     // isFetching: boolean
+    itemPerPage: number
 ): Promise<ProductProjection[]> {
     const {
         selectedCategoryId,
@@ -30,7 +31,7 @@ export async function filterSortSearcProducts(
     } = {
         filter: [],
         offset: currentPage,
-        limit: 8,
+        limit: itemPerPage,
     };
     if (Array.isArray(queryArgs.filter)) {
         if (selectedCategoryId) {
@@ -77,6 +78,9 @@ export async function filterSortSearcProducts(
             })
             .execute();
         // console.log('filetr');
+        // if (setCountCards) {
+        //     setCountCards(result.body.total);
+        // }
         return result.body.results;
     } catch {
         throw new Error(serverErrorMessage);

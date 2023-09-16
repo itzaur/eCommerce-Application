@@ -23,6 +23,7 @@ export async function getProductsByProductType(
     typeName: string,
     setCountCards?: CallableFunction,
     currentPage?: number
+    // countCards?: number
 ): Promise<ProductProjection[] | undefined> {
     try {
         // console.log('getProductsByProductType++++++++++');
@@ -38,6 +39,8 @@ export async function getProductsByProductType(
                 },
             })
             .execute();
+        // console.log('result__TYPE', result.body);
+        // console.log('GGG', currentPage);
         if (setCountCards) {
             setCountCards(result.body.total);
         }

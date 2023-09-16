@@ -17,9 +17,10 @@ function Parameters(props: {
     setMaxSelectedPrice: React.Dispatch<React.SetStateAction<number>>;
     searchValue: string;
     currentPage: number;
-    setCountCards: CallableFunction;
+    // setCountCards: CallableFunction;
     setIsFetching: CallableFunction;
-    isFetching: boolean;
+    // isFetching: boolean;
+    itemPerPage: number;
 }): JSX.Element {
     const {
         setCards,
@@ -35,9 +36,10 @@ function Parameters(props: {
         setMaxSelectedPrice,
         searchValue,
         currentPage,
-        setCountCards,
+        // setCountCards,
         setIsFetching,
-        isFetching,
+        // isFetching,
+        itemPerPage,
     } = props;
     const [selectedFiltersList, setselectedFiltersList] = useState<string[]>(
         []
@@ -152,9 +154,10 @@ function Parameters(props: {
                 discountedProducts,
             },
             currentPage,
-            setCountCards,
-            setIsFetching,
-            isFetching
+            // setCountCards,
+            // setIsFetching,
+            // isFetching,
+            itemPerPage
         )
             .then((data) => {
                 if (data) setCards(data);
