@@ -1,4 +1,4 @@
-import React, { MouseEvent, useRef, useState, useEffect } from 'react';
+import { MouseEvent, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Cart, ProductProjection } from '@commercetools/platform-sdk';
 import { CircleLoader } from 'react-spinners';
@@ -12,7 +12,6 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
     const currentCardRef = useRef<Element | null>(null);
     const [buttonDescriptionTexcontent, setButtonDescriptionTexcontent] =
         useState('Показать описание ▼');
-    const [productsIdInCart, setProductIdInCart] = useState<string[]>([]);
     const cartFirst = localStorage.getItem('activeCart')
         ? JSON.parse(localStorage.getItem('activeCart') as string)
         : null;
@@ -56,9 +55,7 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
             firstFunctionCall: true,
         })
             .then((data) => {
-                if (data) {
-                    setActiveCart(data);
-                }
+                if (data) setActiveCart(data);
             })
             .catch(() => {})
             .finally(() => {
@@ -66,13 +63,6 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
                 setCartLoading(false);
             });
     }
-
-    useEffect(() => {
-        const tempIDs = activeCart?.lineItems
-            ? activeCart.lineItems.map((product) => product.productId)
-            : [];
-        setProductIdInCart(tempIDs);
-    }, [activeCart]);
 
     return (
         <div className="cards">
@@ -139,7 +129,12 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
                                         type="button"
                                         id={`btn-cart-${card.key}`}
                                         disabled={
-                                            !!productsIdInCart.includes(card.id)
+                                            !!activeCart?.lineItems
+                                                .map(
+                                                    (product) =>
+                                                        product.productId
+                                                )
+                                                .includes(card.id)
                                         }
                                         onClick={(e): void => {
                                             addNewProductInCartDOM(e, card.id);
@@ -149,9 +144,12 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
                                             `btn-cart-${card.key}` && (
                                             <img
                                                 src={
-                                                    productsIdInCart.includes(
-                                                        card.id
-                                                    )
+                                                    activeCart?.lineItems
+                                                        .map(
+                                                            (product) =>
+                                                                product.productId
+                                                        )
+                                                        .includes(card.id)
                                                         ? cartIconInactive
                                                         : cartIcon
                                                 }

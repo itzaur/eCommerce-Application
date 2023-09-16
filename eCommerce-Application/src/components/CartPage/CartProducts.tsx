@@ -22,7 +22,7 @@ function CartProducts(props: {
             firstFunctionCall: true,
         })
             .then((data) => {
-                setActiveCart(data);
+                if (data !== undefined) setActiveCart(data);
             })
             .catch((err) => {
                 setErrorBodyDOM(err);
@@ -40,7 +40,7 @@ function CartProducts(props: {
             firstFunctionCall: true,
         })
             .then((data) => {
-                setActiveCart(data);
+                if (data !== undefined) setActiveCart(data);
                 setModalConfirmVisible(false);
             })
             .catch((err) => {

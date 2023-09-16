@@ -48,6 +48,33 @@
         }
     }
 
+    &_order {
+        width: 50rem;
+        height: 80%;
+        @include mixins.flex(column, center, center);
+
+        color: var(--color-black);
+        background-color: var(--color-primary);
+
+        font-family: var(--ff-product);
+        font-weight: bold;
+
+        &__img_done {
+            width: 10rem;
+        }
+
+        &__img_cart {
+            width: 30rem;
+        }
+
+        h2 {
+            font-size: var(--fs-medium-big);
+        }
+        p {
+            font-size: var(--fs-medium);
+        }
+    }
+
     &__content {
         position: relative;
         width: auto;

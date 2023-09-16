@@ -267,6 +267,8 @@ function App(): JSX.Element {
     // localStorage.removeItem('activeCart');
     // localStorage.removeItem('token');
     // localStorage.removeItem('refreshToken');
+    // localStorage.removeItem('user');
+    // localStorage.removeItem('version');
 
     return (
         <Routes>
