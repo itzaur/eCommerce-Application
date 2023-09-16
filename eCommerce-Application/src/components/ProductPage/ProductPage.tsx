@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCoverflow, Pagination, Navigation } from 'swiper/modules';
 import { Product } from '@commercetools/platform-sdk';
@@ -32,12 +32,12 @@ function ProductDetail({
     typePath: string;
     categoryPath: string;
 }): JSX.Element {
+    const { productKey } = useParams<{ productKey: string }>();
     const [selectedType, setSelectedType] = useState(type);
     const selectedTypePath = typePath;
     const [selectedCategory, setSelectedCategory] = useState(category || '');
     const selectedCategoryPath = categoryPath;
     const [card, setCard] = useState<Product>();
-    const location = useLocation().pathname.split('/').at(-1) as string;
     const cardOptions = card?.masterData.current;
     const cardDetails = card?.masterData.current.masterVariant;
 
@@ -55,7 +55,7 @@ function ProductDetail({
                 throw new Error(serverErrorMessage);
             }
         }
-        getProductKey(location).catch((err: Error) => {
+        getProductKey(String(productKey)).catch((err: Error) => {
             document.body.textContent = err.message;
             document.body.classList.add('error-connection');
         });

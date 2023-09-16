@@ -113,18 +113,6 @@ function App(): JSX.Element {
                                         categoryPath=""
                                     />
                                 }
-                            />,
-                            <Route
-                                key={el.key}
-                                path={`/store/${el.key}`}
-                                element={
-                                    <ProductDetail
-                                        type=""
-                                        typePath=""
-                                        category=""
-                                        categoryPath=""
-                                    />
-                                }
                             />
                         );
                         setCategoriesRoutes([
@@ -136,18 +124,6 @@ function App(): JSX.Element {
                                     <ProductDetail
                                         type={category.parent.name}
                                         typePath={category.parent.path}
-                                        category=""
-                                        categoryPath=""
-                                    />
-                                }
-                            />,
-                            <Route
-                                key={el.key}
-                                path={`/store/${el.key}`}
-                                element={
-                                    <ProductDetail
-                                        type=""
-                                        typePath=""
                                         category=""
                                         categoryPath=""
                                     />
@@ -273,6 +249,17 @@ function App(): JSX.Element {
                 path="/store"
                 element={
                     <Store type="" category="" typePath="" categoryPath="" />
+                }
+            />
+            <Route
+                path="/store/:productKey"
+                element={
+                    <ProductDetail
+                        type=""
+                        category=""
+                        typePath=""
+                        categoryPath=""
+                    />
                 }
             />
             <Route path="/about" element={<AboutPage />} />
