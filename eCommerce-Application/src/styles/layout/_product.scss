@@ -229,6 +229,8 @@
                 opacity: 0.5;
 
                 &-active {
+                    margin-left: -1rem;
+
                     color: var(--color-primary);
                     opacity: 1;
                 }

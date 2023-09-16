@@ -1,5 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import gsap from 'gsap';
+import Transition from '../Transition/Transition';
 import logo from '../../assets/images/logo.png';
 import { checkIncorrectEmail } from '../../utils/validation/checkCorrectEmail';
 import { checkIncorrectPassword } from '../../utils/validation/checkPassword';
@@ -50,18 +52,46 @@ function LoginPage(): JSX.Element {
                 }
             });
     };
+
+    const timeline = gsap.timeline();
+    const loginTransition = useRef(null);
+    const formTransition = useRef(null);
+
     useEffect(() => {
         if (localStorage.getItem('user')) navigate('/');
+
+        timeline
+            .from(
+                loginTransition.current,
+                {
+                    y: -20,
+                    autoAlpha: 0,
+                    duration: 1,
+                    ease: 'power1.out',
+                },
+                '<0.2'
+            )
+            .from(
+                formTransition.current,
+                {
+                    y: -20,
+                    autoAlpha: 0,
+                    duration: 1,
+                    ease: 'power1.out',
+                },
+                '<0.5'
+            );
     });
 
     return (
         <>
-            <header className="header">
+            <Transition timeline={timeline} />
+            <header className="header" ref={loginTransition}>
                 <Link to="/">
                     <img src={logo} alt="logo" className="logo_big" />
                 </Link>
             </header>
-            <section className="form login">
+            <section className="form login" ref={formTransition}>
                 <h2 className="form__title">
                     Добро пожаловать <br /> На Борт Космической Одиссеи!
                 </h2>

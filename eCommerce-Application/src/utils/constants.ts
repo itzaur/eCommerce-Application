@@ -588,6 +588,16 @@ export const products = [
     },
 ];
 
+export const aboutUsImages = [
+    { id: 1, src: '/about1.jpg' },
+    { id: 2, src: '/about2.jpg' },
+    { id: 3, src: '/about3.jpg' },
+    { id: 4, src: '/about4.jpg' },
+    { id: 5, src: '/about5.jpg' },
+    { id: 6, src: '/about6.jpg' },
+    { id: 7, src: '/about7.jpg' },
+];
+
 export const serverErrorMessage = 'Сервер улетел в космос, попробуйте позже';
 
 export function setErrorBodyDOM(err: Error): void {

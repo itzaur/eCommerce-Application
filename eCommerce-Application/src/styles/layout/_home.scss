@@ -16,7 +16,7 @@
         margin-top: 10vw;
 
         @include mixins.respond-to('desktop') {
-            margin-top: 10rem;
+            margin-top: 6rem;
         }
     }
 
@@ -120,6 +120,8 @@
 
         color: var(--color-white);
 
+        --scaleY: 1;
+
         & > * + * {
             margin-top: 2rem;
         }
@@ -151,6 +153,9 @@
                 height: 100%;
 
                 background-color: var(--color-white);
+
+                scale: 1 var(--scaleY);
+                transform-origin: top;
             }
 
             &::after {

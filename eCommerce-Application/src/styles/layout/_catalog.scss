@@ -90,7 +90,7 @@
 
         &--3 {
             &::after {
-                background-image: url('../assets/images/hotels.png');
+                background-image: url('../assets/images/hotels.jpg');
             }
 
             @include mixins.respond-to('desktop') {

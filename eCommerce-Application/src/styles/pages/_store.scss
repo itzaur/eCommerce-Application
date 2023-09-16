@@ -384,7 +384,7 @@ input[type='range']::-moz-range-thumb {
         padding: 2rem;
 
         box-shadow: none;
-        clip-path: 0;
+        clip-path: none;
     }
 
     &__content {

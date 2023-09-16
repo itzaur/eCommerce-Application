@@ -16,6 +16,8 @@ body {
     background-position: top;
     background-attachment: fixed;
     background-size: calc(max(100%, 100rem)), cover;
+
+    overflow-x: hidden;
 }
 
 .sr-only {
