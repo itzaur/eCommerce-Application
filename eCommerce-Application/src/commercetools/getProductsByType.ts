@@ -6,7 +6,6 @@ export async function getTypeId(
     productTypeName: string
 ): Promise<string | undefined> {
     try {
-        // console.log('getTypeId++++++++');
         const productType = await apiRoot
             .productTypes()
             .get({ queryArgs: { where: `name="${productTypeName}"` } })
@@ -16,31 +15,26 @@ export async function getTypeId(
     } catch {
         throw new Error(serverErrorMessage);
     }
-    return undefined;
 }
 
 export async function getProductsByProductType(
     typeName: string,
+    countCards?: number,
     setCountCards?: CallableFunction,
-    currentPage?: number
-    // countCards?: number
+    currentOffset?: number
 ): Promise<ProductProjection[] | undefined> {
     try {
-        // console.log('getProductsByProductType++++++++++');
-
         const typeId = await getTypeId(typeName);
         const result = await apiRoot
             .productProjections()
             .get({
                 queryArgs: {
                     where: `productType(id="${typeId}")`,
-                    offset: currentPage,
-                    limit: 8,
+                    offset: currentOffset,
+                    limit: countCards,
                 },
             })
             .execute();
-        // console.log('result__TYPE', result.body);
-        // console.log('GGG', currentPage);
         if (setCountCards) {
             setCountCards(result.body.total);
         }
@@ -49,5 +43,4 @@ export async function getProductsByProductType(
     } catch {
         throw new Error(serverErrorMessage);
     }
-    return undefined;
 }

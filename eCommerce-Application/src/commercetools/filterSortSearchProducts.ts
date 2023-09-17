@@ -5,10 +5,7 @@ import { serverErrorMessage } from '../utils/constants';
 
 export async function filterSortSearcProducts(
     parameters: FilterSortSearcParameters,
-    currentPage: number,
-    // setCountCards: CallableFunction,
-    // setIsFetching: CallableFunction,
-    // isFetching: boolean
+    currentOffset: number,
     itemPerPage: number
 ): Promise<ProductProjection[]> {
     const {
@@ -30,7 +27,7 @@ export async function filterSortSearcProducts(
         fuzzy?: boolean;
     } = {
         filter: [],
-        offset: currentPage,
+        offset: currentOffset,
         limit: itemPerPage,
     };
     if (Array.isArray(queryArgs.filter)) {
@@ -67,8 +64,6 @@ export async function filterSortSearcProducts(
         queryArgs.fuzzy = true;
     }
 
-    // console.log('OOOO++++');
-
     try {
         const result = await apiRoot
             .productProjections()
@@ -77,10 +72,6 @@ export async function filterSortSearcProducts(
                 queryArgs,
             })
             .execute();
-        // console.log('filetr');
-        // if (setCountCards) {
-        //     setCountCards(result.body.total);
-        // }
         return result.body.results;
     } catch {
         throw new Error(serverErrorMessage);

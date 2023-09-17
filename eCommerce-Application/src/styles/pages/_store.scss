@@ -48,10 +48,28 @@
         @include mixins.flex(null, null, center);
     }
 
-    &__next-page {
-        @include mixins.flex(null, center, center);
-        transform: rotate(180deg);
+    &__page {
+        cursor: pointer;
+        transition: transform 0.5s;
+
+        &:hover {
+            transform: scale(1.2);
+        }
+
+        &-next {
+            @include mixins.flex(null, center, center);
+        }
     }
+
+    &__current-page {
+        font-size: 3rem;
+        color: var(--color-primary);
+    }
+
+    &__count-page {
+        font-size: 2rem;
+    }
+
     &__loader {
         margin: 0 auto;
     }

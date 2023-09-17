@@ -16,10 +16,8 @@ function Parameters(props: {
     setMinSelectedPrice: React.Dispatch<React.SetStateAction<number>>;
     setMaxSelectedPrice: React.Dispatch<React.SetStateAction<number>>;
     searchValue: string;
-    currentPage: number;
-    // setCountCards: CallableFunction;
+    currentOffset: number;
     setIsFetching: CallableFunction;
-    // isFetching: boolean;
     itemPerPage: number;
 }): JSX.Element {
     const {
@@ -35,10 +33,8 @@ function Parameters(props: {
         setMinSelectedPrice,
         setMaxSelectedPrice,
         searchValue,
-        currentPage,
-        // setCountCards,
+        currentOffset,
         setIsFetching,
-        // isFetching,
         itemPerPage,
     } = props;
     const [selectedFiltersList, setselectedFiltersList] = useState<string[]>(
@@ -53,29 +49,6 @@ function Parameters(props: {
         value: 'По умолчанию',
         icon: '↓↑',
     });
-
-    // const [currentPage, setCurrentPage] = useState(2);
-    // const [fetching, setFetching] = useState(true);
-
-    // const scrollHandler = (): void => {
-    //     if (
-    //         document.documentElement.scrollHeight -
-    //             (document.documentElement.scrollTop + window.innerHeight) <
-    //         100
-    //     ) {
-    //         setFetching(true);
-    //         setCurrentPage((prevPage) => prevPage + 1);
-    //         console.log('123');
-    //     }
-    // };
-
-    // useEffect(() => {
-    //     document.addEventListener('scroll', scrollHandler);
-
-    //     return () => {
-    //         document.removeEventListener('scroll', scrollHandler);
-    //     };
-    // }, []);
 
     switch (selectedType) {
         case 'Космотуры':
@@ -153,10 +126,7 @@ function Parameters(props: {
                 attributesToSearch: searchValue,
                 discountedProducts,
             },
-            currentPage,
-            // setCountCards,
-            // setIsFetching,
-            // isFetching,
+            currentOffset,
             itemPerPage
         )
             .then((data) => {
@@ -167,46 +137,6 @@ function Parameters(props: {
                 setErrorBodyDOM(err);
             });
     }
-
-    // useEffect(() => {
-    //     filterSortSearcProducts(
-    //         {
-    //             selectedCategoryId,
-    //             attributesToFilter: filter.key,
-    //             selectedFiltersList,
-    //             minSelectedPrice,
-    //             maxSelectedPrice,
-    //             attributesToSort: sort.order,
-    //             attributesToSearch: searchValue,
-    //             discountedProducts,
-    //         },
-    //         currentPage,
-    //         setCountCards,
-    //         setIsFetching,
-    //         isFetching
-    //     )
-    //         .then((data) => {
-    //             if (data) setCards(data);
-    //         })
-    //         .catch((err: Error) => {
-    //             setErrorBodyDOM(err);
-    //         });
-    // }, [
-    //     minSelectedPrice,
-    //     maxSelectedPrice,
-    //     selectedFiltersList,
-    //     filtersApplied,
-    //     filter.key,
-    //     selectedCategoryId,
-    //     setCards,
-    //     sort,
-    //     searchValue,
-    //     discountedProducts,
-    //     currentPage,
-    //     setIsFetching,
-    //     setCountCards,
-    //     isFetching,
-    // ]);
 
     return (
         <div className="parameters">

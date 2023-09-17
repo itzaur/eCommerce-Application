@@ -4,17 +4,14 @@ import { serverErrorMessage } from '../utils/constants';
 
 export async function getAllProducts(
     setCountCards: CallableFunction,
-    currentPage: number,
+    currentOffset: number,
     itemPerPage: number
 ): Promise<ProductProjection[]> {
-    // console.log('getAllProducts+++++');
     try {
         const result = await apiRoot
             .productProjections()
-            .get({ queryArgs: { offset: currentPage, limit: itemPerPage } })
+            .get({ queryArgs: { offset: currentOffset, limit: itemPerPage } })
             .execute();
-        // console.log('RESULT', result.body);
-        // console.log('fbf111', result.body.total);
         setCountCards(result.body.total);
         return result.body.results;
     } catch {

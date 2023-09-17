@@ -11,7 +11,7 @@ function BreadCrumbs(props: {
     selectedProduct: string;
     selectedProductPath: string;
     setIsFetching?: CallableFunction;
-    setCurrentPage?: CallableFunction;
+    setCurrentOffset?: CallableFunction;
     setIsBreadCrumbsClicked?: CallableFunction;
 }): JSX.Element {
     const {
@@ -24,7 +24,7 @@ function BreadCrumbs(props: {
         selectedProduct,
         selectedProductPath,
         setIsFetching,
-        setCurrentPage,
+        setCurrentOffset,
         setIsBreadCrumbsClicked,
     } = props;
 
@@ -49,8 +49,8 @@ function BreadCrumbs(props: {
                         if (setIsBreadCrumbsClicked) {
                             setIsBreadCrumbsClicked(true);
                         }
-                        if (setCurrentPage) {
-                            setCurrentPage(0);
+                        if (setCurrentOffset) {
+                            setCurrentOffset(0);
                         }
 
                         setSelectedType('');

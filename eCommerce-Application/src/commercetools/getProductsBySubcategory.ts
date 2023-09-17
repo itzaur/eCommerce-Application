@@ -6,7 +6,6 @@ export async function getSubCategoryId(
     categoryName: string
 ): Promise<string | undefined> {
     try {
-        // console.log('getSubCategoryId++++++');
         const category = await apiRoot
             .categories()
             .get({ queryArgs: { where: `name(ru-Ru="${categoryName}")` } })
@@ -15,23 +14,21 @@ export async function getSubCategoryId(
     } catch {
         throw new Error(serverErrorMessage);
     }
-    return undefined;
 }
 export async function getProductsBySubcategory(
     categoryExternalId: string,
     setCountCards?: CallableFunction,
-    currentPage?: number,
+    currentOffset?: number,
     itemPerPage?: number
 ): Promise<ProductProjection[] | undefined> {
     try {
-        // console.log('getProductsBySubcategory+++++++');
         const categoryId = await getSubCategoryId(categoryExternalId);
         const result = await apiRoot
             .productProjections()
             .get({
                 queryArgs: {
                     where: `categories(id="${categoryId}")`,
-                    offset: currentPage,
+                    offset: currentOffset,
                     limit: itemPerPage,
                 },
             })
@@ -43,5 +40,4 @@ export async function getProductsBySubcategory(
     } catch {
         throw new Error(serverErrorMessage);
     }
-    return undefined;
 }

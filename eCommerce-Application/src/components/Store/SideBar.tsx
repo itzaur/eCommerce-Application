@@ -9,7 +9,7 @@ function SideBar(props: {
     setSelectedCategoryPath: React.Dispatch<React.SetStateAction<string>>;
     categories: CategoryCustom[];
     setIsFetching: CallableFunction;
-    setCurrentPage: CallableFunction;
+    setCurrentOffset: CallableFunction;
     setIsBreadCrumbsClicked: CallableFunction;
 }): JSX.Element {
     const {
@@ -20,11 +20,10 @@ function SideBar(props: {
         setSelectedCategoryPath,
         setSelectedTypePath,
         setIsFetching,
-        setCurrentPage,
+        setCurrentOffset,
         setIsBreadCrumbsClicked,
     } = props;
 
-    // const breadCrumbs = document.querySelector('.bread-crumbs');
     return (
         <aside className="sidebar">
             <div className="sidebar__content">
@@ -38,7 +37,7 @@ function SideBar(props: {
                                 onClick={(e): void => {
                                     setSelectedCategory('');
                                     setIsFetching(true);
-                                    setCurrentPage(0);
+                                    setCurrentOffset(0);
                                     setSelectedType(category.parent.name);
                                     setSelectedTypePath(category.parent.path);
                                     setIsBreadCrumbsClicked(false);
@@ -57,9 +56,6 @@ function SideBar(props: {
                                             'sidebar__category_active'
                                         );
                                     }
-                                    // breadCrumbs?.lastElementChild?.classList.add(
-                                    //     'sidebar__category_active'
-                                    // );
                                 }}
                             >
                                 {String(category.parent.name)}
@@ -77,7 +73,7 @@ function SideBar(props: {
                                         type="button"
                                         onClick={(e): void => {
                                             setIsFetching(true);
-                                            setCurrentPage(0);
+                                            setCurrentOffset(0);
 
                                             setSelectedType(
                                                 category.parent.name
@@ -106,10 +102,6 @@ function SideBar(props: {
                                                     'sidebar__category_active'
                                                 );
                                             }
-
-                                            // breadCrumbs?.lastElementChild?.classList.add(
-                                            //     'sidebar__category_active'
-                                            // );
                                         }}
                                     >
                                         {el.name}

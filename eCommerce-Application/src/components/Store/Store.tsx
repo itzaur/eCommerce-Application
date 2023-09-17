@@ -14,7 +14,8 @@ import { getAllProducts } from '../../commercetools/getAllProducts';
 import { checkFilterVariants } from '../../utils/checkFilterVariants';
 import { checkMinMaxPrice } from '../../utils/checkMinMaxPrice';
 import { setErrorBodyDOM } from '../../utils/constants';
-import arrow from '../../assets/icons/arrow.svg';
+import arrowPrev from '../../assets/icons/arrow-prev.svg';
+import arrowNext from '../../assets/icons/arrow-next.svg';
 
 function Store({
     type,
@@ -42,7 +43,7 @@ function Store({
     const [searchValue, setSearchValue] = useState('');
 
     const itemPerPage = 8;
-    const [currentPage, setCurrentPage] = useState(0);
+    const [currentOffset, setCurrentOffset] = useState(0);
     const [countCards, setCountCards] = useState(0);
     const countPages = Math.ceil(countCards / itemPerPage);
     const [isFetching, setIsFetching] = useState(true);
@@ -50,6 +51,21 @@ function Store({
     const [isBreadCrumbsClicked, setIsBreadCrumbsClicked] = useState(false);
 
     const breadCrumbs = document.querySelector('.bread-crumbs');
+
+    document.querySelectorAll('.btn').forEach((item) => {
+        item.classList.remove('sidebar__category_active');
+
+        if (item.textContent === selectedType && !selectedCategory) {
+            item.classList.add('sidebar__category_active');
+        }
+    });
+
+    document.querySelectorAll('.sidebar__category').forEach((item) => {
+        item.classList.remove('sidebar__category_active');
+        if (item.textContent === selectedCategory) {
+            item.classList.add('sidebar__category_active');
+        }
+    });
 
     useEffect(() => {
         getCategories()
@@ -67,10 +83,6 @@ function Store({
                 .then((data) => {
                     if (data) setSelectedCategoryId(data);
                     setIsFetching(false);
-
-                    breadCrumbs?.lastElementChild?.classList.add(
-                        'sidebar__category_active'
-                    );
                 })
                 .catch((err: Error) => {
                     setErrorBodyDOM(err);
@@ -80,11 +92,10 @@ function Store({
             breadCrumbs?.lastElementChild?.classList.add(
                 'sidebar__category_active'
             );
-            // setCurrentPage(0);
             getProductsBySubcategory(
                 selectedCategory,
                 setCountCards,
-                currentPage,
+                currentOffset,
                 itemPerPage
             )
                 .then((data) => {
@@ -107,11 +118,12 @@ function Store({
             breadCrumbs?.lastElementChild?.classList.add(
                 'sidebar__category_active'
             );
+
             getProductsByProductType(
                 selectedType,
+                itemPerPage,
                 setCountCards,
-                currentPage,
-                countCards
+                currentOffset
             )
                 .then((data) => {
                     if (data) {
@@ -134,10 +146,9 @@ function Store({
             breadCrumbs?.lastElementChild?.classList.add(
                 'sidebar__category_active'
             );
-            getAllProducts(setCountCards, currentPage, itemPerPage)
+            getAllProducts(setCountCards, currentOffset, itemPerPage)
                 .then((data) => {
                     if (data) {
-                        // setCountCards(data.length);
                         setCards(data);
                         setSelectedCategoryId('');
                         setMinPrice(checkMinMaxPrice(data)[0]);
@@ -155,13 +166,12 @@ function Store({
         selectedCategory,
         selectedType,
         category,
-        currentPage,
+        currentOffset,
         isBreadCrumbsClicked,
         breadCrumbs?.lastElementChild?.classList,
         countCards,
+        breadCrumbs?.lastElementChild,
     ]);
-
-    // console.log(currentPage);
 
     return (
         <>
@@ -177,7 +187,7 @@ function Store({
                     selectedProduct=""
                     selectedProductPath=""
                     setIsFetching={setIsFetching}
-                    setCurrentPage={setCurrentPage}
+                    setCurrentOffset={setCurrentOffset}
                     setIsBreadCrumbsClicked={setIsBreadCrumbsClicked}
                 />
                 <section className="store__content">
@@ -189,7 +199,7 @@ function Store({
                         setSelectedCategoryId={setSelectedCategoryId}
                         setSelectedCategoryPath={setSelectedCategoryPath}
                         setIsFetching={setIsFetching}
-                        setCurrentPage={setCurrentPage}
+                        setCurrentOffset={setCurrentOffset}
                         setIsBreadCrumbsClicked={setIsBreadCrumbsClicked}
                     />
                     <div className="store__cards">
@@ -206,10 +216,8 @@ function Store({
                             setMinSelectedPrice={setMinSelectedPrice}
                             setMaxSelectedPrice={setMaxSelectedPrice}
                             searchValue={searchValue}
-                            currentPage={currentPage}
-                            // setCountCards={setCountCards}
+                            currentOffset={currentOffset}
                             setIsFetching={setIsFetching}
-                            // isFetching={isFetching}
                             itemPerPage={itemPerPage}
                         />
 
@@ -235,11 +243,12 @@ function Store({
                                 type="button"
                                 className="btn_action"
                                 onClick={(): void | null =>
-                                    currentPage < countCards - itemPerPage
-                                        ? setCurrentPage(
+                                    currentOffset < countCards - itemPerPage
+                                        ? (setIsFetching(true),
+                                          setCurrentOffset(
                                               (prevPage) =>
                                                   prevPage + itemPerPage
-                                          )
+                                          ))
                                         : null
                                 }
                             >
@@ -248,39 +257,39 @@ function Store({
                             <div className="store__pages">
                                 <button
                                     type="button"
-                                    className="store__prev-page"
+                                    className="store__page store__page-prev"
                                     onClick={(): void | null =>
-                                        currentPage >= itemPerPage
+                                        currentOffset >= itemPerPage
                                             ? (setIsFetching(true),
-                                              setCurrentPage(
+                                              setCurrentOffset(
                                                   (prevPage) =>
                                                       prevPage - itemPerPage
                                               ))
                                             : null
                                     }
                                 >
-                                    <img src={arrow} alt="arrow" />
+                                    <img src={arrowPrev} alt="arrow" />
                                 </button>
                                 <div className="store__current-page">
-                                    {currentPage / itemPerPage + 1}
+                                    {currentOffset / itemPerPage + 1}
                                 </div>
                                 <div className="store__count-page">
                                     {countPages}
                                 </div>
                                 <button
                                     type="button"
-                                    className="store__next-page"
-                                    onClick={(): void =>
-                                        currentPage < countCards - itemPerPage
+                                    className="store__page store__page-next"
+                                    onClick={(): void | null =>
+                                        currentOffset < countCards - itemPerPage
                                             ? (setIsFetching(true),
-                                              setCurrentPage(
+                                              setCurrentOffset(
                                                   (prevPage) =>
                                                       prevPage + itemPerPage
                                               ))
-                                            : undefined
+                                            : null
                                     }
                                 >
-                                    <img src={arrow} alt="arrow" />
+                                    <img src={arrowNext} alt="arrow" />
                                 </button>
                             </div>
                         </div>
