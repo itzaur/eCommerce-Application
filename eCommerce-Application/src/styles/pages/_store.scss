@@ -72,6 +72,12 @@
 
     &__loader {
         margin: 0 auto;
+
+        &_product {
+            position: absolute !important;
+            left: 50%;
+            transform: translateX(-50%);
+        }
     }
 }
 
