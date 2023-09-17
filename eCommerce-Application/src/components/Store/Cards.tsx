@@ -19,7 +19,7 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
     const [activeCart, setActiveCart] = useState<Cart | null>(cartFirst);
     const [cartLoading, setCartLoading] = useState(false);
     const [cartLoadingElement, setCartLoadingElement] = useState('');
-
+    // console.log(activeCart);
     // const scrollToTop = (event: React.MouseEvent<HTMLElement>): void => {
     //     const target = event.target as HTMLElement;
     //     if (target.className.includes('btn')) return;

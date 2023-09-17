@@ -1,6 +1,10 @@
 import { Cart } from '@commercetools/platform-sdk';
 import { useEffect, useState } from 'react';
-import { applyDiscount } from '../../commercetools/updateCart';
+import { setErrorBodyDOM } from '../../utils/constants';
+import {
+    addNewProductInCartOrUpdateQuantity,
+    applyDiscount,
+} from '../../commercetools/updateCart';
 import orderCartImg from '../../assets/images/order-cart.png';
 import orderDoneImg from '../../assets/images/order-done.png';
 
@@ -64,12 +68,28 @@ function PriceBlock(props: {
                 });
     }
 
+    function removeCart(): void {
+        addNewProductInCartOrUpdateQuantity({
+            cartData: activeCart,
+            mode: 'remove',
+            cardId: '',
+            quantity: 0,
+            firstFunctionCall: true,
+        })
+            .then((data) => {
+                if (data !== undefined) setActiveCart(data);
+            })
+            .catch((err) => {
+                setErrorBodyDOM(err);
+            });
+    }
+
     function newOrderDone(): void {
         setOrderDone(true);
         document.body.style.overflow = 'hidden';
 
         setTimeout(() => {
-            setActiveCart(null);
+            removeCart();
             document.body.style.overflow = 'auto';
             setOrderDone(false);
         }, 2000);

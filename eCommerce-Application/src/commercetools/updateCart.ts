@@ -13,13 +13,14 @@ import { UpdateCartParams } from '../types';
 import { serverErrorMessage } from '../utils/constants';
 import { loginCustomer } from './loginCustomer';
 
-const user = JSON.parse(localStorage.getItem('user') as string);
-
 async function getCorrectApiRoot(): Promise<ByProjectKeyRequestBuilder> {
-    if (apirootPassword) {
+    const user = JSON.parse(localStorage.getItem('user') as string);
+    if (apirootPassword && user) {
+        // console.log('готовый пароль');
         return apirootPassword;
     }
     if (user && user.email && user.password) {
+        // console.log('входим по паролю');
         return loginCustomer(user.email, user.password)
             .then((apiroot) => {
                 if (apiroot) return apiroot;
@@ -29,6 +30,7 @@ async function getCorrectApiRoot(): Promise<ByProjectKeyRequestBuilder> {
                 return constructClientAnonimousFlow();
             });
     }
+    // console.log('анон');
     return constructClientAnonimousFlow();
 }
 let apiRootForRequest: ByProjectKeyRequestBuilder = await getCorrectApiRoot();
@@ -46,10 +48,11 @@ async function createNewCart(): Promise<Cart> {
             })
             .execute();
         localStorage.setItem('token', tokenInstance.get().token);
-        localStorage.setItem(
-            'refreshToken',
-            tokenInstance.get().refreshToken || ''
-        );
+        if (!localStorage.getItem('refreshToken'))
+            localStorage.setItem(
+                'refreshToken',
+                tokenInstance.get().refreshToken || ''
+            );
         return result.body;
     } catch {
         throw new Error(serverErrorMessage);
@@ -90,7 +93,6 @@ export async function addNewProductInCartOrUpdateQuantity(
                         lineItemId: el.id,
                     };
                 });
-            localStorage.removeItem('activeCart');
             break;
         default: //
     }
@@ -98,7 +100,7 @@ export async function addNewProductInCartOrUpdateQuantity(
 
     try {
         const cartForRequest = cartData || (await createNewCart());
-        if (!apiRootForRequest || !cartForRequest) return;
+
         await apiRootForRequest
             .me()
             .carts()
@@ -115,9 +117,12 @@ export async function addNewProductInCartOrUpdateQuantity(
             .activeCart()
             .get()
             .execute();
-        if (mode !== 'remove')
+        if (mode !== 'remove' && activeCart.body.lineItems.length) {
             localStorage.setItem('activeCart', JSON.stringify(activeCart.body));
-        // eslint-disable-next-line
+        } else {
+            localStorage.removeItem('activeCart');
+        }
+
         return activeCart.body;
     } catch (e) {
         if (
@@ -125,9 +130,10 @@ export async function addNewProductInCartOrUpdateQuantity(
             e.message.startsWith('URI not found: /odyssey4165/me/carts/') &&
             firstFunctionCall
         ) {
+            // console.log('пытаемся рефреш');
             apiRootForRequest = constructClientRefresh();
             localStorage.setItem('token', tokenInstance.get().token);
-            // eslint-disable-next-line
+
             return addNewProductInCartOrUpdateQuantity({
                 cartData,
                 mode,
@@ -143,7 +149,6 @@ export async function addNewProductInCartOrUpdateQuantity(
                     'The refresh token was not found. It may have expired.') &&
             firstFunctionCall
         ) {
-            // eslint-disable-next-line
             return addNewProductInCartOrUpdateQuantity({
                 cartData: null,
                 mode,
@@ -155,6 +160,7 @@ export async function addNewProductInCartOrUpdateQuantity(
         if (e instanceof Error && e.message === 'Failed to fetch') {
             throw new Error(serverErrorMessage);
         }
+        return null;
     }
 }
 
@@ -162,13 +168,23 @@ export async function getActiveCart(
     firstFunctionCall: boolean
 ): Promise<Cart | null> {
     try {
-        return (await apiRootForRequest.me().activeCart().get().execute()).body;
+        if (!localStorage.getItem('activeCart'))
+            apiRootForRequest = await getCorrectApiRoot();
+        const activeCart = await apiRootForRequest
+            .me()
+            .activeCart()
+            .get()
+            .execute();
+        localStorage.setItem('activeCart', JSON.stringify(activeCart.body));
+        return activeCart.body;
     } catch (e) {
+        // console.log((e as Error).message);
         if (
             e instanceof Error &&
             e.message === 'URI not found: /odyssey4165/me/active-cart' &&
             firstFunctionCall
         ) {
+            // console.log('пытаемся рефреш');
             if (localStorage.getItem('refreshToken')) {
                 apiRootForRequest = constructClientRefresh();
                 localStorage.setItem('token', tokenInstance.get().token);
@@ -187,6 +203,8 @@ export async function getActiveCart(
         if (e instanceof Error && e.message === 'Failed to fetch') {
             throw new Error(serverErrorMessage);
         }
+        // console.log('null');
+        localStorage.removeItem('activeCart');
         return null;
     }
 }
