@@ -15,24 +15,32 @@ export async function getTypeId(
     } catch {
         throw new Error(serverErrorMessage);
     }
-    return undefined;
 }
 
 export async function getProductsByProductType(
-    typeName: string
+    typeName: string,
+    countCards?: number,
+    setCountCards?: CallableFunction,
+    currentOffset?: number
 ): Promise<ProductProjection[] | undefined> {
     try {
         const typeId = await getTypeId(typeName);
         const result = await apiRoot
             .productProjections()
             .get({
-                queryArgs: { where: `productType(id="${typeId}")` },
+                queryArgs: {
+                    where: `productType(id="${typeId}")`,
+                    offset: currentOffset,
+                    limit: countCards,
+                },
             })
             .execute();
+        if (setCountCards) {
+            setCountCards(result.body.total);
+        }
 
         return result.body.results;
     } catch {
         throw new Error(serverErrorMessage);
     }
-    return undefined;
 }

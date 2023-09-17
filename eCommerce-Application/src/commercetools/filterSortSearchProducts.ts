@@ -4,7 +4,9 @@ import { FilterSortSearcParameters } from '../types/index';
 import { serverErrorMessage } from '../utils/constants';
 
 export async function filterSortSearcProducts(
-    parameters: FilterSortSearcParameters
+    parameters: FilterSortSearcParameters,
+    currentOffset: number,
+    itemPerPage: number
 ): Promise<ProductProjection[]> {
     const {
         selectedCategoryId,
@@ -18,13 +20,15 @@ export async function filterSortSearcProducts(
     } = parameters;
     const queryArgs: {
         filter: string | string[] | undefined;
+        offset: number;
         limit: number;
         sort?: string[];
         ['text.ru-RU']?: string;
         fuzzy?: boolean;
     } = {
         filter: [],
-        limit: 100,
+        offset: currentOffset,
+        limit: itemPerPage,
     };
     if (Array.isArray(queryArgs.filter)) {
         if (selectedCategoryId) {

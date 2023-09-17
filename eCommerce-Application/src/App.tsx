@@ -38,6 +38,8 @@ function App(): JSX.Element {
         .filter((el) => el)
         .at(-1) as string;
 
+    const countCards = 35;
+
     function setMainId(categoriesArr: CategoryCustom[]): void {
         if (paths.includes(path)) {
             root?.setAttribute('id', path);
@@ -98,7 +100,7 @@ function App(): JSX.Element {
                     }
                 />,
             ]);
-            getProductsByProductType(category.parent.name)
+            getProductsByProductType(category.parent.name, countCards)
                 .then((data) => {
                     data?.forEach((el) => {
                         tempArrCategoriesRoutes.push(

@@ -1,6 +1,7 @@
 @use '../abstracts/mixins';
 
 #store {
+    min-height: 100vh;
     font-family: var(--ff-secondary);
 
     color: var(--color-white);
@@ -37,6 +38,46 @@
         row-gap: 3rem;
 
         padding-bottom: 4rem;
+    }
+
+    &__navigation {
+        @include mixins.flex(null, null, null);
+    }
+
+    &__pages {
+        @include mixins.flex(null, null, center);
+    }
+
+    &__page {
+        cursor: pointer;
+        transition: transform 0.5s;
+
+        &:hover {
+            transform: scale(1.2);
+        }
+
+        &-next {
+            @include mixins.flex(null, center, center);
+        }
+    }
+
+    &__current-page {
+        font-size: 3rem;
+        color: var(--color-primary);
+    }
+
+    &__count-page {
+        font-size: 2rem;
+    }
+
+    &__loader {
+        margin: 0 auto;
+
+        &_product {
+            position: absolute !important;
+            left: 50%;
+            transform: translateX(-50%);
+        }
     }
 }
 
@@ -435,6 +476,7 @@ input[type='range']::-moz-range-thumb {
 
         &_active {
             color: var(--color-primary);
+            pointer-events: none;
         }
     }
 }

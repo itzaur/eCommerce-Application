@@ -4,10 +4,10 @@ import { filterSortSearcProducts } from '../../commercetools/filterSortSearchPro
 import { setErrorBodyDOM } from '../../utils/constants';
 
 function Parameters(props: {
+    setCards: React.Dispatch<React.SetStateAction<ProductProjection[]>>;
     selectedType: string;
     selectedCategory: string;
     selectedCategoryId: string;
-    setCards: React.Dispatch<React.SetStateAction<ProductProjection[]>>;
     filterVariants: string[];
     minPrice: number;
     maxPrice: number;
@@ -16,6 +16,9 @@ function Parameters(props: {
     setMinSelectedPrice: React.Dispatch<React.SetStateAction<number>>;
     setMaxSelectedPrice: React.Dispatch<React.SetStateAction<number>>;
     searchValue: string;
+    currentOffset: number;
+    setIsFetching: CallableFunction;
+    itemPerPage: number;
 }): JSX.Element {
     const {
         setCards,
@@ -30,6 +33,9 @@ function Parameters(props: {
         setMinSelectedPrice,
         setMaxSelectedPrice,
         searchValue,
+        currentOffset,
+        setIsFetching,
+        itemPerPage,
     } = props;
     const [selectedFiltersList, setselectedFiltersList] = useState<string[]>(
         []
@@ -107,35 +113,30 @@ function Parameters(props: {
         setMinSelectedPrice,
     ]);
 
-    useEffect(() => {
-        filterSortSearcProducts({
-            selectedCategoryId,
-            attributesToFilter: filter.key,
-            selectedFiltersList,
-            minSelectedPrice,
-            maxSelectedPrice,
-            attributesToSort: sort.order,
-            attributesToSearch: searchValue,
-            discountedProducts,
-        })
+    function filterProducts(): void {
+        setIsFetching(true);
+        filterSortSearcProducts(
+            {
+                selectedCategoryId,
+                attributesToFilter: filter.key,
+                selectedFiltersList,
+                minSelectedPrice,
+                maxSelectedPrice,
+                attributesToSort: sort.order,
+                attributesToSearch: searchValue,
+                discountedProducts,
+            },
+            currentOffset,
+            itemPerPage
+        )
             .then((data) => {
                 if (data) setCards(data);
+                setIsFetching(false);
             })
             .catch((err: Error) => {
                 setErrorBodyDOM(err);
             });
-    }, [
-        minSelectedPrice,
-        maxSelectedPrice,
-        selectedFiltersList,
-        filtersApplied,
-        filter.key,
-        selectedCategoryId,
-        setCards,
-        sort,
-        searchValue,
-        discountedProducts,
-    ]);
+    }
 
     return (
         <div className="parameters">
@@ -160,6 +161,7 @@ function Parameters(props: {
                                     });
                                     if (!filtersApplied)
                                         setFiltersApplied(true);
+                                    filterProducts();
                                 }}
                             >
                                 <span>↑</span> По умолчанию
@@ -176,6 +178,8 @@ function Parameters(props: {
                                     });
                                     if (!filtersApplied)
                                         setFiltersApplied(true);
+
+                                    filterProducts();
                                 }}
                             >
                                 <span>&#8595;</span> A - Я
@@ -192,6 +196,8 @@ function Parameters(props: {
                                     });
                                     if (!filtersApplied)
                                         setFiltersApplied(true);
+
+                                    filterProducts();
                                 }}
                             >
                                 <span>&#8593;</span> Я - А
@@ -208,6 +214,7 @@ function Parameters(props: {
                                     });
                                     if (!filtersApplied)
                                         setFiltersApplied(true);
+                                    filterProducts();
                                 }}
                             >
                                 <span>&#8593;</span> По возрастанию цены
@@ -224,6 +231,7 @@ function Parameters(props: {
                                     });
                                     if (!filtersApplied)
                                         setFiltersApplied(true);
+                                    filterProducts();
                                 }}
                             >
                                 <span>&#8595;</span> По убыванию цены
@@ -252,6 +260,7 @@ function Parameters(props: {
                                             id={el}
                                             onChange={(e): void => {
                                                 checkFilters(e, el);
+                                                filterProducts();
                                             }}
                                         />
                                         {el}
@@ -278,6 +287,7 @@ function Parameters(props: {
                                     setMinSelectedPrice(+e.target.value);
                                     if (!filtersApplied)
                                         setFiltersApplied(true);
+                                    filterProducts();
                                 }}
                             />
                             <p>До</p>
@@ -290,6 +300,7 @@ function Parameters(props: {
                                     setMaxSelectedPrice(+e.target.value);
                                     if (!filtersApplied)
                                         setFiltersApplied(true);
+                                    filterProducts();
                                 }}
                             />
                         </div>
@@ -305,6 +316,7 @@ function Parameters(props: {
                                     setMinSelectedPrice(+e.target.value);
                                     if (!filtersApplied)
                                         setFiltersApplied(true);
+                                    filterProducts();
                                 }}
                             />
                             <input
@@ -318,6 +330,7 @@ function Parameters(props: {
                                     setMaxSelectedPrice(+e.target.value);
                                     if (!filtersApplied)
                                         setFiltersApplied(true);
+                                    filterProducts();
                                 }}
                             />
                         </div>
@@ -335,6 +348,7 @@ function Parameters(props: {
                             setDiscountedProducts(!discountedProducts);
 
                             if (!filtersApplied) setFiltersApplied(true);
+                            filterProducts();
                         }}
                     >
                         Акции

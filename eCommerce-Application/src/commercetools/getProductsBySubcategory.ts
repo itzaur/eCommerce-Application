@@ -14,22 +14,30 @@ export async function getSubCategoryId(
     } catch {
         throw new Error(serverErrorMessage);
     }
-    return undefined;
 }
 export async function getProductsBySubcategory(
-    categoryExternalId: string
+    categoryExternalId: string,
+    setCountCards?: CallableFunction,
+    currentOffset?: number,
+    itemPerPage?: number
 ): Promise<ProductProjection[] | undefined> {
     try {
         const categoryId = await getSubCategoryId(categoryExternalId);
         const result = await apiRoot
             .productProjections()
             .get({
-                queryArgs: { where: `categories(id="${categoryId}")` },
+                queryArgs: {
+                    where: `categories(id="${categoryId}")`,
+                    offset: currentOffset,
+                    limit: itemPerPage,
+                },
             })
             .execute();
+        if (setCountCards) {
+            setCountCards(result.body.total);
+        }
         return result.body.results;
     } catch {
         throw new Error(serverErrorMessage);
     }
-    return undefined;
 }
