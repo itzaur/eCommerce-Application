@@ -42,11 +42,12 @@ function ProductDetail({
     const location = useLocation().pathname.split('/').at(-1) as string;
     const cardOptions = card?.masterData.current;
     const cardDetails = card?.masterData.current.masterVariant;
-    const cartFirst = localStorage.getItem('activeCart')
-        ? JSON.parse(localStorage.getItem('activeCart') as string)
-        : null;
 
-    const [activeCart, setActiveCart] = useState<Cart | null>(cartFirst);
+    const [activeCart, setActiveCart] = useState<Cart | null>(
+        localStorage.getItem('activeCart')
+            ? JSON.parse(localStorage.getItem('activeCart') as string)
+            : null
+    );
     const [cardInCart, setCardInCart] = useState(false);
     const [cartLoading, setCartLoading] = useState(false);
 
@@ -62,7 +63,7 @@ function ProductDetail({
                 setCard(result.body);
                 if (activeCart)
                     setCardInCart(
-                        !!cartFirst.lineItems
+                        activeCart.lineItems
                             .map((el: LineItem) => el.productId)
                             .includes(result.body.id)
                     );
@@ -74,8 +75,7 @@ function ProductDetail({
             document.body.textContent = err.message;
             document.body.classList.add('error-connection');
         });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [location]);
+    }, [location, activeCart]);
 
     const product: ProductOptions = {
         title: cardOptions?.name ? cardOptions?.name['ru-RU'] : '',
