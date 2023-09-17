@@ -187,9 +187,14 @@
 
     &--basket {
         width: fit-content;
+
+        padding: 1em;
+
+        font-weight: bold;
+        text-align: center;
+
         background-color: var(--color-primary);
         color: var(--color-secondary);
-        font-weight: bold;
     }
 
     &--item {

@@ -105,7 +105,7 @@ function PriceBlock(props: {
                     </h2>
                 </div>
                 <div className="promocode">
-                    <div>
+                    <div className="promocode__title">
                         <p className="promocode__label">Ввести промокод</p>
                         <input
                             className="promocode__input"
