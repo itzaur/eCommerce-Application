@@ -64,11 +64,12 @@ function ProductDetail({
 
                 setCard(result.body);
                 setIsFetching(false);
-                setCardInCart(
-                    !!cartFirst.lineItems
-                        .map((el: LineItem) => el.productId)
-                        .includes(result.body.id)
-                );
+                if (activeCart)
+                    setCardInCart(
+                        !!cartFirst.lineItems
+                            .map((el: LineItem) => el.productId)
+                            .includes(result.body.id)
+                    );
             } catch (error) {
                 throw new Error(serverErrorMessage);
             }
