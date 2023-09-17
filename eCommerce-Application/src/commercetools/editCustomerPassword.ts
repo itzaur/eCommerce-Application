@@ -1,6 +1,4 @@
 import { apiRoot } from './Client';
-// import { getCustomer } from './getCustomer';
-// import { ICustomer } from '../types';
 
 export async function editCustomerPassword(
     ID: string,

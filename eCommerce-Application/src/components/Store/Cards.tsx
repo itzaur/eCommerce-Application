@@ -20,13 +20,19 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
     );
     const [cartLoading, setCartLoading] = useState(false);
     const [cartLoadingElement, setCartLoadingElement] = useState('');
-    // console.log(activeCart);
-    // const scrollToTop = (event: React.MouseEvent<HTMLElement>): void => {
-    //     const target = event.target as HTMLElement;
-    //     if (target.className.includes('btn')) return;
 
-    //     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-    // };
+    const scrollToTop = (event: React.MouseEvent<HTMLElement>): void => {
+        const target = event.target as HTMLElement;
+
+        if (
+            target.className.includes('btn') ||
+            target.className.includes('card__icon')
+        )
+            return;
+
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    };
+
     function showHideDescription(e: MouseEvent): void {
         e.preventDefault();
         if (e.target instanceof HTMLElement) {
@@ -41,6 +47,7 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
             );
         }
     }
+
     function addNewProductInCartDOM(e: MouseEvent, cardId: string): void {
         e.preventDefault();
         if (e.target instanceof HTMLElement && e.target.parentElement) {
@@ -68,7 +75,7 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
     return (
         <div className="cards">
             {cards.map((card, i: number) => (
-                <Link key={card.id} to={`./${card.key}`}>
+                <Link key={card.id} to={`./${card.key}`} onClick={scrollToTop}>
                     <div key={i} className="card" id={card.key}>
                         <figure className="card__img">
                             {card.masterVariant.images && (
@@ -144,6 +151,7 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
                                         {cartLoadingElement !==
                                             `btn-cart-${card.key}` && (
                                             <img
+                                                className="card__icon"
                                                 src={
                                                     activeCart?.lineItems
                                                         .map(
