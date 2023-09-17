@@ -33,18 +33,14 @@
     }
 
     &_confirm {
-        h4 {
-            text-align: center;
-            font-size: var(--fs-review);
-        }
+        & .modal__btns {
+            --gap: 3rem;
+            @include mixins.flex(row, center, center);
+            flex-wrap: wrap;
 
-        .btn--basket {
-            position: static;
-            padding: 1rem;
-        }
-        .flex-2-col {
-            @include mixins.flex(row, space-between, center);
-            margin-top: 2rem;
+            position: relative;
+
+            letter-spacing: 0.1em;
         }
     }
 
@@ -70,6 +66,7 @@
         h2 {
             font-size: var(--fs-medium-big);
         }
+
         p {
             font-size: var(--fs-medium);
         }
@@ -105,19 +102,25 @@
 
 .modal_registration {
     position: fixed;
-    top: calc(50vh - 5rem);
-    left: calc(50vw - 40rem);
-
-    width: 80rem;
-    height: 10rem;
+    top: 50%;
+    left: 50%;
 
     display: grid;
     place-content: center;
+    gap: 3rem;
+
+    width: 80%;
+    min-height: 30rem;
+    height: auto;
+
+    padding: 2rem 4rem;
+
+    transform: translate(-50%, -50%);
 
     background-color: var(--color-secondary);
     color: var(--color-white);
 
-    button {
+    &__btn {
         position: absolute;
         right: 0.4rem;
         top: 0.4rem;
