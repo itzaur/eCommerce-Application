@@ -12,11 +12,12 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
     const currentCardRef = useRef<Element | null>(null);
     const [buttonDescriptionTexcontent, setButtonDescriptionTexcontent] =
         useState('Показать описание ▼');
-    const cartFirst = localStorage.getItem('activeCart')
-        ? JSON.parse(localStorage.getItem('activeCart') as string)
-        : null;
 
-    const [activeCart, setActiveCart] = useState<Cart | null>(cartFirst);
+    const [activeCart, setActiveCart] = useState<Cart | null>(
+        localStorage.getItem('activeCart')
+            ? JSON.parse(localStorage.getItem('activeCart') as string)
+            : null
+    );
     const [cartLoading, setCartLoading] = useState(false);
     const [cartLoadingElement, setCartLoadingElement] = useState('');
     // console.log(activeCart);
