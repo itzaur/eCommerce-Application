@@ -37,6 +37,17 @@ function CartPage(): JSX.Element {
                     </li>
                 </ul>
 
+                <button
+                    className="product__back"
+                    type="button"
+                    onClick={(): void => {
+                        window.history.back();
+                    }}
+                >
+                    <span />
+                    Назад
+                </button>
+
                 {activeCart && activeCart.lineItems.length ? (
                     <div className="cart__content">
                         <CartProducts

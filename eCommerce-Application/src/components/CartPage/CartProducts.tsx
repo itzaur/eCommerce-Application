@@ -31,6 +31,7 @@ function CartProducts(props: {
                 setCartLoading(false);
             });
     }
+
     function removeCart(): void {
         addNewProductInCartOrUpdateQuantity({
             cartData: activeCart,
@@ -85,6 +86,7 @@ function CartProducts(props: {
 
                                         {purchase.variant.images && (
                                             <Link
+                                                className="purchase__link"
                                                 to={`/store/${purchase.productKey}`}
                                             >
                                                 <img
@@ -235,12 +237,12 @@ function CartProducts(props: {
             {modalConfirmVisible && (
                 <div className="modal modal_confirm active">
                     <div className="modal_registration">
-                        <h4>
+                        <h4 className="modal__title">
                             Вы уверены, что хотите огорчить робокотика и всё
                             удалить?
                         </h4>
 
-                        <div className="flex-2-col">
+                        <div className="modal__btns">
                             <button
                                 type="button"
                                 className="btn btn--basket"

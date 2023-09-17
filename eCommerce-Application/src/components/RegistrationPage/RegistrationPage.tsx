@@ -1437,6 +1437,7 @@ function RegistrationDetail(): JSX.Element {
                 <div className="modal active ">
                     <div className="modal_registration">
                         <button
+                            className="modal_registration__btn"
                             type="button"
                             onClick={(): void => {
                                 setResultMessage('');
