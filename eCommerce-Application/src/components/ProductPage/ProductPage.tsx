@@ -171,7 +171,7 @@ function ProductDetail({
                 <div className="product__box">
                     {isFetching ? (
                         <ClipLoader
-                            color="#910000"
+                            color="#4fe1e3"
                             loading={isFetching}
                             size={150}
                             className="store__loader store__loader_product"

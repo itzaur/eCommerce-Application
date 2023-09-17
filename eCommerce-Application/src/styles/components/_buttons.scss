@@ -131,6 +131,10 @@
         }
     }
 
+    &_store {
+        height: 3.5rem;
+    }
+
     &_un-action {
         background-color: var(--color-secondary);
         color: var(--color-input);

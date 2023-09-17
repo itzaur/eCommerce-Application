@@ -229,7 +229,7 @@ function Store({
                         )}
                         {isFetching ? (
                             <ClipLoader
-                                color="#910000"
+                                color="#4fe1e3"
                                 loading={isFetching}
                                 size={150}
                                 className="store__loader"
@@ -241,7 +241,7 @@ function Store({
                         <div className="store__navigation">
                             <button
                                 type="button"
-                                className="btn_action"
+                                className="btn_action btn_store"
                                 onClick={(): void | null =>
                                     currentOffset < countCards - itemPerPage
                                         ? (setIsFetching(true),
