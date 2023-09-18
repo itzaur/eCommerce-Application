@@ -43,7 +43,6 @@ function ProductDetail({
     const location = useLocation().pathname.split('/').at(-1) as string;
     const cardOptions = card?.masterData.current;
     const cardDetails = card?.masterData.current.masterVariant;
-
     const [isFetching, setIsFetching] = useState(true);
 
     const [activeCart, setActiveCart] = useState<Cart | null>(
@@ -64,6 +63,12 @@ function ProductDetail({
                     .execute();
 
                 setCard(result.body);
+                if (activeCart)
+                    setCardInCart(
+                        activeCart.lineItems
+                            .map((el: LineItem) => el.productId)
+                            .includes(result.body.id)
+                    );
                 setIsFetching(false);
                 if (activeCart)
                     setCardInCart(
