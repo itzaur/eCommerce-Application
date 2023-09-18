@@ -167,6 +167,21 @@
         line-height: 1.4;
         letter-spacing: 0.1em;
     }
+
+    &_order {
+        font-family: var(--ff-product);
+        font-weight: bold;
+
+        h2 {
+            font-size: var(--fs-medium-big);
+            text-align: center;
+        }
+
+        p {
+            font-size: var(--fs-medium);
+            text-align: center;
+        }
+    }
 }
 
 .form {
@@ -489,8 +504,9 @@
 .promocodes {
     &__title {
         font-family: var(--ff-primary);
-        font-size: var(--fs-paragraph);
+        font-size: var(--fs-big);
         text-align: left;
+        line-height: 0.8;
     }
 
     &__subtitle {

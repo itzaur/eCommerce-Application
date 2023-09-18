@@ -384,6 +384,7 @@
 .no-cart {
     @include mixins.flex(column, center, center);
     margin-bottom: 4rem;
+    padding-top: 2rem;
 
     @include mixins.respond-to('tablet') {
         margin-bottom: 10rem;

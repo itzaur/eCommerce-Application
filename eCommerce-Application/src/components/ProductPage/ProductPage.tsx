@@ -63,43 +63,6 @@ function ProductDetail({
     const timeline = gsap.timeline();
 
     useEffect(() => {
-        const productTimeline = gsap.timeline();
-
-        productTimeline
-            .from(
-                '.nav__item',
-                {
-                    xPercent: '100',
-                    autoAlpha: 0,
-                    stagger: { each: 0.2 },
-                    duration: 1.5,
-                    ease: 'expo.out',
-                },
-                '<0.4'
-            )
-            .from(
-                ['.info-title', '.info-text p', '.info-price div'],
-                {
-                    yPercent: '-100',
-                    autoAlpha: 0,
-                    stagger: { each: 0.2 },
-                    duration: 1.5,
-                    ease: 'expo.out',
-                },
-                '<0.4'
-            )
-            .from(
-                ['.header-nav__logo', '.bread-crumbs', '.product__back'],
-                {
-                    xPercent: -100,
-                    autoAlpha: 0,
-                    duration: 1.5,
-                    ease: 'expo.out',
-                    clearProps: 'opacity',
-                },
-                '<0'
-            );
-
         async function getProductKey(key: string): Promise<void> {
             try {
                 const result = await apiRoot

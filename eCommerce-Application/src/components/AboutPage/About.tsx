@@ -54,7 +54,7 @@ function About(): JSX.Element {
                 scrollTrigger: {
                     trigger: text,
                     start: 'top bottom',
-                    end: 'top 10%',
+                    end: 'top 20%',
                     scrub: true,
                 },
             });
