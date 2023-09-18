@@ -229,10 +229,8 @@
             cursor: pointer;
         }
 
-        @media (hover: hover) {
-            &:hover {
-                transform: scale(1, 1);
-            }
+        &:hover {
+            transform: scale(1, 1);
         }
 
         li {
