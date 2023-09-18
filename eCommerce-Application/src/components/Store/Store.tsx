@@ -242,18 +242,15 @@ function Store({
                             <button
                                 type="button"
                                 className="btn_action btn_store"
-                                onClick={(): void | null => {
-                                    if (
-                                        currentOffset <
-                                        countCards - itemPerPage
-                                    ) {
-                                        setIsFetching(true);
-                                        setCurrentOffset(
-                                            (prevPage) => prevPage + itemPerPage
-                                        );
-                                    }
-                                    window.scrollTo(0, 0);
-                                }}
+                                onClick={(): void | null =>
+                                    currentOffset < countCards - itemPerPage
+                                        ? (setIsFetching(true),
+                                          setCurrentOffset(
+                                              (prevPage) =>
+                                                  prevPage + itemPerPage
+                                          ))
+                                        : null
+                                }
                             >
                                 Следующая страница
                             </button>
