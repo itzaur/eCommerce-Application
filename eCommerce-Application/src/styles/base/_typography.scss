@@ -159,12 +159,20 @@
         width: min(100%, 15ch);
         font-size: var(--fs-big);
     }
+
+    &__title {
+        font-family: var(--ff-secondary);
+        font-size: var(--fs-paragraph);
+        text-align: center;
+        line-height: 1.4;
+        letter-spacing: 0.1em;
+    }
 }
 
 .form {
     &__content {
-        font-size: var(--fs-form);
         font-family: var(--ff-primary);
+        font-size: var(--fs-form);
         text-align: start;
     }
 
@@ -401,5 +409,106 @@
 
     &__button {
         font-size: var(--fs-small);
+    }
+}
+
+#cart {
+    font-family: var(--ff-secondary);
+}
+
+.cart {
+    &__btn {
+        font-family: var(--ff-product);
+        font-size: var(--fs-small);
+    }
+}
+
+.purchases__header {
+    font-family: var(--ff-product);
+    font-size: var(--fs-small);
+}
+
+.purchase {
+    &__price {
+        font-size: var(--fs-medium);
+
+        &-block {
+            & > * {
+                font-size: var(--fs-paragraph);
+
+                @include mixins.respond-to('tablet') {
+                    font-size: var(--fs-small);
+                }
+            }
+        }
+
+        &-type {
+            font-family: var(--ff-product);
+            font-size: var(--fs-paragraph);
+
+            @include mixins.respond-to('tablet') {
+                font-size: var(--fs-small);
+            }
+        }
+    }
+
+    &__name {
+        font-size: var(--fs-medium);
+        text-align: center;
+        line-height: 1.7;
+    }
+
+    &__btn {
+        font-family: var(--ff-product);
+        font-size: var(--fs-medium);
+    }
+}
+
+.price {
+    font-size: var(--fs-medium);
+
+    &__type {
+        font-family: var(--ff-product);
+        font-size: var(--fs-paragraph);
+
+        @include mixins.respond-to('tablet') {
+            font-size: var(--fs-small);
+        }
+    }
+
+    &-total {
+        font-size: var(--fs-medium-big);
+    }
+}
+
+.btn--basket {
+    font-family: var(--ff-product);
+    font-size: var(--fs-small);
+}
+
+.promocode {
+    &__label {
+        font-family: var(--ff-product);
+        font-size: var(--fs-paragraph);
+
+        @include mixins.respond-to('tablet') {
+            font-size: var(--fs-small);
+        }
+    }
+
+    &__input {
+        font-size: var(--fs-review);
+    }
+}
+
+.no-cart {
+    &__subtitle {
+        font-family: var(--ff-product);
+        font-size: var(--fs-paragraph);
+    }
+
+    &__title {
+        font-family: var(--ff-secondary);
+        font-size: var(--fs-big);
     }
 }

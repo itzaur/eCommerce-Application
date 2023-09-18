@@ -1,20 +1,26 @@
 import ClipLoader from 'react-spinners/RingLoader';
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCoverflow, Pagination, Navigation } from 'swiper/modules';
-import { Product } from '@commercetools/platform-sdk';
+import { Product, Cart, LineItem } from '@commercetools/platform-sdk';
+import CircleLoader from 'react-spinners/CircleLoader';
 import { apiRoot } from '../../commercetools/Client';
 import { Header } from '../Store';
 import { Footer } from '../MainPage';
-import { products, serverErrorMessage } from '../../utils/constants';
-import { ProductOptions } from '../../types';
+import {
+    products,
+    serverErrorMessage,
+    setErrorBodyDOM,
+} from '../../utils/constants';
+import { ProductOptions, UpdateCartMode } from '../../types';
 import starEmpty from '../../assets/images/review-star-empty.png';
 import avatar from '../../assets/images/user.png';
 import star from '../../assets/images/review-star.png';
 import Modal from '../NotFoundPage/Modal';
 import BreadCrumbs from '../Store/BreadCrumbs';
 import createSlider from '../Slider/Slider';
+import { addNewProductInCartOrUpdateQuantity } from '../../commercetools/updateCart';
 
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
@@ -41,8 +47,15 @@ function ProductDetail({
     const location = useLocation().pathname.split('/').at(-1) as string;
     const cardOptions = card?.masterData.current;
     const cardDetails = card?.masterData.current.masterVariant;
-
     const [isFetching, setIsFetching] = useState(true);
+
+    const [activeCart, setActiveCart] = useState<Cart | null>(
+        localStorage.getItem('activeCart')
+            ? JSON.parse(localStorage.getItem('activeCart') as string)
+            : null
+    );
+    const [cardInCart, setCardInCart] = useState(false);
+    const [cartLoading, setCartLoading] = useState(false);
 
     useEffect(() => {
         async function getProductKey(key: string): Promise<void> {
@@ -54,7 +67,19 @@ function ProductDetail({
                     .execute();
 
                 setCard(result.body);
+                if (activeCart)
+                    setCardInCart(
+                        activeCart.lineItems
+                            .map((el: LineItem) => el.productId)
+                            .includes(result.body.id)
+                    );
                 setIsFetching(false);
+                if (activeCart)
+                    setCardInCart(
+                        activeCart.lineItems
+                            .map((el: LineItem) => el.productId)
+                            .includes(result.body.id)
+                    );
             } catch (error) {
                 throw new Error(serverErrorMessage);
             }
@@ -63,7 +88,7 @@ function ProductDetail({
             document.body.textContent = err.message;
             document.body.classList.add('error-connection');
         });
-    }, [location]);
+    }, [location, activeCart]);
 
     const product: ProductOptions = {
         title: cardOptions?.name ? cardOptions?.name['ru-RU'] : '',
@@ -85,11 +110,7 @@ function ProductDetail({
 
     product.price = cardDetails?.prices
         ? ((cardDetails.prices[0].value.centAmount || 0) / 100).toLocaleString(
-              product.currency,
-              {
-                  style: 'currency',
-                  currency: product.currency,
-              }
+              'ru'
           )
         : '';
     product.discount = cardDetails?.prices
@@ -116,6 +137,40 @@ function ProductDetail({
             slider.init();
         }
     };
+
+    function addRemoveProductInCartDOM(mode: UpdateCartMode): void {
+        const quantity = mode === 'new' ? 1 : 0;
+        if (card) {
+            setCartLoading(true);
+
+            addNewProductInCartOrUpdateQuantity({
+                cartData: activeCart,
+                mode,
+                cardId: card.id,
+                quantity,
+                firstFunctionCall: true,
+            })
+                .then((data) => {
+                    if (data) setActiveCart(data);
+                    if (mode === 'new') {
+                        setCardInCart(true);
+                    } else {
+                        setCardInCart(false);
+                    }
+                })
+                .catch((err) => {
+                    if (
+                        err instanceof Error &&
+                        err.message === serverErrorMessage
+                    ) {
+                        setErrorBodyDOM(err);
+                    }
+                })
+                .finally(() => {
+                    setCartLoading(false);
+                });
+        }
+    }
 
     return (
         <>
@@ -281,14 +336,9 @@ function ProductDetail({
                                         <span className="info-value__discount">
                                             {product.discount === 0
                                                 ? ''
-                                                : product.discount.toLocaleString(
-                                                      product.currency,
-                                                      {
-                                                          style: 'currency',
-                                                          currency:
-                                                              product.currency,
-                                                      }
-                                                  )}
+                                                : `$ ${product.discount.toLocaleString(
+                                                      'ru'
+                                                  )}`}
                                         </span>
                                         <span
                                             className={
@@ -297,7 +347,7 @@ function ProductDetail({
                                                     : 'info-value__price'
                                             }
                                         >
-                                            {product.price}
+                                            {`$ ${product.price}`}
                                         </span>
                                     </div>
                                 </div>
@@ -318,18 +368,59 @@ function ProductDetail({
                                     ))}
                                 </div>
                                 <div className="product__details-btns">
+                                    <Link to="/store">
+                                        <button
+                                            className="btn btn--product"
+                                            type="button"
+                                        >
+                                            Продолжить покупки
+                                        </button>
+                                    </Link>
+
                                     <button
-                                        className="btn btn--product"
+                                        className={
+                                            cardInCart
+                                                ? 'btn--product'
+                                                : 'btn btn--product btn--basket'
+                                        }
                                         type="button"
+                                        disabled={!!cardInCart}
+                                        onClick={(): void => {
+                                            addRemoveProductInCartDOM('new');
+                                        }}
                                     >
-                                        Продолжить покупки
+                                        {!cartLoading && <span>В корзину</span>}
+                                        {cartLoading && (
+                                            <CircleLoader
+                                                color="hsl(0, 0%, 100%)"
+                                                loading={cartLoading}
+                                                size={40}
+                                            />
+                                        )}
                                     </button>
-                                    <button
-                                        className="btn btn--product btn--basket"
-                                        type="button"
-                                    >
-                                        В корзину
-                                    </button>
+
+                                    {cardInCart && !cartLoading && (
+                                        <button
+                                            className="btn btn--product btn--basket"
+                                            type="button"
+                                            onClick={(): void => {
+                                                addRemoveProductInCartDOM(
+                                                    'update'
+                                                );
+                                            }}
+                                        >
+                                            {!cartLoading && (
+                                                <span>Удалить из корзины</span>
+                                            )}
+                                            {cartLoading && (
+                                                <CircleLoader
+                                                    color="hsl(252, 12%, 40%);"
+                                                    loading={cartLoading}
+                                                    size={40}
+                                                />
+                                            )}
+                                        </button>
+                                    )}
                                 </div>
                             </div>
                             <div className="product__reviews">

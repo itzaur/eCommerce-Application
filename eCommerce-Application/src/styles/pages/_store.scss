@@ -588,6 +588,13 @@ input[type='range']::-moz-range-thumb {
         --gap: 1.2rem;
         @include mixins.flex(row, space-between, center);
 
+        button {
+            cursor: pointer;
+        }
+        button[disabled] {
+            cursor: auto;
+        }
+
         img {
             width: 3rem;
             aspect-ratio: 1;

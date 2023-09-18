@@ -25,7 +25,11 @@
             top: -75%;
         }
     }
+    &_static {
+        position: static;
+    }
 }
+
 .error-connection {
     @include mixins.flex(row, center, center);
 

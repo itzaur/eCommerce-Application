@@ -1,3 +1,5 @@
+import { Cart } from '@commercetools/platform-sdk';
+
 export type ModalProps = {
     active: boolean;
     setActive(arg: boolean): void;
@@ -47,3 +49,12 @@ export interface IAddress {
     region: string;
     streetName: string;
 }
+
+export type UpdateCartParams = {
+    cartData: Cart | null;
+    mode: UpdateCartMode;
+    cardId: string;
+    quantity: number;
+    firstFunctionCall: boolean;
+};
+export type UpdateCartMode = 'new' | 'update' | 'remove';
