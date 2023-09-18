@@ -59,28 +59,6 @@ function LoginPage(): JSX.Element {
 
     useEffect(() => {
         if (localStorage.getItem('user')) navigate('/');
-
-        timeline
-            .from(
-                loginTransition.current,
-                {
-                    y: -20,
-                    autoAlpha: 0,
-                    duration: 1,
-                    ease: 'power1.out',
-                },
-                '<0.2'
-            )
-            .from(
-                formTransition.current,
-                {
-                    y: -20,
-                    autoAlpha: 0,
-                    duration: 1,
-                    ease: 'power1.out',
-                },
-                '<0.5'
-            );
     });
 
     return (

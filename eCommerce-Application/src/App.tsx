@@ -268,11 +268,6 @@ function App(): JSX.Element {
     useEffect(() => {
         setMainId(categories);
     });
-    // localStorage.removeItem('activeCart');
-    // localStorage.removeItem('token');
-    // localStorage.removeItem('refreshToken');
-    // localStorage.removeItem('user');
-    // localStorage.removeItem('version');
 
     // Activate scroll smooth effect
     useEffect(() => {

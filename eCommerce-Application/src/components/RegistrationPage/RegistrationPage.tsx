@@ -131,28 +131,6 @@ function RegistrationDetail(): JSX.Element {
 
     useEffect(() => {
         if (localStorage.getItem('user')) navigate('/');
-
-        timeline
-            .from(
-                registrationTransition.current,
-                {
-                    y: -20,
-                    autoAlpha: 0,
-                    duration: 1,
-                    ease: 'power1.out',
-                },
-                '<0.2'
-            )
-            .from(
-                formTransition.current,
-                {
-                    y: -20,
-                    autoAlpha: 0,
-                    duration: 1,
-                    ease: 'power1.out',
-                },
-                '<0.5'
-            );
     });
 
     const comparePassword = (

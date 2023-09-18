@@ -166,66 +166,6 @@ function Store({
                     setErrorBodyDOM(err);
                 });
         }
-
-        const storeTimeline = gsap.timeline();
-
-        storeTimeline
-            .from(
-                '.sidebar button',
-                {
-                    y: 100,
-                    autoAlpha: 0,
-                    stagger: { each: 0.04 },
-
-                    duration: 0.6,
-                    ease: 'power2.in',
-                },
-                '<0.5'
-            )
-            .from(
-                '.nav__item',
-                {
-                    xPercent: '100',
-                    autoAlpha: 0,
-                    stagger: { each: 0.2 },
-                    duration: 1.5,
-                    ease: 'expo.out',
-                },
-                '<0'
-            )
-            .from(
-                '.parameters button',
-                {
-                    yPercent: -100,
-                    autoAlpha: 0,
-                    stagger: { each: 0.1 },
-                    duration: 1,
-                    ease: 'expo.out',
-                },
-                '<0'
-            )
-            .from(
-                ['.header-nav__logo', '.bread-crumbs'],
-                {
-                    xPercent: -100,
-                    autoAlpha: 0,
-                    duration: 1.5,
-                    ease: 'expo.out',
-                    clearProps: 'opacity',
-                },
-                '<0'
-            )
-            .from(
-                '.cards a',
-                {
-                    x: 50,
-                    autoAlpha: 0,
-                    stagger: { each: 0.09 },
-                    duration: 2,
-                    ease: 'expo.out',
-                },
-                '<0'
-            );
     }, [
         selectedCategory,
         selectedType,

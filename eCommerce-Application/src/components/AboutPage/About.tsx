@@ -1,6 +1,6 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useEffect, useLayoutEffect, useRef } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCoverflow } from 'swiper/modules';
@@ -27,66 +27,6 @@ function About(): JSX.Element {
     const mainTimeline = useRef(null);
     const aboutTimeline = useRef(null);
     const lineTimeline = useRef(null);
-
-    useEffect(() => {
-        timeline
-            .from(
-                aboutTimeline.current,
-                {
-                    x: -100,
-
-                    duration: 0.9,
-                    ease: 'expo.out',
-                },
-                '<0.2'
-            )
-            .from(
-                '.about-us__text p',
-                {
-                    x: 100,
-                    autoAlpha: 0,
-                    stagger: { each: 0.1 },
-                    skewX: 30,
-                    transformOrigin: 'right top',
-                    duration: 1,
-                    ease: 'expo',
-                },
-                '<0'
-            )
-            .from(
-                lineTimeline.current,
-                {
-                    scale: 0,
-                    transformOrigin: 'top',
-
-                    duration: 1.4,
-                    ease: 'expo.out',
-                },
-                '<0'
-            )
-            .from(
-                '.nav__item',
-                {
-                    xPercent: '100',
-                    autoAlpha: 0,
-                    stagger: { each: 0.2 },
-                    duration: 1.5,
-                    ease: 'expo.out',
-                },
-                '<0'
-            )
-            .from(
-                ['.header-nav__logo', '.bread-crumbs', '.about-us__back'],
-                {
-                    xPercent: -100,
-                    autoAlpha: 0,
-                    duration: 1.5,
-                    ease: 'expo.out',
-                    clearProps: 'opacity',
-                },
-                '<0'
-            );
-    });
 
     useLayoutEffect(() => {
         const ctx = gsap.context((self) => {

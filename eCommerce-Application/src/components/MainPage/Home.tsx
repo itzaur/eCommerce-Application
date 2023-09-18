@@ -14,6 +14,7 @@ function Home(): JSX.Element {
         const ctx = gsap.context((self) => {
             const text = self.selector?.('.home__text--scroll p');
             const attainment = self.selector?.('.attainment');
+            const promocodes = self.selector?.('.attainment--promocodes');
 
             gsap.from(attainment, {
                 height: 0,
@@ -22,7 +23,20 @@ function Home(): JSX.Element {
                 scrollTrigger: {
                     trigger: attainment,
                     start: '100% bottom',
-                    end: 'top 0%',
+                    end: 'top 30%',
+                    scrub: true,
+                },
+            });
+
+            gsap.from(promocodes, {
+                y: 200,
+                autoAlpha: 0,
+                skewX: 30,
+
+                scrollTrigger: {
+                    trigger: promocodes,
+                    start: 'top bottom',
+                    end: 'top 10%',
                     scrub: true,
                 },
             });

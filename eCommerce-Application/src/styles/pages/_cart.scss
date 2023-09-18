@@ -56,7 +56,6 @@
         color: var(--color-secondary);
 
         background-color: var(--color-primary);
-        box-shadow: 0 0 2rem 0.5rem var(--color-primary-alpha);
 
         @include mixins.respond-to('tablet') {
             min-width: 20ch;

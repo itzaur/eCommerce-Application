@@ -486,6 +486,19 @@
     font-size: var(--fs-small);
 }
 
+.promocodes {
+    &__title {
+        font-family: var(--ff-primary);
+        font-size: var(--fs-paragraph);
+        text-align: left;
+    }
+
+    &__subtitle {
+        font-family: var(--ff-product);
+        font-size: var(--fs-paragraph);
+    }
+}
+
 .promocode {
     &__label {
         font-family: var(--ff-product);
