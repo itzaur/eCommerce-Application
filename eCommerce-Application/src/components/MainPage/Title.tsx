@@ -4,6 +4,7 @@ import Transition from '../Transition/Transition';
 
 function Title(): JSX.Element {
     const timeline = gsap.timeline();
+
     const homeTimeline = useRef(null);
 
     useEffect(() => {
@@ -12,7 +13,6 @@ function Title(): JSX.Element {
                 homeTimeline.current,
                 {
                     x: -100,
-
                     duration: 0.9,
                     ease: 'back.out',
                 },
@@ -52,7 +52,6 @@ function Title(): JSX.Element {
                     '--scaleY': 0,
                     transformOrigin: 'top',
                     autoAlpha: 0,
-
                     duration: 1.6,
                     ease: 'back.out',
                 },

@@ -1,9 +1,15 @@
 @use '../abstracts/mixins';
 
+.page {
+    padding-inline: 2vw;
+}
+
 .home {
+    margin-top: -3rem;
     padding-bottom: 2rem;
 
     @include mixins.respond-to('desktop') {
+        margin-top: 0;
         padding-bottom: 8rem;
     }
 

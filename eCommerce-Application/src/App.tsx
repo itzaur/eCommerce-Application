@@ -274,6 +274,17 @@ function App(): JSX.Element {
     // localStorage.removeItem('user');
     // localStorage.removeItem('version');
 
+    // Activate scroll smooth effect
+    useEffect(() => {
+        (async (): Promise<void> => {
+            const LocomotiveScroll = (await import('locomotive-scroll'))
+                .default;
+
+            const locomotiveScroll = new LocomotiveScroll();
+            locomotiveScroll.start();
+        })();
+    }, []);
+
     return (
         <Routes>
             {categoriesRoutes.map((route) => route)}

@@ -21,19 +21,31 @@ function Header({
 
     return (
         <header className="header-nav">
-            <Link className="header-nav__logo" to="/">
+            <Link
+                className="header-nav__logo"
+                to="/"
+                onClick={(): void => window.scrollTo(0, 0)}
+            >
                 <img src={logo} alt="logo" className="logo" />
             </Link>
             <nav className="nav">
                 <ul className="nav__list">
                     <li className="nav__item">
-                        <Link className="nav__link" to="/store">
+                        <Link
+                            className="nav__link"
+                            to="/store"
+                            onClick={(): void => window.scrollTo(0, 0)}
+                        >
                             <img src={iconCatalog} alt="icon-catalog" />
                             <h3 className="nav__title">Каталог</h3>
                         </Link>
                     </li>
                     <li className="nav__item">
-                        <Link className="nav__link" to="/about">
+                        <Link
+                            className="nav__link"
+                            to="/about"
+                            onClick={(): void => window.scrollTo(0, 0)}
+                        >
                             <img src={iconAbout} alt="icon-about" />
                             <h3 className="nav__title">О нас</h3>
                         </Link>
@@ -64,7 +76,11 @@ function Header({
                         </li>
                     )}
                     <li className="nav__item">
-                        <Link className="nav__link" to="/cart">
+                        <Link
+                            className="nav__link"
+                            to="/cart"
+                            onClick={(): void => window.scrollTo(0, 0)}
+                        >
                             <img src={iconCart} alt="icon-cart" />
                             <h3 className="nav__title">Корзина</h3>
                             <div id="purchases-number" />

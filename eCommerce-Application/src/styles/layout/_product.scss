@@ -275,7 +275,7 @@
         }
 
         &-btns {
-            @include mixins.flex(null, center, stretch);
+            @include mixins.flex(null, flex-start, stretch);
             flex-wrap: wrap;
         }
 

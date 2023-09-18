@@ -1,14 +1,14 @@
 @use '../abstracts/mixins';
+
 #about {
     position: relative;
 
     background-image: url('../assets/images/about-bg.jpg');
     background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
+    background-position: top;
 
-    @include mixins.respond-to('desktop') {
-        background-position: top;
+    @media (max-width: 73.19em) {
+        background-size: cover;
     }
 
     & .about-us__container {
@@ -22,10 +22,14 @@
 
 .about-us {
     color: var(--color-white);
-    // background-image: url('../assets/images/about-bg.jpg');
-    // background-size: max(100%, 100rem) max(100%, 300rem);
-    // // background-repeat: no-repeat;
-    // background-position: left;
+
+    @media (min-width: 73.19em) {
+        background-image: url('../assets/images/about-bg2.png');
+
+        background-repeat: no-repeat;
+        background-position: bottom center;
+        background-size: contain;
+    }
 
     &__container {
         & > * + * {
@@ -192,7 +196,7 @@
 
     &__card {
         --gap: 1rem;
-        @include mixins.flex(null, center, center);
+        @include mixins.flex(null, center, flex-start);
         flex-wrap: wrap;
 
         margin-inline: auto;
@@ -205,18 +209,26 @@
 
         @include mixins.respond-to('desktop') {
             width: 80%;
+            flex-wrap: nowrap;
         }
 
         &:nth-child(even) {
             flex-direction: row-reverse;
 
             & > * {
-                text-align: right;
+                @include mixins.respond-to('desktop') {
+                    text-align: right;
+                }
             }
 
             & .about-us__card-text {
-                margin-left: auto;
-                margin-right: 0;
+                margin-left: 0;
+                margin-right: auto;
+
+                @include mixins.respond-to('desktop') {
+                    margin-left: auto;
+                    margin-right: 0;
+                }
             }
         }
 
@@ -225,8 +237,12 @@
         }
 
         &-img {
-            flex: 1 0 16rem;
+            width: 100%;
             align-self: stretch;
+
+            @include mixins.respond-to('tablet') {
+                width: auto;
+            }
 
             img {
                 display: block;
@@ -267,8 +283,12 @@
         max-width: 20ch;
         align-self: flex-end;
 
-        padding-top: 30rem;
+        padding-top: 3rem;
 
         text-shadow: 1px 1px 2px var(--color-black);
+
+        @include mixins.respond-to('desktop') {
+            padding-top: 30rem;
+        }
     }
 }
