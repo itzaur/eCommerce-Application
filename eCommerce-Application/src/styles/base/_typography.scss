@@ -167,6 +167,21 @@
         line-height: 1.4;
         letter-spacing: 0.1em;
     }
+
+    &_order {
+        font-family: var(--ff-product);
+        font-weight: bold;
+
+        h2 {
+            font-size: var(--fs-medium-big);
+            text-align: center;
+        }
+
+        p {
+            font-size: var(--fs-medium);
+            text-align: center;
+        }
+    }
 }
 
 .form {
@@ -486,6 +501,20 @@
     font-size: var(--fs-small);
 }
 
+.promocodes {
+    &__title {
+        font-family: var(--ff-primary);
+        font-size: var(--fs-big);
+        text-align: left;
+        line-height: 0.8;
+    }
+
+    &__subtitle {
+        font-family: var(--ff-product);
+        font-size: var(--fs-paragraph);
+    }
+}
+
 .promocode {
     &__label {
         font-family: var(--ff-product);
@@ -510,5 +539,82 @@
     &__title {
         font-family: var(--ff-secondary);
         font-size: var(--fs-big);
+    }
+}
+
+.about-us {
+    &__school-title {
+        font-family: var(--ff-product);
+        font-size: var(--fs-paragraph);
+    }
+
+    &__text-title {
+        font-family: var(--ff-secondary);
+        font-size: clamp(2rem, 3vw, 3rem);
+    }
+
+    &__text-subtitle {
+        font-family: var(--ff-secondary);
+        font-size: var(--fs-small);
+        line-height: 1.5;
+        letter-spacing: 0.05em;
+    }
+
+    &__text-detail {
+        font-family: var(--ff-product);
+        font-size: var(--fs-small);
+        letter-spacing: 0.05em;
+    }
+
+    &__foundation-title {
+        font-family: var(--ff-secondary);
+        font-size: var(--fs-big);
+    }
+
+    &__foundation-subtitle {
+        font-family: var(--ff-product);
+        font-size: var(--fs-big);
+        text-transform: capitalize;
+        text-align: center;
+
+        @include mixins.respond-to('desktop') {
+            text-align: left;
+        }
+    }
+
+    &__foundation-text {
+        font-family: var(--ff-product);
+        font-size: var(--fs-small);
+        letter-spacing: 0.05em;
+        text-align: center;
+
+        @include mixins.respond-to('desktop') {
+            text-align: left;
+        }
+    }
+
+    &__card-title {
+        font-family: var(--ff-secondary);
+        font-size: var(--fs-paragraph);
+    }
+
+    &__card-subtitle {
+        font-family: var(--ff-product);
+        font-size: var(--fs-medium-big);
+        letter-spacing: 0.05em;
+    }
+
+    &__card-text {
+        font-family: var(--ff-product);
+        font-size: var(--fs-small);
+        letter-spacing: 0.05em;
+    }
+
+    &__postscript {
+        font-family: var(--ff-primary);
+        font-size: var(--fs-paragraph);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        line-height: 1.6;
     }
 }

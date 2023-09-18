@@ -34,34 +34,46 @@ function Footer(): JSX.Element {
                             <span>Связаться с нами</span>
                         </Link>
                         <div className="social-logo">
-                            <Link to="/">
+                            <Link to="https://github.com/itzaur">
                                 <img src={githubLogo} alt="logo" />
                             </Link>
-                            <Link to="/">
+                            <Link to="https://github.com/ksu1ven">
                                 <img src={githubLogo} alt="logo" />
                             </Link>
-                            <Link to="/">
+                            <Link to="https://github.com/maxxx1mhr">
                                 <img src={githubLogo} alt="logo" />
                             </Link>
                         </div>
                     </li>
                     <li className="footer__nav-item">
-                        <Link to="/about">
+                        <Link
+                            to="/about"
+                            onClick={(): void => window.scrollTo(0, 0)}
+                        >
                             <span>О нас</span>
                         </Link>
                     </li>
                     <li className="footer__nav-item">
-                        <Link to="/store/souvenirs">
+                        <Link
+                            to="/store/souvenirs"
+                            onClick={(): void => window.scrollTo(0, 0)}
+                        >
                             <span>Сувениры</span>
                         </Link>
                     </li>
                     <li className="footer__nav-item">
-                        <Link to="/store/cosmotours">
+                        <Link
+                            to="/store/cosmotours"
+                            onClick={(): void => window.scrollTo(0, 0)}
+                        >
                             <span>Выбрать космотур</span>
                         </Link>
                     </li>
                     <li className="footer__nav-item">
-                        <Link to="/store/hotel">
+                        <Link
+                            to="/store/hotel"
+                            onClick={(): void => window.scrollTo(0, 0)}
+                        >
                             <span>Выбрать номер</span>
                         </Link>
                     </li>

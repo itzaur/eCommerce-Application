@@ -53,15 +53,51 @@
         }
     }
 
-    &__promocodes {
-        gap: 1rem;
-        p {
-            display: block;
-            width: 100%;
+    &--promocodes {
+        --gap: 3rem;
+        @include mixins.flex(row, flex-start, flex-start);
+        flex-wrap: wrap;
 
-            b {
-                font-weight: bolder;
+        padding-block: 3rem;
+
+        background-color: var(--color-secondary);
+
+        box-shadow: 0 0 0 100vmax var(--color-secondary);
+        clip-path: inset(0 -100vmax);
+
+        & > * + * {
+            flex: 1 1 100%;
+
+            @include mixins.respond-to('desktop') {
+                flex: 1 1 25%;
             }
         }
+
+        @include mixins.respond-to('tablet') {
+            padding-block: 6rem;
+            padding-inline: 3rem;
+        }
+
+        & .attainment__title {
+            max-width: 15ch;
+            color: var(--color-primary);
+            text-align: left;
+        }
+    }
+}
+
+.promocodes {
+    --gap: 1rem;
+    @include mixins.flex(column, flex-start, flex-start);
+
+    text-align: left;
+
+    &__title {
+        color: var(--color-white);
+    }
+
+    &__subtitle {
+        max-width: 25ch;
+        color: var(--color-white);
     }
 }

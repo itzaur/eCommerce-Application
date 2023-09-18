@@ -145,7 +145,7 @@
         width: 80%;
 
         @include mixins.respond-to('tablet') {
-            width: 22rem;
+            width: fit-content;
         }
     }
 
@@ -162,10 +162,8 @@
             min-width: 22rem;
         }
 
-        @media (hover: hover) {
-            &:hover + .parameters__dropdown {
-                transform: scale(1, 1);
-            }
+        &:hover + .parameters__dropdown {
+            transform: scale(1, 1);
         }
 
         &-img {
@@ -231,10 +229,8 @@
             cursor: pointer;
         }
 
-        @media (hover: hover) {
-            &:hover {
-                transform: scale(1, 1);
-            }
+        &:hover {
+            transform: scale(1, 1);
         }
 
         li {
@@ -384,7 +380,7 @@ input[type='range']::-moz-range-thumb {
         padding: 2rem;
 
         box-shadow: none;
-        clip-path: 0;
+        clip-path: none;
     }
 
     &__content {

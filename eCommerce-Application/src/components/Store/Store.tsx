@@ -1,8 +1,10 @@
+import gsap from 'gsap';
 import { useState, useEffect } from 'react';
 import { ProductProjection } from '@commercetools/platform-sdk';
 import ClipLoader from 'react-spinners/RingLoader';
 import { CategoryCustom } from '../../types';
 import Header from './Header';
+import Transition from '../Transition/Transition';
 import { Cards, SideBar, Parameters, BreadCrumbs } from './index';
 import { getCategories } from '../../commercetools/getCategories';
 import { getProductsByProductType } from '../../commercetools/getProductsByType';
@@ -66,6 +68,8 @@ function Store({
             item.classList.add('sidebar__category_active');
         }
     });
+
+    const timeline = gsap.timeline();
 
     useEffect(() => {
         getCategories()
@@ -175,6 +179,7 @@ function Store({
 
     return (
         <>
+            <Transition timeline={timeline} />
             <Header setSearchValue={setSearchValue} withSearchValue />
             <section className="store__main">
                 <BreadCrumbs

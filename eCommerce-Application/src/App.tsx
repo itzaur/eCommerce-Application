@@ -87,6 +87,7 @@ function App(): JSX.Element {
                     }
                 />
             );
+
             setCategoriesRoutes([
                 ...tempArrCategoriesRoutes,
                 <Route
@@ -131,6 +132,7 @@ function App(): JSX.Element {
                                 }
                             />
                         );
+
                         setCategoriesRoutes([
                             ...tempArrCategoriesRoutes,
                             <Route
@@ -179,6 +181,7 @@ function App(): JSX.Element {
                         }
                     />
                 );
+
                 setCategoriesRoutes([
                     ...tempArrCategoriesRoutes,
                     <Route
@@ -194,6 +197,7 @@ function App(): JSX.Element {
                         }
                     />,
                 ]);
+
                 getProductsBySubcategory(item.name)
                     .then((data) => {
                         data?.forEach((el) => {
@@ -211,6 +215,7 @@ function App(): JSX.Element {
                                     }
                                 />
                             );
+
                             setCategoriesRoutes([
                                 ...tempArrCategoriesRoutes,
                                 <Route
@@ -254,7 +259,6 @@ function App(): JSX.Element {
                             });
                     }
                 })
-
                 .catch((err: Error) => {
                     setErrorBodyDOM(err);
                 });
@@ -264,17 +268,21 @@ function App(): JSX.Element {
     useEffect(() => {
         setMainId(categories);
     });
-    // localStorage.removeItem('activeCart');
-    // localStorage.removeItem('token');
-    // localStorage.removeItem('refreshToken');
-    // localStorage.removeItem('user');
-    // localStorage.removeItem('version');
+
+    // Activate scroll smooth effect
+    useEffect(() => {
+        (async (): Promise<void> => {
+            const LocomotiveScroll = (await import('locomotive-scroll'))
+                .default;
+
+            const locomotiveScroll = new LocomotiveScroll();
+            locomotiveScroll.start();
+        })();
+    }, []);
 
     return (
         <Routes>
-            {categoriesRoutes.map((route) => {
-                return route;
-            })}
+            {categoriesRoutes.map((route) => route)}
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/cart" element={<CartPage />} />

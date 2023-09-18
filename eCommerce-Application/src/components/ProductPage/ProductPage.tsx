@@ -1,19 +1,22 @@
-import ClipLoader from 'react-spinners/RingLoader';
 import { useEffect, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCoverflow, Pagination, Navigation } from 'swiper/modules';
 import { Product, Cart, LineItem } from '@commercetools/platform-sdk';
+import ClipLoader from 'react-spinners/RingLoader';
 import CircleLoader from 'react-spinners/CircleLoader';
-import { apiRoot } from '../../commercetools/Client';
-import { Header } from '../Store';
-import { Footer } from '../MainPage';
+import gsap from 'gsap';
 import {
     products,
     serverErrorMessage,
     setErrorBodyDOM,
 } from '../../utils/constants';
 import { ProductOptions, UpdateCartMode } from '../../types';
+
+import { apiRoot } from '../../commercetools/Client';
+import { Header } from '../Store';
+import { Footer } from '../MainPage';
+import Transition from '../Transition/Transition';
 import starEmpty from '../../assets/images/review-star-empty.png';
 import avatar from '../../assets/images/user.png';
 import star from '../../assets/images/review-star.png';
@@ -56,6 +59,8 @@ function ProductDetail({
     );
     const [cardInCart, setCardInCart] = useState(false);
     const [cartLoading, setCartLoading] = useState(false);
+
+    const timeline = gsap.timeline();
 
     useEffect(() => {
         async function getProductKey(key: string): Promise<void> {
@@ -174,6 +179,7 @@ function ProductDetail({
 
     return (
         <>
+            <Transition timeline={timeline} />
             <Header withSearchValue={false} setSearchValue={undefined} />
             <Modal
                 active={modalActive}
