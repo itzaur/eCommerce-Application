@@ -138,6 +138,11 @@ function Parameters(props: {
             });
     }
 
+    useEffect(() => {
+        filterProducts();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [searchValue]);
+
     return (
         <div className="parameters">
             <div className="parameters__filters">
