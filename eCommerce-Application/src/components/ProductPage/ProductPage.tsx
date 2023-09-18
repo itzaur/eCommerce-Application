@@ -8,7 +8,11 @@ import CircleLoader from 'react-spinners/CircleLoader';
 import { apiRoot } from '../../commercetools/Client';
 import { Header } from '../Store';
 import { Footer } from '../MainPage';
-import { products, serverErrorMessage } from '../../utils/constants';
+import {
+    products,
+    serverErrorMessage,
+    setErrorBodyDOM,
+} from '../../utils/constants';
 import { ProductOptions, UpdateCartMode } from '../../types';
 import starEmpty from '../../assets/images/review-star-empty.png';
 import avatar from '../../assets/images/user.png';
@@ -154,7 +158,14 @@ function ProductDetail({
                         setCardInCart(false);
                     }
                 })
-                .catch(() => {})
+                .catch((err) => {
+                    if (
+                        err instanceof Error &&
+                        err.message === serverErrorMessage
+                    ) {
+                        setErrorBodyDOM(err);
+                    }
+                })
                 .finally(() => {
                     setCartLoading(false);
                 });

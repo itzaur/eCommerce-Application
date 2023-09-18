@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Cart, ProductProjection } from '@commercetools/platform-sdk';
 import { CircleLoader } from 'react-spinners';
 import { addNewProductInCartOrUpdateQuantity } from '../../commercetools/updateCart';
+import { serverErrorMessage, setErrorBodyDOM } from '../../utils/constants';
 
 import cartIcon from '../../assets/images/cart-icon.png';
 import cartIconInactive from '../../assets/images/cart-icon-inactive.png';
@@ -65,7 +66,14 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
             .then((data) => {
                 if (data) setActiveCart(data);
             })
-            .catch(() => {})
+            .catch((err) => {
+                if (
+                    err instanceof Error &&
+                    err.message === serverErrorMessage
+                ) {
+                    setErrorBodyDOM(err);
+                }
+            })
             .finally(() => {
                 setCartLoadingElement('');
                 setCartLoading(false);
