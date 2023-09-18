@@ -1,6 +1,6 @@
 import ClipLoader from 'react-spinners/RingLoader';
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCoverflow, Pagination, Navigation } from 'swiper/modules';
 import { Product, Cart, LineItem } from '@commercetools/platform-sdk';
@@ -106,11 +106,7 @@ function ProductDetail({
 
     product.price = cardDetails?.prices
         ? ((cardDetails.prices[0].value.centAmount || 0) / 100).toLocaleString(
-              product.currency,
-              {
-                  style: 'currency',
-                  currency: product.currency,
-              }
+              'ru'
           )
         : '';
     product.discount = cardDetails?.prices
@@ -329,14 +325,9 @@ function ProductDetail({
                                         <span className="info-value__discount">
                                             {product.discount === 0
                                                 ? ''
-                                                : product.discount.toLocaleString(
-                                                      product.currency,
-                                                      {
-                                                          style: 'currency',
-                                                          currency:
-                                                              product.currency,
-                                                      }
-                                                  )}
+                                                : `$ ${product.discount.toLocaleString(
+                                                      'ru'
+                                                  )}`}
                                         </span>
                                         <span
                                             className={
@@ -345,7 +336,7 @@ function ProductDetail({
                                                     : 'info-value__price'
                                             }
                                         >
-                                            {product.price}
+                                            {`$ ${product.price}`}
                                         </span>
                                     </div>
                                 </div>
@@ -366,12 +357,14 @@ function ProductDetail({
                                     ))}
                                 </div>
                                 <div className="product__details-btns">
-                                    <button
-                                        className="btn btn--product"
-                                        type="button"
-                                    >
-                                        Продолжить покупки
-                                    </button>
+                                    <Link to="/store">
+                                        <button
+                                            className="btn btn--product"
+                                            type="button"
+                                        >
+                                            Продолжить покупки
+                                        </button>
+                                    </Link>
 
                                     <button
                                         className={
