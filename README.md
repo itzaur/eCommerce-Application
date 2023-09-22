@@ -14,7 +14,7 @@ You will be able to visit places you have not dreamed of even in your wildest fa
 [![React](https://img.shields.io/badge/-React-%2320232a?style=flat&logo=react&logoColor=ffffff)](https://react.dev/)
 [![SCSS](https://img.shields.io/badge/-SCSS-CC6699?style=flat&logo=sass&logoColor=ffffff)](https://sass-lang.com/)
 [![Vite](https://img.shields.io/badge/-Vite-%23646CFF?style=flat&logo=Vite&logoColor=ffffff)](https://vitejs.dev/)
-[![Jest](https://img.shields.io/badge/-Jest-%23C21325?style=flat&logo=jest&logoColor=ffffff)](https://jestjs.io/)
+[![Vitest](https://img.shields.io/badge/-Vitest-%dab40b?style=flat&logo=vitest&logoColor=ffffff)](https://vitest.dev/)
 
 ## How to run locally
 
