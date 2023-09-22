@@ -16,6 +16,7 @@ You will be able to visit places you have not dreamed of even in your wildest fa
 [![Vite](https://img.shields.io/badge/-Vite-%23646CFF?style=flat&logo=Vite&logoColor=ffffff)](https://vitejs.dev/)
 [![Vitest](https://img.shields.io/badge/-Vitest-%dab40b?style=flat&logo=vitest&logoColor=ffffff)](https://vitest.dev/)
 
+
 ## How to run locally
 
 #### Requirements
