@@ -1,11 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import gsap from 'gsap';
+import Transition from '../Transition/Transition';
 import logo from '../../assets/images/logo.png';
 import { checkIncorrectEmail } from '../../utils/validation/checkCorrectEmail';
 import { checkIncorrectPassword } from '../../utils/validation/checkPassword';
 import { loginCustomer } from '../../commercetools/loginCustomer';
 
 function LoginPage(): JSX.Element {
+    const user = localStorage.getItem('user');
     const [errorEmail, setErrorEmail] = useState({ error: false, message: '' });
     const [errorPassword, setErrorPassword] = useState({
         error: false,
@@ -50,18 +53,46 @@ function LoginPage(): JSX.Element {
                 }
             });
     };
+
+    const checkEmail = (e: React.ChangeEvent<HTMLInputElement>): void => {
+        if (errorWithLogin) {
+            setErrorPassword({
+                error: false,
+                message: '',
+            });
+        }
+        setErrorEmail({
+            error: checkIncorrectEmail(e).incorrect,
+            message: checkIncorrectEmail(e).message,
+        });
+        setEmail(e.target.value);
+    };
+
+    const checkPassword = (e: React.ChangeEvent<HTMLInputElement>): void => {
+        setErrorPassword({
+            error: checkIncorrectPassword(e).incorrect,
+            message: checkIncorrectPassword(e).message,
+        });
+        setPassword(e.target.value);
+    };
+
+    const timeline = gsap.timeline();
+    const loginTransition = useRef(null);
+    const formTransition = useRef(null);
+
     useEffect(() => {
-        if (localStorage.getItem('user')) navigate('/');
-    });
+        if (user) navigate('/');
+    }, [user, navigate]);
 
     return (
         <>
-            <header className="header">
+            <Transition timeline={timeline} />
+            <header className="header" ref={loginTransition}>
                 <Link to="/">
                     <img src={logo} alt="logo" className="logo_big" />
                 </Link>
             </header>
-            <section className="form login">
+            <section className="form login" ref={formTransition}>
                 <h2 className="form__title">
                     Добро пожаловать <br /> На Борт Космической Одиссеи!
                 </h2>
@@ -83,26 +114,14 @@ function LoginPage(): JSX.Element {
                                     id="email"
                                     required
                                     onChange={(e): void => {
-                                        if (errorWithLogin) {
-                                            setErrorPassword({
-                                                error: false,
-                                                message: '',
-                                            });
-                                        }
-                                        setErrorEmail({
-                                            error: checkIncorrectEmail(e)
-                                                .incorrect,
-                                            message:
-                                                checkIncorrectEmail(e).message,
-                                        });
-                                        setEmail(e.target.value);
+                                        checkEmail(e);
                                     }}
                                 />
                                 <div className="placeholder__input form_big-first-letter">
                                     Email<span>*</span>
                                 </div>
                                 <p className="error-message ">
-                                    {errorEmail ? errorEmail.message : ''}
+                                    {errorEmail.message || ''}
                                 </p>
                             </label>
                         </div>
@@ -119,14 +138,7 @@ function LoginPage(): JSX.Element {
                                     id="password"
                                     required
                                     onChange={(e): void => {
-                                        setErrorPassword({
-                                            error: checkIncorrectPassword(e)
-                                                .incorrect,
-                                            message:
-                                                checkIncorrectPassword(e)
-                                                    .message,
-                                        });
-                                        setPassword(e.target.value);
+                                        checkPassword(e);
                                     }}
                                 />
                                 <div className="placeholder__input form_big-first-letter">

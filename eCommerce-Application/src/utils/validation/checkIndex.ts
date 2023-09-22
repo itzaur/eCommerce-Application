@@ -1,3 +1,5 @@
+import { countriesList } from '../constants';
+
 export const checkIncorrectAddressIndex = (
     index: string,
     country: string
@@ -6,31 +8,12 @@ export const checkIncorrectAddressIndex = (
         return { incorrect: false, message: '' };
     }
 
-    if (country === 'Россия') {
-        if (!/^\d{6}$/.test(index)) {
-            return {
-                incorrect: true,
-                message: 'Формат индекса 6 цифр XXXYYY',
-            };
-        }
-    }
-
-    if (country === 'Беларусь') {
-        if (!/^\d{6}$/.test(index)) {
-            return {
-                incorrect: true,
-                message: 'Формат индекса 6 цифр XXXYYY',
-            };
-        }
-    }
-
-    if (country === 'Польша') {
-        if (!/^\d{2}-\d{3}$/.test(index)) {
-            return {
-                incorrect: true,
-                message: 'Формат индекса 5 цифр XY-ZZZ',
-            };
-        }
+    const found = countriesList.find((el) => el.name === country);
+    if (found && !found?.regularForIndex.test(index)) {
+        return {
+            incorrect: true,
+            message: found?.indexError,
+        };
     }
 
     if (/^\s/.test(index) || /\s$/.test(index)) {

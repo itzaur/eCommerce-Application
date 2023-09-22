@@ -9,6 +9,7 @@ export default defineConfig({
         outDir: './dist',
         emptyOutDir: true,
         sourcemap: true,
+        target: 'esnext',
     },
     resolve: {
         alias: {

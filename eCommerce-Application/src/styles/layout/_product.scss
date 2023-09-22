@@ -229,6 +229,8 @@
                 opacity: 0.5;
 
                 &-active {
+                    margin-left: -1rem;
+
                     color: var(--color-primary);
                     opacity: 1;
                 }
@@ -273,7 +275,7 @@
         }
 
         &-btns {
-            @include mixins.flex(null, center, stretch);
+            @include mixins.flex(null, flex-start, stretch);
             flex-wrap: wrap;
         }
 

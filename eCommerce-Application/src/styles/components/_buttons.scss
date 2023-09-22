@@ -227,12 +227,14 @@
 
 .arrow {
     margin-top: auto;
-    padding: 0.8em 1em;
+    padding: 0.6em 1em;
 
     border: 0.1rem solid var(--color-primary);
 
     img {
         height: 1.5rem;
+
+        animation: move 1.4s infinite forwards;
 
         @include mixins.respond-to('tablet') {
             height: auto;

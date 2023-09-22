@@ -36,6 +36,7 @@ function SideBar(props: {
                                 to={`/store/${category.parent.path}`}
                                 onClick={(e): void => {
                                     setSelectedCategory('');
+                                    setSelectedCategoryId('');
                                     setIsFetching(true);
                                     setCurrentOffset(0);
                                     setSelectedType(category.parent.name);

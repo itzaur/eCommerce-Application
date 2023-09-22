@@ -1,5 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import gsap from 'gsap';
+import Transition from '../Transition/Transition';
 import { checkIncorrectUserName } from '../../utils/validation/checkUserName';
 import { checkIncorrectEmail } from '../../utils/validation/checkCorrectEmail';
 import { checkIncorrectPassword } from '../../utils/validation/checkPassword';
@@ -122,6 +124,11 @@ function RegistrationDetail(): JSX.Element {
     const [errorMessageAge, setErrorMessageAge] = useState('');
     const [resultMessage, setResultMessage] = useState('');
     const navigate = useNavigate();
+
+    const timeline = gsap.timeline();
+    const registrationTransition = useRef(null);
+    const formTransition = useRef(null);
+
     useEffect(() => {
         if (localStorage.getItem('user')) navigate('/');
     });
@@ -252,12 +259,13 @@ function RegistrationDetail(): JSX.Element {
 
     return (
         <>
-            <header className="header">
+            <Transition timeline={timeline} />
+            <header className="header" ref={registrationTransition}>
                 <Link to="/">
                     <img src={logo} alt="logo" className="logo_big" />
                 </Link>
             </header>
-            <section className="form registration">
+            <section className="form registration" ref={formTransition}>
                 <h2 className="form__title form_big-first-letter">
                     добро пожаловать <br /> на борт космической одиссеи!
                 </h2>
@@ -1140,8 +1148,20 @@ function RegistrationDetail(): JSX.Element {
                             type="submit"
                             onClick={(e): void => {
                                 e.preventDefault();
-                                setErrorAge(checkIncorrectAge().incorrect);
-                                setErrorMessageAge(checkIncorrectAge().message);
+                                setErrorAge(
+                                    checkIncorrectAge(
+                                        +birthDayValue,
+                                        +birthMonthValue,
+                                        +birthYearValue
+                                    ).incorrect
+                                );
+                                setErrorMessageAge(
+                                    checkIncorrectAge(
+                                        +birthDayValue,
+                                        +birthMonthValue,
+                                        +birthYearValue
+                                    ).message
+                                );
                                 if (!userName) {
                                     setErrorUserName(true);
                                     setErrorMessageUserName(
@@ -1367,33 +1387,39 @@ function RegistrationDetail(): JSX.Element {
                                     !formLifeValue ||
                                     countryShipping === countries[0] ||
                                     countryBilling === countries[0] ||
-                                    getAge() < 18 ||
+                                    getAge(
+                                        +birthDayValue,
+                                        +birthMonthValue,
+                                        +birthYearValue
+                                    ) < 18 ||
                                     password !== passwordRepeat
                                 )
                                     return;
-                                signUpCustomer(
+                                signUpCustomer({
                                     userName,
                                     name,
                                     surname,
                                     password,
                                     email,
                                     countryShipping,
-                                    shippingRegionValue,
-                                    shippingCityValue,
-                                    shippingIndexValue,
-                                    shippingStreetValue,
+                                    shippingRegion: shippingRegionValue,
+                                    shippingCity: shippingCityValue,
+                                    shippingIndex: shippingIndexValue,
+                                    shippingStreet: shippingStreetValue,
                                     countryBilling,
-                                    billingRegionValue,
-                                    billingCityValue,
-                                    billingIndexValue,
-                                    billingStreetValue,
-                                    birthDayValue,
-                                    birthMonthValue,
-                                    birthYearValue,
-                                    formLifeValue,
-                                    checkboxUseShippingAddressAsDefault,
-                                    checkboxUseBillingAddressAsDefault
-                                )
+                                    billingRegion: billingRegionValue,
+                                    billingCity: billingCityValue,
+                                    billingIndex: billingIndexValue,
+                                    billingStreet: billingStreetValue,
+                                    birthDay: birthDayValue,
+                                    birthMonth: birthMonthValue,
+                                    birthYear: birthYearValue,
+                                    formLife: formLifeValue,
+                                    defaultShippingAddress:
+                                        checkboxUseShippingAddressAsDefault,
+                                    defaultBillingAddress:
+                                        checkboxUseBillingAddressAsDefault,
+                                })
                                     .then(() => {
                                         setResultMessage(
                                             'вы успешно зарегистрировались в системе'

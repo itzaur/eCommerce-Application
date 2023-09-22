@@ -16,11 +16,9 @@ import { loginCustomer } from './loginCustomer';
 async function getCorrectApiRoot(): Promise<ByProjectKeyRequestBuilder> {
     const user = JSON.parse(localStorage.getItem('user') as string);
     if (apirootPassword && user) {
-        // console.log('готовый пароль');
         return apirootPassword;
     }
     if (user && user.email && user.password) {
-        // console.log('входим по паролю');
         return loginCustomer(user.email, user.password)
             .then((apiroot) => {
                 if (apiroot) return apiroot;
@@ -30,7 +28,7 @@ async function getCorrectApiRoot(): Promise<ByProjectKeyRequestBuilder> {
                 return constructClientAnonimousFlow();
             });
     }
-    // console.log('анон');
+
     return constructClientAnonimousFlow();
 }
 let apiRootForRequest: ByProjectKeyRequestBuilder = await getCorrectApiRoot();
@@ -130,7 +128,6 @@ export async function addNewProductInCartOrUpdateQuantity(
             e.message.startsWith('URI not found: /odyssey4165/me/carts/') &&
             firstFunctionCall
         ) {
-            // console.log('пытаемся рефреш');
             apiRootForRequest = constructClientRefresh();
             localStorage.setItem('token', tokenInstance.get().token);
 
@@ -178,13 +175,11 @@ export async function getActiveCart(
         localStorage.setItem('activeCart', JSON.stringify(activeCart.body));
         return activeCart.body;
     } catch (e) {
-        // console.log((e as Error).message);
         if (
             e instanceof Error &&
             e.message === 'URI not found: /odyssey4165/me/active-cart' &&
             firstFunctionCall
         ) {
-            // console.log('пытаемся рефреш');
             if (localStorage.getItem('refreshToken')) {
                 apiRootForRequest = constructClientRefresh();
                 localStorage.setItem('token', tokenInstance.get().token);
@@ -203,8 +198,9 @@ export async function getActiveCart(
         if (e instanceof Error && e.message === 'Failed to fetch') {
             throw new Error(serverErrorMessage);
         }
-        // console.log('null');
+
         localStorage.removeItem('activeCart');
+
         return null;
     }
 }

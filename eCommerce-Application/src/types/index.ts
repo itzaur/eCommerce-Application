@@ -1,4 +1,4 @@
-import { Cart } from '@commercetools/platform-sdk';
+import { Cart, Address } from '@commercetools/platform-sdk';
 
 export type ModalProps = {
     active: boolean;
@@ -49,6 +49,51 @@ export interface IAddress {
     region: string;
     streetName: string;
 }
+
+export type RegistrationParams = {
+    userName: string;
+    name: string;
+    surname: string;
+    password: string;
+    email: string;
+    countryShipping: string;
+    shippingRegion: string;
+    shippingCity: string;
+    shippingIndex: string;
+    shippingStreet: string;
+    countryBilling: string;
+    billingRegion: string;
+    billingCity: string;
+    billingIndex: string;
+    billingStreet: string;
+    birthDay: string;
+    birthMonth: string;
+    birthYear: string;
+    formLife: string;
+    defaultShippingAddress: boolean;
+    defaultBillingAddress: boolean;
+};
+
+export type EditCustomerAddressParams = {
+    ID: string;
+    country: string;
+    regionValue: string;
+    cityValue: string;
+    indexValue: string;
+    streetValue: string;
+    checkboxUseAddressAsDefault: boolean;
+    version: number;
+    setVersion: CallableFunction;
+    setAddAddressFormView: CallableFunction;
+    setTypeAddresses: CallableFunction;
+    addressId: string;
+    addressTypeView: boolean;
+    setDefaultAddresses: CallableFunction;
+    changeAddressIndex: number;
+    getTypeAddress: CallableFunction;
+    typeAddresses?: Address[];
+    defaultAddresses?: Address[];
+};
 
 export type UpdateCartParams = {
     cartData: Cart | null;

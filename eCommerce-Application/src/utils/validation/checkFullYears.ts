@@ -166,11 +166,11 @@ export const checkIncorrectBirthYear = (
     return { incorrect: false, message: '' };
 };
 
-export const getAge = (): number => {
-    const day = document.querySelector('#birth-day') as HTMLInputElement;
-    const month = document.querySelector('#birth-month') as HTMLInputElement;
-    const year = document.querySelector('#birth-year') as HTMLInputElement;
-
+export const getAge = (
+    dayValue: number,
+    dayMonth: number,
+    dayYear: number
+): number => {
     const curDate = new Date();
 
     let curDay = curDate.getDate();
@@ -178,10 +178,6 @@ export const getAge = (): number => {
     let curYear = curDate.getFullYear();
 
     const monthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-
-    const dayValue = Number(day!.value);
-    const dayMonth = Number(month!.value);
-    const dayYear = Number(year!.value);
 
     if (dayValue > curDay) {
         curDay += monthDays[dayMonth - 1];
@@ -197,11 +193,15 @@ export const getAge = (): number => {
     return resYear;
 };
 
-export const checkIncorrectAge = (): {
+export const checkIncorrectAge = (
+    dayValue: number,
+    dayMonth: number,
+    dayYear: number
+): {
     incorrect: boolean;
     message: string;
 } => {
-    if (getAge() < validUserAge) {
+    if (getAge(dayValue, dayMonth, dayYear) < validUserAge) {
         return {
             incorrect: true,
             message: 'Вам нет 18 лет',

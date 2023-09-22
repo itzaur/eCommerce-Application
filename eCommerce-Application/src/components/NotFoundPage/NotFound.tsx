@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import gsap from 'gsap';
 import Modal from './Modal';
 import ship from '../../assets/images/ship.svg';
 import notFound from '../../assets/images/404.svg';
@@ -8,6 +9,66 @@ import ellipse from '../../assets/images/ellipse.png';
 
 function NotFound(): JSX.Element {
     const [modalActive, setModalActive] = useState(false);
+
+    const timeline = gsap.timeline({ repeat: -1, repeatDelay: 0.05 });
+
+    useEffect(() => {
+        timeline
+            .to('.fail__ship', 3, {
+                x: '+=10',
+                y: '-=15',
+                rotate: '-=2',
+                ease: 'power1.ease',
+            })
+            .to('.fail__ship', 2, {
+                x: '-=10',
+                y: '+=15',
+                rotate: '-=2',
+                ease: 'power1.ease',
+            })
+            .to('.fail__ship', 3, {
+                y: '-=15',
+                rotate: '+=12',
+                ease: 'power1.ease',
+            })
+            .to('.fail__ship', 3, {
+                y: '+=15',
+                rotate: '+=12',
+                ease: 'power1.ease',
+            })
+            .to('.fail__ship', 3, {
+                y: '-=15',
+                rotate: '-=12',
+                ease: 'power1.ease',
+            });
+
+        gsap.set('.line', {
+            autoAlpha: 0,
+            scale: 0.5,
+            transformOrigin: 'right 100%',
+        });
+
+        gsap.timeline({ repeat: -1, delay: 0.5 })
+            .to('.line', {
+                repeat: 1,
+                autoAlpha: 1,
+                duration: 4,
+                repeatDelay: 0.8,
+                yoyo: true,
+                ease: 'none',
+            })
+            .to(
+                '.line',
+                {
+                    x: `-=random(0, 50)`,
+                    scale: 1,
+                    rotation: 0.5,
+                    duration: 4,
+                    ease: 'none',
+                },
+                0
+            );
+    });
 
     return (
         <section className="fail">

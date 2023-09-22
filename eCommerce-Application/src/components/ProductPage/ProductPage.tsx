@@ -1,19 +1,22 @@
-import ClipLoader from 'react-spinners/RingLoader';
 import { useEffect, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCoverflow, Pagination, Navigation } from 'swiper/modules';
 import { Product, Cart, LineItem } from '@commercetools/platform-sdk';
+import ClipLoader from 'react-spinners/RingLoader';
 import CircleLoader from 'react-spinners/CircleLoader';
-import { apiRoot } from '../../commercetools/Client';
-import { Header } from '../Store';
-import { Footer } from '../MainPage';
+import gsap from 'gsap';
 import {
     products,
     serverErrorMessage,
     setErrorBodyDOM,
 } from '../../utils/constants';
 import { ProductOptions, UpdateCartMode } from '../../types';
+
+import { getProductKey } from '../../commercetools/getProductKey';
+import { Header } from '../Store';
+import { Footer } from '../MainPage';
+import Transition from '../Transition/Transition';
 import starEmpty from '../../assets/images/review-star-empty.png';
 import avatar from '../../assets/images/user.png';
 import star from '../../assets/images/review-star.png';
@@ -57,37 +60,29 @@ function ProductDetail({
     const [cardInCart, setCardInCart] = useState(false);
     const [cartLoading, setCartLoading] = useState(false);
 
-    useEffect(() => {
-        async function getProductKey(key: string): Promise<void> {
-            try {
-                const result = await apiRoot
-                    .products()
-                    .withKey({ key })
-                    .get()
-                    .execute();
+    const timeline = gsap.timeline();
 
-                setCard(result.body);
+    useEffect(() => {
+        getProductKey(location)
+            .then((result) => {
+                setCard(result);
                 if (activeCart)
                     setCardInCart(
                         activeCart.lineItems
                             .map((el: LineItem) => el.productId)
-                            .includes(result.body.id)
+                            .includes(result.id)
                     );
                 setIsFetching(false);
                 if (activeCart)
                     setCardInCart(
                         activeCart.lineItems
                             .map((el: LineItem) => el.productId)
-                            .includes(result.body.id)
+                            .includes(result.id)
                     );
-            } catch (error) {
-                throw new Error(serverErrorMessage);
-            }
-        }
-        getProductKey(location).catch((err: Error) => {
-            document.body.textContent = err.message;
-            document.body.classList.add('error-connection');
-        });
+            })
+            .catch((err: Error) => {
+                setErrorBodyDOM(err);
+            });
     }, [location, activeCart]);
 
     const product: ProductOptions = {
@@ -101,12 +96,15 @@ function ProductDetail({
         images: cardDetails?.images?.map((el) => el.url),
         imageSrc: cardDetails?.images ? cardDetails.images[0].url : '',
         imageAlt: cardDetails?.images ? cardDetails.images[0].label : '',
-        detailsTitle: products.find((el) => el.name === card?.key)?.details
-            ?.title,
-        detailsItems: products.find((el) => el.name === card?.key)?.details
-            ?.name,
-        reviews: products.find((el) => el.name === card?.key)?.reviews,
+        detailsTitle: '',
+        detailsItems: [],
+        reviews: [],
     };
+
+    const foundProduct = products.find((el) => el.name === card?.key);
+    product.detailsTitle = foundProduct?.details.title;
+    product.detailsItems = foundProduct?.details.name;
+    product.reviews = foundProduct?.reviews;
 
     product.price = cardDetails?.prices
         ? ((cardDetails.prices[0].value.centAmount || 0) / 100).toLocaleString(
@@ -174,6 +172,7 @@ function ProductDetail({
 
     return (
         <>
+            <Transition timeline={timeline} />
             <Header withSearchValue={false} setSearchValue={undefined} />
             <Modal
                 active={modalActive}

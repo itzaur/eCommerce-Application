@@ -1,7 +1,9 @@
+import gsap from 'gsap';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Cart } from '@commercetools/platform-sdk';
 import { Header } from '../Store';
+import Transition from '../Transition/Transition';
 import CartProducts from './CartProducts';
 import PricesBlock from './PriceBlock';
 import NoCart from './NoCart';
@@ -12,6 +14,7 @@ import { setErrorBodyDOM } from '../../utils/constants';
 function CartPage(): JSX.Element {
     const [activeCart, setActiveCart] = useState<Cart | null>(null);
     const [pageLoaded, setPageloaded] = useState(false);
+    const timeline = gsap.timeline();
 
     useEffect(() => {
         getActiveCart(true)
@@ -26,6 +29,7 @@ function CartPage(): JSX.Element {
 
     return (
         <>
+            <Transition timeline={timeline} />
             <Header setSearchValue={undefined} withSearchValue={false} />
             <section className="cart__main">
                 <ul className="bread-crumbs">

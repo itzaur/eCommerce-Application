@@ -56,7 +56,6 @@
         color: var(--color-secondary);
 
         background-color: var(--color-primary);
-        box-shadow: 0 0 2rem 0.5rem var(--color-primary-alpha);
 
         @include mixins.respond-to('tablet') {
             min-width: 20ch;
@@ -385,6 +384,7 @@
 .no-cart {
     @include mixins.flex(column, center, center);
     margin-bottom: 4rem;
+    padding-top: 2rem;
 
     @include mixins.respond-to('tablet') {
         margin-bottom: 10rem;
