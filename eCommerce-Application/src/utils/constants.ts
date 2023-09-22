@@ -598,7 +598,36 @@ export const aboutUsImages = [
     { id: 7, src: '/about7.jpg' },
 ];
 
+export const countriesList = [
+    {
+        name: 'Польша',
+        abbr: 'PL',
+        indexError: 'Формат индекса 5 цифр XY-ZZZ',
+        regularForIndex: /^\d{2}-\d{3}$/,
+    },
+    {
+        name: 'Россия',
+        abbr: 'RU',
+        indexError: 'Формат индекса 6 цифр XXXYYY',
+        regularForIndex: /^\d{6}$/,
+    },
+    {
+        name: 'Беларусь',
+        abbr: 'BY',
+        indexError: 'Формат индекса 6 цифр XXXYYY',
+        regularForIndex: /^\d{6}$/,
+    },
+];
+
+export const errorPasswordValidation = 'Введите пароль в верном формате';
+export const errorEmailValidation = 'Введите e-mail в верном формате';
+
 export const serverErrorMessage = 'Сервер улетел в космос, попробуйте позже';
+export const errorPassword = 'Вы ввели неверный пароль';
+export const errorEmailNotExist = 'Данный e-mail не найден в системе';
+export const errorEmailExist = 'Данный e-mail уже существует в системе';
+
+export const regexpEmail = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
 
 export function setErrorBodyDOM(err: Error): void {
     document.body.textContent = err.message;

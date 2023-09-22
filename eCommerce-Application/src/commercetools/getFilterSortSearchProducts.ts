@@ -3,7 +3,7 @@ import { apiRoot } from './Client';
 import { FilterSortSearcParameters } from '../types/index';
 import { serverErrorMessage } from '../utils/constants';
 
-export async function filterSortSearcProducts(
+export async function getFilterSortSearchProducts(
     parameters: FilterSortSearcParameters,
     currentOffset: number,
     itemPerPage: number
@@ -30,6 +30,7 @@ export async function filterSortSearcProducts(
         offset: currentOffset,
         limit: itemPerPage,
     };
+
     if (Array.isArray(queryArgs.filter)) {
         if (selectedCategoryId) {
             queryArgs.filter.push(`categories.id:"${selectedCategoryId}"`);
@@ -73,7 +74,7 @@ export async function filterSortSearcProducts(
             })
             .execute();
         return result.body.results;
-    } catch {
+    } catch (e) {
         throw new Error(serverErrorMessage);
     }
 }

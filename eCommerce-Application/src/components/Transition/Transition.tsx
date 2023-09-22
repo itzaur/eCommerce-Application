@@ -15,6 +15,7 @@ function Transition({
                 duration: 2.5,
 
                 ease: 'power1.out',
+                autoAlpha: 0,
             })
             .to(
                 transition2.current,
@@ -23,6 +24,7 @@ function Transition({
                     duration: 2.5,
 
                     ease: 'power1.out',
+                    autoAlpha: 0,
                 },
                 '<0'
             );

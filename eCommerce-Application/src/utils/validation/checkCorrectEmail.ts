@@ -1,3 +1,5 @@
+import { regexpEmail } from '../constants';
+
 export const checkIncorrectEmail = (
     e: React.ChangeEvent<HTMLInputElement>
 ): { incorrect: boolean; message: string } => {
@@ -5,9 +7,7 @@ export const checkIncorrectEmail = (
         return { incorrect: false, message: '' };
     }
 
-    const regexp = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
-
-    if (!e.target.value.match(regexp)) {
+    if (!e.target.value.match(regexpEmail)) {
         return { incorrect: true, message: 'Введите e-mail в верном формате' };
     }
 

@@ -20,17 +20,7 @@ function Info(): JSX.Element {
         <>
             <div className="home__info">
                 <div className="home__btns">
-                    {!user && (
-                        <button className="btn" type="button">
-                            <Link to="/login">Войти</Link>
-                        </button>
-                    )}
-                    {!user && (
-                        <button className="btn" type="button">
-                            <Link to="/registration">Регистрация</Link>
-                        </button>
-                    )}
-                    {user && (
+                    {user ? (
                         <>
                             <div className="user-info">
                                 <img src={userLogo} alt="userIcon" />
@@ -58,7 +48,17 @@ function Info(): JSX.Element {
                                 <span>Выйти</span>
                             </button>
                         </>
+                    ) : (
+                        <>
+                            <button className="btn" type="button">
+                                <Link to="/login">Войти</Link>
+                            </button>
+                            <button className="btn" type="button">
+                                <Link to="/registration">Регистрация</Link>
+                            </button>
+                        </>
                     )}
+
                     <button className="btn" type="button">
                         <Link
                             to="/store"

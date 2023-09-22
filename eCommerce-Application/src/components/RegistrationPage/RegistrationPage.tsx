@@ -1148,8 +1148,20 @@ function RegistrationDetail(): JSX.Element {
                             type="submit"
                             onClick={(e): void => {
                                 e.preventDefault();
-                                setErrorAge(checkIncorrectAge().incorrect);
-                                setErrorMessageAge(checkIncorrectAge().message);
+                                setErrorAge(
+                                    checkIncorrectAge(
+                                        +birthDayValue,
+                                        +birthMonthValue,
+                                        +birthYearValue
+                                    ).incorrect
+                                );
+                                setErrorMessageAge(
+                                    checkIncorrectAge(
+                                        +birthDayValue,
+                                        +birthMonthValue,
+                                        +birthYearValue
+                                    ).message
+                                );
                                 if (!userName) {
                                     setErrorUserName(true);
                                     setErrorMessageUserName(
@@ -1375,33 +1387,39 @@ function RegistrationDetail(): JSX.Element {
                                     !formLifeValue ||
                                     countryShipping === countries[0] ||
                                     countryBilling === countries[0] ||
-                                    getAge() < 18 ||
+                                    getAge(
+                                        +birthDayValue,
+                                        +birthMonthValue,
+                                        +birthYearValue
+                                    ) < 18 ||
                                     password !== passwordRepeat
                                 )
                                     return;
-                                signUpCustomer(
+                                signUpCustomer({
                                     userName,
                                     name,
                                     surname,
                                     password,
                                     email,
                                     countryShipping,
-                                    shippingRegionValue,
-                                    shippingCityValue,
-                                    shippingIndexValue,
-                                    shippingStreetValue,
+                                    shippingRegion: shippingRegionValue,
+                                    shippingCity: shippingCityValue,
+                                    shippingIndex: shippingIndexValue,
+                                    shippingStreet: shippingStreetValue,
                                     countryBilling,
-                                    billingRegionValue,
-                                    billingCityValue,
-                                    billingIndexValue,
-                                    billingStreetValue,
-                                    birthDayValue,
-                                    birthMonthValue,
-                                    birthYearValue,
-                                    formLifeValue,
-                                    checkboxUseShippingAddressAsDefault,
-                                    checkboxUseBillingAddressAsDefault
-                                )
+                                    billingRegion: billingRegionValue,
+                                    billingCity: billingCityValue,
+                                    billingIndex: billingIndexValue,
+                                    billingStreet: billingStreetValue,
+                                    birthDay: birthDayValue,
+                                    birthMonth: birthMonthValue,
+                                    birthYear: birthYearValue,
+                                    formLife: formLifeValue,
+                                    defaultShippingAddress:
+                                        checkboxUseShippingAddressAsDefault,
+                                    defaultBillingAddress:
+                                        checkboxUseBillingAddressAsDefault,
+                                })
                                     .then(() => {
                                         setResultMessage(
                                             'вы успешно зарегистрировались в системе'

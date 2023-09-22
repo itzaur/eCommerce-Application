@@ -41,7 +41,7 @@ function About(): JSX.Element {
                     scrollTrigger: {
                         trigger: card,
                         start: 'top bottom',
-                        end: 'top 10%',
+                        end: 'top 5%',
                         scrub: true,
                     },
                 });
@@ -54,7 +54,7 @@ function About(): JSX.Element {
                 scrollTrigger: {
                     trigger: text,
                     start: 'top bottom',
-                    end: 'top 20%',
+                    end: 'top 5%',
                     scrub: true,
                 },
             });

@@ -84,6 +84,8 @@ export function AddAddressFormView(props: {
 
     const mandatoryMessage = 'Это обязатальное поле';
 
+    const userAction = isEdit ? 'Изменить' : 'Добавить';
+
     useEffect(() => {
         setErrorIndex(
             checkIncorrectAddressIndex(indexValue, country).incorrect
@@ -93,15 +95,120 @@ export function AddAddressFormView(props: {
         );
     }, [indexValue, country]);
 
+    function checkFieldsBeforeSubmit(): void {
+        if (country === countries[0]) {
+            setErrorCountry(true);
+            setErrorMessageCountry(mandatoryMessage);
+        }
+        setErrorIndex(
+            checkIncorrectAddressIndex(indexValue, country).incorrect
+        );
+        setErrorMessageIndex(
+            checkIncorrectAddressIndex(indexValue, country).message
+        );
+
+        if (!regionValue) {
+            setErrorRegion(true);
+            setErrorMessageRegion(mandatoryMessage);
+        }
+        if (!cityValue) {
+            setErrorCity(true);
+            setErrorMessageCity(mandatoryMessage);
+        }
+        if (!indexValue) {
+            setErrorIndex(true);
+            setErrorMessageIndex(mandatoryMessage);
+        }
+        if (!streetValue) {
+            setErrorStreet(true);
+            setErrorMessageStreet(mandatoryMessage);
+        }
+        if (
+            errorCountry ||
+            !country ||
+            errorRegion ||
+            !regionValue ||
+            errorCity ||
+            !cityValue ||
+            errorIndex ||
+            !indexValue ||
+            errorStreet ||
+            !streetValue
+        )
+            return;
+
+        if (isEdit) {
+            editCustomerAddress({
+                ID: userId,
+                country,
+                regionValue,
+                cityValue,
+                indexValue,
+                streetValue,
+                checkboxUseAddressAsDefault,
+                version,
+                setVersion,
+                setAddAddressFormView,
+                setTypeAddresses,
+                addressId: String(currentSelectedAddress.id),
+                addressTypeView,
+                setDefaultAddresses,
+                changeAddressIndex,
+                getTypeAddress,
+                typeAddresses,
+                defaultAddresses,
+            })
+                .then(() => {
+                    setResultMessageAddress('адрес успешно изменен');
+                    setTimeout(() => {
+                        setResultMessageAddress('');
+                    }, 1500);
+                    setIsEdit(false);
+                })
+                .catch((err) => {
+                    if (err.cause === 'ServerError') {
+                        document.body.textContent = err.message;
+                        document.body.classList.add('error-connection');
+                    }
+                });
+        } else {
+            addCustomerAddress(
+                userId,
+                country,
+                regionValue,
+                cityValue,
+                indexValue,
+                streetValue,
+                checkboxUseAddressAsDefault,
+                version,
+                setVersion,
+                setAddAddressFormView,
+                setTypeAddresses,
+                addressTypeView,
+                setDefaultAddresses
+            )
+                .then(() => {
+                    setResultMessageAddress('адрес успешно добавлен');
+                    setTimeout(() => {
+                        setResultMessageAddress('');
+                    }, 1500);
+                })
+                .catch((err) => {
+                    if (err.cause === 'ServerError') {
+                        document.body.textContent = err.message;
+                        document.body.classList.add('error-connection');
+                    }
+                });
+        }
+    }
+
     return (
         <form className="profile__address-wrapper">
             <div className="form__input-pair form__input-pair--profile">
                 <div className="profile__info-title">
                     {addressTypeView
-                        ? `${isEdit ? 'Изменить' : 'Добавить'} адрес доставки`
-                        : `${
-                              isEdit ? 'Изменить' : 'Добавить'
-                          } адрес выставления счета`}
+                        ? `${userAction} адрес доставки`
+                        : `${userAction} адрес выставления счета`}
                 </div>
                 <button
                     type="button"
@@ -276,138 +383,7 @@ export function AddAddressFormView(props: {
                         type="submit"
                         onClick={(e): void => {
                             e.preventDefault();
-                            if (country === countries[0]) {
-                                setErrorCountry(true);
-                                setErrorMessageCountry(mandatoryMessage);
-                            }
-                            if (country === countries[1]) {
-                                if (!/^\d{6}$/.test(indexValue)) {
-                                    setErrorIndex(true);
-                                    setErrorMessageIndex(
-                                        'Формат индекса 6 цифр XXXYYY'
-                                    );
-                                }
-                            }
-                            if (country === countries[2]) {
-                                if (!/^\d{6}$/.test(indexValue)) {
-                                    setErrorIndex(true);
-                                    setErrorMessageIndex(
-                                        'Формат индекса 6 цифр XXXYYY'
-                                    );
-                                }
-                            }
-                            if (country === countries[3]) {
-                                if (!/^\d{2}-\d{3}$/.test(indexValue)) {
-                                    setErrorIndex(true);
-                                    setErrorMessageIndex(
-                                        'Формат индекса 5 цифр XY-ZZZ'
-                                    );
-                                }
-                            }
-
-                            if (!regionValue) {
-                                setErrorRegion(true);
-                                setErrorMessageRegion(mandatoryMessage);
-                            }
-                            if (!cityValue) {
-                                setErrorCity(true);
-                                setErrorMessageCity(mandatoryMessage);
-                            }
-                            if (!indexValue) {
-                                setErrorIndex(true);
-                                setErrorMessageIndex(mandatoryMessage);
-                            }
-                            if (!streetValue) {
-                                setErrorStreet(true);
-                                setErrorMessageStreet(mandatoryMessage);
-                            }
-                            if (
-                                errorCountry ||
-                                !country ||
-                                errorRegion ||
-                                !regionValue ||
-                                errorCity ||
-                                !cityValue ||
-                                errorIndex ||
-                                !indexValue ||
-                                errorStreet ||
-                                !streetValue
-                            )
-                                return;
-
-                            if (isEdit) {
-                                editCustomerAddress(
-                                    userId,
-                                    country,
-                                    regionValue,
-                                    cityValue,
-                                    indexValue,
-                                    streetValue,
-                                    checkboxUseAddressAsDefault,
-                                    version,
-                                    setVersion,
-                                    setAddAddressFormView,
-                                    setTypeAddresses,
-                                    String(currentSelectedAddress.id),
-                                    addressTypeView,
-                                    setDefaultAddresses,
-                                    changeAddressIndex,
-                                    getTypeAddress,
-                                    typeAddresses,
-                                    defaultAddresses
-                                )
-                                    .then(() => {
-                                        setResultMessageAddress(
-                                            'адрес успешно изменен'
-                                        );
-                                        setTimeout(() => {
-                                            setResultMessageAddress('');
-                                        }, 1500);
-                                        setIsEdit(false);
-                                    })
-                                    .catch((err) => {
-                                        if (err.cause === 'ServerError') {
-                                            document.body.textContent =
-                                                err.message;
-                                            document.body.classList.add(
-                                                'error-connection'
-                                            );
-                                        }
-                                    });
-                            } else {
-                                addCustomerAddress(
-                                    userId,
-                                    country,
-                                    regionValue,
-                                    cityValue,
-                                    indexValue,
-                                    streetValue,
-                                    checkboxUseAddressAsDefault,
-                                    version,
-                                    setVersion,
-                                    setAddAddressFormView,
-                                    setTypeAddresses,
-                                    addressTypeView,
-                                    setDefaultAddresses
-                                )
-                                    .then(() => {
-                                        setResultMessageAddress(
-                                            'адрес успешно добавлен'
-                                        );
-                                        setTimeout(() => {
-                                            setResultMessageAddress('');
-                                        }, 1500);
-                                    })
-                                    .catch((err) => {
-                                        if (err.cause === 'ServerError') {
-                                            document.body.textContent =
-                                                err.message;
-                                            document.body.classList.add(
-                                                'error-connection'
-                                            );
-                                        }
-                                    });
-                            }
+                            checkFieldsBeforeSubmit();
                         }}
                     >
                         ок
