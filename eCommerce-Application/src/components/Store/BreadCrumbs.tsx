@@ -7,6 +7,7 @@ function BreadCrumbs(props: {
     selectedTypePath: string;
     selectedCategory: string;
     setSelectedCategory: React.Dispatch<React.SetStateAction<string>>;
+    setSelectedCategoryId?: React.Dispatch<React.SetStateAction<string>>;
     selectedCategoryPath: string;
     selectedProduct: string;
     selectedProductPath: string;
@@ -20,6 +21,7 @@ function BreadCrumbs(props: {
         selectedTypePath,
         selectedCategory,
         setSelectedCategory,
+        setSelectedCategoryId,
         selectedCategoryPath,
         selectedProduct,
         selectedProductPath,
@@ -55,6 +57,7 @@ function BreadCrumbs(props: {
 
                         setSelectedType('');
                         setSelectedCategory('');
+                        if (setSelectedCategoryId) setSelectedCategoryId('');
                         (
                             document.querySelectorAll(
                                 '.sidebar__category_active'
