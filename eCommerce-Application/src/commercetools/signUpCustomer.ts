@@ -1,39 +1,43 @@
 import { apiRoot } from './Client';
-import { serverErrorMessage } from '../utils/constants';
+import {
+    serverErrorMessage,
+    countriesList,
+    errorEmailExist,
+    errorEmailValidation,
+    errorPasswordValidation,
+} from '../utils/constants';
+import { RegistrationParams } from '../types';
 
-export async function signUpCustomer(
-    userName: string,
-    name: string,
-    surname: string,
-    password: string,
-    email: string,
-    countryShipping: string,
-    shippingRegion: string,
-    shippingCity: string,
-    shippingIndex: string,
-    shippingStreet: string,
-    countryBilling: string,
-    billingRegion: string,
-    billingCity: string,
-    billingIndex: string,
-    billingStreet: string,
-    birthDay: string,
-    birthMonth: string,
-    birthYear: string,
-    formLife: string,
-    defaultShippingAddress: boolean,
-    defaultBillingAddress: boolean
-): Promise<void> {
+export async function signUpCustomer(props: RegistrationParams): Promise<void> {
+    const {
+        userName,
+        name,
+        surname,
+        password,
+        email,
+        countryShipping,
+        shippingRegion,
+        shippingCity,
+        shippingIndex,
+        shippingStreet,
+        countryBilling,
+        billingRegion,
+        billingCity,
+        billingIndex,
+        billingStreet,
+        birthDay,
+        birthMonth,
+        birthYear,
+        formLife,
+        defaultShippingAddress,
+        defaultBillingAddress,
+    } = props;
     let countryShippingAbbr = '';
     let countryBillingAbbr = '';
-    const countriesAbbr = [
-        { long: 'Россия', short: 'RU' },
-        { long: 'Беларусь', short: 'BY' },
-        { long: 'Польша', short: 'PL' },
-    ];
-    countriesAbbr.forEach((el) => {
-        if (el.long === countryShipping) countryShippingAbbr = el.short;
-        if (el.long === countryBilling) countryBillingAbbr = el.short;
+
+    countriesList.forEach((el) => {
+        if (el.name === countryShipping) countryShippingAbbr = el.abbr;
+        if (el.name === countryBilling) countryBillingAbbr = el.abbr;
     });
     try {
         await apiRoot
@@ -76,26 +80,27 @@ export async function signUpCustomer(
             .execute();
     } catch (e) {
         const error = e as Error;
-        if (error.message === 'The provided value is not a valid email') {
-            throw new Error('Введите e-mail в верном формате', {
-                cause: 'emailError',
-            });
-        }
-        if (error.message === `'password' should not be empty.`) {
-            throw new Error('Введите пароль в верном формате', {
-                cause: 'passwordError',
-            });
-        } else if (
-            error.message ===
-            'There is already an existing customer with the provided email.'
-        ) {
-            throw new Error('Данный e-mail уже существует в системе', {
-                cause: 'emailError',
-            });
-        } else {
-            throw new Error(serverErrorMessage, {
-                cause: 'serverError',
-            });
+        switch (error.message) {
+            case 'The provided value is not a valid email': {
+                throw new Error(errorEmailValidation, {
+                    cause: 'emailError',
+                });
+            }
+            case `'password' should not be empty.`: {
+                throw new Error(errorPasswordValidation, {
+                    cause: 'passwordError',
+                });
+            }
+            case 'There is already an existing customer with the provided email.': {
+                throw new Error(errorEmailExist, {
+                    cause: 'emailError',
+                });
+            }
+            default: {
+                throw new Error(serverErrorMessage, {
+                    cause: 'serverError',
+                });
+            }
         }
     }
 }

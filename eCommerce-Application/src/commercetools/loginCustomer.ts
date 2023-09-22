@@ -3,7 +3,11 @@ import { MyCustomerSignin } from '@commercetools/platform-sdk';
 import { constructClientPasswordFlow } from './withPasswordClient';
 import { tokenInstance } from './apiConstants';
 import { apiRoot } from './Client';
-import { serverErrorMessage } from '../utils/constants';
+import {
+    serverErrorMessage,
+    errorPassword,
+    errorEmailNotExist,
+} from '../utils/constants';
 
 export async function loginCustomer(
     email: string,
@@ -49,11 +53,11 @@ export async function loginCustomer(
                 .get({ queryArgs: { where: `email="${email}"` } })
                 .execute();
             if (checkEmailExistResponse.body.count === 0) {
-                throw new Error('Данный e-mail не найден в системе', {
+                throw new Error(errorEmailNotExist, {
                     cause: 'emailError',
                 });
             } else if (checkEmailExistResponse.body.count === 1) {
-                throw new Error('Вы ввели неверный пароль', {
+                throw new Error(errorPassword, {
                     cause: 'passwordError',
                 });
             }

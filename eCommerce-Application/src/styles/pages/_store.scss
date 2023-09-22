@@ -41,7 +41,7 @@
     }
 
     &__navigation {
-        @include mixins.flex(null, null, null);
+        @include mixins.flex(null, flex-end, null);
     }
 
     &__pages {

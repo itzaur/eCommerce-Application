@@ -1,6 +1,6 @@
 import { useEffect, useState, ChangeEvent } from 'react';
 import { ProductProjection } from '@commercetools/platform-sdk';
-import { filterSortSearcProducts } from '../../commercetools/filterSortSearchProducts';
+import { getFilterSortSearchProducts } from '../../commercetools/getFilterSortSearchProducts';
 import { setErrorBodyDOM } from '../../utils/constants';
 
 function Parameters(props: {
@@ -8,6 +8,7 @@ function Parameters(props: {
     selectedType: string;
     selectedCategory: string;
     selectedCategoryId: string;
+    filter: { name: string; key: string };
     filterVariants: string[];
     minPrice: number;
     maxPrice: number;
@@ -19,12 +20,16 @@ function Parameters(props: {
     currentOffset: number;
     setIsFetching: CallableFunction;
     itemPerPage: number;
+    setCountCards: React.Dispatch<React.SetStateAction<number>>;
+    setCountPages: React.Dispatch<React.SetStateAction<number>>;
+    setCurrentOffset: React.Dispatch<React.SetStateAction<number>>;
 }): JSX.Element {
     const {
         setCards,
         selectedType,
         selectedCategory,
         selectedCategoryId,
+        filter,
         filterVariants,
         minPrice,
         maxPrice,
@@ -36,12 +41,13 @@ function Parameters(props: {
         currentOffset,
         setIsFetching,
         itemPerPage,
+        setCountCards,
+        setCountPages,
+        setCurrentOffset,
     } = props;
     const [selectedFiltersList, setselectedFiltersList] = useState<string[]>(
         []
     );
-
-    let filter: { name: string; key: string } = { name: '', key: '' };
     const [filtersApplied, setFiltersApplied] = useState(false);
     const [discountedProducts, setDiscountedProducts] = useState(false);
     const [sort, setSort] = useState({
@@ -49,20 +55,6 @@ function Parameters(props: {
         value: 'По умолчанию',
         icon: '↓↑',
     });
-
-    switch (selectedType) {
-        case 'Космотуры':
-            filter = { name: 'Локация', key: 'location' };
-            break;
-        case 'Выбрать номер':
-            filter = { name: 'Цвет', key: 'color' };
-            break;
-        case 'Сувениры':
-            filter = { name: 'Форма', key: 'shape' };
-            break;
-        default:
-            filter = { name: '', key: '' };
-    }
 
     function checkFilters(e: ChangeEvent, el: string): void {
         if (e.target instanceof HTMLInputElement) {
@@ -93,29 +85,20 @@ function Parameters(props: {
     }
 
     useEffect(() => {
+        setFiltersApplied(false);
         setselectedFiltersList([]);
         setDiscountedProducts(false);
+        setSort({ order: '', value: 'По умолчанию', icon: '↓↑' });
         document.querySelectorAll('input[data-type="filter"').forEach((el) => {
             if (el instanceof HTMLInputElement) {
                 const elCopy = el;
                 elCopy.checked = false;
             }
         });
-        setMinSelectedPrice(minPrice);
-        setMaxSelectedPrice(maxPrice);
-        setDiscountedProducts(false);
-    }, [
-        selectedType,
-        selectedCategory,
-        maxPrice,
-        minPrice,
-        setMaxSelectedPrice,
-        setMinSelectedPrice,
-    ]);
+    }, [selectedType, selectedCategory]);
 
-    function filterProducts(): void {
-        setIsFetching(true);
-        filterSortSearcProducts(
+    function getOnlyCards(): void {
+        getFilterSortSearchProducts(
             {
                 selectedCategoryId,
                 attributesToFilter: filter.key,
@@ -130,7 +113,9 @@ function Parameters(props: {
             itemPerPage
         )
             .then((data) => {
-                if (data) setCards(data);
+                if (data) {
+                    setCards(data);
+                }
                 setIsFetching(false);
             })
             .catch((err: Error) => {
@@ -138,10 +123,46 @@ function Parameters(props: {
             });
     }
 
+    function filterProducts(): void {
+        setIsFetching(true);
+        getFilterSortSearchProducts(
+            {
+                selectedCategoryId,
+                attributesToFilter: filter.key,
+                selectedFiltersList,
+                minSelectedPrice,
+                maxSelectedPrice,
+                attributesToSort: sort.order,
+                attributesToSearch: searchValue,
+                discountedProducts,
+            },
+            0,
+            100
+        ).then((data) => {
+            setCurrentOffset(0);
+            setCountCards(data.length);
+            setCountPages(Math.ceil(data.length / itemPerPage));
+            getOnlyCards();
+        });
+    }
+
     useEffect(() => {
+        getOnlyCards();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currentOffset]);
+
+    useEffect(() => {
+        if (filtersApplied) {
+            filterProducts();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedFiltersList, discountedProducts, sort]);
+
+    useEffect(() => {
+        setFiltersApplied(true);
         filterProducts();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [searchValue]);
+    }, [searchValue, setFiltersApplied]);
 
     return (
         <div className="parameters">
@@ -166,7 +187,6 @@ function Parameters(props: {
                                     });
                                     if (!filtersApplied)
                                         setFiltersApplied(true);
-                                    filterProducts();
                                 }}
                             >
                                 <span>↑</span> По умолчанию
@@ -183,8 +203,6 @@ function Parameters(props: {
                                     });
                                     if (!filtersApplied)
                                         setFiltersApplied(true);
-
-                                    filterProducts();
                                 }}
                             >
                                 <span>&#8595;</span> A - Я
@@ -201,8 +219,6 @@ function Parameters(props: {
                                     });
                                     if (!filtersApplied)
                                         setFiltersApplied(true);
-
-                                    filterProducts();
                                 }}
                             >
                                 <span>&#8593;</span> Я - А
@@ -219,7 +235,6 @@ function Parameters(props: {
                                     });
                                     if (!filtersApplied)
                                         setFiltersApplied(true);
-                                    filterProducts();
                                 }}
                             >
                                 <span>&#8593;</span> По возрастанию цены
@@ -236,7 +251,6 @@ function Parameters(props: {
                                     });
                                     if (!filtersApplied)
                                         setFiltersApplied(true);
-                                    filterProducts();
                                 }}
                             >
                                 <span>&#8595;</span> По убыванию цены
@@ -265,7 +279,6 @@ function Parameters(props: {
                                             id={el}
                                             onChange={(e): void => {
                                                 checkFilters(e, el);
-                                                filterProducts();
                                             }}
                                         />
                                         {el}
@@ -353,7 +366,6 @@ function Parameters(props: {
                             setDiscountedProducts(!discountedProducts);
 
                             if (!filtersApplied) setFiltersApplied(true);
-                            filterProducts();
                         }}
                     >
                         Акции

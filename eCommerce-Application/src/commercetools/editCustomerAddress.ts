@@ -1,35 +1,33 @@
 import { Address } from '@commercetools/platform-sdk';
 import { apiRoot } from './Client';
+import { countriesList } from '../utils/constants';
+import { EditCustomerAddressParams } from '../types';
 
 export async function editCustomerAddress(
-    ID: string,
-    country: string,
-    regionValue: string,
-    cityValue: string,
-    indexValue: string,
-    streetValue: string,
-    checkboxUseAddressAsDefault: boolean,
-    version: number,
-    setVersion: CallableFunction,
-    setAddAddressFormView: CallableFunction,
-    setTypeAddresses: CallableFunction,
-    addressId: string,
-    addressTypeView: boolean,
-    setDefaultAddresses: CallableFunction,
-    changeAddressIndex: number,
-    getTypeAddress: CallableFunction,
-    typeAddresses?: Address[],
-    defaultAddresses?: Address[]
+    props: EditCustomerAddressParams
 ): Promise<void> {
-    let countryShippingAbbr = '';
-    const countriesAbbr = [
-        { long: 'Россия', short: 'RU' },
-        { long: 'Беларусь', short: 'BY' },
-        { long: 'Польша', short: 'PL' },
-    ];
-    countriesAbbr.forEach((el) => {
-        if (el.long === country) countryShippingAbbr = el.short;
-    });
+    const {
+        ID,
+        country,
+        regionValue,
+        cityValue,
+        indexValue,
+        streetValue,
+        checkboxUseAddressAsDefault,
+        version,
+        setVersion,
+        setAddAddressFormView,
+        setTypeAddresses,
+        addressId,
+        addressTypeView,
+        setDefaultAddresses,
+        changeAddressIndex,
+        getTypeAddress,
+        typeAddresses,
+        defaultAddresses,
+    } = props;
+    const countryShippingAbbr =
+        countriesList.find((el) => el.name === country)?.abbr || '';
 
     try {
         const response = await apiRoot
@@ -83,11 +81,13 @@ export async function editCustomerAddress(
         }
 
         if (typeAddresses) {
-            setTypeAddresses((prev: Address[]) => [
-                ...prev.slice(0, changeAddressIndex),
-                getTypeAddress(response.body)[changeAddressIndex],
-                ...prev.slice(changeAddressIndex + 1, typeAddresses.length),
-            ]);
+            setTypeAddresses((addresses: Address[]) => {
+                const tempAddresses = addresses;
+                tempAddresses[changeAddressIndex] = getTypeAddress(
+                    response.body
+                )[changeAddressIndex];
+                return tempAddresses;
+            });
         }
         setAddAddressFormView(true);
 
