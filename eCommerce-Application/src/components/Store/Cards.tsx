@@ -1,9 +1,12 @@
-import React, { MouseEvent, useRef, useState } from 'react';
+import { MouseEvent, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ProductProjection } from '@commercetools/platform-sdk';
-import { updateCart } from '../../commercetools/updateCart';
+import { Cart, ProductProjection } from '@commercetools/platform-sdk';
+import { CircleLoader } from 'react-spinners';
+import { addNewProductInCartOrUpdateQuantity } from '../../commercetools/updateCart';
+import { serverErrorMessage, setErrorBodyDOM } from '../../utils/constants';
 
 import cartIcon from '../../assets/images/cart-icon.png';
+import cartIconInactive from '../../assets/images/cart-icon-inactive.png';
 import favouriteIcon from '../../assets/images/favourite-icon.png';
 
 function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
@@ -11,12 +14,26 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
     const [buttonDescriptionTexcontent, setButtonDescriptionTexcontent] =
         useState('Показать описание ▼');
 
+    const [activeCart, setActiveCart] = useState<Cart | null>(
+        localStorage.getItem('activeCart')
+            ? JSON.parse(localStorage.getItem('activeCart') as string)
+            : null
+    );
+    const [cartLoading, setCartLoading] = useState(false);
+    const [cartLoadingElement, setCartLoadingElement] = useState('');
+
     const scrollToTop = (event: React.MouseEvent<HTMLElement>): void => {
         const target = event.target as HTMLElement;
-        if (target.className.includes('btn')) return;
+
+        if (
+            target.className.includes('btn') ||
+            target.className.includes('card__icon')
+        )
+            return;
 
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
     };
+
     function showHideDescription(e: MouseEvent): void {
         e.preventDefault();
         if (e.target instanceof HTMLElement) {
@@ -31,9 +48,36 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
             );
         }
     }
-    function updateCartDOM(e: MouseEvent, cardId: string): void {
+
+    function addNewProductInCartDOM(e: MouseEvent, cardId: string): void {
         e.preventDefault();
-        updateCart(cardId);
+        if (e.target instanceof HTMLElement && e.target.parentElement) {
+            setCartLoadingElement(e.target.parentElement.id);
+            setCartLoading(true);
+        }
+
+        addNewProductInCartOrUpdateQuantity({
+            cartData: activeCart,
+            mode: 'new',
+            cardId,
+            quantity: 1,
+            firstFunctionCall: true,
+        })
+            .then((data) => {
+                if (data) setActiveCart(data);
+            })
+            .catch((err) => {
+                if (
+                    err instanceof Error &&
+                    err.message === serverErrorMessage
+                ) {
+                    setErrorBodyDOM(err);
+                }
+            })
+            .finally(() => {
+                setCartLoadingElement('');
+                setCartLoading(false);
+            });
     }
 
     return (
@@ -99,12 +143,46 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
                                 <div className="card__icons">
                                     <button
                                         type="button"
+                                        id={`btn-cart-${card.key}`}
+                                        disabled={
+                                            !!activeCart?.lineItems
+                                                .map(
+                                                    (product) =>
+                                                        product.productId
+                                                )
+                                                .includes(card.id)
+                                        }
                                         onClick={(e): void => {
-                                            updateCartDOM(e, card.id);
+                                            addNewProductInCartDOM(e, card.id);
                                         }}
                                     >
-                                        <img src={cartIcon} alt="cart-icon" />
+                                        {cartLoadingElement !==
+                                            `btn-cart-${card.key}` && (
+                                            <img
+                                                className="card__icon"
+                                                src={
+                                                    activeCart?.lineItems
+                                                        .map(
+                                                            (product) =>
+                                                                product.productId
+                                                        )
+                                                        .includes(card.id)
+                                                        ? cartIconInactive
+                                                        : cartIcon
+                                                }
+                                                alt="cart-icon"
+                                            />
+                                        )}
+                                        {cartLoadingElement ===
+                                            `btn-cart-${card.key}` && (
+                                            <CircleLoader
+                                                color="hsl(181, 73%, 60%)"
+                                                loading={cartLoading}
+                                                size={40}
+                                            />
+                                        )}
                                     </button>
+
                                     <button type="button">
                                         <img
                                             src={favouriteIcon}

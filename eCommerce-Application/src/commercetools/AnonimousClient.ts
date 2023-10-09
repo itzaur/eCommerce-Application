@@ -1,41 +1,17 @@
 import {
-    TokenCache,
     ClientBuilder,
-    HttpMiddlewareOptions,
     AnonymousAuthMiddlewareOptions,
-    TokenStore,
 } from '@commercetools/sdk-client-v2';
 import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
+import { httpMiddlewareOptions, tokenInstance } from './apiConstants';
 
 const {
     VITE_CTP_CLIENT_ID,
     VITE_CTP_CLIENT_SECRET,
     VITE_CTP_PROJECT_KEY,
     VITE_CTP_AUTH_URL,
-    VITE_CTP_API_URL,
 } = import.meta.env;
-
-class TokenCacheClass implements TokenCache {
-    private token: TokenStore;
-
-    constructor() {
-        this.token = {
-            token: '',
-            expirationTime: 0,
-            refreshToken: '',
-        };
-    }
-
-    public get(): TokenStore {
-        return this.token;
-    }
-
-    public set(cache: TokenStore): void {
-        this.token = cache;
-    }
-}
-export const tokenInstance = new TokenCacheClass();
 
 export function constructClientAnonimousFlow(): ByProjectKeyRequestBuilder {
     const options: AnonymousAuthMiddlewareOptions = {
@@ -49,10 +25,6 @@ export function constructClientAnonimousFlow(): ByProjectKeyRequestBuilder {
         fetch,
         tokenCache: tokenInstance,
     };
-    const httpMiddlewareOptions: HttpMiddlewareOptions = {
-        host: VITE_CTP_API_URL,
-        fetch,
-    };
 
     const client = new ClientBuilder()
         .withAnonymousSessionFlow(options)
@@ -63,4 +35,3 @@ export function constructClientAnonimousFlow(): ByProjectKeyRequestBuilder {
     });
     return apiRoot;
 }
-export const apiRoot = constructClientAnonimousFlow();

@@ -1,6 +1,7 @@
 @use '../abstracts/mixins';
 
 #store {
+    min-height: 100vh;
     font-family: var(--ff-secondary);
 
     color: var(--color-white);
@@ -37,6 +38,46 @@
         row-gap: 3rem;
 
         padding-bottom: 4rem;
+    }
+
+    &__navigation {
+        @include mixins.flex(null, flex-end, null);
+    }
+
+    &__pages {
+        @include mixins.flex(null, null, center);
+    }
+
+    &__page {
+        cursor: pointer;
+        transition: transform 0.5s;
+
+        &:hover {
+            transform: scale(1.2);
+        }
+
+        &-next {
+            @include mixins.flex(null, center, center);
+        }
+    }
+
+    &__current-page {
+        font-size: 3rem;
+        color: var(--color-primary);
+    }
+
+    &__count-page {
+        font-size: 2rem;
+    }
+
+    &__loader {
+        margin: 0 auto;
+
+        &_product {
+            position: absolute !important;
+            left: 50%;
+            transform: translateX(-50%);
+        }
     }
 }
 
@@ -104,7 +145,7 @@
         width: 80%;
 
         @include mixins.respond-to('tablet') {
-            width: 22rem;
+            width: fit-content;
         }
     }
 
@@ -121,10 +162,8 @@
             min-width: 22rem;
         }
 
-        @media (hover: hover) {
-            &:hover + .parameters__dropdown {
-                transform: scale(1, 1);
-            }
+        &:hover + .parameters__dropdown {
+            transform: scale(1, 1);
         }
 
         &-img {
@@ -190,10 +229,8 @@
             cursor: pointer;
         }
 
-        @media (hover: hover) {
-            &:hover {
-                transform: scale(1, 1);
-            }
+        &:hover {
+            transform: scale(1, 1);
         }
 
         li {
@@ -343,7 +380,7 @@ input[type='range']::-moz-range-thumb {
         padding: 2rem;
 
         box-shadow: none;
-        clip-path: 0;
+        clip-path: none;
     }
 
     &__content {
@@ -435,6 +472,7 @@ input[type='range']::-moz-range-thumb {
 
         &_active {
             color: var(--color-primary);
+            pointer-events: none;
         }
     }
 }
@@ -545,6 +583,13 @@ input[type='range']::-moz-range-thumb {
     &__icons {
         --gap: 1.2rem;
         @include mixins.flex(row, space-between, center);
+
+        button {
+            cursor: pointer;
+        }
+        button[disabled] {
+            cursor: auto;
+        }
 
         img {
             width: 3rem;

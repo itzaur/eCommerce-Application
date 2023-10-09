@@ -3,6 +3,7 @@
 .modal {
     position: fixed;
     top: 0;
+    left: 0;
 
     width: 100%;
     height: 100%;
@@ -29,6 +30,37 @@
     &.active &__content {
         transform: translateY(0);
         opacity: 1;
+    }
+
+    &_confirm {
+        & .modal__btns {
+            --gap: 3rem;
+            @include mixins.flex(row, center, center);
+            flex-wrap: wrap;
+
+            position: relative;
+
+            letter-spacing: 0.1em;
+        }
+    }
+
+    &_order {
+        --gap: 1rem;
+        @include mixins.flex(column, center, center);
+        width: min(50rem, 90%);
+
+        padding: 2rem;
+
+        color: var(--color-black);
+        background-color: var(--color-primary);
+
+        @include mixins.respond-to('tablet') {
+            --gap: 1.4rem;
+        }
+
+        &__img_done {
+            width: min(10rem, 20%);
+        }
     }
 
     &__content {
@@ -61,19 +93,25 @@
 
 .modal_registration {
     position: fixed;
-    top: calc(50vh - 5rem);
-    left: calc(50vw - 40rem);
-
-    width: 80rem;
-    height: 10rem;
+    top: 50%;
+    left: 50%;
 
     display: grid;
     place-content: center;
+    gap: 3rem;
+
+    width: 80%;
+    min-height: 30rem;
+    height: auto;
+
+    padding: 2rem 4rem;
+
+    transform: translate(-50%, -50%);
 
     background-color: var(--color-secondary);
     color: var(--color-white);
 
-    button {
+    &__btn {
         position: absolute;
         right: 0.4rem;
         top: 0.4rem;

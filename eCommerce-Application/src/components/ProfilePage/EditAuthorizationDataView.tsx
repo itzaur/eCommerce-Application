@@ -114,12 +114,11 @@ export function EditAuthorizationDataView(props: {
                             e.preventDefault();
                             setIsEditEmail(false);
 
-                            if (!editEmail) {
+                            if (!editEmail || errorEmail) {
                                 setErrorEmail(true);
                                 setErrorMessageEmail('Это обязатальное поле');
+                                return;
                             }
-
-                            if (errorEmail || !editEmail) return;
 
                             editCustomerEmail(
                                 userId,

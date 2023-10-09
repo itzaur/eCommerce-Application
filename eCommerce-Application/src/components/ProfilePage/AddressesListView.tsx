@@ -44,6 +44,29 @@ export function AddressesListView(props: {
         return typeAddresses?.filter((typeAddress) => typeAddress.id !== id);
     };
 
+    function removeCustomerAddressDOM(address: Address): void {
+        const addressID = address.id;
+
+        if (addressID) {
+            setTypeAddresses(removeAddress(address.id));
+            removeCustomerAddress(userId, address.id, version, setVersion)
+                .then(() => {
+                    setResultMessageAddress('адрес успешно удален');
+                    setTimeout(() => {
+                        setResultMessageAddress('');
+                    }, 1500);
+                })
+                .catch((err) => {
+                    if (err.cause === 'ServerError') {
+                        document.body.textContent = err.message;
+                        document.body.classList.add('error-connection');
+                    }
+                });
+        }
+
+        if (addressID === defaultAddress?.[0]?.id) setDefaultAddresses('');
+    }
+
     return (
         <div className="dropdown">
             <button
@@ -112,41 +135,7 @@ export function AddressesListView(props: {
                                 type="button"
                                 className="menu__button_trash"
                                 onClick={(): void => {
-                                    const addressID = address.id;
-
-                                    if (addressID) {
-                                        setTypeAddresses(
-                                            removeAddress(address.id)
-                                        );
-                                        removeCustomerAddress(
-                                            userId,
-                                            address.id,
-                                            version,
-                                            setVersion
-                                        )
-                                            .then(() => {
-                                                setResultMessageAddress(
-                                                    'адрес успешно удален'
-                                                );
-                                                setTimeout(() => {
-                                                    setResultMessageAddress('');
-                                                }, 1500);
-                                            })
-                                            .catch((err) => {
-                                                if (
-                                                    err.cause === 'ServerError'
-                                                ) {
-                                                    document.body.textContent =
-                                                        err.message;
-                                                    document.body.classList.add(
-                                                        'error-connection'
-                                                    );
-                                                }
-                                            });
-                                    }
-
-                                    if (addressID === defaultAddress?.[0]?.id)
-                                        setDefaultAddresses('');
+                                    removeCustomerAddressDOM(address);
                                 }}
                             >
                                 <img src={trash} alt="trash" />

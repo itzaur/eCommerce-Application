@@ -1,5 +1,6 @@
 import { Address } from '@commercetools/platform-sdk';
 import { apiRoot } from './Client';
+import { countriesList } from '../utils/constants';
 
 export async function addCustomerAddress(
     ID: string,
@@ -16,17 +17,8 @@ export async function addCustomerAddress(
     addressTypeView: boolean,
     setDefaultAddresses: CallableFunction
 ): Promise<void> {
-    let countryShippingAbbr = '';
-
-    const countriesAbbr = [
-        { long: 'Россия', short: 'RU' },
-        { long: 'Беларусь', short: 'BY' },
-        { long: 'Польша', short: 'PL' },
-    ];
-
-    countriesAbbr.forEach((el) => {
-        if (el.long === country) countryShippingAbbr = el.short;
-    });
+    const countryShippingAbbr =
+        countriesList.find((el) => el.name === country)?.abbr || '';
 
     try {
         const response = await apiRoot

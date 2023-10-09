@@ -1,19 +1,29 @@
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCoverflow, Pagination, Navigation } from 'swiper/modules';
-import { Product } from '@commercetools/platform-sdk';
-import { apiRoot } from '../../commercetools/Client';
+import { Product, Cart, LineItem } from '@commercetools/platform-sdk';
+import ClipLoader from 'react-spinners/RingLoader';
+import CircleLoader from 'react-spinners/CircleLoader';
+import gsap from 'gsap';
+import {
+    products,
+    serverErrorMessage,
+    setErrorBodyDOM,
+} from '../../utils/constants';
+import { ProductOptions, UpdateCartMode } from '../../types';
+
+import { getProductKey } from '../../commercetools/getProductKey';
 import { Header } from '../Store';
 import { Footer } from '../MainPage';
-import { products, serverErrorMessage } from '../../utils/constants';
-import { ProductOptions } from '../../types';
+import Transition from '../Transition/Transition';
 import starEmpty from '../../assets/images/review-star-empty.png';
 import avatar from '../../assets/images/user.png';
 import star from '../../assets/images/review-star.png';
 import Modal from '../NotFoundPage/Modal';
 import BreadCrumbs from '../Store/BreadCrumbs';
 import createSlider from '../Slider/Slider';
+import { addNewProductInCartOrUpdateQuantity } from '../../commercetools/updateCart';
 
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
@@ -40,26 +50,40 @@ function ProductDetail({
     const location = useLocation().pathname.split('/').at(-1) as string;
     const cardOptions = card?.masterData.current;
     const cardDetails = card?.masterData.current.masterVariant;
+    const [isFetching, setIsFetching] = useState(true);
+
+    const [activeCart, setActiveCart] = useState<Cart | null>(
+        localStorage.getItem('activeCart')
+            ? JSON.parse(localStorage.getItem('activeCart') as string)
+            : null
+    );
+    const [cardInCart, setCardInCart] = useState(false);
+    const [cartLoading, setCartLoading] = useState(false);
+
+    const timeline = gsap.timeline();
 
     useEffect(() => {
-        async function getProductKey(key: string): Promise<void> {
-            try {
-                const result = await apiRoot
-                    .products()
-                    .withKey({ key })
-                    .get()
-                    .execute();
-
-                setCard(result.body);
-            } catch (error) {
-                throw new Error(serverErrorMessage);
-            }
-        }
-        getProductKey(location).catch((err: Error) => {
-            document.body.textContent = err.message;
-            document.body.classList.add('error-connection');
-        });
-    }, [location]);
+        getProductKey(location)
+            .then((result) => {
+                setCard(result);
+                if (activeCart)
+                    setCardInCart(
+                        activeCart.lineItems
+                            .map((el: LineItem) => el.productId)
+                            .includes(result.id)
+                    );
+                setIsFetching(false);
+                if (activeCart)
+                    setCardInCart(
+                        activeCart.lineItems
+                            .map((el: LineItem) => el.productId)
+                            .includes(result.id)
+                    );
+            })
+            .catch((err: Error) => {
+                setErrorBodyDOM(err);
+            });
+    }, [location, activeCart]);
 
     const product: ProductOptions = {
         title: cardOptions?.name ? cardOptions?.name['ru-RU'] : '',
@@ -72,20 +96,19 @@ function ProductDetail({
         images: cardDetails?.images?.map((el) => el.url),
         imageSrc: cardDetails?.images ? cardDetails.images[0].url : '',
         imageAlt: cardDetails?.images ? cardDetails.images[0].label : '',
-        detailsTitle: products.find((el) => el.name === card?.key)?.details
-            ?.title,
-        detailsItems: products.find((el) => el.name === card?.key)?.details
-            ?.name,
-        reviews: products.find((el) => el.name === card?.key)?.reviews,
+        detailsTitle: '',
+        detailsItems: [],
+        reviews: [],
     };
+
+    const foundProduct = products.find((el) => el.name === card?.key);
+    product.detailsTitle = foundProduct?.details.title;
+    product.detailsItems = foundProduct?.details.name;
+    product.reviews = foundProduct?.reviews;
 
     product.price = cardDetails?.prices
         ? ((cardDetails.prices[0].value.centAmount || 0) / 100).toLocaleString(
-              product.currency,
-              {
-                  style: 'currency',
-                  currency: product.currency,
-              }
+              'ru'
           )
         : '';
     product.discount = cardDetails?.prices
@@ -113,8 +136,43 @@ function ProductDetail({
         }
     };
 
+    function addRemoveProductInCartDOM(mode: UpdateCartMode): void {
+        const quantity = mode === 'new' ? 1 : 0;
+        if (card) {
+            setCartLoading(true);
+
+            addNewProductInCartOrUpdateQuantity({
+                cartData: activeCart,
+                mode,
+                cardId: card.id,
+                quantity,
+                firstFunctionCall: true,
+            })
+                .then((data) => {
+                    if (data) setActiveCart(data);
+                    if (mode === 'new') {
+                        setCardInCart(true);
+                    } else {
+                        setCardInCart(false);
+                    }
+                })
+                .catch((err) => {
+                    if (
+                        err instanceof Error &&
+                        err.message === serverErrorMessage
+                    ) {
+                        setErrorBodyDOM(err);
+                    }
+                })
+                .finally(() => {
+                    setCartLoading(false);
+                });
+        }
+    }
+
     return (
         <>
+            <Transition timeline={timeline} />
             <Header withSearchValue={false} setSearchValue={undefined} />
             <Modal
                 active={modalActive}
@@ -138,6 +196,7 @@ function ProductDetail({
                     <div className="swiper-scrollbar" />
                 </div>
             </Modal>
+
             <section className="product">
                 <BreadCrumbs
                     selectedType={selectedType}
@@ -164,202 +223,253 @@ function ProductDetail({
                 </button>
 
                 <div className="product__box">
-                    <div className="product__imgs">
-                        <div className="slider">
-                            <Swiper
-                                effect="coverflow"
-                                grabCursor
-                                slidesPerView={1}
-                                spaceBetween={20}
-                                coverflowEffect={{
-                                    rotate: 0,
-                                    stretch: 0,
-                                    depth: 100,
-                                    modifier: 2.5,
-                                }}
-                                pagination={{
-                                    el: '.swiper-pagination',
-                                    clickable: true,
-                                }}
-                                navigation={{
-                                    nextEl: '.swiper-button-next',
-                                    prevEl: '.swiper-button-prev',
-                                }}
-                                modules={[
-                                    EffectCoverflow,
-                                    Pagination,
-                                    Navigation,
-                                ]}
-                                className="swiper-container"
-                            >
-                                {product.images?.map((img, i) => (
-                                    <SwiperSlide
-                                        key={img}
-                                        onClick={(e): void => {
-                                            setModalActive(true);
-                                            handleClickSlideIndex(e);
-                                            sliderState();
+                    {isFetching ? (
+                        <ClipLoader
+                            color="#4fe1e3"
+                            loading={isFetching}
+                            size={150}
+                            className="store__loader store__loader_product"
+                        />
+                    ) : (
+                        <>
+                            <div className="product__imgs">
+                                <div className="slider">
+                                    <Swiper
+                                        effect="coverflow"
+                                        grabCursor
+                                        slidesPerView={1}
+                                        spaceBetween={20}
+                                        coverflowEffect={{
+                                            rotate: 0,
+                                            stretch: 0,
+                                            depth: 100,
+                                            modifier: 2.5,
+                                        }}
+                                        pagination={{
+                                            el: '.swiper-pagination',
+                                            clickable: true,
+                                        }}
+                                        navigation={{
+                                            nextEl: '.swiper-button-next',
+                                            prevEl: '.swiper-button-prev',
+                                        }}
+                                        modules={[
+                                            EffectCoverflow,
+                                            Pagination,
+                                            Navigation,
+                                        ]}
+                                        className="swiper-container"
+                                    >
+                                        {product.images?.map((img, i) => (
+                                            <SwiperSlide
+                                                key={img}
+                                                onClick={(e): void => {
+                                                    setModalActive(true);
+                                                    handleClickSlideIndex(e);
+                                                    sliderState();
+                                                }}
+                                            >
+                                                <img
+                                                    src={img}
+                                                    alt="product illustration"
+                                                    data-num={i}
+                                                />
+                                            </SwiperSlide>
+                                        ))}
+
+                                        <div className="slider-controler">
+                                            <div className="swiper-button-prev slider-arrow" />
+                                            <div className="swiper-button-next slider-arrow" />
+                                            <div className="swiper-pagination" />
+                                        </div>
+                                    </Swiper>
+                                </div>
+                                <div className="slider-details">
+                                    {product.images?.map((img, i) => (
+                                        <div
+                                            tabIndex={0}
+                                            role="button"
+                                            onKeyDown={undefined}
+                                            key={img}
+                                            onClick={(e): void => {
+                                                setModalActive(true);
+                                                handleClickSlideIndex(e);
+                                                sliderState();
+                                            }}
+                                        >
+                                            <img
+                                                src={img}
+                                                alt="product illustration"
+                                                data-num={i}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="product__info">
+                                <h1 className="info-title">{product.title}</h1>
+                                <div className="info-text">
+                                    <p>{product.description}</p>
+                                </div>
+                                <div className="info-price">
+                                    <div
+                                        className={
+                                            product.discount === 0
+                                                ? 'info-discount--inactive'
+                                                : 'info-discount'
+                                        }
+                                    >
+                                        <span>Цена со скидкой</span>
+                                        <span>-15%</span>
+                                    </div>
+                                    <div
+                                        className={
+                                            product.discount === 0
+                                                ? 'info-value info-value--active'
+                                                : 'info-value--inactive'
+                                        }
+                                    >
+                                        <span>Ваша цена:</span>
+                                    </div>
+                                    <div className="info-value">
+                                        <span className="info-value__discount">
+                                            {product.discount === 0
+                                                ? ''
+                                                : `$ ${product.discount.toLocaleString(
+                                                      'ru'
+                                                  )}`}
+                                        </span>
+                                        <span
+                                            className={
+                                                product.discount === 0
+                                                    ? 'info-value__price info-value__price-active'
+                                                    : 'info-value__price'
+                                            }
+                                        >
+                                            {`$ ${product.price}`}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="product__details">
+                                <h3 className="product__details-title">
+                                    {product.detailsTitle}
+                                </h3>
+                                <div className="product__details-items">
+                                    {product.detailsItems?.map((item) => (
+                                        <button
+                                            className="btn btn--item"
+                                            key={item}
+                                            type="button"
+                                        >
+                                            {item}
+                                        </button>
+                                    ))}
+                                </div>
+                                <div className="product__details-btns">
+                                    <Link to="/store">
+                                        <button
+                                            className="btn btn--product"
+                                            type="button"
+                                        >
+                                            Продолжить покупки
+                                        </button>
+                                    </Link>
+
+                                    <button
+                                        className={
+                                            cardInCart
+                                                ? 'btn--product'
+                                                : 'btn btn--product btn--basket'
+                                        }
+                                        type="button"
+                                        disabled={!!cardInCart}
+                                        onClick={(): void => {
+                                            addRemoveProductInCartDOM('new');
                                         }}
                                     >
-                                        <img
-                                            src={img}
-                                            alt="product illustration"
-                                            data-num={i}
-                                        />
-                                    </SwiperSlide>
-                                ))}
+                                        {!cartLoading && <span>В корзину</span>}
+                                        {cartLoading && (
+                                            <CircleLoader
+                                                color="hsl(0, 0%, 100%)"
+                                                loading={cartLoading}
+                                                size={40}
+                                            />
+                                        )}
+                                    </button>
 
-                                <div className="slider-controler">
-                                    <div className="swiper-button-prev slider-arrow" />
-                                    <div className="swiper-button-next slider-arrow" />
-                                    <div className="swiper-pagination" />
-                                </div>
-                            </Swiper>
-                        </div>
-                        <div className="slider-details">
-                            {product.images?.map((img, i) => (
-                                <div
-                                    tabIndex={0}
-                                    role="button"
-                                    onKeyDown={undefined}
-                                    key={img}
-                                    onClick={(e): void => {
-                                        setModalActive(true);
-                                        handleClickSlideIndex(e);
-                                        sliderState();
-                                    }}
-                                >
-                                    <img
-                                        src={img}
-                                        alt="product illustration"
-                                        data-num={i}
-                                    />
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                    <div className="product__info">
-                        <h1 className="info-title">{product.title}</h1>
-                        <div className="info-text">
-                            <p>{product.description}</p>
-                        </div>
-                        <div className="info-price">
-                            <div
-                                className={
-                                    product.discount === 0
-                                        ? 'info-discount--inactive'
-                                        : 'info-discount'
-                                }
-                            >
-                                <span>Цена со скидкой</span>
-                                <span>-15%</span>
-                            </div>
-                            <div
-                                className={
-                                    product.discount === 0
-                                        ? 'info-value info-value--active'
-                                        : 'info-value--inactive'
-                                }
-                            >
-                                <span>Ваша цена:</span>
-                            </div>
-                            <div className="info-value">
-                                <span className="info-value__discount">
-                                    {product.discount === 0
-                                        ? ''
-                                        : product.discount.toLocaleString(
-                                              product.currency,
-                                              {
-                                                  style: 'currency',
-                                                  currency: product.currency,
-                                              }
-                                          )}
-                                </span>
-                                <span
-                                    className={
-                                        product.discount === 0
-                                            ? 'info-value__price info-value__price-active'
-                                            : 'info-value__price'
-                                    }
-                                >
-                                    {product.price}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="product__details">
-                        <h3 className="product__details-title">
-                            {product.detailsTitle}
-                        </h3>
-                        <div className="product__details-items">
-                            {product.detailsItems?.map((item) => (
-                                <button
-                                    className="btn btn--item"
-                                    key={item}
-                                    type="button"
-                                >
-                                    {item}
-                                </button>
-                            ))}
-                        </div>
-                        <div className="product__details-btns">
-                            <button className="btn btn--product" type="button">
-                                Продолжить покупки
-                            </button>
-                            <button
-                                className="btn btn--product btn--basket"
-                                type="button"
-                            >
-                                В корзину
-                            </button>
-                        </div>
-                    </div>
-                    <div className="product__reviews">
-                        <h2>Отзывы</h2>
-                        {product.reviews?.map((el, i) => (
-                            <div className="review" key={i}>
-                                <div className="review__autor">
-                                    <img src={avatar} alt="avatar" />
-                                    <span>{el.autor}</span>
-                                </div>
-                                <div className="review__info">
-                                    <div
-                                        className={`review__text ${
-                                            el.autor === 'Чужой'
-                                                ? 'review__text--alien'
-                                                : ''
-                                        } ${
-                                            el.autor === 'Хищник'
-                                                ? 'review__text--predator'
-                                                : ''
-                                        }`}
-                                    >
-                                        {el.text}
-                                    </div>
-                                    <div className="review__stars">
-                                        {Array(el.stars)
-                                            .fill(el.stars)
-                                            .map((_, j) => (
-                                                <img
-                                                    key={j}
-                                                    src={star}
-                                                    alt="star"
+                                    {cardInCart && !cartLoading && (
+                                        <button
+                                            className="btn btn--product btn--basket"
+                                            type="button"
+                                            onClick={(): void => {
+                                                addRemoveProductInCartDOM(
+                                                    'update'
+                                                );
+                                            }}
+                                        >
+                                            {!cartLoading && (
+                                                <span>Удалить из корзины</span>
+                                            )}
+                                            {cartLoading && (
+                                                <CircleLoader
+                                                    color="hsl(252, 12%, 40%);"
+                                                    loading={cartLoading}
+                                                    size={40}
                                                 />
-                                            ))}
-                                        {Array(el.starsEmpty)
-                                            .fill(el.starsEmpty)
-                                            .map((_, k) => (
-                                                <img
-                                                    key={k}
-                                                    src={starEmpty}
-                                                    alt="starEmpty"
-                                                />
-                                            ))}
-                                    </div>
+                                            )}
+                                        </button>
+                                    )}
                                 </div>
                             </div>
-                        ))}
-                    </div>
+                            <div className="product__reviews">
+                                <h2>Отзывы</h2>
+                                {product.reviews?.map((el, i) => (
+                                    <div className="review" key={i}>
+                                        <div className="review__autor">
+                                            <img src={avatar} alt="avatar" />
+                                            <span>{el.autor}</span>
+                                        </div>
+                                        <div className="review__info">
+                                            <div
+                                                className={`review__text ${
+                                                    el.autor === 'Чужой'
+                                                        ? 'review__text--alien'
+                                                        : ''
+                                                } ${
+                                                    el.autor === 'Хищник'
+                                                        ? 'review__text--predator'
+                                                        : ''
+                                                }`}
+                                            >
+                                                {el.text}
+                                            </div>
+                                            <div className="review__stars">
+                                                {Array(el.stars)
+                                                    .fill(el.stars)
+                                                    .map((_, j) => (
+                                                        <img
+                                                            key={j}
+                                                            src={star}
+                                                            alt="star"
+                                                        />
+                                                    ))}
+                                                {Array(el.starsEmpty)
+                                                    .fill(el.starsEmpty)
+                                                    .map((_, k) => (
+                                                        <img
+                                                            key={k}
+                                                            src={starEmpty}
+                                                            alt="starEmpty"
+                                                        />
+                                                    ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </>
+                    )}
                 </div>
             </section>
             <Footer />

@@ -126,13 +126,14 @@ export function PersonalDataView(props: {
                             onClick={(e): void => {
                                 e.preventDefault();
                                 setIsEditName(false);
-                                if (!name) {
+                                if (!name || errorName) {
                                     setErrorName(true);
                                     setErrorMessageName(
                                         'Это обязатальное поле'
                                     );
+                                    return;
                                 }
-                                if (errorName || !name) return;
+
                                 editCustomerName(
                                     userId,
                                     name,
@@ -368,8 +369,20 @@ export function PersonalDataView(props: {
                             onClick={(e): void => {
                                 e.preventDefault();
                                 setIsEditBirth(false);
-                                setErrorAge(checkIncorrectAge().incorrect);
-                                setErrorMessageAge(checkIncorrectAge().message);
+                                setErrorAge(
+                                    checkIncorrectAge(
+                                        +birthDayValue,
+                                        +birthMonthValue,
+                                        +birthYearValue
+                                    ).incorrect
+                                );
+                                setErrorMessageAge(
+                                    checkIncorrectAge(
+                                        +birthDayValue,
+                                        +birthMonthValue,
+                                        +birthYearValue
+                                    ).message
+                                );
 
                                 if (!birthDayValue) {
                                     setErrorBirthDay(true);
@@ -397,7 +410,11 @@ export function PersonalDataView(props: {
                                     !birthMonthValue ||
                                     errorBirthYear ||
                                     !birthYearValue ||
-                                    getAge() < 18
+                                    getAge(
+                                        +birthDayValue,
+                                        +birthMonthValue,
+                                        +birthYearValue
+                                    ) < 18
                                 )
                                     return;
                                 editCustomerAge(

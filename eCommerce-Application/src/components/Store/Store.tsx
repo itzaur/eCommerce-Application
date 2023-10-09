@@ -1,18 +1,19 @@
+import gsap from 'gsap';
 import { useState, useEffect } from 'react';
 import { ProductProjection } from '@commercetools/platform-sdk';
+import ClipLoader from 'react-spinners/RingLoader';
 import { CategoryCustom } from '../../types';
 import Header from './Header';
+import Transition from '../Transition/Transition';
 import { Cards, SideBar, Parameters, BreadCrumbs } from './index';
 import { getCategories } from '../../commercetools/getCategories';
-import { getProductsByProductType } from '../../commercetools/getProductsByType';
-import {
-    getProductsBySubcategory,
-    getSubCategoryId,
-} from '../../commercetools/getProductsBySubcategory';
-import { getAllProducts } from '../../commercetools/getAllProducts';
+import { getSubCategoryId } from '../../commercetools/getProductsBySubcategory';
+import { getFilterSortSearchProducts } from '../../commercetools/getFilterSortSearchProducts';
 import { checkFilterVariants } from '../../utils/checkFilterVariants';
 import { checkMinMaxPrice } from '../../utils/checkMinMaxPrice';
 import { setErrorBodyDOM } from '../../utils/constants';
+import arrowPrev from '../../assets/icons/arrow-prev.svg';
+import arrowNext from '../../assets/icons/arrow-next.svg';
 
 function Store({
     type,
@@ -27,19 +28,64 @@ function Store({
 }): JSX.Element {
     const [selectedType, setSelectedType] = useState(type);
     const [selectedTypePath, setSelectedTypePath] = useState(typePath);
-    const [selectedCategory, setSelectedCategory] = useState(category || '');
-    const [selectedCategoryId, setSelectedCategoryId] = useState(categoryPath);
-    const [selectedCategoryPath, setSelectedCategoryPath] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState(category);
+    const [selectedCategoryId, setSelectedCategoryId] = useState('');
+    const [selectedCategoryPath, setSelectedCategoryPath] =
+        useState(categoryPath);
     const [cards, setCards] = useState<ProductProjection[]>([]);
     const [categories, setCategories] = useState<CategoryCustom[]>([]);
     const [filterVariants, setFilterVariants] = useState<string[]>([]);
+    let filter: { name: string; key: string } = { name: '', key: '' };
+    switch (selectedType) {
+        case 'Космотуры':
+            filter = { name: 'Локация', key: 'location' };
+            break;
+        case 'Выбрать номер':
+            filter = { name: 'Цвет', key: 'color' };
+            break;
+        case 'Сувениры':
+            filter = { name: 'Форма', key: 'shape' };
+            break;
+        default:
+            filter = { name: '', key: '' };
+    }
     const [minPrice, setMinPrice] = useState(0);
     const [maxPrice, setMaxPrice] = useState(0);
     const [minSelectedPrice, setMinSelectedPrice] = useState(0);
     const [maxSelectedPrice, setMaxSelectedPrice] = useState(0);
     const [searchValue, setSearchValue] = useState('');
 
+    const itemPerPage = 8;
+    const [currentOffset, setCurrentOffset] = useState(0);
+    const [countCards, setCountCards] = useState(0);
+    const [countPages, setCountPages] = useState(
+        Math.ceil(countCards / itemPerPage)
+    );
+    const [isFetching, setIsFetching] = useState(true);
+
+    const [isBreadCrumbsClicked, setIsBreadCrumbsClicked] = useState(false);
+
+    const breadCrumbs = document.querySelector('.bread-crumbs');
+
+    document.querySelectorAll('.btn').forEach((item) => {
+        item.classList.remove('sidebar__category_active');
+
+        if (item.textContent === selectedType && !selectedCategory) {
+            item.classList.add('sidebar__category_active');
+        }
+    });
+
+    document.querySelectorAll('.sidebar__category').forEach((item) => {
+        item.classList.remove('sidebar__category_active');
+        if (item.textContent === selectedCategory) {
+            item.classList.add('sidebar__category_active');
+        }
+    });
+
+    const timeline = gsap.timeline();
+
     useEffect(() => {
+        if (!selectedCategory) setSelectedCategoryId('');
         getCategories()
             .then((data) => {
                 if (data) setCategories(data);
@@ -47,71 +93,73 @@ function Store({
             .catch((err: Error) => {
                 setErrorBodyDOM(err);
             });
-        if (category)
-            getSubCategoryId(category)
+        if (selectedCategory && isBreadCrumbsClicked) {
+            getSubCategoryId(selectedCategory)
                 .then((data) => {
                     if (data) setSelectedCategoryId(data);
                 })
                 .catch((err: Error) => {
                     setErrorBodyDOM(err);
                 });
-
-        if (selectedCategory) {
-            getProductsBySubcategory(selectedCategory)
-                .then((data) => {
-                    if (data) {
-                        if (data.length) {
-                            setFilterVariants(checkFilterVariants(data));
-                        }
-
-                        setCards(data);
-                        setMinPrice(checkMinMaxPrice(data)[0]);
-                        setMaxPrice(checkMinMaxPrice(data)[1]);
-                        setMinSelectedPrice(checkMinMaxPrice(data)[0]);
-                        setMaxSelectedPrice(checkMinMaxPrice(data)[1]);
-                    }
-                })
-                .catch((err: Error) => {
-                    setErrorBodyDOM(err);
-                });
-        } else if (selectedType) {
-            getProductsByProductType(selectedType)
-                .then((data) => {
-                    if (data) {
-                        if (data.length) {
-                            setFilterVariants(checkFilterVariants(data));
-                        }
-                        setCards(data);
-                        setSelectedCategoryId('');
-                        setMinPrice(checkMinMaxPrice(data)[0]);
-                        setMaxPrice(checkMinMaxPrice(data)[1]);
-                        setMinSelectedPrice(checkMinMaxPrice(data)[0]);
-                        setMaxSelectedPrice(checkMinMaxPrice(data)[1]);
-                    }
-                })
-                .catch((err: Error) => {
-                    setErrorBodyDOM(err);
-                });
-        } else {
-            getAllProducts()
-                .then((data) => {
-                    if (data) {
-                        setCards(data);
-                        setSelectedCategoryId('');
-                        setMinPrice(checkMinMaxPrice(data)[0]);
-                        setMaxPrice(checkMinMaxPrice(data)[1]);
-                        setMinSelectedPrice(checkMinMaxPrice(data)[0]);
-                        setMaxSelectedPrice(checkMinMaxPrice(data)[1]);
-                    }
-                })
-                .catch((err: Error) => {
-                    setErrorBodyDOM(err);
-                });
         }
-    }, [selectedCategory, selectedType, category]);
+
+        breadCrumbs?.lastElementChild?.classList.add(
+            'sidebar__category_active'
+        );
+
+        getFilterSortSearchProducts(
+            {
+                selectedCategoryId,
+                attributesToFilter: filter.key,
+                selectedFiltersList: [],
+                minSelectedPrice: 0,
+                maxSelectedPrice: 100000,
+            },
+            0,
+            100
+        ).then((data) => {
+            if (data.length) {
+                setFilterVariants(checkFilterVariants(data));
+                const tempMinPrice = checkMinMaxPrice(data)[0];
+                const tempMaxPrice = checkMinMaxPrice(data)[1];
+                setMinPrice(tempMinPrice);
+                setMaxPrice(tempMaxPrice);
+                setMinSelectedPrice(tempMinPrice);
+                setMaxSelectedPrice(tempMaxPrice);
+                setCountCards(data.length);
+                setCountPages(Math.ceil(data.length / itemPerPage));
+                setCurrentOffset(0);
+                setCards(data);
+                setIsFetching(false);
+                getFilterSortSearchProducts(
+                    {
+                        selectedCategoryId,
+                        attributesToFilter: filter.key,
+                        selectedFiltersList: [],
+                        minSelectedPrice: 0,
+                        maxSelectedPrice: 100000,
+                        attributesToSearch: searchValue,
+                    },
+                    currentOffset,
+                    itemPerPage
+                )
+                    .then((items) => {
+                        if (items) {
+                            setCards(items);
+                        }
+                        setIsFetching(false);
+                    })
+                    .catch((err: Error) => {
+                        setErrorBodyDOM(err);
+                    });
+            }
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedCategory, selectedType]);
 
     return (
         <>
+            <Transition timeline={timeline} />
             <Header setSearchValue={setSearchValue} withSearchValue />
             <section className="store__main">
                 <BreadCrumbs
@@ -120,9 +168,13 @@ function Store({
                     selectedTypePath={selectedTypePath}
                     selectedCategory={selectedCategory}
                     setSelectedCategory={setSelectedCategory}
+                    setSelectedCategoryId={setSelectedCategoryId}
                     selectedCategoryPath={selectedCategoryPath}
                     selectedProduct=""
                     selectedProductPath=""
+                    setIsFetching={setIsFetching}
+                    setCurrentOffset={setCurrentOffset}
+                    setIsBreadCrumbsClicked={setIsBreadCrumbsClicked}
                 />
                 <section className="store__content">
                     <SideBar
@@ -132,6 +184,9 @@ function Store({
                         setSelectedCategory={setSelectedCategory}
                         setSelectedCategoryId={setSelectedCategoryId}
                         setSelectedCategoryPath={setSelectedCategoryPath}
+                        setIsFetching={setIsFetching}
+                        setCurrentOffset={setCurrentOffset}
+                        setIsBreadCrumbsClicked={setIsBreadCrumbsClicked}
                     />
                     <div className="store__cards">
                         <Parameters
@@ -139,6 +194,7 @@ function Store({
                             selectedType={selectedType}
                             selectedCategory={selectedCategory || ''}
                             selectedCategoryId={selectedCategoryId}
+                            filter={filter}
                             filterVariants={filterVariants}
                             minPrice={minPrice}
                             maxPrice={maxPrice}
@@ -147,14 +203,96 @@ function Store({
                             setMinSelectedPrice={setMinSelectedPrice}
                             setMaxSelectedPrice={setMaxSelectedPrice}
                             searchValue={searchValue}
+                            currentOffset={currentOffset}
+                            setIsFetching={setIsFetching}
+                            itemPerPage={itemPerPage}
+                            setCurrentOffset={setCurrentOffset}
+                            setCountCards={setCountCards}
+                            setCountPages={setCountPages}
                         />
-                        {!cards.length && (
+
+                        {!cards.length && !isFetching && (
                             <h2 className="no-cards">
                                 Вселенная бесконечна, а наши продукты нет. Мы
                                 ничего не нашли :(
                             </h2>
                         )}
-                        {cards.length > 0 && <Cards cards={cards} />}
+                        {isFetching ? (
+                            <ClipLoader
+                                color="#4fe1e3"
+                                loading={isFetching}
+                                size={150}
+                                className="store__loader"
+                            />
+                        ) : (
+                            cards.length > 0 && <Cards cards={cards} />
+                        )}
+
+                        {cards.length ? (
+                            <div className="store__navigation">
+                                {currentOffset / itemPerPage + 1 !==
+                                    countPages && (
+                                    <button
+                                        type="button"
+                                        className="btn_action btn_store"
+                                        onClick={(): void | null =>
+                                            currentOffset <
+                                            countCards - itemPerPage
+                                                ? (setIsFetching(true),
+                                                  setCurrentOffset(
+                                                      (prevPage) =>
+                                                          prevPage + itemPerPage
+                                                  ))
+                                                : null
+                                        }
+                                    >
+                                        Следующая страница
+                                    </button>
+                                )}
+
+                                <div className="store__pages">
+                                    <button
+                                        type="button"
+                                        className="store__page store__page-prev"
+                                        onClick={(): void | null =>
+                                            currentOffset >= itemPerPage
+                                                ? (setIsFetching(true),
+                                                  setCurrentOffset(
+                                                      (prevPage) =>
+                                                          prevPage - itemPerPage
+                                                  ))
+                                                : null
+                                        }
+                                    >
+                                        <img src={arrowPrev} alt="arrow" />
+                                    </button>
+                                    <div className="store__current-page">
+                                        {currentOffset / itemPerPage + 1}
+                                    </div>
+                                    <div className="store__count-page">
+                                        {countPages}
+                                    </div>
+                                    <button
+                                        type="button"
+                                        className="store__page store__page-next"
+                                        onClick={(): void | null =>
+                                            currentOffset <
+                                            countCards - itemPerPage
+                                                ? (setIsFetching(true),
+                                                  setCurrentOffset(
+                                                      (prevPage) =>
+                                                          prevPage + itemPerPage
+                                                  ))
+                                                : null
+                                        }
+                                    >
+                                        <img src={arrowNext} alt="arrow" />
+                                    </button>
+                                </div>
+                            </div>
+                        ) : (
+                            ''
+                        )}
                     </div>
                 </section>
             </section>

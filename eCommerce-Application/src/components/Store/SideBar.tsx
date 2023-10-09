@@ -8,6 +8,9 @@ function SideBar(props: {
     setSelectedCategoryId: React.Dispatch<React.SetStateAction<string>>;
     setSelectedCategoryPath: React.Dispatch<React.SetStateAction<string>>;
     categories: CategoryCustom[];
+    setIsFetching: CallableFunction;
+    setCurrentOffset: CallableFunction;
+    setIsBreadCrumbsClicked: CallableFunction;
 }): JSX.Element {
     const {
         categories,
@@ -16,6 +19,9 @@ function SideBar(props: {
         setSelectedCategoryId,
         setSelectedCategoryPath,
         setSelectedTypePath,
+        setIsFetching,
+        setCurrentOffset,
+        setIsBreadCrumbsClicked,
     } = props;
 
     return (
@@ -30,8 +36,13 @@ function SideBar(props: {
                                 to={`/store/${category.parent.path}`}
                                 onClick={(e): void => {
                                     setSelectedCategory('');
+                                    setSelectedCategoryId('');
+                                    setIsFetching(true);
+                                    setCurrentOffset(0);
                                     setSelectedType(category.parent.name);
                                     setSelectedTypePath(category.parent.path);
+                                    setIsBreadCrumbsClicked(false);
+
                                     if (e.target instanceof HTMLElement) {
                                         (
                                             document.querySelectorAll(
@@ -62,6 +73,9 @@ function SideBar(props: {
                                         key={el.name}
                                         type="button"
                                         onClick={(e): void => {
+                                            setIsFetching(true);
+                                            setCurrentOffset(0);
+
                                             setSelectedType(
                                                 category.parent.name
                                             );
@@ -71,6 +85,8 @@ function SideBar(props: {
                                             setSelectedCategory(el.name);
                                             setSelectedCategoryId(el.id);
                                             setSelectedCategoryPath(el.path);
+                                            setIsBreadCrumbsClicked(false);
+
                                             if (
                                                 e.target instanceof HTMLElement
                                             ) {

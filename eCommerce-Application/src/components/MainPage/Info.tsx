@@ -20,17 +20,7 @@ function Info(): JSX.Element {
         <>
             <div className="home__info">
                 <div className="home__btns">
-                    {!user && (
-                        <button className="btn" type="button">
-                            <Link to="/login">Войти</Link>
-                        </button>
-                    )}
-                    {!user && (
-                        <button className="btn" type="button">
-                            <Link to="/registration">Регистрация</Link>
-                        </button>
-                    )}
-                    {user && (
+                    {user ? (
                         <>
                             <div className="user-info">
                                 <img src={userLogo} alt="userIcon" />
@@ -43,23 +33,47 @@ function Info(): JSX.Element {
                                 className="btn btn--exit"
                                 type="button"
                                 onClick={(): void => {
-                                    localStorage.clear();
+                                    localStorage.removeItem('user');
+                                    localStorage.removeItem('version');
+                                    localStorage.removeItem('activeCart');
                                     setUser(null);
                                 }}
                                 onKeyDown={(): void => {
-                                    localStorage.clear();
+                                    localStorage.removeItem('user');
+                                    localStorage.removeItem('version');
+                                    localStorage.removeItem('activeCart');
                                     setUser(null);
                                 }}
                             >
                                 <span>Выйти</span>
                             </button>
                         </>
+                    ) : (
+                        <>
+                            <button className="btn" type="button">
+                                <Link to="/login">Войти</Link>
+                            </button>
+                            <button className="btn" type="button">
+                                <Link to="/registration">Регистрация</Link>
+                            </button>
+                        </>
                     )}
+
                     <button className="btn" type="button">
-                        <Link to="/store">Перейти в магазин</Link>
+                        <Link
+                            to="/store"
+                            onClick={(): void => window.scrollTo(0, 0)}
+                        >
+                            Перейти в магазин
+                        </Link>
                     </button>
                     <button className="btn" type="button">
-                        <Link to="/about">О нас</Link>
+                        <Link
+                            to="/about"
+                            onClick={(): void => window.scrollTo(0, 0)}
+                        >
+                            О нас
+                        </Link>
                     </button>
                     <figcaption className="arrow">
                         <img src={arrow} alt="arrow" />
@@ -106,7 +120,7 @@ function Info(): JSX.Element {
                         </SwiperSlide>
                     </Swiper>
                 </div>
-                <div className="home__text">
+                <div className="home__text home__text--scroll">
                     <h2 className="home__text-title">Что мы предлагаем?</h2>
                     <p className="home__text-subtitle">
                         Неизгладимые впечатления и море эмоций!

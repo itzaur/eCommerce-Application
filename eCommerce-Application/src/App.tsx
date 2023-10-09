@@ -8,6 +8,7 @@ import {
     Store,
     NotFound,
     ProfilePage,
+    CartPage,
 } from './components';
 import ProductDetail from './components/ProductPage/ProductPage';
 import { products, setErrorBodyDOM } from './utils/constants';
@@ -25,6 +26,7 @@ function App(): JSX.Element {
         'store',
         'about',
         'profile',
+        'cart',
         ...products.map((product) => product.name),
     ];
     const tempArrCategoriesRoutes: React.ReactElement[] = [];
@@ -37,6 +39,8 @@ function App(): JSX.Element {
         .split('/')
         .filter((el) => el)
         .at(-1) as string;
+
+    const countCards = 35;
 
     function setMainId(categoriesArr: CategoryCustom[]): void {
         if (paths.includes(path)) {
@@ -83,6 +87,7 @@ function App(): JSX.Element {
                     }
                 />
             );
+
             setCategoriesRoutes([
                 ...tempArrCategoriesRoutes,
                 <Route
@@ -98,7 +103,7 @@ function App(): JSX.Element {
                     }
                 />,
             ]);
-            getProductsByProductType(category.parent.name)
+            getProductsByProductType(category.parent.name, countCards)
                 .then((data) => {
                     data?.forEach((el) => {
                         tempArrCategoriesRoutes.push(
@@ -127,6 +132,7 @@ function App(): JSX.Element {
                                 }
                             />
                         );
+
                         setCategoriesRoutes([
                             ...tempArrCategoriesRoutes,
                             <Route
@@ -175,6 +181,7 @@ function App(): JSX.Element {
                         }
                     />
                 );
+
                 setCategoriesRoutes([
                     ...tempArrCategoriesRoutes,
                     <Route
@@ -190,6 +197,7 @@ function App(): JSX.Element {
                         }
                     />,
                 ]);
+
                 getProductsBySubcategory(item.name)
                     .then((data) => {
                         data?.forEach((el) => {
@@ -207,6 +215,7 @@ function App(): JSX.Element {
                                     }
                                 />
                             );
+
                             setCategoriesRoutes([
                                 ...tempArrCategoriesRoutes,
                                 <Route
@@ -250,7 +259,6 @@ function App(): JSX.Element {
                             });
                     }
                 })
-
                 .catch((err: Error) => {
                     setErrorBodyDOM(err);
                 });
@@ -261,13 +269,23 @@ function App(): JSX.Element {
         setMainId(categories);
     });
 
+    // Activate scroll smooth effect
+    useEffect(() => {
+        (async (): Promise<void> => {
+            const LocomotiveScroll = (await import('locomotive-scroll'))
+                .default;
+
+            const locomotiveScroll = new LocomotiveScroll();
+            locomotiveScroll.start();
+        })();
+    }, []);
+
     return (
         <Routes>
-            {categoriesRoutes.map((route) => {
-                return route;
-            })}
+            {categoriesRoutes.map((route) => route)}
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/cart" element={<CartPage />} />
             <Route path="/registration" element={<RegistrationPage />} />
             <Route
                 path="/store"

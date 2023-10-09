@@ -13,9 +13,9 @@
 @use './components/errors';
 @use './components/dropdown';
 @use './components/success';
-
 @use './components/modal';
 @use './components/slider';
+@use './components/transition';
 
 @use './layout/header';
 @use './layout/home';
@@ -25,8 +25,10 @@
 @use './layout/error-page';
 @use './layout/footer';
 
+@use './pages/about';
 @use './pages/login';
 @use './pages/profile';
 @use './pages/main';
 @use './pages/registration';
 @use './pages/store';
+@use './pages/cart';

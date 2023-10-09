@@ -159,12 +159,35 @@
         width: min(100%, 15ch);
         font-size: var(--fs-big);
     }
+
+    &__title {
+        font-family: var(--ff-secondary);
+        font-size: var(--fs-paragraph);
+        text-align: center;
+        line-height: 1.4;
+        letter-spacing: 0.1em;
+    }
+
+    &_order {
+        font-family: var(--ff-product);
+        font-weight: bold;
+
+        h2 {
+            font-size: var(--fs-medium-big);
+            text-align: center;
+        }
+
+        p {
+            font-size: var(--fs-medium);
+            text-align: center;
+        }
+    }
 }
 
 .form {
     &__content {
-        font-size: var(--fs-form);
         font-family: var(--ff-primary);
+        font-size: var(--fs-form);
         text-align: start;
     }
 
@@ -401,5 +424,197 @@
 
     &__button {
         font-size: var(--fs-small);
+    }
+}
+
+#cart {
+    font-family: var(--ff-secondary);
+}
+
+.cart {
+    &__btn {
+        font-family: var(--ff-product);
+        font-size: var(--fs-small);
+    }
+}
+
+.purchases__header {
+    font-family: var(--ff-product);
+    font-size: var(--fs-small);
+}
+
+.purchase {
+    &__price {
+        font-size: var(--fs-medium);
+
+        &-block {
+            & > * {
+                font-size: var(--fs-paragraph);
+
+                @include mixins.respond-to('tablet') {
+                    font-size: var(--fs-small);
+                }
+            }
+        }
+
+        &-type {
+            font-family: var(--ff-product);
+            font-size: var(--fs-paragraph);
+
+            @include mixins.respond-to('tablet') {
+                font-size: var(--fs-small);
+            }
+        }
+    }
+
+    &__name {
+        font-size: var(--fs-medium);
+        text-align: center;
+        line-height: 1.7;
+    }
+
+    &__btn {
+        font-family: var(--ff-product);
+        font-size: var(--fs-medium);
+    }
+}
+
+.price {
+    font-size: var(--fs-medium);
+
+    &__type {
+        font-family: var(--ff-product);
+        font-size: var(--fs-paragraph);
+
+        @include mixins.respond-to('tablet') {
+            font-size: var(--fs-small);
+        }
+    }
+
+    &-total {
+        font-size: var(--fs-medium-big);
+    }
+}
+
+.btn--basket {
+    font-family: var(--ff-product);
+    font-size: var(--fs-small);
+}
+
+.promocodes {
+    &__title {
+        font-family: var(--ff-primary);
+        font-size: var(--fs-big);
+        text-align: left;
+        line-height: 0.8;
+    }
+
+    &__subtitle {
+        font-family: var(--ff-product);
+        font-size: var(--fs-paragraph);
+    }
+}
+
+.promocode {
+    &__label {
+        font-family: var(--ff-product);
+        font-size: var(--fs-paragraph);
+
+        @include mixins.respond-to('tablet') {
+            font-size: var(--fs-small);
+        }
+    }
+
+    &__input {
+        font-size: var(--fs-review);
+    }
+}
+
+.no-cart {
+    &__subtitle {
+        font-family: var(--ff-product);
+        font-size: var(--fs-paragraph);
+    }
+
+    &__title {
+        font-family: var(--ff-secondary);
+        font-size: var(--fs-big);
+    }
+}
+
+.about-us {
+    &__school-title {
+        font-family: var(--ff-product);
+        font-size: var(--fs-paragraph);
+    }
+
+    &__text-title {
+        font-family: var(--ff-secondary);
+        font-size: clamp(2rem, 3vw, 3rem);
+    }
+
+    &__text-subtitle {
+        font-family: var(--ff-secondary);
+        font-size: var(--fs-small);
+        line-height: 1.5;
+        letter-spacing: 0.05em;
+    }
+
+    &__text-detail {
+        font-family: var(--ff-product);
+        font-size: var(--fs-small);
+        letter-spacing: 0.05em;
+    }
+
+    &__foundation-title {
+        font-family: var(--ff-secondary);
+        font-size: var(--fs-big);
+    }
+
+    &__foundation-subtitle {
+        font-family: var(--ff-product);
+        font-size: var(--fs-big);
+        text-transform: capitalize;
+        text-align: center;
+
+        @include mixins.respond-to('desktop') {
+            text-align: left;
+        }
+    }
+
+    &__foundation-text {
+        font-family: var(--ff-product);
+        font-size: var(--fs-small);
+        letter-spacing: 0.05em;
+        text-align: center;
+
+        @include mixins.respond-to('desktop') {
+            text-align: left;
+        }
+    }
+
+    &__card-title {
+        font-family: var(--ff-secondary);
+        font-size: var(--fs-paragraph);
+    }
+
+    &__card-subtitle {
+        font-family: var(--ff-product);
+        font-size: var(--fs-medium-big);
+        letter-spacing: 0.05em;
+    }
+
+    &__card-text {
+        font-family: var(--ff-product);
+        font-size: var(--fs-small);
+        letter-spacing: 0.05em;
+    }
+
+    &__postscript {
+        font-family: var(--ff-primary);
+        font-size: var(--fs-paragraph);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        line-height: 1.6;
     }
 }

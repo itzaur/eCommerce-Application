@@ -1,7 +1,7 @@
 import { Address, Customer } from '@commercetools/platform-sdk';
-
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import gsap from 'gsap';
 import userPhoto from '../../assets/images/user.png';
 import { getCustomer } from '../../commercetools/getCustomer';
 import { AddressesListView } from './AddressesListView';
@@ -12,6 +12,7 @@ import { EditAuthorizationDataView } from './EditAuthorizationDataView';
 import { PersonalDataView } from './PersonalDataView';
 import Header from '../Store/Header';
 import Footer from '../MainPage/Footer';
+import Transition from '../Transition/Transition';
 
 function ProfilePage(): JSX.Element {
     const user = localStorage.getItem('user') as string;
@@ -158,8 +159,11 @@ function ProfilePage(): JSX.Element {
             });
     }, [userId]);
 
+    const timeline = gsap.timeline({ yoyo: true });
+
     return (
         <>
+            <Transition timeline={timeline} />
             <section className="profile">
                 <Header withSearchValue={false} setSearchValue={undefined} />
                 <div className="profile__container">

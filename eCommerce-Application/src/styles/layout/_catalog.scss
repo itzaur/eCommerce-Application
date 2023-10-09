@@ -38,7 +38,7 @@
 
         @include mixins.flex(column, flex-end, flex-start);
 
-        min-height: 40vh;
+        min-height: 30vh;
 
         color: var(--color-white);
 
@@ -90,7 +90,7 @@
 
         &--3 {
             &::after {
-                background-image: url('../assets/images/hotels.png');
+                background-image: url('../assets/images/hotels.jpg');
             }
 
             @include mixins.respond-to('desktop') {

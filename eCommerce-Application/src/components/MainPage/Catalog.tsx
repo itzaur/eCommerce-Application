@@ -1,12 +1,7 @@
 import { Link } from 'react-router-dom';
-import React, { useState } from 'react';
 
 function Catalog(): JSX.Element {
-    const [, setIsHover] = useState(false);
-
     const handleMouseEnter = (event: React.MouseEvent): void => {
-        setIsHover(true);
-
         const hoverElement = event.target as HTMLDivElement;
 
         const catalogAccent = document.querySelector(
@@ -17,8 +12,6 @@ function Catalog(): JSX.Element {
     };
 
     const handleMouseLeave = (event: React.MouseEvent): void => {
-        setIsHover(false);
-
         const hoverElement = event.target as HTMLDivElement;
 
         const catalogAccent = document.querySelector(

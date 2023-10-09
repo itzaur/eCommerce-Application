@@ -18,6 +18,8 @@
     background-position: center center;
     background-size: cover;
 
+    box-shadow: 0 1rem 6rem var(--color-primary);
+
     @include mixins.respond-to('desktop') {
         grid-template-columns: minmax(0, 2rem) repeat(6, 1fr) minmax(0, 2rem);
         row-gap: 0;
@@ -189,5 +191,5 @@
 }
 
 #main .footer {
-    --scrollbar-width: 1.7rem;
+    --scrollbar-width: 0rem;
 }

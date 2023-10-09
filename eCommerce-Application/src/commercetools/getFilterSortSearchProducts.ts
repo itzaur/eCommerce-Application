@@ -3,8 +3,10 @@ import { apiRoot } from './Client';
 import { FilterSortSearcParameters } from '../types/index';
 import { serverErrorMessage } from '../utils/constants';
 
-export async function filterSortSearcProducts(
-    parameters: FilterSortSearcParameters
+export async function getFilterSortSearchProducts(
+    parameters: FilterSortSearcParameters,
+    currentOffset: number,
+    itemPerPage: number
 ): Promise<ProductProjection[]> {
     const {
         selectedCategoryId,
@@ -18,14 +20,17 @@ export async function filterSortSearcProducts(
     } = parameters;
     const queryArgs: {
         filter: string | string[] | undefined;
+        offset: number;
         limit: number;
         sort?: string[];
         ['text.ru-RU']?: string;
         fuzzy?: boolean;
     } = {
         filter: [],
-        limit: 100,
+        offset: currentOffset,
+        limit: itemPerPage,
     };
+
     if (Array.isArray(queryArgs.filter)) {
         if (selectedCategoryId) {
             queryArgs.filter.push(`categories.id:"${selectedCategoryId}"`);
@@ -69,7 +74,7 @@ export async function filterSortSearcProducts(
             })
             .execute();
         return result.body.results;
-    } catch {
+    } catch (e) {
         throw new Error(serverErrorMessage);
     }
 }

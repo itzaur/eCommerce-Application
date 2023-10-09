@@ -196,7 +196,7 @@
                 --gap: 3rem;
                 @include mixins.flex(column, center, center);
                 flex-wrap: wrap;
-                // align-self: flex-end;
+
                 width: 100%;
 
                 @include mixins.respond-to('tablet') {
