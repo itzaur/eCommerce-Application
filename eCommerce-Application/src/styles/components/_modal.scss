@@ -1,0 +1,126 @@
+@use '../abstracts/mixins';
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    display: grid;
+    place-items: center;
+
+    border: 0.1rem solid rgba(255, 255, 255, 0.3);
+
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0.4rem 3rem rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(15px);
+
+    clip-path: circle(0%);
+
+    z-index: 2;
+
+    transition: clip-path 0.5s cubic-bezier(0.6, 0.44, 0.98, 0.335);
+
+    &.active {
+        clip-path: circle(100%);
+    }
+
+    &.active &__content {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    &_confirm {
+        & .modal__btns {
+            --gap: 3rem;
+            @include mixins.flex(row, center, center);
+            flex-wrap: wrap;
+
+            position: relative;
+
+            letter-spacing: 0.1em;
+        }
+    }
+
+    &_order {
+        --gap: 1rem;
+        @include mixins.flex(column, center, center);
+        width: min(50rem, 90%);
+
+        padding: 2rem;
+
+        color: var(--color-black);
+        background-color: var(--color-primary);
+
+        @include mixins.respond-to('tablet') {
+            --gap: 1.4rem;
+        }
+
+        &__img_done {
+            width: min(10rem, 20%);
+        }
+    }
+
+    &__content {
+        position: relative;
+        width: auto;
+
+        display: grid;
+        place-content: center;
+        place-items: center;
+        grid-template-columns: 80vw;
+        grid-template-rows: auto;
+        row-gap: 2rem;
+
+        transform: translateY(-100%);
+        opacity: 0;
+        transition:
+            transform 0.6s ease,
+            opacity 0.6s ease;
+
+        @include mixins.respond-to('tablet') {
+            grid-template-columns: 45vw;
+            grid-template-rows: minmax(0, 70vh);
+        }
+    }
+
+    &__img {
+        width: 100%;
+    }
+}
+
+.modal_registration {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+
+    display: grid;
+    place-content: center;
+    gap: 3rem;
+
+    width: 80%;
+    min-height: 30rem;
+    height: auto;
+
+    padding: 2rem 4rem;
+
+    transform: translate(-50%, -50%);
+
+    background-color: var(--color-secondary);
+    color: var(--color-white);
+
+    &__btn {
+        position: absolute;
+        right: 0.4rem;
+        top: 0.4rem;
+
+        padding: 0.5rem;
+
+        background-color: var(--color-primary);
+        color: var(--color-white);
+
+        cursor: pointer;
+    }
+}

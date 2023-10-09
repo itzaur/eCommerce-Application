@@ -1,0 +1,103 @@
+@use '../abstracts/mixins';
+
+.attainment {
+    @include mixins.flex(column, null, null);
+
+    padding-block: 3rem;
+
+    color: var(--color-secondary);
+    background-color: var(--color-primary);
+
+    box-shadow: 0 0 0 100vmax var(--color-primary);
+    clip-path: inset(0 -100vmax);
+
+    @include mixins.respond-to('tablet') {
+        padding-block: 6rem;
+    }
+
+    & > * + * {
+        @include mixins.respond-to('tablet') {
+            margin-top: 5rem;
+        }
+    }
+
+    &__container {
+        --gap: 2rem;
+        @include mixins.flex(null, center, center);
+        flex-wrap: wrap;
+
+        @include mixins.respond-to('tablet') {
+            --gap: 4rem;
+        }
+
+        & > * {
+            --flow: 15rem;
+            flex: 1 1 var(--flow);
+        }
+    }
+
+    &__item {
+        --gap: 1rem;
+        @include mixins.flex(column, center, center);
+
+        @include mixins.respond-to('tablet') {
+            --gap: 4rem;
+        }
+
+        svg {
+            height: 5rem;
+
+            @include mixins.respond-to('tablet') {
+                height: max(5vw, 9rem);
+            }
+        }
+    }
+
+    &--promocodes {
+        --gap: 3rem;
+        @include mixins.flex(row, flex-start, flex-start);
+        flex-wrap: wrap;
+
+        padding-block: 3rem;
+
+        background-color: var(--color-secondary);
+
+        box-shadow: 0 0 0 100vmax var(--color-secondary);
+        clip-path: inset(0 -100vmax);
+
+        & > * + * {
+            flex: 1 1 100%;
+
+            @include mixins.respond-to('desktop') {
+                flex: 1 1 25%;
+            }
+        }
+
+        @include mixins.respond-to('tablet') {
+            padding-block: 6rem;
+            padding-inline: 3rem;
+        }
+
+        & .attainment__title {
+            max-width: 15ch;
+            color: var(--color-primary);
+            text-align: left;
+        }
+    }
+}
+
+.promocodes {
+    --gap: 1rem;
+    @include mixins.flex(column, flex-start, flex-start);
+
+    text-align: left;
+
+    &__title {
+        color: var(--color-white);
+    }
+
+    &__subtitle {
+        max-width: 25ch;
+        color: var(--color-white);
+    }
+}

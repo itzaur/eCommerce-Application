@@ -1,0 +1,34 @@
+@use './abstracts/mixins';
+@use './abstracts/variables';
+@use './abstracts/animations';
+
+@use './base/base';
+@use './base/reset';
+@use './base/typography';
+
+@use './components/logo';
+@use './components/buttons';
+@use './components/form';
+@use './components/placeholder';
+@use './components/errors';
+@use './components/dropdown';
+@use './components/success';
+@use './components/modal';
+@use './components/slider';
+@use './components/transition';
+
+@use './layout/header';
+@use './layout/home';
+@use './layout/attainments';
+@use './layout/catalog';
+@use './layout/product';
+@use './layout/error-page';
+@use './layout/footer';
+
+@use './pages/about';
+@use './pages/login';
+@use './pages/profile';
+@use './pages/main';
+@use './pages/registration';
+@use './pages/store';
+@use './pages/cart';

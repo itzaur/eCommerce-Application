@@ -1,0 +1,61 @@
+@use '../abstracts/mixins';
+
+.slider {
+    &-arrow {
+        color: var(--color-white);
+
+        &:after {
+            font-size: 2rem;
+
+            @include mixins.respond-to('tablet') {
+                font-size: var(--fs-big);
+            }
+        }
+    }
+}
+
+.swiper {
+    width: 100%;
+    height: 100%;
+
+    &-container,
+    &-container2 {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    &-slide {
+        height: auto;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    &-pagination-bullet {
+        background-color: var(--color-white);
+        opacity: 0.5;
+
+        &-active {
+            background-color: var(--color-white);
+
+            opacity: 1;
+        }
+    }
+
+    &-pagination2 {
+        position: absolute;
+        text-align: center;
+        transition: 300ms opacity;
+        transform: translate3d(0, 0, 0);
+        z-index: 10;
+    }
+
+    &-scrollbar-drag {
+        background-color: var(--color-white);
+    }
+}

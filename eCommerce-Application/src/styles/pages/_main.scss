@@ -1,0 +1,14 @@
+#main {
+    max-width: 155rem;
+
+    margin: 0 auto;
+
+    text-align: center;
+}
+
+main:not(#main, #login, #registration, #store, #about, #error-page, #profile) {
+    background-image: url('../assets/images/bg-product.jpg');
+    background-repeat: no-repeat;
+    background-position: top;
+    background-size: cover;
+}

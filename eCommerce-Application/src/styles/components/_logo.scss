@@ -1,0 +1,31 @@
+@use '../abstracts/mixins';
+
+.logo {
+    height: var(--fs-logo);
+
+    &_big {
+        display: block;
+
+        width: min(40rem, 100%);
+
+        margin: 0 auto;
+    }
+}
+
+.user-info {
+    @include mixins.flex(row, space-between, center);
+
+    margin-bottom: 0;
+
+    h2 {
+        color: var(--color-white);
+    }
+
+    img {
+        height: clamp(3rem, 3vw, 7rem);
+    }
+
+    @include mixins.respond-to('tablet') {
+        margin-bottom: 2rem;
+    }
+}

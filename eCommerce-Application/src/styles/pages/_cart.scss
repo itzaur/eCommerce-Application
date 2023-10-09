@@ -1,0 +1,408 @@
+@use '../abstracts/mixins';
+
+#cart {
+    min-height: 100vh;
+
+    color: var(--color-white);
+
+    background-image: url('../assets/images/background-catalog.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.cart {
+    &__main {
+        padding: 0 5vw 3rem 5vw;
+    }
+
+    &__content {
+        display: grid;
+        grid-template-columns: 1fr;
+        place-items: center;
+        gap: 1rem;
+
+        padding-top: 2rem;
+
+        @include mixins.respond-to('tablet') {
+            padding-top: 4rem;
+        }
+
+        @include mixins.respond-to('desktop') {
+            grid-template-columns: 1.5fr 1fr;
+            place-items: flex-start;
+            gap: 4rem;
+        }
+    }
+
+    &__products {
+        display: grid;
+        grid-template-columns: 1fr;
+        column-gap: 2rem;
+        row-gap: 3rem;
+        width: 100%;
+
+        @include mixins.respond-to('tablet') {
+            grid-template-columns: repeat(4, minmax(10rem, 1fr));
+            row-gap: 1rem;
+        }
+    }
+
+    &__btn {
+        padding: 0.7em 2em;
+
+        text-align: center;
+
+        color: var(--color-secondary);
+
+        background-color: var(--color-primary);
+
+        @include mixins.respond-to('tablet') {
+            min-width: 20ch;
+        }
+
+        &_submit {
+            @include mixins.respond-to('tablet') {
+                min-width: 20ch;
+
+                margin-right: 4rem;
+            }
+        }
+    }
+}
+
+.purchases {
+    &__header {
+        display: grid;
+        grid-template-columns: 1fr;
+        place-items: center;
+
+        padding: 1.5rem 2rem;
+
+        background-color: var(--color-secondary);
+        color: var(--color-primary);
+
+        grid-column: 1 / -1;
+
+        @include mixins.respond-to('tablet') {
+            grid-template-columns: max-content minmax(0, 14rem) minmax(0, 14rem) max-content;
+
+            justify-content: flex-start;
+        }
+
+        @include mixins.respond-to('desktop') {
+            justify-content: space-between;
+            grid-template-columns:
+                minmax(0, 15rem) minmax(0, 14rem) minmax(0, 14rem)
+                max-content;
+        }
+
+        button {
+            position: relative;
+            width: fit-content;
+
+            border-bottom: 1px solid transparent;
+
+            cursor: pointer;
+
+            &::after {
+                position: absolute;
+                content: '';
+                width: 100%;
+                height: 1px;
+                bottom: -0.4rem;
+                left: 0;
+                background-color: var(--color-primary);
+                transform: scaleX(0);
+                transition: transform 0.3s ease-in-out;
+            }
+
+            &:hover::after {
+                transform: scaleX(1);
+            }
+        }
+
+        & p {
+            display: none;
+
+            @include mixins.respond-to('tablet') {
+                display: block;
+            }
+        }
+    }
+
+    &__items {
+        display: grid;
+
+        grid-column: 1 / -1;
+    }
+}
+
+.purchase {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+
+    padding: 2rem 1.5rem;
+
+    border-bottom: 1px solid var(--color-white);
+    box-shadow: 0 1rem 1rem -1rem var(--color-primary);
+
+    @include mixins.respond-to('tablet') {
+        grid-template-columns: minmax(0, 12rem) min-content minmax(0, 14rem) minmax(
+                0,
+                14rem
+            );
+        gap: 4vw;
+
+        padding: 1.5rem 0;
+    }
+
+    @include mixins.respond-to('desktop') {
+        grid-template-columns:
+            minmax(0, 25rem) minmax(0, 14rem) minmax(0, 17rem)
+            minmax(0, 14rem);
+        justify-content: space-between;
+
+        padding: 1.5rem 1rem;
+    }
+
+    &:last-child {
+        border-bottom: none;
+        box-shadow: none;
+    }
+
+    &__link {
+        height: 100%;
+    }
+
+    &__img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+
+        &-block {
+            @include mixins.flex(column, center, center);
+
+            @include mixins.respond-to('tablet') {
+                @include mixins.flex(row, center, center);
+            }
+        }
+    }
+
+    &__name {
+        @include mixins.respond-to('tablet') {
+            text-align: left;
+        }
+
+        &-block {
+            @include mixins.flex(column, space-between, center);
+
+            @include mixins.respond-to('tablet') {
+                align-items: flex-start;
+            }
+
+            @include mixins.respond-to('desktop') {
+                margin-left: -3vw;
+            }
+        }
+    }
+
+    &__btn {
+        width: 3rem;
+        height: 3rem;
+
+        display: grid;
+        place-content: center;
+
+        border: 1px solid var(--color-primary);
+
+        color: var(--color-primary);
+
+        &::before,
+        &::after {
+            width: 1rem;
+            height: 1rem;
+
+            border: 1px solid var(--color-primary);
+        }
+
+        &::before {
+            top: -30%;
+            left: -30%;
+
+            border-right: 0;
+            border-bottom: 0;
+        }
+
+        &::after {
+            bottom: -30%;
+            right: -30%;
+
+            border-left: 0;
+            border-top: 0;
+        }
+    }
+
+    &__quantity {
+        width: fit-content;
+
+        @include mixins.flex(row, center, center);
+
+        .quantity__input {
+            width: 3rem;
+            height: 3rem;
+            padding: 1rem 0.7rem;
+
+            color: var(--color-black);
+            text-align: center;
+
+            background-color: var(--color-white);
+        }
+    }
+
+    &__price {
+        --gap: 1rem;
+        @include mixins.flex(column, space-between, center);
+
+        &_discounted {
+            color: var(--color-primary);
+        }
+    }
+
+    &__price-block {
+        --gap: 2rem;
+        @include mixins.flex(column, space-between, center);
+
+        height: fit-content;
+    }
+
+    &__price-type {
+        text-align: center;
+    }
+}
+
+.price {
+    @include mixins.flex(row, space-between, center);
+
+    margin-bottom: 2rem;
+
+    &__value {
+        color: var(--color-primary);
+    }
+
+    &-section {
+        --gap: 3rem;
+        @include mixins.flex(column, flex-start, center);
+
+        @include mixins.respond-to('tablet') {
+            --gap: 5rem;
+            align-items: flex-end;
+        }
+    }
+
+    &-block {
+        height: fit-content;
+
+        padding: 1rem;
+
+        background-color: var(--color-primary-opacity);
+        box-shadow: inset 0 0 3rem 1rem var(--color-primary-alpha);
+
+        border: 3px solid var(--color-primary);
+
+        @include mixins.respond-to('tablet') {
+            padding: 4rem;
+        }
+    }
+
+    &-total {
+        @include mixins.flex(row, space-between, center);
+        padding-top: 2rem;
+
+        &__value {
+            width: 50%;
+            color: var(--color-primary);
+            text-align: right;
+        }
+    }
+}
+
+.promocode {
+    --gap: 1rem;
+    @include mixins.flex(row, center, flex-end);
+    flex-wrap: wrap;
+
+    padding-top: 4rem;
+
+    @include mixins.respond-to('tablet') {
+        --gap: 2rem;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        align-items: flex-end;
+    }
+
+    &__title {
+        @include mixins.flex(column, flex-start, center);
+
+        position: relative;
+
+        @include mixins.respond-to('tablet') {
+            align-items: flex-start;
+        }
+
+        .promocode_success,
+        .error-message_static {
+            position: absolute;
+            top: calc(100% + 1rem);
+            left: 0;
+
+            transition: top 0.4s;
+
+            color: var(--color-primary);
+        }
+
+        .error-message_static {
+            top: 100%;
+            color: var(--color-error);
+        }
+    }
+
+    &__input {
+        padding: 0.5em 0.6em;
+
+        color: var(--color-black);
+
+        background-color: var(--color-white);
+
+        @include mixins.respond-to('tablet') {
+            width: 90%;
+        }
+    }
+}
+
+.no-cart {
+    @include mixins.flex(column, center, center);
+    margin-bottom: 4rem;
+    padding-top: 2rem;
+
+    @include mixins.respond-to('tablet') {
+        margin-bottom: 10rem;
+    }
+
+    &__subtitle {
+        margin-bottom: 0;
+
+        @include mixins.respond-to('tablet') {
+            margin-bottom: 2rem;
+        }
+    }
+
+    &__title {
+        color: var(--color-primary);
+    }
+
+    &__img {
+        width: 30rem;
+    }
+}

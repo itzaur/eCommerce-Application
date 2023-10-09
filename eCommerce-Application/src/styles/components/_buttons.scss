@@ -1,0 +1,243 @@
+@use '../abstracts/mixins';
+
+.btn {
+    &,
+    &:visited,
+    &:link {
+        position: relative;
+
+        width: max-content;
+
+        padding: 0.5em;
+
+        color: var(--color-white);
+
+        cursor: pointer;
+
+        transition: box-shadow 0.3s ease;
+
+        @media (hover: hover) {
+            &:hover {
+                box-shadow: 0 0 0.6rem 0.2rem var(--color-primary-alpha);
+
+                &::before {
+                    top: 0;
+                    left: 0;
+
+                    opacity: 1;
+
+                    transition:
+                        opacity 0.2s ease-in-out,
+                        inset 0.2s ease-in-out;
+                }
+
+                &:after {
+                    bottom: 0;
+                    right: 0;
+
+                    opacity: 1;
+                }
+
+                & span::after {
+                    filter: invert(95%) sepia(34%) saturate(4887%)
+                        hue-rotate(145deg) brightness(91%) contrast(96%);
+                    left: calc(100% + 1.5rem);
+                }
+            }
+        }
+
+        &::before,
+        &::after {
+            position: absolute;
+            content: '';
+
+            width: 1rem;
+            height: 1rem;
+
+            border: 2px solid var(--color-primary);
+
+            background-color: transparent;
+
+            opacity: 0;
+
+            transition:
+                opacity 0.2s ease-in-out,
+                inset 0.2s ease-in-out;
+
+            @include mixins.respond-to('tablet') {
+                width: 1.5rem;
+                height: 1.5rem;
+            }
+        }
+
+        &::before {
+            top: -10%;
+            left: -10%;
+
+            border-right: 0;
+            border-bottom: 0;
+        }
+
+        &::after {
+            bottom: -10%;
+            right: -10%;
+
+            border-left: 0;
+            border-top: 0;
+        }
+    }
+
+    &-modal {
+        cursor: pointer;
+    }
+
+    &_action {
+        display: block;
+
+        position: relative;
+
+        width: min(100%, 23rem);
+
+        margin: 0 auto;
+        padding: 1em 0.5em;
+
+        font-family: var(--ff-secondary);
+        text-align: center;
+
+        background-color: var(--color-primary);
+        color: var(--color-secondary);
+
+        cursor: pointer;
+
+        transition: box-shadow 0.3s linear;
+
+        &:focus-visible {
+            outline: 2px solid var(--color-secondary);
+        }
+
+        &:active,
+        &:visited {
+            outline-color: transparent;
+        }
+
+        @media (hover: hover) {
+            &:hover {
+                box-shadow: var(--drop-shadow-light);
+            }
+        }
+
+        &--close {
+            width: min(100%, 10rem);
+        }
+    }
+
+    &_store {
+        height: 3.5rem;
+    }
+
+    &_un-action {
+        background-color: var(--color-secondary);
+        color: var(--color-input);
+
+        &:hover {
+            box-shadow: var(--drop-shadow-dark);
+        }
+    }
+
+    &--exit {
+        span {
+            position: relative;
+
+            &:after {
+                position: absolute;
+                content: '';
+                top: 50%;
+                left: calc(100% + 1.2rem);
+                translate: 0 -50%;
+
+                width: 2rem;
+                height: 2rem;
+
+                background-image: url('../assets/images/exit-icon.png');
+                background-repeat: no-repeat;
+                background-size: 2rem 2rem;
+
+                filter: invert(1) brightness(200%);
+
+                transition:
+                    filter 0.3s linear,
+                    left 0.2s ease-in;
+            }
+        }
+    }
+
+    & a {
+        padding: 0.5em;
+
+        @include mixins.respond-to('tablet') {
+            margin-left: -0.5em;
+        }
+    }
+
+    &--product {
+        width: min-content;
+        min-width: 15ch;
+        background-color: var(--color-secondary);
+
+        @include mixins.respond-to('tablet') {
+            padding-inline: 2em;
+        }
+    }
+
+    &--basket {
+        width: fit-content;
+
+        padding: 1em;
+
+        font-weight: bold;
+        text-align: center;
+
+        background-color: var(--color-primary);
+        color: var(--color-secondary);
+    }
+
+    &--item {
+        padding: 0.5em 1.5em;
+        border: 2px solid var(--color-primary);
+
+        transition: background-color 0.3s ease-in-out;
+
+        @media (hover: hover) {
+            &:hover {
+                background-color: var(--color-primary);
+            }
+        }
+    }
+
+    &--close {
+        color: var(--color-secondary);
+        background-color: var(--color-primary);
+
+        padding: 0.5em 2em;
+
+        font-family: var(--ff-product);
+        font-size: var(--fs-paragraph);
+    }
+}
+
+.arrow {
+    margin-top: auto;
+    padding: 0.6em 1em;
+
+    border: 0.1rem solid var(--color-primary);
+
+    img {
+        height: 1.5rem;
+
+        animation: move 1.4s infinite forwards;
+
+        @include mixins.respond-to('tablet') {
+            height: auto;
+        }
+    }
+}

@@ -1,0 +1,25 @@
+@use '../abstracts/mixins';
+
+.success-message {
+    position: absolute;
+
+    z-index: 20;
+
+    padding-top: 0.5rem;
+
+    font-family: var(--ff-errors);
+    font-size: 1.3rem;
+    text-align: left;
+    text-transform: lowercase;
+
+    color: var(--color-primary);
+
+    @include mixins.respond-to('tablet') {
+        padding-top: 1rem;
+    }
+
+    &--address {
+        right: 6rem;
+        top: 3rem;
+    }
+}
