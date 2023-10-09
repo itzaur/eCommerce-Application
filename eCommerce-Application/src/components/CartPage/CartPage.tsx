@@ -30,7 +30,7 @@ function CartPage(): JSX.Element {
     return (
         <>
             <Transition timeline={timeline} />
-            <Header setSearchValue={undefined} withSearchValue={false} />
+            <Header />
             <section className="cart__main">
                 <ul className="bread-crumbs">
                     <li>
@@ -52,7 +52,7 @@ function CartPage(): JSX.Element {
                     Назад
                 </button>
 
-                {activeCart && activeCart.lineItems.length ? (
+                {activeCart?.lineItems?.length ? (
                     <div className="cart__content">
                         <CartProducts
                             activeCart={activeCart}
@@ -67,7 +67,7 @@ function CartPage(): JSX.Element {
                     ''
                 )}
 
-                {(!activeCart || !activeCart.lineItems.length) && <NoCart />}
+                {!activeCart?.lineItems?.length && <NoCart />}
             </section>
             <Footer />
         </>

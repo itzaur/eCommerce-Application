@@ -48,8 +48,8 @@ export function AddressesListView(props: {
         const addressID = address.id;
 
         if (addressID) {
-            setTypeAddresses(removeAddress(address.id));
-            removeCustomerAddress(userId, address.id, version, setVersion)
+            setTypeAddresses(removeAddress(addressID));
+            removeCustomerAddress(userId, addressID, version, setVersion)
                 .then(() => {
                     setResultMessageAddress('адрес успешно удален');
                     setTimeout(() => {

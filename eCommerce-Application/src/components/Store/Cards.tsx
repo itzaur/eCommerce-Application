@@ -11,8 +11,9 @@ import favouriteIcon from '../../assets/images/favourite-icon.png';
 
 function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
     const currentCardRef = useRef<Element | null>(null);
-    const [buttonDescriptionTexcontent, setButtonDescriptionTexcontent] =
-        useState('Показать описание ▼');
+    const [buttonDescriptionOpenId, setButtonDescriptionOpenId] = useState<
+        string[]
+    >([]);
 
     const [activeCart, setActiveCart] = useState<Cart | null>(
         localStorage.getItem('activeCart')
@@ -34,18 +35,29 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
     };
 
-    function showHideDescription(e: MouseEvent): void {
+    function showHideDescription(
+        e: MouseEvent,
+        cardId: string | undefined
+    ): void {
         e.preventDefault();
-        if (e.target instanceof HTMLElement) {
+        if (e.target instanceof HTMLElement && cardId) {
             currentCardRef.current = e.target.previousElementSibling;
-
             currentCardRef.current?.classList.toggle('card__description_open');
 
-            setButtonDescriptionTexcontent(
-                buttonDescriptionTexcontent === 'Показать описание ▼'
-                    ? 'Скрыть описание ▲'
-                    : 'Показать описание ▼'
-            );
+            if (
+                currentCardRef.current?.classList.contains(
+                    'card__description_open'
+                )
+            ) {
+                setButtonDescriptionOpenId([
+                    ...buttonDescriptionOpenId,
+                    cardId,
+                ]);
+            } else {
+                const tempArr = [...buttonDescriptionOpenId];
+                tempArr.splice(tempArr.indexOf(cardId), 1);
+                setButtonDescriptionOpenId(tempArr);
+            }
         }
     }
 
@@ -144,14 +156,9 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
                                     <button
                                         type="button"
                                         id={`btn-cart-${card.key}`}
-                                        disabled={
-                                            !!activeCart?.lineItems
-                                                .map(
-                                                    (product) =>
-                                                        product.productId
-                                                )
-                                                .includes(card.id)
-                                        }
+                                        disabled={activeCart?.lineItems
+                                            .map((product) => product.productId)
+                                            .includes(card.id)}
                                         onClick={(e): void => {
                                             addNewProductInCartDOM(e, card.id);
                                         }}
@@ -203,10 +210,13 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
                                 type="button"
                                 className="btn card__description-btn"
                                 onClick={(e): void => {
-                                    showHideDescription(e);
+                                    showHideDescription(e, card.key);
                                 }}
                             >
-                                {buttonDescriptionTexcontent}
+                                {card.key &&
+                                buttonDescriptionOpenId.includes(card.key)
+                                    ? 'Скрыть описание'
+                                    : 'Показать описание'}
                             </button>
                         </div>
                     </div>

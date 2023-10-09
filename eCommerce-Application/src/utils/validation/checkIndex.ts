@@ -8,8 +8,10 @@ export const checkIncorrectAddressIndex = (
         return { incorrect: false, message: '' };
     }
 
-    const found = countriesList.find((el) => el.name === country);
-    if (found && !found?.regularForIndex.test(index)) {
+    const found = countriesList.find(
+        (el) => el.name === country && !el.regularForIndex.test(index)
+    );
+    if (found) {
         return {
             incorrect: true,
             message: found?.indexError,

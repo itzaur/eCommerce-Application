@@ -164,6 +164,11 @@ function Parameters(props: {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchValue, setFiltersApplied]);
 
+    function filterByPrice(): void {
+        if (!filtersApplied) setFiltersApplied(true);
+        filterProducts();
+    }
+
     return (
         <div className="parameters">
             <div className="parameters__filters">
@@ -303,9 +308,7 @@ function Parameters(props: {
                                 value={minSelectedPrice || ''}
                                 onChange={(e): void => {
                                     setMinSelectedPrice(+e.target.value);
-                                    if (!filtersApplied)
-                                        setFiltersApplied(true);
-                                    filterProducts();
+                                    filterByPrice();
                                 }}
                             />
                             <p>До</p>
@@ -316,9 +319,7 @@ function Parameters(props: {
                                 value={maxSelectedPrice || ''}
                                 onChange={(e): void => {
                                     setMaxSelectedPrice(+e.target.value);
-                                    if (!filtersApplied)
-                                        setFiltersApplied(true);
-                                    filterProducts();
+                                    filterByPrice();
                                 }}
                             />
                         </div>
@@ -332,9 +333,7 @@ function Parameters(props: {
                                 value={minSelectedPrice}
                                 onChange={(e): void => {
                                     setMinSelectedPrice(+e.target.value);
-                                    if (!filtersApplied)
-                                        setFiltersApplied(true);
-                                    filterProducts();
+                                    filterByPrice();
                                 }}
                             />
                             <input
@@ -346,9 +345,7 @@ function Parameters(props: {
                                 value={maxSelectedPrice}
                                 onChange={(e): void => {
                                     setMaxSelectedPrice(+e.target.value);
-                                    if (!filtersApplied)
-                                        setFiltersApplied(true);
-                                    filterProducts();
+                                    filterByPrice();
                                 }}
                             />
                         </div>

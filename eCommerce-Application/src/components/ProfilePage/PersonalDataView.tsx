@@ -87,6 +87,8 @@ export function PersonalDataView(props: {
     const [errorAge, setErrorAge] = useState(false);
     const [errorMessageAge, setErrorMessageAge] = useState('');
 
+    const minimumAgeAllow = 18;
+
     return (
         <div className="profile__info">
             <div className="profile__info-line">
@@ -369,20 +371,13 @@ export function PersonalDataView(props: {
                             onClick={(e): void => {
                                 e.preventDefault();
                                 setIsEditBirth(false);
-                                setErrorAge(
-                                    checkIncorrectAge(
-                                        +birthDayValue,
-                                        +birthMonthValue,
-                                        +birthYearValue
-                                    ).incorrect
+                                const incorrectAgeCheck = checkIncorrectAge(
+                                    +birthDayValue,
+                                    +birthMonthValue,
+                                    +birthYearValue
                                 );
-                                setErrorMessageAge(
-                                    checkIncorrectAge(
-                                        +birthDayValue,
-                                        +birthMonthValue,
-                                        +birthYearValue
-                                    ).message
-                                );
+                                setErrorAge(incorrectAgeCheck.incorrect);
+                                setErrorMessageAge(incorrectAgeCheck.message);
 
                                 if (!birthDayValue) {
                                     setErrorBirthDay(true);
@@ -414,7 +409,7 @@ export function PersonalDataView(props: {
                                         +birthDayValue,
                                         +birthMonthValue,
                                         +birthYearValue
-                                    ) < 18
+                                    ) < minimumAgeAllow
                                 )
                                     return;
                                 editCustomerAge(

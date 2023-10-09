@@ -33,9 +33,7 @@ export async function getProductsBySubcategory(
                 },
             })
             .execute();
-        if (setCountCards) {
-            setCountCards(result.body.total);
-        }
+        setCountCards?.(result.body.total);
         return result.body.results;
     } catch {
         throw new Error(serverErrorMessage);

@@ -2,6 +2,7 @@ import { Link, Outlet } from 'react-router-dom';
 import { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, EffectCube } from 'swiper/modules';
+import { scrollToHeader } from '../../utils/constants';
 import slide1 from '../../assets/images/slide1.png';
 import slide2 from '../../assets/images/slide2.png';
 import slide3 from '../../assets/images/slide3.png';
@@ -38,12 +39,6 @@ function Info(): JSX.Element {
                                     localStorage.removeItem('activeCart');
                                     setUser(null);
                                 }}
-                                onKeyDown={(): void => {
-                                    localStorage.removeItem('user');
-                                    localStorage.removeItem('version');
-                                    localStorage.removeItem('activeCart');
-                                    setUser(null);
-                                }}
                             >
                                 <span>Выйти</span>
                             </button>
@@ -62,7 +57,7 @@ function Info(): JSX.Element {
                     <button className="btn" type="button">
                         <Link
                             to="/store"
-                            onClick={(): void => window.scrollTo(0, 0)}
+                            onClick={(): void => scrollToHeader()}
                         >
                             Перейти в магазин
                         </Link>
@@ -70,7 +65,7 @@ function Info(): JSX.Element {
                     <button className="btn" type="button">
                         <Link
                             to="/about"
-                            onClick={(): void => window.scrollTo(0, 0)}
+                            onClick={(): void => scrollToHeader()}
                         >
                             О нас
                         </Link>

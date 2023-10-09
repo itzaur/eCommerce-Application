@@ -3,6 +3,8 @@ import {
     MyCartAddLineItemAction,
     MyCartChangeLineItemQuantityAction,
     MyCartRemoveLineItemAction,
+    MyCartAddDiscountCodeAction,
+    ClientResponse,
 } from '@commercetools/platform-sdk';
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
 import { constructClientAnonimousFlow } from './AnonimousClient';
@@ -12,6 +14,8 @@ import { tokenInstance } from './apiConstants';
 import { UpdateCartParams } from '../types';
 import { serverErrorMessage } from '../utils/constants';
 import { loginCustomer } from './loginCustomer';
+
+const refreshToken = localStorage.getItem('refreshToken');
 
 async function getCorrectApiRoot(): Promise<ByProjectKeyRequestBuilder> {
     const user = JSON.parse(localStorage.getItem('user') as string);
@@ -46,7 +50,7 @@ async function createNewCart(): Promise<Cart> {
             })
             .execute();
         localStorage.setItem('token', tokenInstance.get().token);
-        if (!localStorage.getItem('refreshToken'))
+        if (!refreshToken)
             localStorage.setItem(
                 'refreshToken',
                 tokenInstance.get().refreshToken || ''
@@ -57,9 +61,30 @@ async function createNewCart(): Promise<Cart> {
     }
 }
 
+async function doActionsWithCart(
+    cartForRequest: Cart,
+    actions:
+        | MyCartAddLineItemAction
+        | MyCartChangeLineItemQuantityAction
+        | MyCartRemoveLineItemAction[]
+        | MyCartAddDiscountCodeAction[]
+): Promise<ClientResponse<Cart>> {
+    return apiRootForRequest
+        .me()
+        .carts()
+        .withId({ ID: cartForRequest.id })
+        .post({
+            body: {
+                version: cartForRequest.version,
+                actions: Array.isArray(actions) ? [...actions] : [actions],
+            },
+        })
+        .execute();
+}
+
 export async function addNewProductInCartOrUpdateQuantity(
     props: UpdateCartParams
-): Promise<Cart | null | void> {
+): Promise<Cart | null> {
     const { cartData, mode, cardId, quantity, firstFunctionCall } = props;
 
     let tempActions:
@@ -92,24 +117,16 @@ export async function addNewProductInCartOrUpdateQuantity(
                     };
                 });
             break;
-        default: //
+        default:
+            return null;
     }
     const actions = tempActions;
 
     try {
         const cartForRequest = cartData || (await createNewCart());
 
-        await apiRootForRequest
-            .me()
-            .carts()
-            .withId({ ID: cartForRequest.id })
-            .post({
-                body: {
-                    version: cartForRequest.version,
-                    actions: Array.isArray(actions) ? [...actions] : [actions],
-                },
-            })
-            .execute();
+        await doActionsWithCart(cartForRequest, actions);
+
         const activeCart = await apiRootForRequest
             .me()
             .activeCart()
@@ -125,7 +142,8 @@ export async function addNewProductInCartOrUpdateQuantity(
     } catch (e) {
         if (
             e instanceof Error &&
-            e.message.startsWith('URI not found: /odyssey4165/me/carts/') &&
+            // править эту строчку каждый раз при смене commercetools! Не забывать
+            e.message.startsWith('URI not found: /odyssey4160/me/carts/') &&
             firstFunctionCall
         ) {
             apiRootForRequest = constructClientRefresh();
@@ -177,10 +195,11 @@ export async function getActiveCart(
     } catch (e) {
         if (
             e instanceof Error &&
-            e.message === 'URI not found: /odyssey4165/me/active-cart' &&
+            // править эту строчку каждый раз при смене commercetools! Не забывать
+            e.message === 'URI not found: /odyssey4160/me/active-cart' &&
             firstFunctionCall
         ) {
-            if (localStorage.getItem('refreshToken')) {
+            if (refreshToken) {
                 apiRootForRequest = constructClientRefresh();
                 localStorage.setItem('token', tokenInstance.get().token);
                 return getActiveCart(false);
@@ -210,17 +229,9 @@ export async function applyDiscount(
     promocode: string
 ): Promise<Cart | undefined> {
     try {
-        const cartWithPromocode = await apiRootForRequest
-            .me()
-            .carts()
-            .withId({ ID: cartData.id })
-            .post({
-                body: {
-                    version: cartData.version,
-                    actions: [{ action: 'addDiscountCode', code: promocode }],
-                },
-            })
-            .execute();
+        const cartWithPromocode = await doActionsWithCart(cartData, [
+            { action: 'addDiscountCode', code: promocode },
+        ]);
         localStorage.setItem(
             'activeCart',
             JSON.stringify(cartWithPromocode.body)
@@ -232,8 +243,7 @@ export async function applyDiscount(
             error.message === `The discount code '${promocode}' was not found.`
         ) {
             throw new Error('Промокод не найден:(');
-        } else {
-            throw new Error('Сервер в космосе, не обещал вернуться:(');
         }
+        throw new Error('Сервер в космосе, не обещал вернуться:(');
     }
 }

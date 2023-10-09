@@ -35,11 +35,13 @@ export async function loginCustomer(
             .login()
             .post({ body })
             .execute();
-        localStorage.setItem('token', tokenInstance.get().token);
-        localStorage.setItem(
-            'refreshToken',
-            tokenInstance.get().refreshToken || ''
-        );
+        if (tokenInstance.get().token)
+            localStorage.setItem('token', tokenInstance.get().token);
+        if (tokenInstance.get().refreshToken)
+            localStorage.setItem(
+                'refreshToken',
+                tokenInstance.get().refreshToken || ''
+            );
         localStorage.setItem('user', JSON.stringify(response.body.customer));
         localStorage.setItem(
             'version',

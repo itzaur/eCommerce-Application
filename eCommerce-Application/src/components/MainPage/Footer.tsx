@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { scrollToHeader } from '../../utils/constants';
 import logo from '../../assets/images/logo.svg';
 import rsschoolLogo from '../../assets/images/rsschool.svg';
 import githubLogo from '../../assets/images/github.svg';
@@ -56,7 +57,7 @@ function Footer(): JSX.Element {
                     <li className="footer__nav-item">
                         <Link
                             to="/store/souvenirs"
-                            onClick={(): void => window.scrollTo(0, 0)}
+                            onClick={(): void => scrollToHeader()}
                         >
                             <span>Сувениры</span>
                         </Link>
@@ -64,7 +65,7 @@ function Footer(): JSX.Element {
                     <li className="footer__nav-item">
                         <Link
                             to="/store/cosmotours"
-                            onClick={(): void => window.scrollTo(0, 0)}
+                            onClick={(): void => scrollToHeader()}
                         >
                             <span>Выбрать космотур</span>
                         </Link>
@@ -72,7 +73,7 @@ function Footer(): JSX.Element {
                     <li className="footer__nav-item">
                         <Link
                             to="/store/hotel"
-                            onClick={(): void => window.scrollTo(0, 0)}
+                            onClick={(): void => scrollToHeader()}
                         >
                             <span>Выбрать номер</span>
                         </Link>

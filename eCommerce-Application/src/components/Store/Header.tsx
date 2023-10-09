@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import { scrollToHeader } from '../../utils/constants';
 import SearchBar from './SearchBar';
 import logo from '../../assets/images/logo.png';
 import iconCatalog from '../../assets/images/icon-catalog.png';
@@ -12,8 +13,8 @@ function Header({
     withSearchValue,
     setSearchValue,
 }: {
-    setSearchValue: React.Dispatch<React.SetStateAction<string>> | undefined;
-    withSearchValue: boolean;
+    setSearchValue?: React.Dispatch<React.SetStateAction<string>> | undefined;
+    withSearchValue?: boolean;
 }): JSX.Element {
     const user = localStorage.getItem('user');
 
@@ -24,7 +25,7 @@ function Header({
             <Link
                 className="header-nav__logo"
                 to="/"
-                onClick={(): void => window.scrollTo(0, 0)}
+                onClick={(): void => scrollToHeader()}
             >
                 <img src={logo} alt="logo" className="logo" />
             </Link>
@@ -34,7 +35,7 @@ function Header({
                         <Link
                             className="nav__link"
                             to="/store"
-                            onClick={(): void => window.scrollTo(0, 0)}
+                            onClick={(): void => scrollToHeader()}
                         >
                             <img src={iconCatalog} alt="icon-catalog" />
                             <h3 className="nav__title">Каталог</h3>
@@ -44,7 +45,7 @@ function Header({
                         <Link
                             className="nav__link"
                             to="/about"
-                            onClick={(): void => window.scrollTo(0, 0)}
+                            onClick={(): void => scrollToHeader()}
                         >
                             <img src={iconAbout} alt="icon-about" />
                             <h3 className="nav__title">О нас</h3>
@@ -79,7 +80,7 @@ function Header({
                         <Link
                             className="nav__link"
                             to="/cart"
-                            onClick={(): void => window.scrollTo(0, 0)}
+                            onClick={(): void => scrollToHeader()}
                         >
                             <img src={iconCart} alt="icon-cart" />
                             <h3 className="nav__title">Корзина</h3>
@@ -91,5 +92,10 @@ function Header({
         </header>
     );
 }
+
+Header.defaultProps = {
+    setSearchValue: undefined,
+    withSearchValue: false,
+};
 
 export default Header;

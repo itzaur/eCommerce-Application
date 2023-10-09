@@ -41,7 +41,7 @@ function CartProducts(props: {
             firstFunctionCall: true,
         })
             .then((data) => {
-                if (data !== undefined) setActiveCart(data);
+                setActiveCart(data);
                 setModalConfirmVisible(false);
             })
             .catch((err) => {

@@ -157,6 +157,10 @@ function Store({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedCategory, selectedType]);
 
+    function checkCurrentPageNotLastPage(): boolean {
+        return currentOffset / itemPerPage + 1 !== countPages;
+    }
+
     return (
         <>
             <Transition timeline={timeline} />
@@ -230,8 +234,7 @@ function Store({
 
                         {cards.length ? (
                             <div className="store__navigation">
-                                {currentOffset / itemPerPage + 1 !==
-                                    countPages && (
+                                {checkCurrentPageNotLastPage() && (
                                     <button
                                         type="button"
                                         className="btn_action btn_store"

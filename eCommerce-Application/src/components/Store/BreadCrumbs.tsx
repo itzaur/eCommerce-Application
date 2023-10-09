@@ -30,6 +30,39 @@ function BreadCrumbs(props: {
         setIsBreadCrumbsClicked,
     } = props;
 
+    function clickBreadcrumbs(target: 'store' | 'type' | 'category'): void {
+        if (setIsFetching) setIsFetching(true);
+        if (setIsBreadCrumbsClicked) setIsBreadCrumbsClicked(true);
+        (
+            document.querySelectorAll(
+                '.sidebar__category_active'
+            ) as NodeListOf<HTMLElement>
+        ).forEach((el) => {
+            el.classList.remove('sidebar__category_active');
+        });
+
+        switch (target) {
+            case 'store': {
+                if (setCurrentOffset) setCurrentOffset(0);
+                setSelectedType('');
+                setSelectedCategory('');
+                if (setSelectedCategoryId) setSelectedCategoryId('');
+                break;
+            }
+            case 'type': {
+                setSelectedCategory('');
+                if (setSelectedCategoryId) setSelectedCategoryId('');
+                break;
+            }
+            case 'category': {
+                setSelectedType(selectedType);
+                setSelectedCategory(selectedCategory);
+                break;
+            }
+            default:
+        }
+    }
+
     return (
         <ul
             className={
@@ -45,26 +78,7 @@ function BreadCrumbs(props: {
                 <Link
                     to="/store"
                     onClick={(): void => {
-                        if (setIsFetching) {
-                            setIsFetching(true);
-                        }
-                        if (setIsBreadCrumbsClicked) {
-                            setIsBreadCrumbsClicked(true);
-                        }
-                        if (setCurrentOffset) {
-                            setCurrentOffset(0);
-                        }
-
-                        setSelectedType('');
-                        setSelectedCategory('');
-                        if (setSelectedCategoryId) setSelectedCategoryId('');
-                        (
-                            document.querySelectorAll(
-                                '.sidebar__category_active'
-                            ) as NodeListOf<HTMLElement>
-                        ).forEach((el) => {
-                            el.classList.remove('sidebar__category_active');
-                        });
+                        clickBreadcrumbs('store');
                     }}
                 >
                     Каталог
@@ -75,22 +89,7 @@ function BreadCrumbs(props: {
                     <Link
                         to={`/store/${selectedTypePath}`}
                         onClick={(): void => {
-                            if (setIsFetching) {
-                                setIsFetching(true);
-                            }
-                            if (setIsBreadCrumbsClicked) {
-                                setIsBreadCrumbsClicked(true);
-                            }
-
-                            setSelectedCategory('');
-
-                            (
-                                document.querySelectorAll(
-                                    '.sidebar__category_active'
-                                ) as NodeListOf<HTMLElement>
-                            ).forEach((el) => {
-                                el.classList.remove('sidebar__category_active');
-                            });
+                            clickBreadcrumbs('type');
                         }}
                     >
                         / {selectedType}{' '}
@@ -102,23 +101,7 @@ function BreadCrumbs(props: {
                     <Link
                         to={`/store/${selectedTypePath}/${selectedCategoryPath}`}
                         onClick={(): void => {
-                            if (setIsFetching) {
-                                setIsFetching(true);
-                            }
-                            if (setIsBreadCrumbsClicked) {
-                                setIsBreadCrumbsClicked(true);
-                            }
-
-                            setSelectedType(selectedType);
-                            setSelectedCategory(selectedCategory);
-
-                            (
-                                document.querySelectorAll(
-                                    '.sidebar__category_active'
-                                ) as NodeListOf<HTMLElement>
-                            ).forEach((el) => {
-                                el.classList.remove('sidebar__category_active');
-                            });
+                            clickBreadcrumbs('category');
                         }}
                     >
                         / {selectedCategory}

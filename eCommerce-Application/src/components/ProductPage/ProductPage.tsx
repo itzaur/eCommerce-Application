@@ -73,12 +73,6 @@ function ProductDetail({
                             .includes(result.id)
                     );
                 setIsFetching(false);
-                if (activeCart)
-                    setCardInCart(
-                        activeCart.lineItems
-                            .map((el: LineItem) => el.productId)
-                            .includes(result.id)
-                    );
             })
             .catch((err: Error) => {
                 setErrorBodyDOM(err);
@@ -137,7 +131,7 @@ function ProductDetail({
     };
 
     function addRemoveProductInCartDOM(mode: UpdateCartMode): void {
-        const quantity = mode === 'new' ? 1 : 0;
+        const quantity = Number(mode === 'new');
         if (card) {
             setCartLoading(true);
 
@@ -150,11 +144,7 @@ function ProductDetail({
             })
                 .then((data) => {
                     if (data) setActiveCart(data);
-                    if (mode === 'new') {
-                        setCardInCart(true);
-                    } else {
-                        setCardInCart(false);
-                    }
+                    setCardInCart(mode === 'new');
                 })
                 .catch((err) => {
                     if (

@@ -633,3 +633,7 @@ export function setErrorBodyDOM(err: Error): void {
     document.body.textContent = err.message;
     document.body.classList.add('error-connection');
 }
+
+export function scrollToHeader(): void {
+    window.scrollTo(0, 0);
+}
