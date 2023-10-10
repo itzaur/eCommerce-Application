@@ -85,7 +85,7 @@ function Parameters(props: {
     }
 
     useEffect(() => {
-        setFiltersApplied(false);
+        if (!searchValue) setFiltersApplied(false);
         setselectedFiltersList([]);
         setDiscountedProducts(false);
         setSort({ order: '', value: 'По умолчанию', icon: '↓↑' });
@@ -95,6 +95,7 @@ function Parameters(props: {
                 elCopy.checked = false;
             }
         });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedType, selectedCategory]);
 
     function getOnlyCards(): void {
@@ -147,7 +148,8 @@ function Parameters(props: {
     }
 
     useEffect(() => {
-        getOnlyCards();
+        if (currentOffset) getOnlyCards();
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentOffset]);
 
@@ -156,17 +158,24 @@ function Parameters(props: {
             filterProducts();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedFiltersList, discountedProducts, sort]);
+    }, [
+        selectedFiltersList,
+        discountedProducts,
+        sort,
+        minSelectedPrice,
+        maxSelectedPrice,
+    ]);
 
     useEffect(() => {
-        setFiltersApplied(true);
-        filterProducts();
+        if (searchValue || (!searchValue && filtersApplied)) {
+            setFiltersApplied(true);
+            filterProducts();
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [searchValue, setFiltersApplied]);
+    }, [searchValue]);
 
     function filterByPrice(): void {
         if (!filtersApplied) setFiltersApplied(true);
-        filterProducts();
     }
 
     return (

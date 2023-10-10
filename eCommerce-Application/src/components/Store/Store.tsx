@@ -63,9 +63,8 @@ function Store({
     );
     const [isFetching, setIsFetching] = useState(true);
 
+    // eslint-disable-next-line
     const [isBreadCrumbsClicked, setIsBreadCrumbsClicked] = useState(false);
-
-    const breadCrumbs = document.querySelector('.bread-crumbs');
 
     document.querySelectorAll('.btn').forEach((item) => {
         item.classList.remove('sidebar__category_active');
@@ -84,32 +83,10 @@ function Store({
 
     const timeline = gsap.timeline();
 
-    useEffect(() => {
-        if (!selectedCategory) setSelectedCategoryId('');
-        getCategories()
-            .then((data) => {
-                if (data) setCategories(data);
-            })
-            .catch((err: Error) => {
-                setErrorBodyDOM(err);
-            });
-        if (selectedCategory && isBreadCrumbsClicked) {
-            getSubCategoryId(selectedCategory)
-                .then((data) => {
-                    if (data) setSelectedCategoryId(data);
-                })
-                .catch((err: Error) => {
-                    setErrorBodyDOM(err);
-                });
-        }
-
-        breadCrumbs?.lastElementChild?.classList.add(
-            'sidebar__category_active'
-        );
-
+    function getCards(categoryId: string): void {
         getFilterSortSearchProducts(
             {
-                selectedCategoryId,
+                selectedCategoryId: categoryId,
                 attributesToFilter: filter.key,
                 selectedFiltersList: [],
                 minSelectedPrice: 0,
@@ -130,10 +107,9 @@ function Store({
                 setCountPages(Math.ceil(data.length / itemPerPage));
                 setCurrentOffset(0);
                 setCards(data);
-                setIsFetching(false);
                 getFilterSortSearchProducts(
                     {
-                        selectedCategoryId,
+                        selectedCategoryId: categoryId,
                         attributesToFilter: filter.key,
                         selectedFiltersList: [],
                         minSelectedPrice: 0,
@@ -147,6 +123,7 @@ function Store({
                         if (items) {
                             setCards(items);
                         }
+
                         setIsFetching(false);
                     })
                     .catch((err: Error) => {
@@ -154,6 +131,37 @@ function Store({
                     });
             }
         });
+    }
+
+    useEffect(() => {
+        if (!selectedCategory) setSelectedCategoryId('');
+        getCategories()
+            .then((data) => {
+                if (data) setCategories(data);
+            })
+            .catch((err: Error) => {
+                setErrorBodyDOM(err);
+            });
+        const breadCrumbs = document.querySelector('.bread-crumbs');
+        breadCrumbs?.lastElementChild?.classList.add(
+            'sidebar__category_active'
+        );
+
+        if (selectedCategory) {
+            getSubCategoryId(selectedCategory)
+                .then((data) => {
+                    if (data) {
+                        setSelectedCategoryId(data);
+                        getCards(data);
+                    }
+                })
+                .catch((err: Error) => {
+                    setErrorBodyDOM(err);
+                });
+        } else {
+            getCards(selectedCategoryId);
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedCategory, selectedType]);
 

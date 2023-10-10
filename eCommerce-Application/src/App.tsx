@@ -1,5 +1,5 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
-import { useState, useEffect, ReactElement } from 'react';
+import { useState, useEffect } from 'react';
 import {
     Home,
     LoginPage,
@@ -69,9 +69,7 @@ function App(): JSX.Element {
         }
     }
 
-    async function getRoutes(
-        categoriesArr: CategoryCustom[]
-    ): Promise<ReactElement[]> {
+    async function getRoutes(categoriesArr: CategoryCustom[]): Promise<void> {
         categoriesArr.forEach((category) => {
             tempArrCategoriesRoutes.push(
                 <Route
@@ -176,7 +174,7 @@ function App(): JSX.Element {
                                 type={category.parent.name}
                                 typePath={category.parent.path}
                                 category={item.name}
-                                categoryPath={item.name}
+                                categoryPath={item.path}
                             />
                         }
                     />
@@ -192,7 +190,7 @@ function App(): JSX.Element {
                                 type={category.parent.name}
                                 typePath={category.parent.path}
                                 category={item.name}
-                                categoryPath={item.name}
+                                categoryPath={item.path}
                             />
                         }
                     />,
@@ -238,8 +236,6 @@ function App(): JSX.Element {
                     });
             });
         });
-
-        return categoriesRoutes;
     }
 
     useEffect(() => {
@@ -250,8 +246,7 @@ function App(): JSX.Element {
                         setCategories(data);
                         setMainId(data);
                         getRoutes(data)
-                            .then((result) => {
-                                setCategoriesRoutes(result);
+                            .then(() => {
                                 setPageLoaded(true);
                             })
                             .catch((err: Error) => {
