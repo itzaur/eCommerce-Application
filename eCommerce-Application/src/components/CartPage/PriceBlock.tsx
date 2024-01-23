@@ -1,6 +1,6 @@
 import { Cart } from '@commercetools/platform-sdk';
 import { useEffect, useState } from 'react';
-import { setErrorBodyDOM } from '../../utils/constants';
+
 import {
     addNewProductInCartOrUpdateQuantity,
     applyDiscount,
@@ -79,8 +79,8 @@ function PriceBlock(props: {
             .then((data) => {
                 if (data !== undefined) setActiveCart(data);
             })
-            .catch((err) => {
-                setErrorBodyDOM(err);
+            .catch(() => {
+                // setErrorBodyDOM(err);
             });
     }
 

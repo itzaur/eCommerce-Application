@@ -1,15 +1,19 @@
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Search } from '@mui/icons-material';
 import { Paper, IconButton } from '@mui/material';
+import { memoizedAttributesToSearch } from '../../redux/selectors/selectors';
+import { setAttributesToSearch } from '../../redux/features/catalogSlice';
 
-function SearchBar({
-    setSearchValue,
-    searchBarOpen,
-}: {
-    setSearchValue: React.Dispatch<React.SetStateAction<string>> | undefined;
+interface SearchBarProps {
     searchBarOpen: boolean;
-}): JSX.Element {
-    const [value, setValue] = useState('');
+}
+
+function SearchBar(props: SearchBarProps): JSX.Element {
+    const { searchBarOpen } = props;
+    const searchValue = useSelector(memoizedAttributesToSearch);
+    const dispatch = useDispatch();
+    const [currentValue, setCurrentValue] = useState(searchValue);
 
     return (
         <Paper
@@ -31,14 +35,15 @@ function SearchBar({
                 type="submit"
                 onClick={(e): void => {
                     e.preventDefault();
-                    if (setSearchValue) setSearchValue(value);
+                    dispatch(setAttributesToSearch(currentValue));
                 }}
                 sx={{ p: '2rem', color: '#000000' }}
             >
                 <input
                     placeholder="Поиск..."
+                    value={currentValue}
                     onChange={(e): void => {
-                        setValue(e.target.value);
+                        setCurrentValue(e.target.value);
                     }}
                 />
 

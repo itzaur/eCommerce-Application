@@ -6,3 +6,4 @@ export { default as AboutPage } from './AboutPage/About';
 export { default as NotFound } from './NotFoundPage/NotFound';
 export { default as ProfilePage } from './ProfilePage/ProfilePage';
 export { default as CartPage } from './CartPage/CartPage';
+export { default as ProductDetail } from './ProductPage/ProductPage';

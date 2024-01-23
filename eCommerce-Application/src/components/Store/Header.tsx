@@ -8,13 +8,12 @@ import iconSearch from '../../assets/images/icon-search.png';
 import iconCart from '../../assets/images/icon-cart.png';
 import iconUser from '../../assets/images/icon-user.png';
 
-function Header({
-    withSearchValue,
-    setSearchValue,
-}: {
-    setSearchValue: React.Dispatch<React.SetStateAction<string>> | undefined;
+interface HeaderProps {
     withSearchValue: boolean;
-}): JSX.Element {
+}
+
+function Header(props: HeaderProps): JSX.Element {
+    const { withSearchValue } = props;
     const user = localStorage.getItem('user');
 
     const [searchBarOpen, setSearchBarOpen] = useState(false);
@@ -61,10 +60,7 @@ function Header({
                                 <img src={iconSearch} alt="icon-search" />
                                 <h3 className="nav__title">Поиск</h3>
                             </button>
-                            <SearchBar
-                                setSearchValue={setSearchValue}
-                                searchBarOpen={searchBarOpen}
-                            />
+                            <SearchBar searchBarOpen={searchBarOpen} />
                         </li>
                     )}
                     {user && (

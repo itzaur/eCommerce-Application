@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Cart } from '@commercetools/platform-sdk';
 import { addNewProductInCartOrUpdateQuantity } from '../../commercetools/updateCart';
-import { setErrorBodyDOM } from '../../utils/constants';
 
 function CartProducts(props: {
     activeCart: Cart | null;
@@ -24,8 +23,8 @@ function CartProducts(props: {
             .then((data) => {
                 if (data !== undefined) setActiveCart(data);
             })
-            .catch((err) => {
-                setErrorBodyDOM(err);
+            .catch(() => {
+                // setErrorBodyDOM(err);
             })
             .finally(() => {
                 setCartLoading(false);
@@ -44,8 +43,8 @@ function CartProducts(props: {
                 if (data !== undefined) setActiveCart(data);
                 setModalConfirmVisible(false);
             })
-            .catch((err) => {
-                setErrorBodyDOM(err);
+            .catch(() => {
+                // setErrorBodyDOM(err);
             });
     }
 

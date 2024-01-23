@@ -23,6 +23,9 @@ import 'swiper/css/pagination';
 gsap.registerPlugin(ScrollTrigger);
 
 function About(): JSX.Element {
+    const root = document.querySelector('main');
+    if (root) root.id = 'about';
+
     const timeline = gsap.timeline();
     const mainTimeline = useRef(null);
     const aboutTimeline = useRef(null);
@@ -92,7 +95,7 @@ function About(): JSX.Element {
             <Transition timeline={timeline} />
 
             <section className="about-us">
-                <Header withSearchValue={false} setSearchValue={undefined} />
+                <Header withSearchValue={false} />
                 <div
                     className="profile__container about-us__container"
                     ref={mainTimeline}

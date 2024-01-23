@@ -1,223 +1,173 @@
 import gsap from 'gsap';
-import { useState, useEffect } from 'react';
-import { ProductProjection } from '@commercetools/platform-sdk';
+import { useState, useEffect, useCallback } from 'react';
+import { useLoaderData, useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+
 import ClipLoader from 'react-spinners/RingLoader';
-import { CategoryCustom } from '../../types';
 import Header from './Header';
 import Transition from '../Transition/Transition';
-import { Cards, SideBar, Parameters, BreadCrumbs } from './index';
-import { getCategories } from '../../commercetools/getCategories';
-import { getSubCategoryId } from '../../commercetools/getProductsBySubcategory';
-import { getFilterSortSearchProducts } from '../../commercetools/getFilterSortSearchProducts';
-import { checkFilterVariants } from '../../utils/checkFilterVariants';
-import { checkMinMaxPrice } from '../../utils/checkMinMaxPrice';
-import { setErrorBodyDOM } from '../../utils/constants';
-import arrowPrev from '../../assets/icons/arrow-prev.svg';
-import arrowNext from '../../assets/icons/arrow-next.svg';
+import { Cards, SideBar, Parameters, BreadCrumbs, Pagination } from './index';
 
-function Store({
-    type,
-    category,
-    typePath,
-    categoryPath,
-}: {
-    type: string;
-    category: string;
-    typePath: string;
-    categoryPath: string;
-}): JSX.Element {
-    const [selectedType, setSelectedType] = useState(type);
-    const [selectedTypePath, setSelectedTypePath] = useState(typePath);
-    const [selectedCategory, setSelectedCategory] = useState(category);
-    const [selectedCategoryId, setSelectedCategoryId] = useState('');
-    const [selectedCategoryPath, setSelectedCategoryPath] =
-        useState(categoryPath);
-    const [cards, setCards] = useState<ProductProjection[]>([]);
-    const [categories, setCategories] = useState<CategoryCustom[]>([]);
-    const [filterVariants, setFilterVariants] = useState<string[]>([]);
-    let filter: { name: string; key: string } = { name: '', key: '' };
-    switch (selectedType) {
-        case 'Космотуры':
-            filter = { name: 'Локация', key: 'location' };
-            break;
-        case 'Выбрать номер':
-            filter = { name: 'Цвет', key: 'color' };
-            break;
-        case 'Сувениры':
-            filter = { name: 'Форма', key: 'shape' };
-            break;
-        default:
-            filter = { name: '', key: '' };
+import { getCategoryId } from '../../commercetools/getCategoryId';
+
+import { checkSelectedTypeCategory } from '../../utils/checkSelectedTypeCategory';
+import { categories } from '../../utils/constants';
+import { CategoryCustom, LoaderStoreResult } from '../../types';
+
+import { store } from '../../redux/store/store';
+import {
+    useGetProductsQuery,
+    useGetProductsParametersQuery,
+    cardsApi,
+} from '../../redux/api/searchCards';
+import { memoizedCatalogParams } from '../../redux/selectors/selectors';
+import { setCategoryType } from '../../redux/features/catalogSlice';
+
+// eslint-disable-next-line
+export async function loaderStore(): Promise<LoaderStoreResult | undefined> {
+    const sideBarListResponse = store.dispatch(
+        cardsApi.endpoints.getCategories.initiate(undefined)
+    );
+
+    try {
+        const sideBarList = await sideBarListResponse.unwrap();
+        if (sideBarList) {
+            return checkSelectedTypeCategory(sideBarList);
+        }
+    } catch (e) {
+        if (e instanceof Error) throw new Error(e.message);
+    } finally {
+        sideBarListResponse.unsubscribe();
     }
-    const [minPrice, setMinPrice] = useState(0);
-    const [maxPrice, setMaxPrice] = useState(0);
-    const [minSelectedPrice, setMinSelectedPrice] = useState(0);
-    const [maxSelectedPrice, setMaxSelectedPrice] = useState(0);
-    const [searchValue, setSearchValue] = useState('');
+    return undefined;
+}
 
+function Store(): JSX.Element {
+    const root = document.querySelector('main');
+    if (root) root.id = 'store';
+
+    const {
+        sideBarList,
+        selectedTypeUpdated: selectedTypeInitial,
+        selectedCategoryUpdated: selectedCategoryInitial,
+    } = useLoaderData() as LoaderStoreResult;
+
+    const location = useLocation();
+
+    const catalogParams = useSelector(memoizedCatalogParams);
+    const {
+        categoryType,
+        selectedFiltersList,
+        minSelectedPrice,
+        maxSelectedPrice,
+        attributesToSearch,
+    } = catalogParams;
     const itemPerPage = 8;
     const [currentOffset, setCurrentOffset] = useState(0);
-    const [countCards, setCountCards] = useState(0);
-    const [countPages, setCountPages] = useState(
-        Math.ceil(countCards / itemPerPage)
+
+    const { data, isLoading, isFetching, error } = useGetProductsQuery({
+        parameters: catalogParams,
+        currentOffset,
+        itemsPerPage: itemPerPage,
+    });
+    const { cards } = data || {};
+    const { data: cardsParameters } = useGetProductsParametersQuery({
+        categoryType,
+        selectedFiltersList,
+        minSelectedPrice,
+        maxSelectedPrice,
+        attributesToSearch,
+    });
+    const {
+        countCards = 0,
+        filterVariants = [],
+        minPrice = 0,
+        maxPrice = 0,
+    } = cardsParameters || {};
+
+    const dispatch = useDispatch();
+
+    const [selectedType, setSelectedType] = useState<CategoryCustom | ''>(
+        selectedTypeInitial
     );
-    const [isFetching, setIsFetching] = useState(true);
+    const [selectedCategory, setSelectedCategory] = useState<
+        CategoryCustom['items'][0] | ''
+    >(selectedCategoryInitial);
+    const [serverError, setServerError] = useState('');
 
-    const [isBreadCrumbsClicked, setIsBreadCrumbsClicked] = useState(false);
+    const changeCatalogParams = useCallback(
+        async (
+            tempSelectedType: CategoryCustom | '',
+            tempSelectedCategory: CategoryCustom['items'][0] | ''
+        ) => {
+            try {
+                const categoryId = tempSelectedCategory
+                    ? await getCategoryId(tempSelectedCategory.path)
+                    : '';
+                dispatch(
+                    setCategoryType({
+                        attributesToFilter: tempSelectedType
+                            ? categories.find(
+                                  (item) =>
+                                      item.name === tempSelectedType.parent.name
+                              )?.filter
+                            : '',
+                        selectedCategoryId: categoryId || '',
+                    })
+                );
+            } catch (e: unknown) {
+                if (e instanceof Error) setServerError(e.message);
+            }
+        },
+        [dispatch]
+    );
 
-    const breadCrumbs = document.querySelector('.bread-crumbs');
-
-    document.querySelectorAll('.btn').forEach((item) => {
-        item.classList.remove('sidebar__category_active');
-
-        if (item.textContent === selectedType && !selectedCategory) {
-            item.classList.add('sidebar__category_active');
+    useEffect(() => {
+        if (sideBarList) {
+            const { selectedTypeUpdated, selectedCategoryUpdated } =
+                checkSelectedTypeCategory(sideBarList);
+            setSelectedType(selectedTypeUpdated);
+            setSelectedCategory(selectedCategoryUpdated);
+            changeCatalogParams(selectedTypeUpdated, selectedCategoryUpdated);
         }
-    });
+        // eslint-disable-next-line
+    }, [location.pathname]);
 
-    document.querySelectorAll('.sidebar__category').forEach((item) => {
-        item.classList.remove('sidebar__category_active');
-        if (item.textContent === selectedCategory) {
-            item.classList.add('sidebar__category_active');
-        }
-    });
+    useEffect(() => {
+        if (currentOffset) setCurrentOffset(0);
+        // eslint-disable-next-line
+    }, [catalogParams]);
 
     const timeline = gsap.timeline();
 
-    useEffect(() => {
-        if (!selectedCategory) setSelectedCategoryId('');
-        getCategories()
-            .then((data) => {
-                if (data) setCategories(data);
-            })
-            .catch((err: Error) => {
-                setErrorBodyDOM(err);
-            });
-        if (selectedCategory && isBreadCrumbsClicked) {
-            getSubCategoryId(selectedCategory)
-                .then((data) => {
-                    if (data) setSelectedCategoryId(data);
-                })
-                .catch((err: Error) => {
-                    setErrorBodyDOM(err);
-                });
-        }
-
-        breadCrumbs?.lastElementChild?.classList.add(
-            'sidebar__category_active'
-        );
-
-        getFilterSortSearchProducts(
-            {
-                selectedCategoryId,
-                attributesToFilter: filter.key,
-                selectedFiltersList: [],
-                minSelectedPrice: 0,
-                maxSelectedPrice: 100000,
-            },
-            0,
-            100
-        ).then((data) => {
-            if (data.length) {
-                setFilterVariants(checkFilterVariants(data));
-                const tempMinPrice = checkMinMaxPrice(data)[0];
-                const tempMaxPrice = checkMinMaxPrice(data)[1];
-                setMinPrice(tempMinPrice);
-                setMaxPrice(tempMaxPrice);
-                setMinSelectedPrice(tempMinPrice);
-                setMaxSelectedPrice(tempMaxPrice);
-                setCountCards(data.length);
-                setCountPages(Math.ceil(data.length / itemPerPage));
-                setCurrentOffset(0);
-                setCards(data);
-                setIsFetching(false);
-                getFilterSortSearchProducts(
-                    {
-                        selectedCategoryId,
-                        attributesToFilter: filter.key,
-                        selectedFiltersList: [],
-                        minSelectedPrice: 0,
-                        maxSelectedPrice: 100000,
-                        attributesToSearch: searchValue,
-                    },
-                    currentOffset,
-                    itemPerPage
-                )
-                    .then((items) => {
-                        if (items) {
-                            setCards(items);
-                        }
-                        setIsFetching(false);
-                    })
-                    .catch((err: Error) => {
-                        setErrorBodyDOM(err);
-                    });
-            }
-        });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedCategory, selectedType]);
+    if (serverError || error) throw new Error(serverError);
 
     return (
         <>
             <Transition timeline={timeline} />
-            <Header setSearchValue={setSearchValue} withSearchValue />
+            <Header withSearchValue />
             <section className="store__main">
                 <BreadCrumbs
                     selectedType={selectedType}
-                    setSelectedType={setSelectedType}
-                    selectedTypePath={selectedTypePath}
                     selectedCategory={selectedCategory}
-                    setSelectedCategory={setSelectedCategory}
-                    setSelectedCategoryId={setSelectedCategoryId}
-                    selectedCategoryPath={selectedCategoryPath}
-                    selectedProduct=""
-                    selectedProductPath=""
-                    setIsFetching={setIsFetching}
-                    setCurrentOffset={setCurrentOffset}
-                    setIsBreadCrumbsClicked={setIsBreadCrumbsClicked}
                 />
                 <section className="store__content">
-                    <SideBar
-                        categories={categories}
-                        setSelectedType={setSelectedType}
-                        setSelectedTypePath={setSelectedTypePath}
-                        setSelectedCategory={setSelectedCategory}
-                        setSelectedCategoryId={setSelectedCategoryId}
-                        setSelectedCategoryPath={setSelectedCategoryPath}
-                        setIsFetching={setIsFetching}
-                        setCurrentOffset={setCurrentOffset}
-                        setIsBreadCrumbsClicked={setIsBreadCrumbsClicked}
-                    />
+                    {sideBarList && (
+                        <SideBar
+                            sideBarList={sideBarList}
+                            selectedType={selectedType}
+                            selectedCategory={selectedCategory}
+                        />
+                    )}
+
                     <div className="store__cards">
                         <Parameters
-                            setCards={setCards}
-                            selectedType={selectedType}
-                            selectedCategory={selectedCategory || ''}
-                            selectedCategoryId={selectedCategoryId}
-                            filter={filter}
                             filterVariants={filterVariants}
                             minPrice={minPrice}
                             maxPrice={maxPrice}
-                            minSelectedPrice={minSelectedPrice}
-                            maxSelectedPrice={maxSelectedPrice}
-                            setMinSelectedPrice={setMinSelectedPrice}
-                            setMaxSelectedPrice={setMaxSelectedPrice}
-                            searchValue={searchValue}
-                            currentOffset={currentOffset}
-                            setIsFetching={setIsFetching}
-                            itemPerPage={itemPerPage}
-                            setCurrentOffset={setCurrentOffset}
-                            setCountCards={setCountCards}
-                            setCountPages={setCountPages}
                         />
 
-                        {!cards.length && !isFetching && (
-                            <h2 className="no-cards">
-                                Вселенная бесконечна, а наши продукты нет. Мы
-                                ничего не нашли :(
-                            </h2>
-                        )}
-                        {isFetching ? (
+                        {isFetching || isLoading ? (
                             <ClipLoader
                                 color="#4fe1e3"
                                 loading={isFetching}
@@ -225,73 +175,26 @@ function Store({
                                 className="store__loader"
                             />
                         ) : (
-                            cards.length > 0 && <Cards cards={cards} />
+                            cards &&
+                            (cards.length ? (
+                                <Cards cards={cards} />
+                            ) : (
+                                <h2 className="no-cards">
+                                    Вселенная бесконечна, а наши продукты нет.
+                                    Мы ничего не нашли :(
+                                </h2>
+                            ))
                         )}
 
-                        {cards.length ? (
-                            <div className="store__navigation">
-                                {currentOffset / itemPerPage + 1 !==
-                                    countPages && (
-                                    <button
-                                        type="button"
-                                        className="btn_action btn_store"
-                                        onClick={(): void | null =>
-                                            currentOffset <
-                                            countCards - itemPerPage
-                                                ? (setIsFetching(true),
-                                                  setCurrentOffset(
-                                                      (prevPage) =>
-                                                          prevPage + itemPerPage
-                                                  ))
-                                                : null
-                                        }
-                                    >
-                                        Следующая страница
-                                    </button>
-                                )}
-
-                                <div className="store__pages">
-                                    <button
-                                        type="button"
-                                        className="store__page store__page-prev"
-                                        onClick={(): void | null =>
-                                            currentOffset >= itemPerPage
-                                                ? (setIsFetching(true),
-                                                  setCurrentOffset(
-                                                      (prevPage) =>
-                                                          prevPage - itemPerPage
-                                                  ))
-                                                : null
-                                        }
-                                    >
-                                        <img src={arrowPrev} alt="arrow" />
-                                    </button>
-                                    <div className="store__current-page">
-                                        {currentOffset / itemPerPage + 1}
-                                    </div>
-                                    <div className="store__count-page">
-                                        {countPages}
-                                    </div>
-                                    <button
-                                        type="button"
-                                        className="store__page store__page-next"
-                                        onClick={(): void | null =>
-                                            currentOffset <
-                                            countCards - itemPerPage
-                                                ? (setIsFetching(true),
-                                                  setCurrentOffset(
-                                                      (prevPage) =>
-                                                          prevPage + itemPerPage
-                                                  ))
-                                                : null
-                                        }
-                                    >
-                                        <img src={arrowNext} alt="arrow" />
-                                    </button>
-                                </div>
-                            </div>
+                        {countCards ? (
+                            <Pagination
+                                countCards={countCards}
+                                currentOffset={currentOffset}
+                                setCurrentOffset={setCurrentOffset}
+                                itemPerPage={itemPerPage}
+                            />
                         ) : (
-                            ''
+                            <> </>
                         )}
                     </div>
                 </section>

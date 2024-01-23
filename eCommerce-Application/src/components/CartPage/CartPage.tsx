@@ -9,9 +9,11 @@ import PricesBlock from './PriceBlock';
 import NoCart from './NoCart';
 import { getActiveCart } from '../../commercetools/updateCart';
 import { Footer } from '../MainPage';
-import { setErrorBodyDOM } from '../../utils/constants';
 
 function CartPage(): JSX.Element {
+    const root = document.querySelector('main');
+    if (root) root.id = 'cart';
+
     const [activeCart, setActiveCart] = useState<Cart | null>(null);
     const [pageLoaded, setPageloaded] = useState(false);
     const timeline = gsap.timeline();
@@ -22,15 +24,15 @@ function CartPage(): JSX.Element {
                 setActiveCart(data);
                 setPageloaded(true);
             })
-            .catch((err) => {
-                setErrorBodyDOM(err);
+            .catch(() => {
+                // setErrorBodyDOM(err);
             });
     }, [pageLoaded, setActiveCart]);
 
     return (
         <>
             <Transition timeline={timeline} />
-            <Header setSearchValue={undefined} withSearchValue={false} />
+            <Header withSearchValue={false} />
             <section className="cart__main">
                 <ul className="bread-crumbs">
                     <li>

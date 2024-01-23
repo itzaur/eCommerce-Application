@@ -1,15 +1,16 @@
 import { MouseEvent, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Cart, ProductProjection } from '@commercetools/platform-sdk';
 import { CircleLoader } from 'react-spinners';
 import { addNewProductInCartOrUpdateQuantity } from '../../commercetools/updateCart';
-import { serverErrorMessage, setErrorBodyDOM } from '../../utils/constants';
+import { serverErrorMessage } from '../../utils/constants';
 
 import cartIcon from '../../assets/images/cart-icon.png';
 import cartIconInactive from '../../assets/images/cart-icon-inactive.png';
 import favouriteIcon from '../../assets/images/favourite-icon.png';
 
 function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
+    const location = useLocation();
     const currentCardRef = useRef<Element | null>(null);
     const [buttonDescriptionTexcontent, setButtonDescriptionTexcontent] =
         useState('Показать описание ▼');
@@ -21,6 +22,7 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
     );
     const [cartLoading, setCartLoading] = useState(false);
     const [cartLoadingElement, setCartLoadingElement] = useState('');
+    const [serverError, setServerError] = useState('');
 
     const scrollToTop = (event: React.MouseEvent<HTMLElement>): void => {
         const target = event.target as HTMLElement;
@@ -71,7 +73,7 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
                     err instanceof Error &&
                     err.message === serverErrorMessage
                 ) {
-                    setErrorBodyDOM(err);
+                    setServerError(err.message);
                 }
             })
             .finally(() => {
@@ -80,10 +82,16 @@ function Cards({ cards }: Record<'cards', ProductProjection[]>): JSX.Element {
             });
     }
 
+    if (serverError) throw new Error(serverError);
+
     return (
         <div className="cards">
             {cards.map((card, i: number) => (
-                <Link key={card.id} to={`./${card.key}`} onClick={scrollToTop}>
+                <Link
+                    key={card.id}
+                    to={`${location.pathname}/${card.key}`}
+                    onClick={scrollToTop}
+                >
                     <div key={i} className="card" id={card.key}>
                         <figure className="card__img">
                             {card.masterVariant.images && (

@@ -1,17 +1,32 @@
 export const categories = [
     {
         name: 'Космотуры',
+        path: 'cosmotours',
         items: ['Релакс', 'Хобби', 'Активный Отдых'],
+        itemsPath: ['relax', 'hobby', 'active'],
+        filter: { name: 'Локация', key: 'location' },
     },
     {
         name: 'Выбрать номер',
+        path: 'hotel',
         items: ['Классик', 'Хард'],
+        itemsPath: ['classic', 'hard'],
+        filter: { name: 'Цвет', key: 'color' },
     },
     {
         name: 'Сувениры',
+        path: 'souvenirs',
         items: ['Стеклянные', 'Роботизированные', 'Прочее'],
+        itemsPath: ['glass', 'robotic', 'other'],
+        filter: { name: 'Форма', key: 'shape' },
     },
 ];
+
+export const categoriesPath = {
+    COSMOTOURS: 'cosmotours',
+    HOTEL: 'hotel',
+    SOUVENIRS: 'souvenirs',
+};
 
 export const countries = ['Выберите страну*', 'Россия', 'Беларусь', 'Польша'];
 
@@ -628,8 +643,3 @@ export const errorEmailNotExist = 'Данный e-mail не найден в си
 export const errorEmailExist = 'Данный e-mail уже существует в системе';
 
 export const regexpEmail = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
-
-export function setErrorBodyDOM(err: Error): void {
-    document.body.textContent = err.message;
-    document.body.classList.add('error-connection');
-}

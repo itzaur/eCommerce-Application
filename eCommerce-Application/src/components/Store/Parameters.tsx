@@ -1,267 +1,181 @@
-import { useEffect, useState, ChangeEvent } from 'react';
-import { ProductProjection } from '@commercetools/platform-sdk';
-import { getFilterSortSearchProducts } from '../../commercetools/getFilterSortSearchProducts';
-import { setErrorBodyDOM } from '../../utils/constants';
+import { useEffect, ChangeEvent, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    memoizedAttributesToSort,
+    memoizedMinSelectedPrice,
+    memoizedMaxSelectedPrice,
+    memoizedSelectedFiltersList,
+    memoizedDiscountedProducts,
+    memoizedSelectedCategoryType,
+} from '../../redux/selectors/selectors';
+import {
+    setAttributesToSort,
+    setSelectedFiltersList,
+    setMinSelectedPrice,
+    setMaxSelectedPrice,
+    setDiscountedProducts,
+    setAttributesToSearch,
+} from '../../redux/features/catalogSlice';
 
-function Parameters(props: {
-    setCards: React.Dispatch<React.SetStateAction<ProductProjection[]>>;
-    selectedType: string;
-    selectedCategory: string;
-    selectedCategoryId: string;
-    filter: { name: string; key: string };
-    filterVariants: string[];
+interface ParametersProps {
     minPrice: number;
     maxPrice: number;
-    minSelectedPrice: number;
-    maxSelectedPrice: number;
-    setMinSelectedPrice: React.Dispatch<React.SetStateAction<number>>;
-    setMaxSelectedPrice: React.Dispatch<React.SetStateAction<number>>;
-    searchValue: string;
-    currentOffset: number;
-    setIsFetching: CallableFunction;
-    itemPerPage: number;
-    setCountCards: React.Dispatch<React.SetStateAction<number>>;
-    setCountPages: React.Dispatch<React.SetStateAction<number>>;
-    setCurrentOffset: React.Dispatch<React.SetStateAction<number>>;
-}): JSX.Element {
-    const {
-        setCards,
-        selectedType,
-        selectedCategory,
-        selectedCategoryId,
-        filter,
-        filterVariants,
-        minPrice,
-        maxPrice,
-        minSelectedPrice,
-        maxSelectedPrice,
-        setMinSelectedPrice,
-        setMaxSelectedPrice,
-        searchValue,
-        currentOffset,
-        setIsFetching,
-        itemPerPage,
-        setCountCards,
-        setCountPages,
-        setCurrentOffset,
-    } = props;
-    const [selectedFiltersList, setselectedFiltersList] = useState<string[]>(
-        []
-    );
-    const [filtersApplied, setFiltersApplied] = useState(false);
-    const [discountedProducts, setDiscountedProducts] = useState(false);
-    const [sort, setSort] = useState({
-        order: '',
-        value: 'По умолчанию',
-        icon: '↓↑',
-    });
+    filterVariants: string[];
+}
+
+function Parameters(props: ParametersProps): JSX.Element {
+    const { filterVariants, minPrice, maxPrice } = props;
+
+    const selectedCategoryType = useSelector(memoizedSelectedCategoryType);
+    const { attributesToFilter } = selectedCategoryType;
+    const selectedFiltersList = useSelector(memoizedSelectedFiltersList);
+    const minSelectedPrice = useSelector(memoizedMinSelectedPrice);
+    const maxSelectedPrice = useSelector(memoizedMaxSelectedPrice);
+    const discountedProducts = useSelector(memoizedDiscountedProducts);
+    const sort = useSelector(memoizedAttributesToSort);
+
+    const dispatch = useDispatch();
 
     function checkFilters(e: ChangeEvent, el: string): void {
         if (e.target instanceof HTMLInputElement) {
             if (e.target.checked) {
-                setselectedFiltersList([...selectedFiltersList, `"${el}"`]);
-                if (!filtersApplied) setFiltersApplied(true);
+                dispatch(
+                    setSelectedFiltersList([...selectedFiltersList, `"${el}"`])
+                );
             } else {
                 const indexEl = selectedFiltersList.indexOf(`"${el}"`);
                 const temp = [...selectedFiltersList];
                 temp.splice(indexEl, 1);
-                setselectedFiltersList(temp);
+                dispatch(setSelectedFiltersList(temp));
             }
         }
     }
 
-    function resetFilters(): void {
-        setMinSelectedPrice(minPrice);
-        setMaxSelectedPrice(maxPrice);
-        setselectedFiltersList([]);
-        setDiscountedProducts(false);
-        setDiscountedProducts(false);
+    const resetFilters = useCallback((): void => {
+        dispatch(setMinSelectedPrice(minPrice));
+        dispatch(setMaxSelectedPrice(maxPrice));
+        dispatch(setSelectedFiltersList([]));
+        dispatch(setDiscountedProducts(false));
+        dispatch(setAttributesToSearch(''));
         document.querySelectorAll('input[data-type="filter"').forEach((el) => {
             if (el instanceof HTMLInputElement) {
                 const elCopy = el;
                 elCopy.checked = false;
             }
         });
-    }
+    }, [minPrice, maxPrice, dispatch]);
 
     useEffect(() => {
-        setFiltersApplied(false);
-        setselectedFiltersList([]);
-        setDiscountedProducts(false);
-        setSort({ order: '', value: 'По умолчанию', icon: '↓↑' });
         document.querySelectorAll('input[data-type="filter"').forEach((el) => {
             if (el instanceof HTMLInputElement) {
                 const elCopy = el;
                 elCopy.checked = false;
             }
         });
-    }, [selectedType, selectedCategory]);
-
-    function getOnlyCards(): void {
-        getFilterSortSearchProducts(
-            {
-                selectedCategoryId,
-                attributesToFilter: filter.key,
-                selectedFiltersList,
-                minSelectedPrice,
-                maxSelectedPrice,
-                attributesToSort: sort.order,
-                attributesToSearch: searchValue,
-                discountedProducts,
-            },
-            currentOffset,
-            itemPerPage
-        )
-            .then((data) => {
-                if (data) {
-                    setCards(data);
-                }
-                setIsFetching(false);
-            })
-            .catch((err: Error) => {
-                setErrorBodyDOM(err);
-            });
-    }
-
-    function filterProducts(): void {
-        setIsFetching(true);
-        getFilterSortSearchProducts(
-            {
-                selectedCategoryId,
-                attributesToFilter: filter.key,
-                selectedFiltersList,
-                minSelectedPrice,
-                maxSelectedPrice,
-                attributesToSort: sort.order,
-                attributesToSearch: searchValue,
-                discountedProducts,
-            },
-            0,
-            100
-        ).then((data) => {
-            setCurrentOffset(0);
-            setCountCards(data.length);
-            setCountPages(Math.ceil(data.length / itemPerPage));
-            getOnlyCards();
-        });
-    }
-
-    useEffect(() => {
-        getOnlyCards();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentOffset]);
-
-    useEffect(() => {
-        if (filtersApplied) {
-            filterProducts();
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedFiltersList, discountedProducts, sort]);
-
-    useEffect(() => {
-        setFiltersApplied(true);
-        filterProducts();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [searchValue, setFiltersApplied]);
+    }, [selectedCategoryType]);
 
     return (
         <div className="parameters">
             <div className="parameters__filters">
-                <div className="parameters__item">
-                    <button
-                        className="btn parameters__btn parameters__btn_first"
-                        type="button"
-                    >
-                        <span className="parameters__btn-img">{sort.icon}</span>
-                        {sort.value}
-                    </button>
-                    <ul className="parameters__dropdown">
-                        <li>
-                            <button
-                                type="button"
-                                onClick={(): void => {
-                                    setSort({
-                                        order: '',
-                                        value: 'По умолчанию',
-                                        icon: '↑',
-                                    });
-                                    if (!filtersApplied)
-                                        setFiltersApplied(true);
-                                }}
-                            >
-                                <span>↑</span> По умолчанию
-                            </button>
-                        </li>
-                        <li>
-                            <button
-                                type="button"
-                                onClick={(): void => {
-                                    setSort({
-                                        order: 'name.ru-RU asc',
-                                        value: 'А - Я',
-                                        icon: '↓',
-                                    });
-                                    if (!filtersApplied)
-                                        setFiltersApplied(true);
-                                }}
-                            >
-                                <span>&#8595;</span> A - Я
-                            </button>
-                        </li>
-                        <li>
-                            <button
-                                type="button"
-                                onClick={(): void => {
-                                    setSort({
-                                        order: 'name.ru-RU desc',
-                                        value: 'Я - А',
-                                        icon: '↑',
-                                    });
-                                    if (!filtersApplied)
-                                        setFiltersApplied(true);
-                                }}
-                            >
-                                <span>&#8593;</span> Я - А
-                            </button>
-                        </li>
-                        <li>
-                            <button
-                                type="button"
-                                onClick={(): void => {
-                                    setSort({
-                                        order: 'price asc',
-                                        value: 'По возрастанию цены',
-                                        icon: '↑',
-                                    });
-                                    if (!filtersApplied)
-                                        setFiltersApplied(true);
-                                }}
-                            >
-                                <span>&#8593;</span> По возрастанию цены
-                            </button>
-                        </li>
-                        <li>
-                            <button
-                                type="button"
-                                onClick={(): void => {
-                                    setSort({
-                                        order: 'price desc',
-                                        value: 'По убыванию цены',
-                                        icon: '↓',
-                                    });
-                                    if (!filtersApplied)
-                                        setFiltersApplied(true);
-                                }}
-                            >
-                                <span>&#8595;</span> По убыванию цены
-                            </button>
-                        </li>
-                    </ul>
-                </div>
-                {(selectedType || selectedCategory) && (
+                {sort && (
+                    <div className="parameters__item">
+                        <button
+                            className="btn parameters__btn parameters__btn_first"
+                            type="button"
+                        >
+                            <span className="parameters__btn-img">
+                                {sort.icon}
+                            </span>
+                            {sort.value}
+                        </button>
+                        <ul className="parameters__dropdown">
+                            <li>
+                                <button
+                                    type="button"
+                                    onClick={(): void => {
+                                        dispatch(
+                                            setAttributesToSort({
+                                                order: '',
+                                                value: 'По умолчанию',
+                                                icon: '↑',
+                                            })
+                                        );
+                                    }}
+                                >
+                                    <span>↑</span> По умолчанию
+                                </button>
+                            </li>
+                            <li>
+                                <button
+                                    type="button"
+                                    onClick={(): void => {
+                                        dispatch(
+                                            setAttributesToSort({
+                                                order: 'name.ru-RU asc',
+                                                value: 'А - Я',
+                                                icon: '↓',
+                                            })
+                                        );
+                                    }}
+                                >
+                                    <span>&#8595;</span> A - Я
+                                </button>
+                            </li>
+                            <li>
+                                <button
+                                    type="button"
+                                    onClick={(): void => {
+                                        dispatch(
+                                            setAttributesToSort({
+                                                order: 'name.ru-RU desc',
+                                                value: 'Я - А',
+                                                icon: '↑',
+                                            })
+                                        );
+                                    }}
+                                >
+                                    <span>&#8593;</span> Я - А
+                                </button>
+                            </li>
+                            <li>
+                                <button
+                                    type="button"
+                                    onClick={(): void => {
+                                        dispatch(
+                                            setAttributesToSort({
+                                                order: 'price asc',
+                                                value: 'По возрастанию цены',
+                                                icon: '↑',
+                                            })
+                                        );
+                                    }}
+                                >
+                                    <span>&#8593;</span> По возрастанию цены
+                                </button>
+                            </li>
+                            <li>
+                                <button
+                                    type="button"
+                                    onClick={(): void => {
+                                        dispatch(
+                                            setAttributesToSort({
+                                                order: 'price desc',
+                                                value: 'По убыванию цены',
+                                                icon: '↓',
+                                            })
+                                        );
+                                    }}
+                                >
+                                    <span>&#8595;</span> По убыванию цены
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                )}
+                {attributesToFilter && (
                     <div className="parameters__item">
                         <button className="btn parameters__btn" type="button">
-                            {filter ? filter.name : ''}
+                            {attributesToFilter.name}
                             <span className="parameters__btn-illustration">
                                 {filterVariants.length
                                     ? filterVariants.length
@@ -301,11 +215,17 @@ function Parameters(props: {
                                 type="number"
                                 id="price-min"
                                 value={minSelectedPrice || ''}
+                                placeholder={minPrice.toString()}
                                 onChange={(e): void => {
-                                    setMinSelectedPrice(+e.target.value);
-                                    if (!filtersApplied)
-                                        setFiltersApplied(true);
-                                    filterProducts();
+                                    if (+e.target.value < maxSelectedPrice)
+                                        dispatch(
+                                            setMinSelectedPrice(+e.target.value)
+                                        );
+                                    else {
+                                        dispatch(
+                                            setMaxSelectedPrice(+e.target.value)
+                                        );
+                                    }
                                 }}
                             />
                             <p>До</p>
@@ -314,11 +234,17 @@ function Parameters(props: {
                                 type="number"
                                 id="price-max"
                                 value={maxSelectedPrice || ''}
+                                placeholder={maxPrice.toString()}
                                 onChange={(e): void => {
-                                    setMaxSelectedPrice(+e.target.value);
-                                    if (!filtersApplied)
-                                        setFiltersApplied(true);
-                                    filterProducts();
+                                    if (+e.target.value > minSelectedPrice)
+                                        dispatch(
+                                            setMaxSelectedPrice(+e.target.value)
+                                        );
+                                    else {
+                                        dispatch(
+                                            setMinSelectedPrice(+e.target.value)
+                                        );
+                                    }
                                 }}
                             />
                         </div>
@@ -329,12 +255,17 @@ function Parameters(props: {
                                 id="price-range-min"
                                 min={minPrice}
                                 max={maxPrice}
-                                value={minSelectedPrice}
+                                value={minSelectedPrice || minPrice}
                                 onChange={(e): void => {
-                                    setMinSelectedPrice(+e.target.value);
-                                    if (!filtersApplied)
-                                        setFiltersApplied(true);
-                                    filterProducts();
+                                    if (+e.target.value < maxSelectedPrice)
+                                        dispatch(
+                                            setMinSelectedPrice(+e.target.value)
+                                        );
+                                    else {
+                                        dispatch(
+                                            setMaxSelectedPrice(+e.target.value)
+                                        );
+                                    }
                                 }}
                             />
                             <input
@@ -343,12 +274,17 @@ function Parameters(props: {
                                 id="price-range-max"
                                 min={minPrice}
                                 max={maxPrice}
-                                value={maxSelectedPrice}
+                                value={maxSelectedPrice || maxPrice}
                                 onChange={(e): void => {
-                                    setMaxSelectedPrice(+e.target.value);
-                                    if (!filtersApplied)
-                                        setFiltersApplied(true);
-                                    filterProducts();
+                                    if (+e.target.value > minSelectedPrice)
+                                        dispatch(
+                                            setMaxSelectedPrice(+e.target.value)
+                                        );
+                                    else {
+                                        dispatch(
+                                            setMinSelectedPrice(+e.target.value)
+                                        );
+                                    }
                                 }}
                             />
                         </div>
@@ -363,9 +299,9 @@ function Parameters(props: {
                         }
                         type="button"
                         onClick={(): void => {
-                            setDiscountedProducts(!discountedProducts);
-
-                            if (!filtersApplied) setFiltersApplied(true);
+                            dispatch(
+                                setDiscountedProducts(!discountedProducts)
+                            );
                         }}
                     >
                         Акции

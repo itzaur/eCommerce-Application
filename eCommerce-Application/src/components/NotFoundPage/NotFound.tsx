@@ -8,6 +8,9 @@ import star from '../../assets/images/star.png';
 import ellipse from '../../assets/images/ellipse.png';
 
 function NotFound(): JSX.Element {
+    const root = document.querySelector('main');
+    if (root) root.id = 'error-page';
+
     const [modalActive, setModalActive] = useState(false);
 
     const timeline = gsap.timeline({ repeat: -1, repeatDelay: 0.05 });

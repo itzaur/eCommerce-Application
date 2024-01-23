@@ -15,6 +15,9 @@ import Footer from '../MainPage/Footer';
 import Transition from '../Transition/Transition';
 
 function ProfilePage(): JSX.Element {
+    const root = document.querySelector('main');
+    if (root) root.id = 'profile';
+
     const user = localStorage.getItem('user') as string;
     const userId = JSON.parse(user).id;
 
@@ -165,7 +168,7 @@ function ProfilePage(): JSX.Element {
         <>
             <Transition timeline={timeline} />
             <section className="profile">
-                <Header withSearchValue={false} setSearchValue={undefined} />
+                <Header withSearchValue={false} />
                 <div className="profile__container">
                     <ul className="bread-crumbs">
                         <li>

@@ -1,4 +1,4 @@
-import { Cart, Address } from '@commercetools/platform-sdk';
+import { Cart, Address, ProductProjection } from '@commercetools/platform-sdk';
 
 export type ModalProps = {
     active: boolean;
@@ -12,13 +12,43 @@ export type CategoryCustom = {
     items: { name: string; path: string; id: string }[];
 };
 
-export type FilterSortSearcParameters = {
-    selectedCategoryId: string;
-    attributesToFilter: string;
+export type GetCardsApiParams = {
+    parameters: FilterSortSearchParameters;
+    currentOffset: number;
+    itemsPerPage: number;
+};
+
+export type GetCardsApiResults = {
+    cards: ProductProjection[];
+    countCards?: number;
+};
+
+export type LoaderStoreResult = {
+    sideBarList: CategoryCustom[];
+    selectedTypeUpdated: CategoryCustom | '';
+    selectedCategoryUpdated: CategoryCustom['items'][0] | '';
+};
+
+export type GetProductsParametersApiResults = {
+    countCards: number;
+    filterVariants: string[];
+    minPrice: number;
+    maxPrice: number;
+};
+
+export type FilterSortSearchParameters = {
+    categoryType: {
+        selectedCategoryId: string;
+        attributesToFilter: { name: string; key: string };
+    };
     selectedFiltersList: string[];
     minSelectedPrice: number;
     maxSelectedPrice: number;
-    attributesToSort?: string;
+    attributesToSort?: {
+        order: string;
+        value: string;
+        icon: string;
+    };
     attributesToSearch?: string;
     discountedProducts?: boolean;
 };

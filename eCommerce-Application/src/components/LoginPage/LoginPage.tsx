@@ -8,6 +8,8 @@ import { checkIncorrectPassword } from '../../utils/validation/checkPassword';
 import { loginCustomer } from '../../commercetools/loginCustomer';
 
 function LoginPage(): JSX.Element {
+    const root = document.querySelector('main');
+    if (root) root.id = 'login';
     const user = localStorage.getItem('user');
     const [errorEmail, setErrorEmail] = useState({ error: false, message: '' });
     const [errorPassword, setErrorPassword] = useState({
