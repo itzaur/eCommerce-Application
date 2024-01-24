@@ -16,6 +16,7 @@ function CartPage(): JSX.Element {
 
     const [activeCart, setActiveCart] = useState<Cart | null>(null);
     const [pageLoaded, setPageloaded] = useState(false);
+    const [serverError, setServerError] = useState('');
     const timeline = gsap.timeline();
 
     useEffect(() => {
@@ -24,10 +25,12 @@ function CartPage(): JSX.Element {
                 setActiveCart(data);
                 setPageloaded(true);
             })
-            .catch(() => {
-                // setErrorBodyDOM(err);
+            .catch((err: Error) => {
+                setServerError(err.message);
             });
     }, [pageLoaded, setActiveCart]);
+
+    if (serverError) throw new Error(serverError);
 
     return (
         <>

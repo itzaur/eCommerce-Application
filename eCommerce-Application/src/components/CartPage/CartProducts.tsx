@@ -10,6 +10,7 @@ function CartProducts(props: {
     const { activeCart, setActiveCart } = props;
     const [cartLoading, setCartLoading] = useState(false);
     const [modalConfirmVisible, setModalConfirmVisible] = useState(false);
+    const [serverError, setServerError] = useState('');
 
     function changeQuantity(cardId: string, newValue: number): void {
         setCartLoading(true);
@@ -23,8 +24,8 @@ function CartProducts(props: {
             .then((data) => {
                 if (data !== undefined) setActiveCart(data);
             })
-            .catch(() => {
-                // setErrorBodyDOM(err);
+            .catch((err) => {
+                setServerError(err.message);
             })
             .finally(() => {
                 setCartLoading(false);
@@ -43,10 +44,12 @@ function CartProducts(props: {
                 if (data !== undefined) setActiveCart(data);
                 setModalConfirmVisible(false);
             })
-            .catch(() => {
-                // setErrorBodyDOM(err);
+            .catch((err) => {
+                setServerError(err.message);
             });
     }
+
+    if (serverError) throw new Error(serverError);
 
     return (
         <>

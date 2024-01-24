@@ -21,6 +21,7 @@ function PriceBlock(props: {
     const [promocodeSuccess, setPromocodeSuccess] = useState(false);
     const [promocodeErrorMessage, setPromocodeErrorMessage] = useState('');
     const [orderDone, setOrderDone] = useState(false);
+    const [serverError, setServerError] = useState('');
 
     useEffect(() => {
         const newPriceWithoutDiscount: number | '' = activeCart
@@ -79,8 +80,8 @@ function PriceBlock(props: {
             .then((data) => {
                 if (data !== undefined) setActiveCart(data);
             })
-            .catch(() => {
-                // setErrorBodyDOM(err);
+            .catch((err) => {
+                setServerError(err.message);
             });
     }
 
@@ -94,6 +95,8 @@ function PriceBlock(props: {
             setOrderDone(false);
         }, 2000);
     }
+
+    if (serverError) throw new Error(serverError);
 
     return (
         <section className="price-section">
