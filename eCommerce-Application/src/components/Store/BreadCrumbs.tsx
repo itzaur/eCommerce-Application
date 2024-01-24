@@ -5,7 +5,7 @@ import { CategoryCustom } from '../../types';
 interface BreadCrumbsProps {
     selectedType: CategoryCustom | '';
     selectedCategory: CategoryCustom['items'][0] | '';
-    selectedProduct?: string;
+    selectedProduct?: { name: string; path: string };
 }
 
 function BreadCrumbs(props: BreadCrumbsProps): JSX.Element {
@@ -15,7 +15,7 @@ function BreadCrumbs(props: BreadCrumbsProps): JSX.Element {
         <ul
             className={
                 selectedProduct
-                    ? 'bread-crumbs bread-crumbs_product-page '
+                    ? 'bread-crumbs bread-crumbs_product-page'
                     : 'bread-crumbs'
             }
         >
@@ -26,7 +26,7 @@ function BreadCrumbs(props: BreadCrumbsProps): JSX.Element {
                 <NavLink
                     to="/store"
                     className={
-                        !selectedType && !selectedCategory
+                        !selectedType && !selectedCategory && !selectedProduct
                             ? 'sidebar__category_active'
                             : ''
                     }
@@ -39,7 +39,9 @@ function BreadCrumbs(props: BreadCrumbsProps): JSX.Element {
                     <NavLink
                         to={`/store/${selectedType.parent.path}`}
                         className={
-                            selectedType && !selectedCategory
+                            selectedType &&
+                            !selectedCategory &&
+                            !selectedProduct
                                 ? 'sidebar__category_active'
                                 : ''
                         }
@@ -51,9 +53,9 @@ function BreadCrumbs(props: BreadCrumbsProps): JSX.Element {
             {selectedCategory && selectedType && (
                 <li>
                     <NavLink
-                        to={`/store/${selectedType.parent.path}?category=${selectedCategory.path}`}
+                        to={`/store/${selectedType.parent.path}/${selectedCategory.path}`}
                         className={
-                            selectedType && selectedCategory
+                            selectedType && selectedCategory && !selectedProduct
                                 ? 'sidebar__category_active'
                                 : ''
                         }
@@ -62,21 +64,22 @@ function BreadCrumbs(props: BreadCrumbsProps): JSX.Element {
                     </NavLink>
                 </li>
             )}
-            {/* {selectedProduct && (
+            {selectedProduct && (
                 <li>
                     <NavLink
                         to={`/store${
-                            selectedTypePath ? `/${selectedTypePath}` : ''
+                            selectedType ? `/${selectedType.parent.path}` : ''
                         }${
-                            selectedCategoryPath
-                                ? `/${selectedCategoryPath}`
-                                : ''
-                        }/${selectedProductPath}`}
+                            selectedCategory ? `/${selectedCategory.path}` : ''
+                        }/${selectedProduct.path}`}
+                        className={
+                            selectedProduct ? 'sidebar__category_active' : ''
+                        }
                     >
-                        / {selectedProduct}
+                        / {selectedProduct.name}
                     </NavLink>
                 </li>
-            )}  */}
+            )}
         </ul>
     );
 }

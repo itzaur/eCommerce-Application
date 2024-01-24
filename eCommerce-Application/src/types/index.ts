@@ -20,7 +20,6 @@ export type GetCardsApiParams = {
 
 export type GetCardsApiResults = {
     cards: ProductProjection[];
-    countCards?: number;
 };
 
 export type LoaderStoreResult = {

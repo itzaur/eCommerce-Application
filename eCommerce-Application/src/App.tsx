@@ -21,8 +21,8 @@ import {
 
 import ErrorBoundary from './components/ErrorBoundary';
 
-import { loaderStore } from './components/Store/Store';
-import { loaderProduct } from './components/ProductPage/ProductPage';
+import { loaderStore } from './components/Store/loaderStore';
+import { loaderProduct } from './components/ProductPage/loaderProduct';
 import { categories } from './utils/constants';
 
 const router = createBrowserRouter(
@@ -59,7 +59,25 @@ const router = createBrowserRouter(
                                             }): Promise<Product | void> =>
                                                 loaderProduct(params.id)
                                             }
-                                            element={<ProductDetail />}
+                                            element={
+                                                <ProductDetail
+                                                    selectedType={{
+                                                        parent: {
+                                                            name: category.name,
+                                                            path: category.path,
+                                                            id: '',
+                                                        },
+                                                        items: [],
+                                                    }}
+                                                    selectedCategory={{
+                                                        name: category.items[
+                                                            ind
+                                                        ],
+                                                        path: item,
+                                                        id: '',
+                                                    }}
+                                                />
+                                            }
                                             errorElement={<ErrorBoundary />}
                                         />
                                     </Route>
@@ -72,7 +90,19 @@ const router = createBrowserRouter(
                                 }): Promise<Product | void> =>
                                     loaderProduct(params.id)
                                 }
-                                element={<ProductDetail />}
+                                element={
+                                    <ProductDetail
+                                        selectedType={{
+                                            parent: {
+                                                name: category.name,
+                                                path: category.path,
+                                                id: '',
+                                            },
+                                            items: [],
+                                        }}
+                                        selectedCategory=""
+                                    />
+                                }
                                 errorElement={<ErrorBoundary />}
                             />
                         </Route>
@@ -83,7 +113,9 @@ const router = createBrowserRouter(
                     loader={async ({ params }): Promise<Product | void> =>
                         loaderProduct(params.id)
                     }
-                    element={<ProductDetail />}
+                    element={
+                        <ProductDetail selectedType="" selectedCategory="" />
+                    }
                     errorElement={<ErrorBoundary />}
                 />
             </Route>

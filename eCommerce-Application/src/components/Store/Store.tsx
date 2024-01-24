@@ -14,33 +14,13 @@ import { checkSelectedTypeCategory } from '../../utils/checkSelectedTypeCategory
 import { categories } from '../../utils/constants';
 import { CategoryCustom, LoaderStoreResult } from '../../types';
 
-import { store } from '../../redux/store/store';
 import {
     useGetProductsQuery,
     useGetProductsParametersQuery,
-    cardsApi,
+    useGetProductsLengthQuery,
 } from '../../redux/api/searchCards';
 import { memoizedCatalogParams } from '../../redux/selectors/selectors';
 import { setCategoryType } from '../../redux/features/catalogSlice';
-
-// eslint-disable-next-line
-export async function loaderStore(): Promise<LoaderStoreResult | undefined> {
-    const sideBarListResponse = store.dispatch(
-        cardsApi.endpoints.getCategories.initiate(undefined)
-    );
-
-    try {
-        const sideBarList = await sideBarListResponse.unwrap();
-        if (sideBarList) {
-            return checkSelectedTypeCategory(sideBarList);
-        }
-    } catch (e) {
-        if (e instanceof Error) throw new Error(e.message);
-    } finally {
-        sideBarListResponse.unsubscribe();
-    }
-    return undefined;
-}
 
 function Store(): JSX.Element {
     const root = document.querySelector('main');
@@ -61,6 +41,7 @@ function Store(): JSX.Element {
         minSelectedPrice,
         maxSelectedPrice,
         attributesToSearch,
+        discountedProducts,
     } = catalogParams;
     const itemPerPage = 8;
     const [currentOffset, setCurrentOffset] = useState(0);
@@ -71,19 +52,25 @@ function Store(): JSX.Element {
         itemsPerPage: itemPerPage,
     });
     const { cards } = data || {};
-    const { data: cardsParameters } = useGetProductsParametersQuery({
+    const { data: cardsWithParameters } = useGetProductsLengthQuery({
         categoryType,
         selectedFiltersList,
         minSelectedPrice,
         maxSelectedPrice,
+        discountedProducts,
         attributesToSearch,
+    });
+    const { countCardsWithParameters = 0 } = cardsWithParameters || {};
+
+    const { data: cardsOnlyCategory } = useGetProductsParametersQuery({
+        categoryType,
     });
     const {
         countCards = 0,
         filterVariants = [],
         minPrice = 0,
         maxPrice = 0,
-    } = cardsParameters || {};
+    } = cardsOnlyCategory || {};
 
     const dispatch = useDispatch();
 
@@ -186,9 +173,11 @@ function Store(): JSX.Element {
                             ))
                         )}
 
-                        {countCards ? (
+                        {cards?.length ? (
                             <Pagination
-                                countCards={countCards}
+                                countCards={
+                                    countCardsWithParameters || countCards
+                                }
                                 currentOffset={currentOffset}
                                 setCurrentOffset={setCurrentOffset}
                                 itemPerPage={itemPerPage}

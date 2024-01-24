@@ -34,8 +34,8 @@ export const cardsApi = createApi({
             },
         }),
 
-        getProductsParameters: build.query<
-            GetProductsParametersApiResults,
+        getProductsLength: build.query<
+            Record<'countCardsWithParameters', number> | undefined,
             Omit<FilterSortSearchParameters, 'attributesToSort'>
         >({
             queryFn: async (params) => {
@@ -44,10 +44,50 @@ export const cardsApi = createApi({
                     selectedFiltersList,
                     minSelectedPrice,
                     maxSelectedPrice,
+                    discountedProducts,
                     attributesToSearch,
                 } = params;
 
-                const resultForParameters = await getFilterSortSearchProducts(
+                if (
+                    selectedFiltersList.length ||
+                    minSelectedPrice ||
+                    maxSelectedPrice ||
+                    attributesToSearch ||
+                    discountedProducts
+                ) {
+                    const resultForParameters =
+                        await getFilterSortSearchProducts(
+                            {
+                                categoryType,
+                                selectedFiltersList,
+                                minSelectedPrice,
+                                maxSelectedPrice,
+                                attributesToSearch,
+                                discountedProducts,
+                            },
+                            0,
+                            500
+                        );
+
+                    return {
+                        data: {
+                            countCardsWithParameters:
+                                resultForParameters.length,
+                        },
+                    };
+                }
+                return { data: undefined };
+            },
+        }),
+
+        getProductsParameters: build.query<
+            GetProductsParametersApiResults,
+            Pick<FilterSortSearchParameters, 'categoryType'>
+        >({
+            queryFn: async (params) => {
+                const { categoryType } = params;
+
+                const result = await getFilterSortSearchProducts(
                     {
                         categoryType,
                         selectedFiltersList: [],
@@ -57,43 +97,12 @@ export const cardsApi = createApi({
                     0,
                     500
                 );
-
-                const filterVariants = checkFilterVariants(resultForParameters);
-                const minPrice = checkMinMaxPrice(resultForParameters)[0];
-                const maxPrice = checkMinMaxPrice(resultForParameters)[1];
-
-                if (
-                    selectedFiltersList.length ||
-                    minSelectedPrice ||
-                    maxSelectedPrice ||
-                    attributesToSearch
-                ) {
-                    const countCards = (
-                        await getFilterSortSearchProducts(
-                            {
-                                categoryType,
-                                selectedFiltersList,
-                                minSelectedPrice,
-                                maxSelectedPrice,
-                                attributesToSearch,
-                            },
-                            0,
-                            500
-                        )
-                    ).length;
-                    return {
-                        data: {
-                            countCards,
-                            filterVariants,
-                            minPrice,
-                            maxPrice,
-                        },
-                    };
-                }
-
+                const filterVariants = checkFilterVariants(result);
+                const minPrice = checkMinMaxPrice(result)[0];
+                const maxPrice = checkMinMaxPrice(result)[1];
                 return {
                     data: {
-                        countCards: resultForParameters.length,
+                        countCards: result.length,
                         filterVariants,
                         minPrice,
                         maxPrice,
@@ -101,6 +110,7 @@ export const cardsApi = createApi({
                 };
             },
         }),
+
         getCategories: build.query<CategoryCustom[], undefined>({
             queryFn: async () => {
                 const categories = await getCategories();
@@ -119,5 +129,6 @@ export const cardsApi = createApi({
 export const {
     useGetProductsQuery,
     useGetCategoriesQuery,
+    useGetProductsLengthQuery,
     useGetProductsParametersQuery,
 } = cardsApi;

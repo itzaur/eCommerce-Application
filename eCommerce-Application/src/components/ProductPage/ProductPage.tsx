@@ -7,9 +7,7 @@ import ClipLoader from 'react-spinners/RingLoader';
 import CircleLoader from 'react-spinners/CircleLoader';
 import gsap from 'gsap';
 import { products, serverErrorMessage } from '../../utils/constants';
-import { ProductOptions, UpdateCartMode } from '../../types';
-
-import { getProductKey } from '../../commercetools/getProductKey';
+import { ProductOptions, UpdateCartMode, CategoryCustom } from '../../types';
 import { Header } from '../Store';
 import { Footer } from '../MainPage';
 import Transition from '../Transition/Transition';
@@ -17,7 +15,7 @@ import starEmpty from '../../assets/images/review-star-empty.png';
 import avatar from '../../assets/images/user.png';
 import star from '../../assets/images/review-star.png';
 import Modal from '../NotFoundPage/Modal';
-// import BreadCrumbs from '../Store/BreadCrumbs';
+import BreadCrumbs from '../Store/BreadCrumbs';
 import createSlider from '../Slider/Slider';
 import { addNewProductInCartOrUpdateQuantity } from '../../commercetools/updateCart';
 
@@ -27,23 +25,13 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import 'swiper/css/scrollbar';
 
-// eslint-disable-next-line
-export async function loaderProduct(
-    id: string | undefined
-): Promise<Product | void> {
-    try {
-        return id ? await getProductKey(id) : undefined;
-    } catch (e) {
-        if (e instanceof Error) {
-            if (e.message.startsWith('URI not found'))
-                throw new Error('Not Found');
-            else throw new Error(e.message);
-        }
-    }
-    return undefined;
+interface ProductDetailProps {
+    selectedType: CategoryCustom | '';
+    selectedCategory: CategoryCustom['items'][0] | '';
 }
 
-function ProductDetail(): JSX.Element {
+function ProductDetail(props: ProductDetailProps): JSX.Element {
+    const { selectedType, selectedCategory } = props;
     const card = useLoaderData() as Product;
     const cardOptions = card?.masterData.current;
     const cardDetails = card?.masterData.current.masterVariant;
@@ -191,18 +179,14 @@ function ProductDetail(): JSX.Element {
             </Modal>
 
             <section className="product">
-                {/* <BreadCrumbs
+                <BreadCrumbs
                     selectedType={selectedType}
-                    setSelectedType={setSelectedType}
-                    selectedTypePath={selectedTypePath}
                     selectedCategory={selectedCategory}
-                    setSelectedCategory={setSelectedCategory}
-                    selectedCategoryPath={selectedCategoryPath}
-                    selectedProduct={
-                        card?.masterData.current.name['ru-RU'] || ''
-                    }
-                    selectedProductPath={card?.key || ''}
-                /> */}
+                    selectedProduct={{
+                        name: card?.masterData.current.name['ru-RU'] || '',
+                        path: card?.key || '',
+                    }}
+                />
 
                 <button
                     className="product__back"
