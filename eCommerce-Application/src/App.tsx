@@ -28,12 +28,32 @@ import { categories } from './utils/constants';
 const router = createBrowserRouter(
     createRoutesFromElements(
         <>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/cart" element={<CartPage />} />
-            <Route path="/registration" element={<RegistrationPage />} />
+            <Route
+                path="/"
+                element={<Home />}
+                errorElement={<ErrorBoundary />}
+            />
+            <Route
+                path="/login"
+                element={<LoginPage />}
+                errorElement={<ErrorBoundary />}
+            />
+            <Route
+                path="/cart"
+                element={<CartPage />}
+                errorElement={<ErrorBoundary />}
+            />
+            <Route
+                path="/registration"
+                element={<RegistrationPage />}
+                errorElement={<ErrorBoundary />}
+            />
             <Route path="/about" element={<AboutPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
+            <Route
+                path="/profile"
+                element={<ProfilePage />}
+                errorElement={<ErrorBoundary />}
+            />
             <Route path="/store" errorElement={<ErrorBoundary />}>
                 <Route index loader={loaderStore} element={<Store />} />
                 {categories.map((category, index) => {
