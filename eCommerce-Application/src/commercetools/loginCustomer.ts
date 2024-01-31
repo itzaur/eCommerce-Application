@@ -8,21 +8,20 @@ import {
     errorPassword,
     errorEmailNotExist,
 } from '../utils/constants';
+import { changeApiRootToPassword } from './updateCart';
 
 export async function loginCustomer(
     email: string,
     password: string
 ): Promise<ByProjectKeyRequestBuilder | undefined> {
     try {
+        tokenInstance.set({
+            token: '',
+            expirationTime: 0,
+            refreshToken: '',
+        });
         const apirootPassword = constructClientPasswordFlow(email, password);
 
-        if (localStorage.getItem('activeCart')) {
-            tokenInstance.set({
-                token: '',
-                expirationTime: 0,
-                refreshToken: '',
-            });
-        }
         const body: MyCustomerSignin = {
             email,
             password,
@@ -45,6 +44,8 @@ export async function loginCustomer(
             'version',
             JSON.stringify(response.body.customer.version)
         );
+        changeApiRootToPassword();
+
         return apirootPassword;
     } catch {
         try {

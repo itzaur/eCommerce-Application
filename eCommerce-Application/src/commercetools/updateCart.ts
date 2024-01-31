@@ -11,29 +11,53 @@ import { apirootPassword } from './withPasswordClient';
 import { tokenInstance } from './apiConstants';
 import { UpdateCartParams } from '../types';
 import { serverErrorMessage } from '../utils/constants';
-import { loginCustomer } from './loginCustomer';
+
+const { VITE_CTP_PROJECT_KEY } = import.meta.env;
+
+function setLocalStorage(allTokens: boolean): void {
+    if (tokenInstance.get().token)
+        localStorage.setItem('token', tokenInstance.get().token);
+    if (
+        tokenInstance.get().refreshToken &&
+        (allTokens || !localStorage.getItem('refreshToken'))
+    )
+        localStorage.setItem(
+            'refreshToken',
+            tokenInstance.get().refreshToken || ''
+        );
+}
 
 async function getCorrectApiRoot(): Promise<ByProjectKeyRequestBuilder> {
-    const user = JSON.parse(localStorage.getItem('user') as string);
-    if (apirootPassword && user) {
-        return apirootPassword;
-    }
-    if (user && user.email && user.password) {
-        return loginCustomer(user.email, user.password)
-            .then((apiroot) => {
-                if (apiroot) return apiroot;
-                return constructClientAnonimousFlow();
-            })
-            .catch(() => {
-                return constructClientAnonimousFlow();
-            });
+    const user = localStorage.getItem('user');
+    const refreshToken = localStorage.getItem('refreshToken');
+    let result;
+
+    if (user && apirootPassword) {
+        result = apirootPassword;
+        setLocalStorage(true);
+    } else if (refreshToken) {
+        try {
+            result = constructClientRefresh();
+            setLocalStorage(false);
+        } catch {
+            result = constructClientAnonimousFlow();
+            setLocalStorage(true);
+        }
+    } else {
+        result = constructClientAnonimousFlow();
+        setLocalStorage(true);
     }
 
-    return constructClientAnonimousFlow();
+    return result;
 }
-let apiRootForRequest: ByProjectKeyRequestBuilder = await getCorrectApiRoot();
 
-async function createNewCart(): Promise<Cart> {
+let apiRootForRequest = await getCorrectApiRoot();
+
+export async function changeApiRootToPassword(): Promise<void> {
+    if (apirootPassword) apiRootForRequest = apirootPassword;
+}
+
+async function createNewCart(): Promise<Cart | undefined> {
     try {
         const result = await apiRootForRequest
             .me()
@@ -45,21 +69,17 @@ async function createNewCart(): Promise<Cart> {
                 },
             })
             .execute();
-        localStorage.setItem('token', tokenInstance.get().token);
-        if (!localStorage.getItem('refreshToken'))
-            localStorage.setItem(
-                'refreshToken',
-                tokenInstance.get().refreshToken || ''
-            );
+        setLocalStorage(false);
         return result.body;
-    } catch {
-        throw new Error(serverErrorMessage);
+    } catch (e) {
+        if (e instanceof Error) throw new Error(e.message);
     }
+    return undefined;
 }
 
 export async function addNewProductInCartOrUpdateQuantity(
     props: UpdateCartParams
-): Promise<Cart | null | void> {
+): Promise<Cart | undefined> {
     const { cartData, mode, cardId, quantity, firstFunctionCall } = props;
 
     let tempActions:
@@ -98,18 +118,20 @@ export async function addNewProductInCartOrUpdateQuantity(
 
     try {
         const cartForRequest = cartData || (await createNewCart());
-
-        await apiRootForRequest
-            .me()
-            .carts()
-            .withId({ ID: cartForRequest.id })
-            .post({
-                body: {
-                    version: cartForRequest.version,
-                    actions: Array.isArray(actions) ? [...actions] : [actions],
-                },
-            })
-            .execute();
+        if (cartForRequest)
+            await apiRootForRequest
+                .me()
+                .carts()
+                .withId({ ID: cartForRequest.id })
+                .post({
+                    body: {
+                        version: cartForRequest.version,
+                        actions: Array.isArray(actions)
+                            ? [...actions]
+                            : [actions],
+                    },
+                })
+                .execute();
         const activeCart = await apiRootForRequest
             .me()
             .activeCart()
@@ -125,12 +147,12 @@ export async function addNewProductInCartOrUpdateQuantity(
     } catch (e) {
         if (
             e instanceof Error &&
-            e.message.startsWith('URI not found: /odyssey4165/me/carts/') &&
+            e.message.startsWith(
+                `URI not found: /${VITE_CTP_PROJECT_KEY}/me/carts/`
+            ) &&
             firstFunctionCall
         ) {
             apiRootForRequest = constructClientRefresh();
-            localStorage.setItem('token', tokenInstance.get().token);
-
             return addNewProductInCartOrUpdateQuantity({
                 cartData,
                 mode,
@@ -141,11 +163,17 @@ export async function addNewProductInCartOrUpdateQuantity(
         }
         if (
             e instanceof Error &&
-            e.message ===
-                ('Missing required option (refreshToken)' ||
+            (e.message === 'Missing required option (refreshToken)' ||
+                e.message ===
                     'The refresh token was not found. It may have expired.') &&
             firstFunctionCall
         ) {
+            localStorage.removeItem('user');
+            localStorage.removeItem('refreshToken');
+            localStorage.removeItem('token');
+            localStorage.removeItem('activeCart');
+            apiRootForRequest = await getCorrectApiRoot();
+
             return addNewProductInCartOrUpdateQuantity({
                 cartData: null,
                 mode,
@@ -157,42 +185,47 @@ export async function addNewProductInCartOrUpdateQuantity(
         if (e instanceof Error && e.message === 'Failed to fetch') {
             throw new Error(serverErrorMessage);
         }
-        return null;
     }
+    return undefined;
 }
 
 export async function getActiveCart(
     firstFunctionCall: boolean
 ): Promise<Cart | null> {
     try {
-        if (!localStorage.getItem('activeCart'))
-            apiRootForRequest = await getCorrectApiRoot();
         const activeCart = await apiRootForRequest
             .me()
             .activeCart()
             .get()
             .execute();
+
         localStorage.setItem('activeCart', JSON.stringify(activeCart.body));
         return activeCart.body;
     } catch (e) {
         if (
             e instanceof Error &&
-            e.message === 'URI not found: /odyssey4165/me/active-cart' &&
+            e.message ===
+                `URI not found: /${VITE_CTP_PROJECT_KEY}/me/active-cart` &&
             firstFunctionCall
         ) {
             if (localStorage.getItem('refreshToken')) {
                 apiRootForRequest = constructClientRefresh();
-                localStorage.setItem('token', tokenInstance.get().token);
                 return getActiveCart(false);
             }
             return null;
         }
         if (
             e instanceof Error &&
-            e.message ===
-                ('Missing required option (refreshToken)' ||
-                    'The refresh token was not found. It may have expired.')
+            (e.message === 'Missing required option (refreshToken)' ||
+                e.message ===
+                    'The refresh token was not found. It may have expired.') &&
+            firstFunctionCall
         ) {
+            localStorage.removeItem('user');
+            localStorage.removeItem('refreshToken');
+            localStorage.removeItem('token');
+            localStorage.removeItem('activeCart');
+            apiRootForRequest = await getCorrectApiRoot();
             return null;
         }
         if (e instanceof Error && e.message === 'Failed to fetch') {
@@ -200,7 +233,6 @@ export async function getActiveCart(
         }
 
         localStorage.removeItem('activeCart');
-
         return null;
     }
 }
@@ -208,7 +240,7 @@ export async function getActiveCart(
 export async function applyDiscount(
     cartData: Cart,
     promocode: string
-): Promise<Cart | undefined> {
+): Promise<Cart> {
     try {
         const cartWithPromocode = await apiRootForRequest
             .me()

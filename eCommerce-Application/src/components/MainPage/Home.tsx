@@ -7,6 +7,9 @@ import { Header, Title, Info, Attainments, Catalog, Footer } from '.';
 gsap.registerPlugin(ScrollTrigger);
 
 function Home(): JSX.Element {
+    const root = document.querySelector('main');
+    if (root) root.id = 'main';
+
     const timeline = gsap.timeline();
     const mainTimeline = useRef(null);
 

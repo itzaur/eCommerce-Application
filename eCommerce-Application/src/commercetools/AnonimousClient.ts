@@ -21,6 +21,7 @@ export function constructClientAnonimousFlow(): ByProjectKeyRequestBuilder {
             clientId: VITE_CTP_CLIENT_ID,
             clientSecret: VITE_CTP_CLIENT_SECRET,
         },
+
         scopes: [`manage_project:${VITE_CTP_PROJECT_KEY}`],
         fetch,
         tokenCache: tokenInstance,
@@ -33,5 +34,6 @@ export function constructClientAnonimousFlow(): ByProjectKeyRequestBuilder {
     const apiRoot = createApiBuilderFromCtpClient(client).withProjectKey({
         projectKey: VITE_CTP_PROJECT_KEY,
     });
+
     return apiRoot;
 }

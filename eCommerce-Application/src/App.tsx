@@ -156,6 +156,17 @@ function App(): JSX.Element {
         })();
     }, []);
 
-    return <RouterProvider router={router} fallbackElement={<ClipLoader />} />;
+    return (
+        <RouterProvider
+            router={router}
+            fallbackElement={
+                <ClipLoader
+                    color="#4fe1e3"
+                    size={150}
+                    className="store__loader"
+                />
+            }
+        />
+    );
 }
 export default App;

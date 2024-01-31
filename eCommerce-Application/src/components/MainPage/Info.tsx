@@ -16,6 +16,16 @@ function Info(): JSX.Element {
         JSON.parse(localStorage.getItem('user') as string)
     );
 
+    function exit(): void {
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('version');
+        if (localStorage.getItem('activeCart')) window.location.reload();
+        localStorage.removeItem('activeCart');
+        setUser(null);
+    }
+
     return (
         <>
             <div className="home__info">
@@ -32,18 +42,8 @@ function Info(): JSX.Element {
                             <button
                                 className="btn btn--exit"
                                 type="button"
-                                onClick={(): void => {
-                                    localStorage.removeItem('user');
-                                    localStorage.removeItem('version');
-                                    localStorage.removeItem('activeCart');
-                                    setUser(null);
-                                }}
-                                onKeyDown={(): void => {
-                                    localStorage.removeItem('user');
-                                    localStorage.removeItem('version');
-                                    localStorage.removeItem('activeCart');
-                                    setUser(null);
-                                }}
+                                onClick={exit}
+                                onKeyDown={exit}
                             >
                                 <span>Выйти</span>
                             </button>
