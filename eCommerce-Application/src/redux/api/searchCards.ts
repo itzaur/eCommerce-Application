@@ -19,11 +19,10 @@ export const cardsApi = createApi({
     endpoints: (build) => ({
         getProducts: build.query<GetCardsApiResults, GetCardsApiParams>({
             queryFn: async (params) => {
-                const { parameters, currentOffset, itemsPerPage } = params;
+                const { parameters, itemsPerPage } = params;
 
                 const cards = await getFilterSortSearchProducts(
                     parameters,
-                    currentOffset,
                     itemsPerPage
                 );
                 return {
@@ -36,7 +35,10 @@ export const cardsApi = createApi({
 
         getProductsLength: build.query<
             Record<'countCardsWithParameters', number> | undefined,
-            Omit<FilterSortSearchParameters, 'attributesToSort'>
+            Omit<
+                FilterSortSearchParameters,
+                'attributesToSort' & 'currentOffset'
+            >
         >({
             queryFn: async (params) => {
                 const {
@@ -64,8 +66,8 @@ export const cardsApi = createApi({
                                 maxSelectedPrice,
                                 attributesToSearch,
                                 discountedProducts,
+                                currentOffset: 0,
                             },
-                            0,
                             500
                         );
 
@@ -93,8 +95,8 @@ export const cardsApi = createApi({
                         selectedFiltersList: [],
                         minSelectedPrice: 0,
                         maxSelectedPrice: 0,
+                        currentOffset: 0,
                     },
-                    0,
                     500
                 );
                 const filterVariants = checkFilterVariants(result);

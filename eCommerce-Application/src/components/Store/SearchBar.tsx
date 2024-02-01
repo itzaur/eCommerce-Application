@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Search } from '@mui/icons-material';
 import { Paper, IconButton } from '@mui/material';
-import { memoizedAttributesToSearch } from '../../redux/selectors/selectors';
+import { memoizedCatalogParams } from '../../redux/selectors/selectors';
 import { setAttributesToSearch } from '../../redux/features/catalogSlice';
 
 interface SearchBarProps {
@@ -11,7 +11,9 @@ interface SearchBarProps {
 
 function SearchBar(props: SearchBarProps): JSX.Element {
     const { searchBarOpen } = props;
-    const searchValue = useSelector(memoizedAttributesToSearch);
+    const { attributesToSearch: searchValue } = useSelector(
+        memoizedCatalogParams
+    );
     const dispatch = useDispatch();
     const [currentValue, setCurrentValue] = useState(searchValue);
 

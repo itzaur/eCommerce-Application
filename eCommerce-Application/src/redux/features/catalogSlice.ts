@@ -17,6 +17,7 @@ const initialState: FilterSortSearchParameters = {
     },
     attributesToSearch: '',
     discountedProducts: false,
+    currentOffset: 0,
 };
 
 export const searchSlice = createSlice({
@@ -29,26 +30,36 @@ export const searchSlice = createSlice({
             state.minSelectedPrice = 0;
             state.discountedProducts = false;
             state.selectedFiltersList = [];
+            state.currentOffset = 0;
         },
 
         setSelectedFiltersList(state, action) {
             state.selectedFiltersList = action.payload;
+            state.currentOffset = 0;
         },
         setMinSelectedPrice(state, action) {
             state.minSelectedPrice = action.payload;
+            state.currentOffset = 0;
         },
         setMaxSelectedPrice(state, action) {
             state.maxSelectedPrice = action.payload;
+            state.currentOffset = 0;
         },
 
         setAttributesToSort(state, action) {
             state.attributesToSort = action.payload;
+            state.currentOffset = 0;
         },
         setAttributesToSearch(state, action) {
             state.attributesToSearch = action.payload;
+            state.currentOffset = 0;
         },
         setDiscountedProducts(state, action) {
             state.discountedProducts = action.payload;
+            state.currentOffset = 0;
+        },
+        setCurrentOffset(state, action) {
+            state.currentOffset = action.payload;
         },
     },
 });
@@ -61,5 +72,6 @@ export const {
     setMaxSelectedPrice,
     setMinSelectedPrice,
     setSelectedFiltersList,
+    setCurrentOffset,
 } = searchSlice.actions;
 export default searchSlice.reducer;

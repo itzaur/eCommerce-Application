@@ -42,9 +42,9 @@ function Store(): JSX.Element {
         maxSelectedPrice,
         attributesToSearch,
         discountedProducts,
+        currentOffset,
     } = catalogParams;
     const itemPerPage = 8;
-    const [currentOffset, setCurrentOffset] = useState(0);
 
     const { data, isLoading, isFetching, error } = useGetProductsQuery({
         parameters: catalogParams,
@@ -59,6 +59,7 @@ function Store(): JSX.Element {
         maxSelectedPrice,
         discountedProducts,
         attributesToSearch,
+        currentOffset: 0,
     });
     const { countCardsWithParameters = 0 } = cardsWithParameters || {};
 
@@ -120,11 +121,6 @@ function Store(): JSX.Element {
         // eslint-disable-next-line
     }, [location.pathname]);
 
-    useEffect(() => {
-        if (currentOffset) setCurrentOffset(0);
-        // eslint-disable-next-line
-    }, [catalogParams]);
-
     const timeline = gsap.timeline();
 
     if (serverError || error) throw new Error(serverError);
@@ -179,7 +175,6 @@ function Store(): JSX.Element {
                                     countCardsWithParameters || countCards
                                 }
                                 currentOffset={currentOffset}
-                                setCurrentOffset={setCurrentOffset}
                                 itemPerPage={itemPerPage}
                             />
                         ) : (

@@ -1,17 +1,19 @@
 import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import arrowPrev from '../../assets/icons/arrow-prev.svg';
 import arrowNext from '../../assets/icons/arrow-next.svg';
+import { setCurrentOffset } from '../../redux/features/catalogSlice';
 
 interface PaginaionProps {
     currentOffset: number;
-    setCurrentOffset: React.Dispatch<React.SetStateAction<number>>;
     itemPerPage: number;
     countCards: number;
 }
 
 function Pagination(props: PaginaionProps): JSX.Element {
-    const { itemPerPage, countCards, currentOffset, setCurrentOffset } = props;
+    const { itemPerPage, countCards, currentOffset } = props;
     const [countPages, setCountPages] = useState(0);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         setCountPages(countCards ? Math.ceil(countCards / itemPerPage) : 0);
@@ -25,7 +27,9 @@ function Pagination(props: PaginaionProps): JSX.Element {
                     className="btn_action btn_store"
                     onClick={(): void | null => {
                         if (currentOffset < countCards - itemPerPage)
-                            setCurrentOffset(currentOffset + itemPerPage);
+                            dispatch(
+                                setCurrentOffset(currentOffset + itemPerPage)
+                            );
                     }}
                 >
                     Следующая страница
@@ -38,7 +42,9 @@ function Pagination(props: PaginaionProps): JSX.Element {
                     className="store__page store__page-prev"
                     onClick={(): void => {
                         if (currentOffset >= itemPerPage)
-                            setCurrentOffset(currentOffset - itemPerPage);
+                            dispatch(
+                                setCurrentOffset(currentOffset - itemPerPage)
+                            );
                     }}
                 >
                     <img src={arrowPrev} alt="arrow" />
@@ -52,7 +58,9 @@ function Pagination(props: PaginaionProps): JSX.Element {
                     className="store__page store__page-next"
                     onClick={(): void => {
                         if (currentOffset < countCards - itemPerPage)
-                            setCurrentOffset(currentOffset + itemPerPage);
+                            dispatch(
+                                setCurrentOffset(currentOffset + itemPerPage)
+                            );
                     }}
                 >
                     <img src={arrowNext} alt="arrow" />

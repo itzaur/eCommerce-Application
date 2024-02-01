@@ -8,7 +8,7 @@ import {
     errorPassword,
     errorEmailNotExist,
 } from '../utils/constants';
-import { changeApiRootToPassword } from './updateCart';
+import { changeApiRootToPassword, getActiveCart } from './updateCart';
 
 export async function loginCustomer(
     email: string,
@@ -45,6 +45,7 @@ export async function loginCustomer(
             JSON.stringify(response.body.customer.version)
         );
         changeApiRootToPassword();
+        getActiveCart(true);
 
         return apirootPassword;
     } catch {

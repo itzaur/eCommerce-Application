@@ -50,6 +50,7 @@ export type FilterSortSearchParameters = {
     };
     attributesToSearch?: string;
     discountedProducts?: boolean;
+    currentOffset: number;
 };
 
 export interface ProductOptions {

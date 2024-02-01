@@ -1,13 +1,6 @@
 import { useEffect, ChangeEvent, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-    memoizedAttributesToSort,
-    memoizedMinSelectedPrice,
-    memoizedMaxSelectedPrice,
-    memoizedSelectedFiltersList,
-    memoizedDiscountedProducts,
-    memoizedSelectedCategoryType,
-} from '../../redux/selectors/selectors';
+import { memoizedCatalogParams } from '../../redux/selectors/selectors';
 import {
     setAttributesToSort,
     setSelectedFiltersList,
@@ -26,13 +19,16 @@ interface ParametersProps {
 function Parameters(props: ParametersProps): JSX.Element {
     const { filterVariants, minPrice, maxPrice } = props;
 
-    const selectedCategoryType = useSelector(memoizedSelectedCategoryType);
-    const { attributesToFilter } = selectedCategoryType;
-    const selectedFiltersList = useSelector(memoizedSelectedFiltersList);
-    const minSelectedPrice = useSelector(memoizedMinSelectedPrice);
-    const maxSelectedPrice = useSelector(memoizedMaxSelectedPrice);
-    const discountedProducts = useSelector(memoizedDiscountedProducts);
-    const sort = useSelector(memoizedAttributesToSort);
+    const {
+        categoryType,
+        selectedFiltersList,
+        minSelectedPrice,
+        maxSelectedPrice,
+        discountedProducts,
+        attributesToSort: sort,
+    } = useSelector(memoizedCatalogParams);
+
+    const { attributesToFilter } = categoryType;
 
     const dispatch = useDispatch();
 
@@ -72,7 +68,7 @@ function Parameters(props: ParametersProps): JSX.Element {
                 elCopy.checked = false;
             }
         });
-    }, [selectedCategoryType]);
+    }, [categoryType]);
 
     return (
         <div className="parameters">

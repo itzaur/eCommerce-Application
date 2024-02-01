@@ -127,7 +127,7 @@ function PriceBlock(props: {
                             : ''}
                     </h2>
                 </div>
-                <div className="promocode">
+                <form className="promocode">
                     <div className="promocode__title">
                         <p className="promocode__label">Ввести промокод</p>
                         <input
@@ -149,14 +149,15 @@ function PriceBlock(props: {
                     <div />
                     <button
                         className="btn cart__btn"
-                        type="button"
-                        onClick={(): void => {
+                        type="submit"
+                        onClick={(e): void => {
+                            e.preventDefault();
                             applyPromocode();
                         }}
                     >
                         Применить
                     </button>
-                </div>
+                </form>
             </div>
             <button
                 className="btn cart__btn cart__btn_submit"

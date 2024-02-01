@@ -5,7 +5,6 @@ import { serverErrorMessage } from '../utils/constants';
 
 export async function getFilterSortSearchProducts(
     parameters: FilterSortSearchParameters,
-    currentOffset: number,
     itemPerPage: number
 ): Promise<ProductProjection[]> {
     const {
@@ -16,6 +15,7 @@ export async function getFilterSortSearchProducts(
         attributesToSort,
         attributesToSearch,
         discountedProducts,
+        currentOffset,
     } = parameters;
     const queryArgs: {
         filter: string | string[] | undefined;
