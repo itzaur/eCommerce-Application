@@ -213,15 +213,9 @@ function Parameters(props: ParametersProps): JSX.Element {
                                 value={minSelectedPrice || ''}
                                 placeholder={minPrice.toString()}
                                 onChange={(e): void => {
-                                    if (+e.target.value < maxSelectedPrice)
-                                        dispatch(
-                                            setMinSelectedPrice(+e.target.value)
-                                        );
-                                    else {
-                                        dispatch(
-                                            setMaxSelectedPrice(+e.target.value)
-                                        );
-                                    }
+                                    dispatch(
+                                        setMinSelectedPrice(+e.target.value)
+                                    );
                                 }}
                             />
                             <p>До</p>
@@ -232,15 +226,9 @@ function Parameters(props: ParametersProps): JSX.Element {
                                 value={maxSelectedPrice || ''}
                                 placeholder={maxPrice.toString()}
                                 onChange={(e): void => {
-                                    if (+e.target.value > minSelectedPrice)
-                                        dispatch(
-                                            setMaxSelectedPrice(+e.target.value)
-                                        );
-                                    else {
-                                        dispatch(
-                                            setMinSelectedPrice(+e.target.value)
-                                        );
-                                    }
+                                    dispatch(
+                                        setMaxSelectedPrice(+e.target.value)
+                                    );
                                 }}
                             />
                         </div>
