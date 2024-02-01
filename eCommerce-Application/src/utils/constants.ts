@@ -22,12 +22,6 @@ export const categories = [
     },
 ];
 
-export const categoriesPath = {
-    COSMOTOURS: 'cosmotours',
-    HOTEL: 'hotel',
-    SOUVENIRS: 'souvenirs',
-};
-
 export const countries = ['Выберите страну*', 'Россия', 'Беларусь', 'Польша'];
 
 export const products = [
