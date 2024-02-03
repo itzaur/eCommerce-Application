@@ -1,5 +1,6 @@
-import { useEffect, ChangeEvent, useCallback } from 'react';
+import { useEffect, ChangeEvent, useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { debounce } from 'lodash';
 import { memoizedCatalogParams } from '../../redux/selectors/selectors';
 import {
     setAttributesToSort,
@@ -30,20 +31,25 @@ function Parameters(props: ParametersProps): JSX.Element {
 
     const { attributesToFilter } = categoryType;
 
+    const [minSelectedPriceState, setMinSelectedPriceState] = useState(
+        minSelectedPrice ? minSelectedPrice.toString() : ''
+    );
+    const [maxSelectedPriceState, setMaxSelectedPriceState] = useState(
+        maxSelectedPrice ? maxSelectedPrice.toString() : ''
+    );
+
     const dispatch = useDispatch();
 
-    function checkFilters(e: ChangeEvent, el: string): void {
-        if (e.target instanceof HTMLInputElement) {
-            if (e.target.checked) {
-                dispatch(
-                    setSelectedFiltersList([...selectedFiltersList, `"${el}"`])
-                );
-            } else {
-                const indexEl = selectedFiltersList.indexOf(`"${el}"`);
-                const temp = [...selectedFiltersList];
-                temp.splice(indexEl, 1);
-                dispatch(setSelectedFiltersList(temp));
-            }
+    function checkFilters(e: ChangeEvent<HTMLInputElement>, el: string): void {
+        if (e.target.checked) {
+            dispatch(
+                setSelectedFiltersList([...selectedFiltersList, `"${el}"`])
+            );
+        } else {
+            const indexEl = selectedFiltersList.indexOf(`"${el}"`);
+            const temp = [...selectedFiltersList];
+            temp.splice(indexEl, 1);
+            dispatch(setSelectedFiltersList(temp));
         }
     }
 
@@ -53,21 +59,41 @@ function Parameters(props: ParametersProps): JSX.Element {
         dispatch(setSelectedFiltersList([]));
         dispatch(setDiscountedProducts(false));
         dispatch(setAttributesToSearch(''));
-        document.querySelectorAll('input[data-type="filter"').forEach((el) => {
-            if (el instanceof HTMLInputElement) {
-                const elCopy = el;
-                elCopy.checked = false;
-            }
-        });
     }, [minPrice, maxPrice, dispatch]);
 
-    useEffect(() => {
-        document.querySelectorAll('input[data-type="filter"').forEach((el) => {
-            if (el instanceof HTMLInputElement) {
-                const elCopy = el;
-                elCopy.checked = false;
+    // eslint-disable-next-line
+    const handleChangeMinSelectedPrice = useCallback(
+        debounce((value, mode: 'number' | 'range') => {
+            if (
+                (mode === 'range' && value < maxSelectedPrice) ||
+                mode === 'number'
+            )
+                dispatch(setMinSelectedPrice(value));
+            else {
+                dispatch(setMaxSelectedPrice(value));
             }
-        });
+        }, 1000),
+        [maxSelectedPrice]
+    );
+
+    // eslint-disable-next-line
+    const handleChangeMaxSelectedPrice = useCallback(
+        debounce((value, mode: 'number' | 'range') => {
+            if (
+                (mode === 'range' && value > minSelectedPrice) ||
+                mode === 'number'
+            )
+                dispatch(setMaxSelectedPrice(value));
+            else {
+                dispatch(setMinSelectedPrice(value));
+            }
+        }, 1000),
+        [minSelectedPrice]
+    );
+
+    useEffect(() => {
+        setMinSelectedPriceState('');
+        setMaxSelectedPriceState('');
     }, [categoryType]);
 
     return (
@@ -185,7 +211,9 @@ function Parameters(props: ParametersProps): JSX.Element {
                                         <input
                                             data-type="filter"
                                             type="checkbox"
-                                            defaultChecked={false}
+                                            checked={selectedFiltersList.includes(
+                                                `"${el}"`
+                                            )}
                                             id={el}
                                             onChange={(e): void => {
                                                 checkFilters(e, el);
@@ -210,11 +238,13 @@ function Parameters(props: ParametersProps): JSX.Element {
                                 className="price-input_number"
                                 type="number"
                                 id="price-min"
-                                value={minSelectedPrice || ''}
+                                value={minSelectedPriceState || ''}
                                 placeholder={minPrice.toString()}
                                 onChange={(e): void => {
-                                    dispatch(
-                                        setMinSelectedPrice(+e.target.value)
+                                    setMinSelectedPriceState(e.target.value);
+                                    handleChangeMinSelectedPrice(
+                                        +e.target.value,
+                                        'number'
                                     );
                                 }}
                             />
@@ -223,11 +253,13 @@ function Parameters(props: ParametersProps): JSX.Element {
                                 className="price-input_number"
                                 type="number"
                                 id="price-max"
-                                value={maxSelectedPrice || ''}
+                                value={maxSelectedPriceState || ''}
                                 placeholder={maxPrice.toString()}
                                 onChange={(e): void => {
-                                    dispatch(
-                                        setMaxSelectedPrice(+e.target.value)
+                                    setMaxSelectedPriceState(e.target.value);
+                                    handleChangeMaxSelectedPrice(
+                                        +e.target.value,
+                                        'number'
                                     );
                                 }}
                             />
@@ -239,17 +271,23 @@ function Parameters(props: ParametersProps): JSX.Element {
                                 id="price-range-min"
                                 min={minPrice}
                                 max={maxPrice}
-                                value={minSelectedPrice || minPrice}
+                                value={minSelectedPriceState || minPrice}
                                 onChange={(e): void => {
-                                    if (+e.target.value < maxSelectedPrice)
-                                        dispatch(
-                                            setMinSelectedPrice(+e.target.value)
+                                    if (
+                                        +e.target.value < +maxSelectedPriceState
+                                    )
+                                        setMinSelectedPriceState(
+                                            e.target.value
                                         );
                                     else {
-                                        dispatch(
-                                            setMaxSelectedPrice(+e.target.value)
+                                        setMaxSelectedPriceState(
+                                            e.target.value
                                         );
                                     }
+                                    handleChangeMinSelectedPrice(
+                                        +e.target.value,
+                                        'range'
+                                    );
                                 }}
                             />
                             <input
@@ -258,17 +296,23 @@ function Parameters(props: ParametersProps): JSX.Element {
                                 id="price-range-max"
                                 min={minPrice}
                                 max={maxPrice}
-                                value={maxSelectedPrice || maxPrice}
+                                value={maxSelectedPriceState || maxPrice}
                                 onChange={(e): void => {
-                                    if (+e.target.value > minSelectedPrice)
-                                        dispatch(
-                                            setMaxSelectedPrice(+e.target.value)
+                                    if (
+                                        +e.target.value > +minSelectedPriceState
+                                    )
+                                        setMaxSelectedPriceState(
+                                            e.target.value
                                         );
                                     else {
-                                        dispatch(
-                                            setMinSelectedPrice(+e.target.value)
+                                        setMinSelectedPriceState(
+                                            e.target.value
                                         );
                                     }
+                                    handleChangeMaxSelectedPrice(
+                                        +e.target.value,
+                                        'range'
+                                    );
                                 }}
                             />
                         </div>
