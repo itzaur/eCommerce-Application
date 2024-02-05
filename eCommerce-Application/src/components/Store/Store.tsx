@@ -35,6 +35,7 @@ function Store(): JSX.Element {
     const location = useLocation();
 
     const catalogParams = useSelector(memoizedCatalogParams);
+
     const {
         categoryType,
         selectedFiltersList,
@@ -92,22 +93,28 @@ function Store(): JSX.Element {
                 const categoryId = tempSelectedCategory
                     ? await getCategoryId(tempSelectedCategory.path)
                     : '';
-                dispatch(
-                    setCategoryType({
-                        attributesToFilter: tempSelectedType
-                            ? categories.find(
-                                  (item) =>
-                                      item.name === tempSelectedType.parent.name
-                              )?.filter
-                            : '',
-                        selectedCategoryId: categoryId || '',
-                    })
-                );
+                const newAttributesToFilter = tempSelectedType
+                    ? categories.find(
+                          (item) => item.name === tempSelectedType.parent.name
+                      )?.filter
+                    : '';
+                if (
+                    categoryId !== categoryType.selectedCategoryId ||
+                    JSON.stringify(newAttributesToFilter) !==
+                        JSON.stringify(categoryType.attributesToFilter)
+                ) {
+                    dispatch(
+                        setCategoryType({
+                            attributesToFilter: newAttributesToFilter,
+                            selectedCategoryId: categoryId,
+                        })
+                    );
+                }
             } catch (e: unknown) {
                 if (e instanceof Error) setServerError(e.message);
             }
         },
-        [dispatch]
+        [dispatch, categoryType]
     );
 
     useEffect(() => {

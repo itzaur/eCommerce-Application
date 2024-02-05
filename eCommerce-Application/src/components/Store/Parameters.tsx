@@ -59,6 +59,13 @@ function Parameters(props: ParametersProps): JSX.Element {
         dispatch(setSelectedFiltersList([]));
         dispatch(setDiscountedProducts(false));
         dispatch(setAttributesToSearch(''));
+        dispatch(
+            setAttributesToSort({
+                order: '',
+                value: 'По умолчанию',
+                icon: '↓↑',
+            })
+        );
     }, [minPrice, maxPrice, dispatch]);
 
     // eslint-disable-next-line
@@ -92,9 +99,13 @@ function Parameters(props: ParametersProps): JSX.Element {
     );
 
     useEffect(() => {
-        setMinSelectedPriceState('');
-        setMaxSelectedPriceState('');
-    }, [categoryType]);
+        setMinSelectedPriceState(
+            minSelectedPrice ? minSelectedPrice.toString() : ''
+        );
+        setMaxSelectedPriceState(
+            maxSelectedPrice ? maxSelectedPrice.toString() : ''
+        );
+    }, [minSelectedPrice, maxSelectedPrice]);
 
     return (
         <div className="parameters">
