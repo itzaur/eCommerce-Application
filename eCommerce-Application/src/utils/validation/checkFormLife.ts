@@ -26,7 +26,7 @@ export const checkIncorrectFormLife = (
     if (!/^[a-zA-ZА-Яа-яёЁ]+$/.test(value)) {
         return {
             incorrect: true,
-            message: 'поле должно содердажать только буквы',
+            message: 'поле должно содержать только буквы',
         };
     }
 

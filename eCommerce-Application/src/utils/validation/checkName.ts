@@ -25,7 +25,7 @@ export const checkIncorrectName = (
     if (!/^[a-zA-ZА-Яа-яёЁ]+$/.test(value)) {
         return {
             incorrect: true,
-            message: 'Имя должно содердажать только буквы',
+            message: 'Имя должно содержать только буквы',
         };
     }
 

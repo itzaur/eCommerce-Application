@@ -230,7 +230,7 @@ export function EditAuthorizationDataView(props: {
                                     if (err.cause === 'passwordError') {
                                         setErrorOldPassword(true);
                                         setErrorMessageOldPassword(
-                                            'текущий пароль не верный'
+                                            'текущий пароль неверный'
                                         );
                                     }
                                     if (err.cause === 'ServerError') {

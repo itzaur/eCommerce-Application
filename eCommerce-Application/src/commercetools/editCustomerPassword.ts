@@ -25,7 +25,7 @@ export async function editCustomerPassword(
     } catch (e) {
         const error = e as Error;
         if (error.message === 'The given current password does not match.') {
-            throw new Error('Tекущий пароль не верный', {
+            throw new Error('Tекущий пароль неверный', {
                 cause: 'passwordError',
             });
         }

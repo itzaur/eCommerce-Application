@@ -25,7 +25,7 @@ export const checkIncorrectSurname = (
     if (!/^[a-zA-ZА-Яа-яёЁ]+$/.test(value)) {
         return {
             incorrect: true,
-            message: 'Фамилия должна содердажать только буквы',
+            message: 'Фамилия должна содержать только буквы',
         };
     }
 
