@@ -30,6 +30,8 @@ import { loginCustomer } from '../../commercetools/loginCustomer';
 import { countries } from '../../utils/constants';
 
 function RegistrationDetail(): JSX.Element {
+    const root = document.querySelector('main');
+    if (root) root.id = 'registration';
     const [errorUserName, setErrorUserName] = useState(false);
     const [errorMessageUserName, setErrorMessageUserName] = useState('');
     const [userName, setUserName] = useState('');

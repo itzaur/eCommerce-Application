@@ -1,15 +1,24 @@
 export const categories = [
     {
         name: 'Космотуры',
+        path: 'cosmotours',
         items: ['Релакс', 'Хобби', 'Активный Отдых'],
+        itemsPath: ['relax', 'hobby', 'active'],
+        filter: { name: 'Локация', key: 'location' },
     },
     {
         name: 'Выбрать номер',
+        path: 'hotel',
         items: ['Классик', 'Хард'],
+        itemsPath: ['classic', 'hard'],
+        filter: { name: 'Цвет', key: 'color' },
     },
     {
         name: 'Сувениры',
+        path: 'souvenirs',
         items: ['Стеклянные', 'Роботизированные', 'Прочее'],
+        itemsPath: ['glass', 'robotic', 'other'],
+        filter: { name: 'Форма', key: 'shape' },
     },
 ];
 
@@ -220,7 +229,7 @@ export const products = [
             },
             {
                 autor: 'Иван',
-                text: 'некачественный, рассыпался на мелкие кусочки, за это минут две звезды. \n обслуживание хорошее, за это +3',
+                text: 'некачественный, рассыпался на мелкие кусочки, за это минус две звезды. \n обслуживание хорошее, за это +3',
                 stars: 3,
                 starsEmpty: 2,
             },
@@ -258,7 +267,7 @@ export const products = [
         reviews: [
             {
                 autor: 'Грегори',
-                text: 'Прошел курс удачно я. Сометую всем очень.',
+                text: 'Прошел курс удачно я. Советую всем очень.',
                 stars: 5,
                 starsEmpty: 0,
             },
@@ -310,7 +319,7 @@ export const products = [
             },
             {
                 autor: 'Екатерина',
-                text: 'Есть интересные виды животных, кого-то даже покормить можно. Минус одна звезда за то, что тушу оленя пришлось тащить самому. Детям будет интересно, взрослым, кто был в крупных зоопарках - не знаю :) Но если располагаете временем, то почему бы и не заглянуть.',
+                text: 'Есть интересные виды животных, кого-то даже покормить можно. Минус одна звезда за то, что тушу оленя пришлось тащить самой. Детям будет интересно, взрослым, кто был в крупных зоопарках - не знаю :) Но если располагаете временем, то почему бы и не заглянуть.',
                 stars: 4,
                 starsEmpty: 1,
             },
@@ -628,8 +637,3 @@ export const errorEmailNotExist = 'Данный e-mail не найден в си
 export const errorEmailExist = 'Данный e-mail уже существует в системе';
 
 export const regexpEmail = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
-
-export function setErrorBodyDOM(err: Error): void {
-    document.body.textContent = err.message;
-    document.body.classList.add('error-connection');
-}

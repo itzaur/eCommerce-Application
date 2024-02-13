@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Cart } from '@commercetools/platform-sdk';
 import { addNewProductInCartOrUpdateQuantity } from '../../commercetools/updateCart';
-import { setErrorBodyDOM } from '../../utils/constants';
 
 function CartProducts(props: {
     activeCart: Cart | null;
@@ -11,6 +10,7 @@ function CartProducts(props: {
     const { activeCart, setActiveCart } = props;
     const [cartLoading, setCartLoading] = useState(false);
     const [modalConfirmVisible, setModalConfirmVisible] = useState(false);
+    const [serverError, setServerError] = useState('');
 
     function changeQuantity(cardId: string, newValue: number): void {
         setCartLoading(true);
@@ -25,7 +25,7 @@ function CartProducts(props: {
                 if (data !== undefined) setActiveCart(data);
             })
             .catch((err) => {
-                setErrorBodyDOM(err);
+                setServerError(err.message);
             })
             .finally(() => {
                 setCartLoading(false);
@@ -45,9 +45,11 @@ function CartProducts(props: {
                 setModalConfirmVisible(false);
             })
             .catch((err) => {
-                setErrorBodyDOM(err);
+                setServerError(err.message);
             });
     }
+
+    if (serverError) throw new Error(serverError);
 
     return (
         <>

@@ -1,112 +1,60 @@
-import { Link } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { CategoryCustom } from '../../types';
 
-function SideBar(props: {
-    setSelectedType: React.Dispatch<React.SetStateAction<string>>;
-    setSelectedCategory: React.Dispatch<React.SetStateAction<string>>;
-    setSelectedTypePath: React.Dispatch<React.SetStateAction<string>>;
-    setSelectedCategoryId: React.Dispatch<React.SetStateAction<string>>;
-    setSelectedCategoryPath: React.Dispatch<React.SetStateAction<string>>;
-    categories: CategoryCustom[];
-    setIsFetching: CallableFunction;
-    setCurrentOffset: CallableFunction;
-    setIsBreadCrumbsClicked: CallableFunction;
-}): JSX.Element {
-    const {
-        categories,
-        setSelectedType,
-        setSelectedCategory,
-        setSelectedCategoryId,
-        setSelectedCategoryPath,
-        setSelectedTypePath,
-        setIsFetching,
-        setCurrentOffset,
-        setIsBreadCrumbsClicked,
-    } = props;
+interface SideBarProps {
+    sideBarList: CategoryCustom[];
+    selectedType: CategoryCustom | '';
+    selectedCategory: CategoryCustom['items'][0] | '';
+}
+
+function SideBar(props: SideBarProps): JSX.Element {
+    const { sideBarList, selectedType, selectedCategory } = props;
+    const navigate = useNavigate();
 
     return (
         <aside className="sidebar">
             <div className="sidebar__content">
-                {categories.map((category) => (
+                {sideBarList.map((category) => (
                     <div className="sidebar__item" key={category.parent.name}>
-                        <button className="btn" type="button">
-                            <Link
+                        <button
+                            className="btn"
+                            type="button"
+                            onClick={(): void =>
+                                navigate(`/store/${category.parent.path}`)
+                            }
+                        >
+                            <NavLink
                                 id={category.parent.id}
-                                className="sidebar__title"
                                 to={`/store/${category.parent.path}`}
-                                onClick={(e): void => {
-                                    setSelectedCategory('');
-                                    setSelectedCategoryId('');
-                                    setIsFetching(true);
-                                    setCurrentOffset(0);
-                                    setSelectedType(category.parent.name);
-                                    setSelectedTypePath(category.parent.path);
-                                    setIsBreadCrumbsClicked(false);
-
-                                    if (e.target instanceof HTMLElement) {
-                                        (
-                                            document.querySelectorAll(
-                                                '.sidebar__category_active'
-                                            ) as NodeListOf<HTMLElement>
-                                        ).forEach((el) => {
-                                            el.classList.remove(
-                                                'sidebar__category_active'
-                                            );
-                                        });
-                                        e.target.classList.add(
-                                            'sidebar__category_active'
-                                        );
-                                    }
-                                }}
+                                className={
+                                    selectedType &&
+                                    selectedType.parent.id ===
+                                        category.parent.id
+                                        ? 'sidebar__category_active sidebar__title'
+                                        : 'sidebar__title'
+                                }
                             >
                                 {String(category.parent.name)}
-                            </Link>
+                            </NavLink>
                         </button>
 
                         <div className="sidebar__btns">
                             {category.items.map((el) => (
                                 <button key={el.path} type="button">
-                                    <Link
+                                    <NavLink
                                         id={el.id}
                                         to={`/store/${category.parent.path}/${el.path}`}
-                                        className="sidebar__category"
+                                        className={
+                                            selectedCategory &&
+                                            selectedCategory.id === el.id
+                                                ? 'sidebar__category_active sidebar__category'
+                                                : 'sidebar__category'
+                                        }
                                         key={el.name}
                                         type="button"
-                                        onClick={(e): void => {
-                                            setIsFetching(true);
-                                            setCurrentOffset(0);
-
-                                            setSelectedType(
-                                                category.parent.name
-                                            );
-                                            setSelectedTypePath(
-                                                category.parent.path
-                                            );
-                                            setSelectedCategory(el.name);
-                                            setSelectedCategoryId(el.id);
-                                            setSelectedCategoryPath(el.path);
-                                            setIsBreadCrumbsClicked(false);
-
-                                            if (
-                                                e.target instanceof HTMLElement
-                                            ) {
-                                                (
-                                                    document.querySelectorAll(
-                                                        '.sidebar__category_active'
-                                                    ) as NodeListOf<HTMLElement>
-                                                ).forEach((elem) => {
-                                                    elem.classList.remove(
-                                                        'sidebar__category_active'
-                                                    );
-                                                });
-                                                e.target.classList.add(
-                                                    'sidebar__category_active'
-                                                );
-                                            }
-                                        }}
                                     >
                                         {el.name}
-                                    </Link>
+                                    </NavLink>
                                 </button>
                             ))}
                         </div>

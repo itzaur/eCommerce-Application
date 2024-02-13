@@ -22,7 +22,7 @@ export const checkIncorrectBirthDay = (
     if (/^\s/.test(value) || /\s$/.test(value)) {
         return {
             incorrect: true,
-            message: 'День не должнен содержать начальных и конечных пробелов',
+            message: 'День не должен содержать начальных и конечных пробелов',
         };
     }
 
@@ -46,14 +46,14 @@ export const checkIncorrectBirthDay = (
     ) {
         return {
             incorrect: true,
-            message: 'День должнен быть в диапазоне 1 - 31',
+            message: 'День должен быть в диапазоне 1 - 31',
         };
     }
 
     if (!/^\d+$/.test(value)) {
         return {
             incorrect: true,
-            message: 'День должен содердажать только цифры',
+            message: 'День должен содержать только цифры',
         };
     }
 
@@ -72,7 +72,7 @@ export const checkIncorrectBirthMonth = (
     if (/^\s/.test(value) || /\s$/.test(value)) {
         return {
             incorrect: true,
-            message: 'Месяц не должнен содержать начальных и конечных пробелов',
+            message: 'Месяц не должен содержать начальных и конечных пробелов',
         };
     }
 
@@ -95,14 +95,14 @@ export const checkIncorrectBirthMonth = (
     ) {
         return {
             incorrect: true,
-            message: 'Месяц должнен быть в диапазоне 1 - 12',
+            message: 'Месяц должен быть в диапазоне 1 - 12',
         };
     }
 
     if (!/^\d+$/.test(value)) {
         return {
             incorrect: true,
-            message: 'Месяц должен содердажать только цифры',
+            message: 'Месяц должен содержать только цифры',
         };
     }
 
@@ -152,14 +152,14 @@ export const checkIncorrectBirthYear = (
     ) {
         return {
             incorrect: true,
-            message: 'Год должнен быть в диапазоне 1900 - 2023',
+            message: 'Год должен быть в диапазоне 1900 - 2024',
         };
     }
 
     if (!/^\d+$/.test(value)) {
         return {
             incorrect: true,
-            message: 'Год должен содердажать только цифры',
+            message: 'Год должен содержать только цифры',
         };
     }
 

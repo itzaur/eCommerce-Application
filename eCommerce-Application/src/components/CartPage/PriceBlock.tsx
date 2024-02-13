@@ -1,6 +1,6 @@
 import { Cart } from '@commercetools/platform-sdk';
 import { useEffect, useState } from 'react';
-import { setErrorBodyDOM } from '../../utils/constants';
+
 import {
     addNewProductInCartOrUpdateQuantity,
     applyDiscount,
@@ -21,6 +21,7 @@ function PriceBlock(props: {
     const [promocodeSuccess, setPromocodeSuccess] = useState(false);
     const [promocodeErrorMessage, setPromocodeErrorMessage] = useState('');
     const [orderDone, setOrderDone] = useState(false);
+    const [serverError, setServerError] = useState('');
 
     useEffect(() => {
         const newPriceWithoutDiscount: number | '' = activeCart
@@ -80,7 +81,7 @@ function PriceBlock(props: {
                 if (data !== undefined) setActiveCart(data);
             })
             .catch((err) => {
-                setErrorBodyDOM(err);
+                setServerError(err.message);
             });
     }
 
@@ -94,6 +95,8 @@ function PriceBlock(props: {
             setOrderDone(false);
         }, 2000);
     }
+
+    if (serverError) throw new Error(serverError);
 
     return (
         <section className="price-section">
@@ -124,7 +127,7 @@ function PriceBlock(props: {
                             : ''}
                     </h2>
                 </div>
-                <div className="promocode">
+                <form className="promocode">
                     <div className="promocode__title">
                         <p className="promocode__label">Ввести промокод</p>
                         <input
@@ -146,14 +149,15 @@ function PriceBlock(props: {
                     <div />
                     <button
                         className="btn cart__btn"
-                        type="button"
-                        onClick={(): void => {
+                        type="submit"
+                        onClick={(e): void => {
+                            e.preventDefault();
                             applyPromocode();
                         }}
                     >
                         Применить
                     </button>
-                </div>
+                </form>
             </div>
             <button
                 className="btn cart__btn cart__btn_submit"

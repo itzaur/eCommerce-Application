@@ -33,6 +33,7 @@
 .error-connection {
     @include mixins.flex(row, center, center);
 
+    height: 100vh;
     text-align: center;
     font-size: var(--fs-big);
     color: var(--color-white);

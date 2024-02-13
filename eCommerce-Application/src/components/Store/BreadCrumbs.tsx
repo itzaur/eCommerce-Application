@@ -1,143 +1,83 @@
 /* eslint-disable react/require-default-props */
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import { CategoryCustom } from '../../types';
 
-function BreadCrumbs(props: {
-    selectedType: string;
-    setSelectedType: React.Dispatch<React.SetStateAction<string>>;
-    selectedTypePath: string;
-    selectedCategory: string;
-    setSelectedCategory: React.Dispatch<React.SetStateAction<string>>;
-    setSelectedCategoryId?: React.Dispatch<React.SetStateAction<string>>;
-    selectedCategoryPath: string;
-    selectedProduct: string;
-    selectedProductPath: string;
-    setIsFetching?: CallableFunction;
-    setCurrentOffset?: CallableFunction;
-    setIsBreadCrumbsClicked?: CallableFunction;
-}): JSX.Element {
-    const {
-        selectedType,
-        setSelectedType,
-        selectedTypePath,
-        selectedCategory,
-        setSelectedCategory,
-        setSelectedCategoryId,
-        selectedCategoryPath,
-        selectedProduct,
-        selectedProductPath,
-        setIsFetching,
-        setCurrentOffset,
-        setIsBreadCrumbsClicked,
-    } = props;
+interface BreadCrumbsProps {
+    selectedType: CategoryCustom | '';
+    selectedCategory: CategoryCustom['items'][0] | '';
+    selectedProduct?: { name: string; path: string };
+}
+
+function BreadCrumbs(props: BreadCrumbsProps): JSX.Element {
+    const { selectedType, selectedCategory, selectedProduct } = props;
 
     return (
         <ul
             className={
                 selectedProduct
-                    ? 'bread-crumbs bread-crumbs_product-page '
+                    ? 'bread-crumbs bread-crumbs_product-page'
                     : 'bread-crumbs'
             }
         >
             <li>
-                <Link to="/">Главная /</Link>
+                <NavLink to="/">Главная /</NavLink>
             </li>
             <li>
-                <Link
+                <NavLink
                     to="/store"
-                    onClick={(): void => {
-                        if (setIsFetching) {
-                            setIsFetching(true);
-                        }
-                        if (setIsBreadCrumbsClicked) {
-                            setIsBreadCrumbsClicked(true);
-                        }
-                        if (setCurrentOffset) {
-                            setCurrentOffset(0);
-                        }
-
-                        setSelectedType('');
-                        setSelectedCategory('');
-                        if (setSelectedCategoryId) setSelectedCategoryId('');
-                        (
-                            document.querySelectorAll(
-                                '.sidebar__category_active'
-                            ) as NodeListOf<HTMLElement>
-                        ).forEach((el) => {
-                            el.classList.remove('sidebar__category_active');
-                        });
-                    }}
+                    className={
+                        !selectedType && !selectedCategory && !selectedProduct
+                            ? 'sidebar__category_active'
+                            : ''
+                    }
                 >
                     Каталог
-                </Link>
+                </NavLink>
             </li>
             {selectedType && (
                 <li>
-                    <Link
-                        to={`/store/${selectedTypePath}`}
-                        onClick={(): void => {
-                            if (setIsFetching) {
-                                setIsFetching(true);
-                            }
-                            if (setIsBreadCrumbsClicked) {
-                                setIsBreadCrumbsClicked(true);
-                            }
-
-                            setSelectedCategory('');
-
-                            (
-                                document.querySelectorAll(
-                                    '.sidebar__category_active'
-                                ) as NodeListOf<HTMLElement>
-                            ).forEach((el) => {
-                                el.classList.remove('sidebar__category_active');
-                            });
-                        }}
+                    <NavLink
+                        to={`/store/${selectedType.parent.path}`}
+                        className={
+                            selectedType &&
+                            !selectedCategory &&
+                            !selectedProduct
+                                ? 'sidebar__category_active'
+                                : ''
+                        }
                     >
-                        / {selectedType}{' '}
-                    </Link>
+                        / {selectedType.parent.name}
+                    </NavLink>
                 </li>
             )}
-            {selectedCategory && (
+            {selectedCategory && selectedType && (
                 <li>
-                    <Link
-                        to={`/store/${selectedTypePath}/${selectedCategoryPath}`}
-                        onClick={(): void => {
-                            if (setIsFetching) {
-                                setIsFetching(true);
-                            }
-                            if (setIsBreadCrumbsClicked) {
-                                setIsBreadCrumbsClicked(true);
-                            }
-
-                            setSelectedType(selectedType);
-                            setSelectedCategory(selectedCategory);
-
-                            (
-                                document.querySelectorAll(
-                                    '.sidebar__category_active'
-                                ) as NodeListOf<HTMLElement>
-                            ).forEach((el) => {
-                                el.classList.remove('sidebar__category_active');
-                            });
-                        }}
+                    <NavLink
+                        to={`/store/${selectedType.parent.path}/${selectedCategory.path}`}
+                        className={
+                            selectedType && selectedCategory && !selectedProduct
+                                ? 'sidebar__category_active'
+                                : ''
+                        }
                     >
-                        / {selectedCategory}
-                    </Link>
+                        / {selectedCategory.name}
+                    </NavLink>
                 </li>
             )}
             {selectedProduct && (
                 <li>
-                    <Link
+                    <NavLink
                         to={`/store${
-                            selectedTypePath ? `/${selectedTypePath}` : ''
+                            selectedType ? `/${selectedType.parent.path}` : ''
                         }${
-                            selectedCategoryPath
-                                ? `/${selectedCategoryPath}`
-                                : ''
-                        }/${selectedProductPath}`}
+                            selectedCategory ? `/${selectedCategory.path}` : ''
+                        }/${selectedProduct.path}`}
+                        className={
+                            selectedProduct ? 'sidebar__category_active' : ''
+                        }
                     >
-                        / {selectedProduct}
-                    </Link>
+                        / {selectedProduct.name}
+                    </NavLink>
                 </li>
             )}
         </ul>

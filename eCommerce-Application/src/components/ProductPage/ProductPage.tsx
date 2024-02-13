@@ -1,19 +1,13 @@
 import { useEffect, useState } from 'react';
-import { useLocation, Link } from 'react-router-dom';
+import { Link, useLoaderData } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCoverflow, Pagination, Navigation } from 'swiper/modules';
 import { Product, Cart, LineItem } from '@commercetools/platform-sdk';
 import ClipLoader from 'react-spinners/RingLoader';
 import CircleLoader from 'react-spinners/CircleLoader';
 import gsap from 'gsap';
-import {
-    products,
-    serverErrorMessage,
-    setErrorBodyDOM,
-} from '../../utils/constants';
-import { ProductOptions, UpdateCartMode } from '../../types';
-
-import { getProductKey } from '../../commercetools/getProductKey';
+import { products, serverErrorMessage } from '../../utils/constants';
+import { ProductOptions, UpdateCartMode, CategoryCustom } from '../../types';
 import { Header } from '../Store';
 import { Footer } from '../MainPage';
 import Transition from '../Transition/Transition';
@@ -31,23 +25,14 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import 'swiper/css/scrollbar';
 
-function ProductDetail({
-    type,
-    category,
-    typePath,
-    categoryPath,
-}: {
-    type: string;
-    category: string;
-    typePath: string;
-    categoryPath: string;
-}): JSX.Element {
-    const [selectedType, setSelectedType] = useState(type);
-    const selectedTypePath = typePath;
-    const [selectedCategory, setSelectedCategory] = useState(category || '');
-    const selectedCategoryPath = categoryPath;
-    const [card, setCard] = useState<Product>();
-    const location = useLocation().pathname.split('/').at(-1) as string;
+interface ProductDetailProps {
+    selectedType: CategoryCustom | '';
+    selectedCategory: CategoryCustom['items'][0] | '';
+}
+
+function ProductDetail(props: ProductDetailProps): JSX.Element {
+    const { selectedType, selectedCategory } = props;
+    const card = useLoaderData() as Product;
     const cardOptions = card?.masterData.current;
     const cardDetails = card?.masterData.current.masterVariant;
     const [isFetching, setIsFetching] = useState(true);
@@ -59,31 +44,25 @@ function ProductDetail({
     );
     const [cardInCart, setCardInCart] = useState(false);
     const [cartLoading, setCartLoading] = useState(false);
+    const [serverError, setServerError] = useState('');
 
     const timeline = gsap.timeline();
 
     useEffect(() => {
-        getProductKey(location)
-            .then((result) => {
-                setCard(result);
-                if (activeCart)
-                    setCardInCart(
-                        activeCart.lineItems
-                            .map((el: LineItem) => el.productId)
-                            .includes(result.id)
-                    );
-                setIsFetching(false);
-                if (activeCart)
-                    setCardInCart(
-                        activeCart.lineItems
-                            .map((el: LineItem) => el.productId)
-                            .includes(result.id)
-                    );
-            })
-            .catch((err: Error) => {
-                setErrorBodyDOM(err);
-            });
-    }, [location, activeCart]);
+        if (activeCart)
+            setCardInCart(
+                activeCart.lineItems
+                    .map((el: LineItem) => el.productId)
+                    .includes(card.id)
+            );
+        setIsFetching(false);
+        if (activeCart)
+            setCardInCart(
+                activeCart.lineItems
+                    .map((el: LineItem) => el.productId)
+                    .includes(card.id)
+            );
+    }, [card, activeCart]);
 
     const product: ProductOptions = {
         title: cardOptions?.name ? cardOptions?.name['ru-RU'] : '',
@@ -161,7 +140,7 @@ function ProductDetail({
                         err instanceof Error &&
                         err.message === serverErrorMessage
                     ) {
-                        setErrorBodyDOM(err);
+                        setServerError(err.message);
                     }
                 })
                 .finally(() => {
@@ -170,10 +149,12 @@ function ProductDetail({
         }
     }
 
+    if (serverError) throw new Error(serverError);
+
     return (
         <>
             <Transition timeline={timeline} />
-            <Header withSearchValue={false} setSearchValue={undefined} />
+            <Header withSearchValue={false} />
             <Modal
                 active={modalActive}
                 setActive={setModalActive}
@@ -200,15 +181,11 @@ function ProductDetail({
             <section className="product">
                 <BreadCrumbs
                     selectedType={selectedType}
-                    setSelectedType={setSelectedType}
-                    selectedTypePath={selectedTypePath}
                     selectedCategory={selectedCategory}
-                    setSelectedCategory={setSelectedCategory}
-                    selectedCategoryPath={selectedCategoryPath}
-                    selectedProduct={
-                        card?.masterData.current.name['ru-RU'] || ''
-                    }
-                    selectedProductPath={card?.key || ''}
+                    selectedProduct={{
+                        name: card?.masterData.current.name['ru-RU'] || '',
+                        path: card?.key || '',
+                    }}
                 />
 
                 <button

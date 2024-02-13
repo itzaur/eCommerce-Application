@@ -2,6 +2,7 @@ import gsap from 'gsap';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Cart } from '@commercetools/platform-sdk';
+import ClipLoader from 'react-spinners/RingLoader';
 import { Header } from '../Store';
 import Transition from '../Transition/Transition';
 import CartProducts from './CartProducts';
@@ -9,28 +10,33 @@ import PricesBlock from './PriceBlock';
 import NoCart from './NoCart';
 import { getActiveCart } from '../../commercetools/updateCart';
 import { Footer } from '../MainPage';
-import { setErrorBodyDOM } from '../../utils/constants';
 
 function CartPage(): JSX.Element {
+    const root = document.querySelector('main');
+    if (root) root.id = 'cart';
+
     const [activeCart, setActiveCart] = useState<Cart | null>(null);
     const [pageLoaded, setPageloaded] = useState(false);
+    const [serverError, setServerError] = useState('');
     const timeline = gsap.timeline();
 
     useEffect(() => {
         getActiveCart(true)
             .then((data) => {
-                setActiveCart(data);
+                if (data !== undefined) setActiveCart(data);
                 setPageloaded(true);
             })
-            .catch((err) => {
-                setErrorBodyDOM(err);
+            .catch((err: Error) => {
+                setServerError(err.message);
             });
-    }, [pageLoaded, setActiveCart]);
+    }, []);
+
+    if (serverError) throw new Error(serverError);
 
     return (
         <>
             <Transition timeline={timeline} />
-            <Header setSearchValue={undefined} withSearchValue={false} />
+            <Header withSearchValue={false} />
             <section className="cart__main">
                 <ul className="bread-crumbs">
                     <li>
@@ -51,23 +57,28 @@ function CartPage(): JSX.Element {
                     <span />
                     Назад
                 </button>
-
-                {activeCart && activeCart.lineItems.length ? (
-                    <div className="cart__content">
-                        <CartProducts
-                            activeCart={activeCart}
-                            setActiveCart={setActiveCart}
-                        />
-                        <PricesBlock
-                            activeCart={activeCart}
-                            setActiveCart={setActiveCart}
-                        />
-                    </div>
-                ) : (
-                    ''
+                {!pageLoaded && (
+                    <ClipLoader
+                        color="#4fe1e3"
+                        size={150}
+                        className="store__loader"
+                    />
                 )}
-
-                {(!activeCart || !activeCart.lineItems.length) && <NoCart />}
+                {pageLoaded &&
+                    (activeCart && activeCart.lineItems.length ? (
+                        <div className="cart__content">
+                            <CartProducts
+                                activeCart={activeCart}
+                                setActiveCart={setActiveCart}
+                            />
+                            <PricesBlock
+                                activeCart={activeCart}
+                                setActiveCart={setActiveCart}
+                            />
+                        </div>
+                    ) : (
+                        <NoCart />
+                    ))}
             </section>
             <Footer />
         </>

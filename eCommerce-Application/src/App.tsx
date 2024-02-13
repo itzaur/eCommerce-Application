@@ -1,5 +1,12 @@
-import { Routes, Route, useLocation } from 'react-router-dom';
-import { useState, useEffect, ReactElement } from 'react';
+import {
+    RouterProvider,
+    Route,
+    createBrowserRouter,
+    createRoutesFromElements,
+} from 'react-router-dom';
+import { useEffect } from 'react';
+import ClipLoader from 'react-spinners/RingLoader';
+import { Product } from '@commercetools/platform-sdk';
 import {
     Home,
     LoginPage,
@@ -8,267 +15,136 @@ import {
     Store,
     NotFound,
     ProfilePage,
+    ProductDetail,
     CartPage,
 } from './components';
-import ProductDetail from './components/ProductPage/ProductPage';
-import { products, setErrorBodyDOM } from './utils/constants';
-import { getCategories } from './commercetools/getCategories';
-import { getProductsByProductType } from './commercetools/getProductsByType';
-import { getProductsBySubcategory } from './commercetools/getProductsBySubcategory';
-import { CategoryCustom } from './types';
+
+import ErrorBoundary from './components/ErrorBoundary';
+
+import { loaderStore } from './components/Store/loaderStore';
+import { loaderProduct } from './components/ProductPage/loaderProduct';
+import { categories } from './utils/constants';
+
+const router = createBrowserRouter(
+    createRoutesFromElements(
+        <>
+            <Route
+                path="/"
+                element={<Home />}
+                errorElement={<ErrorBoundary />}
+            />
+            <Route
+                path="/login"
+                element={<LoginPage />}
+                errorElement={<ErrorBoundary />}
+            />
+            <Route
+                path="/cart"
+                element={<CartPage />}
+                errorElement={<ErrorBoundary />}
+            />
+            <Route
+                path="/registration"
+                element={<RegistrationPage />}
+                errorElement={<ErrorBoundary />}
+            />
+            <Route path="/about" element={<AboutPage />} />
+            <Route
+                path="/profile"
+                element={<ProfilePage />}
+                errorElement={<ErrorBoundary />}
+            />
+            <Route path="/store" errorElement={<ErrorBoundary />}>
+                <Route index loader={loaderStore} element={<Store />} />
+                {categories.map((category, index) => {
+                    return (
+                        <Route key={`category-${index}`} path={category.path}>
+                            <Route
+                                index
+                                loader={loaderStore}
+                                element={<Store />}
+                            />
+                            {category.itemsPath.map((item, ind) => {
+                                return (
+                                    <Route key={`item${ind}`} path={item}>
+                                        <Route
+                                            index
+                                            loader={loaderStore}
+                                            element={<Store />}
+                                        />
+                                        <Route
+                                            path=":id"
+                                            loader={async ({
+                                                params,
+                                            }): Promise<Product | void> =>
+                                                loaderProduct(params.id)
+                                            }
+                                            element={
+                                                <ProductDetail
+                                                    selectedType={{
+                                                        parent: {
+                                                            name: category.name,
+                                                            path: category.path,
+                                                            id: '',
+                                                        },
+                                                        items: [],
+                                                    }}
+                                                    selectedCategory={{
+                                                        name: category.items[
+                                                            ind
+                                                        ],
+                                                        path: item,
+                                                        id: '',
+                                                    }}
+                                                />
+                                            }
+                                            errorElement={<ErrorBoundary />}
+                                        />
+                                    </Route>
+                                );
+                            })}
+                            <Route
+                                path=":id"
+                                loader={async ({
+                                    params,
+                                }): Promise<Product | void> =>
+                                    loaderProduct(params.id)
+                                }
+                                element={
+                                    <ProductDetail
+                                        selectedType={{
+                                            parent: {
+                                                name: category.name,
+                                                path: category.path,
+                                                id: '',
+                                            },
+                                            items: [],
+                                        }}
+                                        selectedCategory=""
+                                    />
+                                }
+                                errorElement={<ErrorBoundary />}
+                            />
+                        </Route>
+                    );
+                })}
+                <Route
+                    path=":id"
+                    loader={async ({ params }): Promise<Product | void> =>
+                        loaderProduct(params.id)
+                    }
+                    element={
+                        <ProductDetail selectedType="" selectedCategory="" />
+                    }
+                    errorElement={<ErrorBoundary />}
+                />
+            </Route>
+            <Route path="*" element={<NotFound />} />
+        </>
+    )
+);
 
 function App(): JSX.Element {
-    const location = useLocation();
-    const root = document.querySelector('main');
-    const paths = [
-        'login',
-        'registration',
-        'store',
-        'about',
-        'profile',
-        'cart',
-        ...products.map((product) => product.name),
-    ];
-    const tempArrCategoriesRoutes: React.ReactElement[] = [];
-    const [categories, setCategories] = useState<CategoryCustom[]>([]);
-    const [categoriesRoutes, setCategoriesRoutes] = useState<
-        React.ReactElement[]
-    >([]);
-    const [pageLoaded, setPageLoaded] = useState(false);
-    const path = location.pathname
-        .split('/')
-        .filter((el) => el)
-        .at(-1) as string;
-
-    const countCards = 35;
-
-    function setMainId(categoriesArr: CategoryCustom[]): void {
-        if (paths.includes(path)) {
-            root?.setAttribute('id', path);
-        } else if (location.pathname === '/') {
-            root?.setAttribute('id', 'main');
-        } else if (categoriesArr.length) {
-            let categoryFound = false;
-            const setIdAttribute = (): void => {
-                categoryFound = true;
-                root?.setAttribute('id', 'store');
-            };
-            categoriesArr.forEach((category) => {
-                if (category.parent.path === path) {
-                    setIdAttribute();
-                }
-                category.items.forEach((child) => {
-                    if (child.path === path) {
-                        setIdAttribute();
-                    }
-                });
-            });
-            if (!categoryFound) {
-                root?.setAttribute('id', 'error-page');
-            }
-        }
-    }
-
-    async function getRoutes(
-        categoriesArr: CategoryCustom[]
-    ): Promise<ReactElement[]> {
-        categoriesArr.forEach((category) => {
-            tempArrCategoriesRoutes.push(
-                <Route
-                    key={category.parent.name}
-                    path={`/store/${category.parent.path}`}
-                    element={
-                        <Store
-                            type={category.parent.name}
-                            typePath={category.parent.path}
-                            category=""
-                            categoryPath=""
-                        />
-                    }
-                />
-            );
-
-            setCategoriesRoutes([
-                ...tempArrCategoriesRoutes,
-                <Route
-                    key={category.parent.name}
-                    path={`/store/${category.parent.path}`}
-                    element={
-                        <Store
-                            type={category.parent.name}
-                            typePath={category.parent.path}
-                            category=""
-                            categoryPath=""
-                        />
-                    }
-                />,
-            ]);
-            getProductsByProductType(category.parent.name, countCards)
-                .then((data) => {
-                    data?.forEach((el) => {
-                        tempArrCategoriesRoutes.push(
-                            <Route
-                                key={el.key}
-                                path={`/store/${category.parent.path}/${el.key}`}
-                                element={
-                                    <ProductDetail
-                                        type={category.parent.name}
-                                        typePath={category.parent.path}
-                                        category=""
-                                        categoryPath=""
-                                    />
-                                }
-                            />,
-                            <Route
-                                key={el.key}
-                                path={`/store/${el.key}`}
-                                element={
-                                    <ProductDetail
-                                        type=""
-                                        typePath=""
-                                        category=""
-                                        categoryPath=""
-                                    />
-                                }
-                            />
-                        );
-
-                        setCategoriesRoutes([
-                            ...tempArrCategoriesRoutes,
-                            <Route
-                                key={el.key}
-                                path={`/store/${category.parent.path}/${el.key}`}
-                                element={
-                                    <ProductDetail
-                                        type={category.parent.name}
-                                        typePath={category.parent.path}
-                                        category=""
-                                        categoryPath=""
-                                    />
-                                }
-                            />,
-                            <Route
-                                key={el.key}
-                                path={`/store/${el.key}`}
-                                element={
-                                    <ProductDetail
-                                        type=""
-                                        typePath=""
-                                        category=""
-                                        categoryPath=""
-                                    />
-                                }
-                            />,
-                        ]);
-                    });
-                })
-                .catch((err: Error) => {
-                    setErrorBodyDOM(err);
-                });
-
-            category.items.forEach((item) => {
-                tempArrCategoriesRoutes.push(
-                    <Route
-                        key={item.name}
-                        path={`/store/${category.parent.path}/${item.path}`}
-                        element={
-                            <Store
-                                type={category.parent.name}
-                                typePath={category.parent.path}
-                                category={item.name}
-                                categoryPath={item.name}
-                            />
-                        }
-                    />
-                );
-
-                setCategoriesRoutes([
-                    ...tempArrCategoriesRoutes,
-                    <Route
-                        key={item.name}
-                        path={`/store/${category.parent.path}/${item.path}`}
-                        element={
-                            <Store
-                                type={category.parent.name}
-                                typePath={category.parent.path}
-                                category={item.name}
-                                categoryPath={item.name}
-                            />
-                        }
-                    />,
-                ]);
-
-                getProductsBySubcategory(item.name)
-                    .then((data) => {
-                        data?.forEach((el) => {
-                            tempArrCategoriesRoutes.push(
-                                <Route
-                                    key={el.key}
-                                    path={`/store/${category.parent.path}/${item.path}/${el.key}`}
-                                    element={
-                                        <ProductDetail
-                                            type={category.parent.name}
-                                            typePath={category.parent.path}
-                                            category={item.name}
-                                            categoryPath={item.path}
-                                        />
-                                    }
-                                />
-                            );
-
-                            setCategoriesRoutes([
-                                ...tempArrCategoriesRoutes,
-                                <Route
-                                    key={el.key}
-                                    path={`/store/${category.parent.path}/${item.path}/${el.key}`}
-                                    element={
-                                        <ProductDetail
-                                            type={category.parent.name}
-                                            typePath={category.parent.path}
-                                            category={item.name}
-                                            categoryPath={item.path}
-                                        />
-                                    }
-                                />,
-                            ]);
-                        });
-                    })
-                    .catch((err: Error) => {
-                        setErrorBodyDOM(err);
-                    });
-            });
-        });
-
-        return categoriesRoutes;
-    }
-
-    useEffect(() => {
-        if (!pageLoaded) {
-            getCategories()
-                .then((data) => {
-                    if (data) {
-                        setCategories(data);
-                        setMainId(data);
-                        getRoutes(data)
-                            .then((result) => {
-                                setCategoriesRoutes(result);
-                                setPageLoaded(true);
-                            })
-                            .catch((err: Error) => {
-                                setErrorBodyDOM(err);
-                            });
-                    }
-                })
-                .catch((err: Error) => {
-                    setErrorBodyDOM(err);
-                });
-        }
-    });
-
-    useEffect(() => {
-        setMainId(categories);
-    });
-
     // Activate scroll smooth effect
     useEffect(() => {
         (async (): Promise<void> => {
@@ -281,23 +157,16 @@ function App(): JSX.Element {
     }, []);
 
     return (
-        <Routes>
-            {categoriesRoutes.map((route) => route)}
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/cart" element={<CartPage />} />
-            <Route path="/registration" element={<RegistrationPage />} />
-            <Route
-                path="/store"
-                element={
-                    <Store type="" category="" typePath="" categoryPath="" />
-                }
-            />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="*" element={<NotFound />} />
-        </Routes>
+        <RouterProvider
+            router={router}
+            fallbackElement={
+                <ClipLoader
+                    color="#4fe1e3"
+                    size={150}
+                    className="store__loader"
+                />
+            }
+        />
     );
 }
-
 export default App;

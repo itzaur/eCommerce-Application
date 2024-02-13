@@ -34,7 +34,7 @@ describe('Registration tests', () => {
     it('Client validation of name works correctly', () => {
         expect(screen.getByText(/фамилия/)).toBeInTheDocument();
         expect(
-            screen.queryByText(/Фамилия должна содердажать только буквы/)
+            screen.queryByText(/Фамилия должна содержать только буквы/)
         ).toBeNull();
         fireEvent.change(
             document.getElementById('surname') as HTMLInputElement,
@@ -43,7 +43,7 @@ describe('Registration tests', () => {
             }
         );
         expect(
-            screen.getByText(/Фамилия должна содердажать только буквы/)
+            screen.getByText(/Фамилия должна содержать только буквы/)
         ).toBeInTheDocument();
     });
     it('Corectly checks different passwords', () => {

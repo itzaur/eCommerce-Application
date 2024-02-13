@@ -10,7 +10,7 @@ export const checkIncorrectAddressStreet = (
     if (/^\s/.test(value) || /\s$/.test(value)) {
         return {
             incorrect: true,
-            message: 'Улица не должена содержать начальных и конечных пробелов',
+            message: 'Улица не должна содержать начальных и конечных пробелов',
         };
     }
 
@@ -50,7 +50,7 @@ export const checkIncorrectAddressCity = (
     if (!/^[a-zа-яё]+[\s-]?[a-zа-яё]*$/i.test(value)) {
         return {
             incorrect: true,
-            message: 'Город должен содердажать только буквы',
+            message: 'Город должен содержать только буквы',
         };
     }
 
@@ -69,8 +69,7 @@ export const checkIncorrectAddressRegion = (
     if (/^\s/.test(value) || /\s$/.test(value)) {
         return {
             incorrect: true,
-            message:
-                'Регнион не должен содержать начальных и конечных пробелов',
+            message: 'Регион не должен содержать начальных и конечных пробелов',
         };
     }
 
@@ -84,7 +83,7 @@ export const checkIncorrectAddressRegion = (
     if (!/^[a-zA-ZА-Яа-яёЁ]+$/.test(value)) {
         return {
             incorrect: true,
-            message: 'Регион должен содердажать только буквы',
+            message: 'Регион должен содержать только буквы',
         };
     }
 

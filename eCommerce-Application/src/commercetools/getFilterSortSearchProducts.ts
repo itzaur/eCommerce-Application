@@ -1,22 +1,21 @@
 import { ProductProjection } from '@commercetools/platform-sdk';
 import { apiRoot } from './Client';
-import { FilterSortSearcParameters } from '../types/index';
+import { FilterSortSearchParameters } from '../types/index';
 import { serverErrorMessage } from '../utils/constants';
 
 export async function getFilterSortSearchProducts(
-    parameters: FilterSortSearcParameters,
-    currentOffset: number,
+    parameters: FilterSortSearchParameters,
     itemPerPage: number
 ): Promise<ProductProjection[]> {
     const {
-        selectedCategoryId,
-        attributesToFilter,
+        categoryType: { attributesToFilter, selectedCategoryId },
         selectedFiltersList,
         minSelectedPrice,
         maxSelectedPrice,
         attributesToSort,
         attributesToSearch,
         discountedProducts,
+        currentOffset,
     } = parameters;
     const queryArgs: {
         filter: string | string[] | undefined;
@@ -35,14 +34,14 @@ export async function getFilterSortSearchProducts(
         if (selectedCategoryId) {
             queryArgs.filter.push(`categories.id:"${selectedCategoryId}"`);
         }
-        if (attributesToFilter && selectedFiltersList.length) {
+        if (attributesToFilter.key && selectedFiltersList.length) {
             queryArgs.filter.push(
-                `variants.attributes.${attributesToFilter}:${selectedFiltersList}`
+                `variants.attributes.${attributesToFilter.key}:${selectedFiltersList}`
             );
         }
-        if (attributesToFilter && !selectedFiltersList.length) {
+        if (attributesToFilter.key && !selectedFiltersList.length) {
             queryArgs.filter.push(
-                `variants.attributes.${attributesToFilter}:exists`
+                `variants.attributes.${attributesToFilter.key}:exists`
             );
         }
         if (minSelectedPrice || maxSelectedPrice) {
@@ -58,7 +57,7 @@ export async function getFilterSortSearchProducts(
     }
 
     if (queryArgs && attributesToSort) {
-        queryArgs.sort = [attributesToSort];
+        queryArgs.sort = [attributesToSort.order];
     }
     if (queryArgs && attributesToSearch) {
         queryArgs['text.ru-RU'] = attributesToSearch;
