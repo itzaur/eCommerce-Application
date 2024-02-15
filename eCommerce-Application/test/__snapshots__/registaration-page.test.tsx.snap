@@ -1,0 +1,1436 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Registration tests > Registration page renders 1`] = `
+{
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <header
+        class="header"
+      >
+        <a
+          href="/"
+        >
+          <img
+            alt="logo"
+            class="logo_big"
+            src="/src/assets/images/logo.png"
+          />
+        </a>
+      </header>
+      <section
+        class="form registration"
+      >
+        <h2
+          class="form__title form_big-first-letter"
+        >
+          добро пожаловать 
+          <br />
+           на борт космической одиссеи!
+        </h2>
+        <div
+          class="form__content"
+        >
+          <div
+            class="form__question form_big-first-letter"
+          >
+            уже есть аккаунт? 
+            <a
+              href="/login"
+            >
+              войдите!
+            </a>
+          </div>
+          <form
+            class="form__inputs"
+          >
+            <div
+              class="form__inputs-wrapper"
+            >
+              <label
+                class="placeholder"
+                for="user-name"
+              >
+                <input
+                  class="form__input"
+                  id="user-name"
+                  required=""
+                  type="text"
+                />
+                <div
+                  class="placeholder__input  form_big-first-letter"
+                >
+                  имя пользователя
+                  <span>
+                    *
+                  </span>
+                </div>
+                <p
+                  class="error-message"
+                />
+              </label>
+            </div>
+            <div
+              class="form__input-pair"
+            >
+              <div
+                class="form__inputs-wrapper"
+              >
+                <label
+                  class="placeholder"
+                  for="name"
+                >
+                  <input
+                    class="form__input"
+                    id="name"
+                    required=""
+                    type="text"
+                  />
+                  <div
+                    class="placeholder__input form_big-first-letter"
+                  >
+                    имя
+                    <span>
+                      *
+                    </span>
+                  </div>
+                  <p
+                    class="error-message"
+                  />
+                </label>
+              </div>
+              <div
+                class="form__inputs-wrapper"
+              >
+                <label
+                  class="placeholder"
+                  for="surname"
+                >
+                  <input
+                    class="form__input"
+                    id="surname"
+                    required=""
+                    type="text"
+                  />
+                  <div
+                    class="placeholder__input form_big-first-letter"
+                  >
+                    фамилия
+                    <span>
+                      *
+                    </span>
+                  </div>
+                  <p
+                    class="error-message"
+                  />
+                </label>
+              </div>
+            </div>
+            <div
+              class="form__inputs-wrapper"
+            >
+              <label
+                class="placeholder"
+                for="user-password"
+              >
+                <input
+                  class="form__input"
+                  id="user-password"
+                  required=""
+                  type="password"
+                />
+                <div
+                  class="placeholder__input form_big-first-letter"
+                >
+                  создайте пароль
+                  <span>
+                    *
+                  </span>
+                </div>
+                <p
+                  class="error-message"
+                />
+              </label>
+            </div>
+            <div
+              class="form__inputs-wrapper"
+            >
+              <label
+                class="placeholder"
+                for="user-password-repeat"
+              >
+                <input
+                  class="form__input"
+                  id="user-password-repeat"
+                  required=""
+                  type="password"
+                />
+                <div
+                  class="placeholder__input form_big-first-letter"
+                >
+                  повторите пароль
+                  <span>
+                    *
+                  </span>
+                </div>
+                <p
+                  class="error-message"
+                />
+              </label>
+            </div>
+            <div
+              class="form__inputs-wrapper"
+            >
+              <label
+                class="placeholder"
+                for="user-email"
+              >
+                <input
+                  class="form__input"
+                  id="user-email"
+                  required=""
+                  type="text"
+                />
+                <div
+                  class="placeholder__input form_big-first-letter"
+                >
+                  e-mail
+                  <span>
+                    *
+                  </span>
+                </div>
+                <p
+                  class="error-message"
+                />
+              </label>
+            </div>
+            <fieldset
+              class="form__input-group "
+            >
+              <legend>
+                Адрес доставки
+              </legend>
+              <div
+                class="form__input-pair"
+              >
+                <div
+                  class="form__inputs-wrapper"
+                >
+                  <select
+                    class="form__input"
+                    id="shipping-country"
+                  >
+                    <option
+                      disabled=""
+                      selected=""
+                      value="Выберите страну*"
+                    >
+                      Выберите страну*
+                    </option>
+                    <option
+                      value="Россия"
+                    >
+                      Россия
+                    </option>
+                    <option
+                      value="Беларусь"
+                    >
+                      Беларусь
+                    </option>
+                    <option
+                      value="Польша"
+                    >
+                      Польша
+                    </option>
+                  </select>
+                  <p
+                    class="error-message"
+                  />
+                </div>
+                <div
+                  class="form__inputs-wrapper"
+                >
+                  <label
+                    class="placeholder"
+                    for="shipping-address-region"
+                  >
+                    <input
+                      class="form__input"
+                      id="shipping-address-region"
+                      required=""
+                      type="text"
+                    />
+                    <div
+                      class="placeholder__input form_big-first-letter"
+                    >
+                      регион
+                      <span>
+                        *
+                      </span>
+                    </div>
+                    <p
+                      class="error-message"
+                    />
+                  </label>
+                </div>
+              </div>
+              <div
+                class="form__input-pair"
+              >
+                <div
+                  class="form__inputs-wrapper"
+                >
+                  <label
+                    class="placeholder"
+                    for="shipping-address-city"
+                  >
+                    <input
+                      class="form__input"
+                      id="shipping-address-city"
+                      required=""
+                      type="text"
+                    />
+                    <div
+                      class="placeholder__input form_big-first-letter"
+                    >
+                      город
+                      <span>
+                        *
+                      </span>
+                    </div>
+                    <p
+                      class="error-message"
+                    />
+                  </label>
+                </div>
+                <div
+                  class="form__inputs-wrapper"
+                >
+                  <label
+                    class="placeholder"
+                    for="shipping-address-index"
+                  >
+                    <input
+                      class="form__input"
+                      id="shipping-address-index"
+                      required=""
+                      type="text"
+                    />
+                    <div
+                      class="placeholder__input form_big-first-letter"
+                    >
+                      индекс
+                      <span>
+                        *
+                      </span>
+                    </div>
+                    <p
+                      class="error-message"
+                    />
+                  </label>
+                </div>
+              </div>
+              <div
+                class="form__inputs-wrapper"
+              >
+                <label
+                  class="placeholder"
+                  for="shipping-address"
+                >
+                  <input
+                    class="form__input"
+                    id="shipping-address"
+                    required=""
+                    type="text"
+                  />
+                  <div
+                    class="placeholder__input form_big-first-letter"
+                  >
+                    адрес
+                    <span>
+                      *
+                    </span>
+                  </div>
+                  <p
+                    class="error-message"
+                  />
+                </label>
+              </div>
+              <div
+                class="form__inputs-wrapper"
+              >
+                <label
+                  class="form__input_checkbox"
+                  for="shipping-address-checkbox"
+                >
+                  <input
+                    id="shipping-address-checkbox"
+                    type="checkbox"
+                  />
+                  Использовать адрес по умолчанию
+                </label>
+              </div>
+              <div
+                class="form__inputs-wrapper"
+              >
+                <label
+                  class="form__input_checkbox"
+                  for="billing-address-default-checkbox"
+                >
+                  <input
+                    id="billing-address-default-checkbox"
+                    type="checkbox"
+                  />
+                  Использовать как адрес выставления счета
+                </label>
+              </div>
+            </fieldset>
+            <fieldset
+              class="form__input-group"
+              style="pointer-events: auto;"
+            >
+              <legend>
+                Адрес выставления счета
+              </legend>
+              <div
+                class="form__input-pair"
+              >
+                <div
+                  class="form__inputs-wrapper"
+                >
+                  <select
+                    class="form__input"
+                    id="billing-country"
+                  >
+                    <option
+                      disabled=""
+                      value="Выберите страну*"
+                    >
+                      Выберите страну*
+                    </option>
+                    <option
+                      value="Россия"
+                    >
+                      Россия
+                    </option>
+                    <option
+                      value="Беларусь"
+                    >
+                      Беларусь
+                    </option>
+                    <option
+                      value="Польша"
+                    >
+                      Польша
+                    </option>
+                  </select>
+                  <p
+                    class="error-message"
+                  />
+                </div>
+                <div
+                  class="form__inputs-wrapper"
+                >
+                  <label
+                    class="placeholder"
+                    for="billing-address-region"
+                  >
+                    <input
+                      class="form__input"
+                      id="billing-address-region"
+                      required=""
+                      type="text"
+                      value=""
+                    />
+                    <div
+                      class="placeholder__input form_big-first-letter"
+                    >
+                      регион
+                      <span>
+                        *
+                      </span>
+                    </div>
+                    <p
+                      class="error-message"
+                    />
+                  </label>
+                </div>
+              </div>
+              <div
+                class="form__input-pair"
+              >
+                <div
+                  class="form__inputs-wrapper"
+                >
+                  <label
+                    class="placeholder"
+                    for="billing-address-city"
+                  >
+                    <input
+                      class="form__input"
+                      id="billing-address-city"
+                      required=""
+                      type="text"
+                      value=""
+                    />
+                    <div
+                      class="placeholder__input form_big-first-letter"
+                    >
+                      город
+                      <span>
+                        *
+                      </span>
+                    </div>
+                    <p
+                      class="error-message"
+                    />
+                  </label>
+                </div>
+                <div
+                  class="form__inputs-wrapper"
+                >
+                  <label
+                    class="placeholder"
+                    for="billing-address-index"
+                  >
+                    <input
+                      class="form__input"
+                      id="billing-address-index"
+                      required=""
+                      type="text"
+                      value=""
+                    />
+                    <div
+                      class="placeholder__input form_big-first-letter"
+                    >
+                      индекс
+                      <span>
+                        *
+                      </span>
+                    </div>
+                    <p
+                      class="error-message"
+                    />
+                  </label>
+                </div>
+              </div>
+              <div
+                class="form__inputs-wrapper"
+              >
+                <label
+                  class="placeholder"
+                  for="billing-address"
+                >
+                  <input
+                    class="form__input"
+                    id="billing-address"
+                    required=""
+                    type="text"
+                    value=""
+                  />
+                  <div
+                    class="placeholder__input form_big-first-letter"
+                  >
+                    адрес
+                    <span>
+                      *
+                    </span>
+                  </div>
+                  <p
+                    class="error-message"
+                  />
+                </label>
+              </div>
+              <div
+                class="form__inputs-wrapper"
+                style="pointer-events: auto;"
+              >
+                <label
+                  class="form__input_checkbox"
+                  for="billing-address-checkbox"
+                >
+                  <input
+                    id="billing-address-checkbox"
+                    type="checkbox"
+                  />
+                  Использовать адрес по умолчанию
+                </label>
+              </div>
+            </fieldset>
+            <div
+              class="form__input-trio"
+            >
+              <div
+                class="form__inputs-wrapper"
+              >
+                <label
+                  class="placeholder"
+                  for="birth-day"
+                >
+                  <input
+                    class="form__input"
+                    id="birth-day"
+                    required=""
+                    type="text"
+                  />
+                  <div
+                    class="placeholder__input form_big-first-letter"
+                  >
+                    число
+                    <span>
+                      *
+                    </span>
+                  </div>
+                  <p
+                    class="error-message"
+                  />
+                </label>
+              </div>
+              <div
+                class="form__inputs-wrapper"
+              >
+                <label
+                  class="placeholder"
+                  for="birth-month"
+                >
+                  <input
+                    class="form__input"
+                    id="birth-month"
+                    required=""
+                    type="text"
+                  />
+                  <div
+                    class="placeholder__input form_big-first-letter"
+                  >
+                    месяц
+                    <span>
+                      *
+                    </span>
+                  </div>
+                  <p
+                    class="error-message"
+                  />
+                </label>
+              </div>
+              <div
+                class="form__inputs-wrapper"
+              >
+                <label
+                  class="placeholder"
+                  for="birth-year"
+                >
+                  <input
+                    class="form__input"
+                    id="birth-year"
+                    required=""
+                    type="text"
+                  />
+                  <div
+                    class="placeholder__input form_big-first-letter"
+                  >
+                    год
+                    <span>
+                      *
+                    </span>
+                  </div>
+                  <p
+                    class="error-message"
+                  />
+                </label>
+              </div>
+              <p
+                class="error-message error-message--age"
+              />
+            </div>
+            <div
+              class="form__inputs-wrapper form__inputs-wrapper--offset"
+            >
+              <label
+                class="placeholder"
+                for="life-form"
+              >
+                <input
+                  class="form__input"
+                  id="life-form"
+                  required=""
+                  type="text"
+                />
+                <div
+                  class="placeholder__input form_big-first-letter"
+                >
+                  форма жизни
+                  <span>
+                    *
+                  </span>
+                </div>
+                <p
+                  class="error-message"
+                />
+              </label>
+            </div>
+            <div
+              class="form__inputs-wrapper"
+            >
+              <label
+                class="form__input_checkbox"
+                for="multi-passport-submit"
+              >
+                <input
+                  id="multi-passport-submit"
+                  type="checkbox"
+                />
+                Наличие мультипаспорта
+              </label>
+            </div>
+            <button
+              class="btn_action"
+              type="submit"
+            >
+              Регистрация
+            </button>
+          </form>
+        </div>
+      </section>
+    </div>
+  </body>,
+  "container": <div>
+    <header
+      class="header"
+    >
+      <a
+        href="/"
+      >
+        <img
+          alt="logo"
+          class="logo_big"
+          src="/src/assets/images/logo.png"
+        />
+      </a>
+    </header>
+    <section
+      class="form registration"
+    >
+      <h2
+        class="form__title form_big-first-letter"
+      >
+        добро пожаловать 
+        <br />
+         на борт космической одиссеи!
+      </h2>
+      <div
+        class="form__content"
+      >
+        <div
+          class="form__question form_big-first-letter"
+        >
+          уже есть аккаунт? 
+          <a
+            href="/login"
+          >
+            войдите!
+          </a>
+        </div>
+        <form
+          class="form__inputs"
+        >
+          <div
+            class="form__inputs-wrapper"
+          >
+            <label
+              class="placeholder"
+              for="user-name"
+            >
+              <input
+                class="form__input"
+                id="user-name"
+                required=""
+                type="text"
+              />
+              <div
+                class="placeholder__input  form_big-first-letter"
+              >
+                имя пользователя
+                <span>
+                  *
+                </span>
+              </div>
+              <p
+                class="error-message"
+              />
+            </label>
+          </div>
+          <div
+            class="form__input-pair"
+          >
+            <div
+              class="form__inputs-wrapper"
+            >
+              <label
+                class="placeholder"
+                for="name"
+              >
+                <input
+                  class="form__input"
+                  id="name"
+                  required=""
+                  type="text"
+                />
+                <div
+                  class="placeholder__input form_big-first-letter"
+                >
+                  имя
+                  <span>
+                    *
+                  </span>
+                </div>
+                <p
+                  class="error-message"
+                />
+              </label>
+            </div>
+            <div
+              class="form__inputs-wrapper"
+            >
+              <label
+                class="placeholder"
+                for="surname"
+              >
+                <input
+                  class="form__input"
+                  id="surname"
+                  required=""
+                  type="text"
+                />
+                <div
+                  class="placeholder__input form_big-first-letter"
+                >
+                  фамилия
+                  <span>
+                    *
+                  </span>
+                </div>
+                <p
+                  class="error-message"
+                />
+              </label>
+            </div>
+          </div>
+          <div
+            class="form__inputs-wrapper"
+          >
+            <label
+              class="placeholder"
+              for="user-password"
+            >
+              <input
+                class="form__input"
+                id="user-password"
+                required=""
+                type="password"
+              />
+              <div
+                class="placeholder__input form_big-first-letter"
+              >
+                создайте пароль
+                <span>
+                  *
+                </span>
+              </div>
+              <p
+                class="error-message"
+              />
+            </label>
+          </div>
+          <div
+            class="form__inputs-wrapper"
+          >
+            <label
+              class="placeholder"
+              for="user-password-repeat"
+            >
+              <input
+                class="form__input"
+                id="user-password-repeat"
+                required=""
+                type="password"
+              />
+              <div
+                class="placeholder__input form_big-first-letter"
+              >
+                повторите пароль
+                <span>
+                  *
+                </span>
+              </div>
+              <p
+                class="error-message"
+              />
+            </label>
+          </div>
+          <div
+            class="form__inputs-wrapper"
+          >
+            <label
+              class="placeholder"
+              for="user-email"
+            >
+              <input
+                class="form__input"
+                id="user-email"
+                required=""
+                type="text"
+              />
+              <div
+                class="placeholder__input form_big-first-letter"
+              >
+                e-mail
+                <span>
+                  *
+                </span>
+              </div>
+              <p
+                class="error-message"
+              />
+            </label>
+          </div>
+          <fieldset
+            class="form__input-group "
+          >
+            <legend>
+              Адрес доставки
+            </legend>
+            <div
+              class="form__input-pair"
+            >
+              <div
+                class="form__inputs-wrapper"
+              >
+                <select
+                  class="form__input"
+                  id="shipping-country"
+                >
+                  <option
+                    disabled=""
+                    selected=""
+                    value="Выберите страну*"
+                  >
+                    Выберите страну*
+                  </option>
+                  <option
+                    value="Россия"
+                  >
+                    Россия
+                  </option>
+                  <option
+                    value="Беларусь"
+                  >
+                    Беларусь
+                  </option>
+                  <option
+                    value="Польша"
+                  >
+                    Польша
+                  </option>
+                </select>
+                <p
+                  class="error-message"
+                />
+              </div>
+              <div
+                class="form__inputs-wrapper"
+              >
+                <label
+                  class="placeholder"
+                  for="shipping-address-region"
+                >
+                  <input
+                    class="form__input"
+                    id="shipping-address-region"
+                    required=""
+                    type="text"
+                  />
+                  <div
+                    class="placeholder__input form_big-first-letter"
+                  >
+                    регион
+                    <span>
+                      *
+                    </span>
+                  </div>
+                  <p
+                    class="error-message"
+                  />
+                </label>
+              </div>
+            </div>
+            <div
+              class="form__input-pair"
+            >
+              <div
+                class="form__inputs-wrapper"
+              >
+                <label
+                  class="placeholder"
+                  for="shipping-address-city"
+                >
+                  <input
+                    class="form__input"
+                    id="shipping-address-city"
+                    required=""
+                    type="text"
+                  />
+                  <div
+                    class="placeholder__input form_big-first-letter"
+                  >
+                    город
+                    <span>
+                      *
+                    </span>
+                  </div>
+                  <p
+                    class="error-message"
+                  />
+                </label>
+              </div>
+              <div
+                class="form__inputs-wrapper"
+              >
+                <label
+                  class="placeholder"
+                  for="shipping-address-index"
+                >
+                  <input
+                    class="form__input"
+                    id="shipping-address-index"
+                    required=""
+                    type="text"
+                  />
+                  <div
+                    class="placeholder__input form_big-first-letter"
+                  >
+                    индекс
+                    <span>
+                      *
+                    </span>
+                  </div>
+                  <p
+                    class="error-message"
+                  />
+                </label>
+              </div>
+            </div>
+            <div
+              class="form__inputs-wrapper"
+            >
+              <label
+                class="placeholder"
+                for="shipping-address"
+              >
+                <input
+                  class="form__input"
+                  id="shipping-address"
+                  required=""
+                  type="text"
+                />
+                <div
+                  class="placeholder__input form_big-first-letter"
+                >
+                  адрес
+                  <span>
+                    *
+                  </span>
+                </div>
+                <p
+                  class="error-message"
+                />
+              </label>
+            </div>
+            <div
+              class="form__inputs-wrapper"
+            >
+              <label
+                class="form__input_checkbox"
+                for="shipping-address-checkbox"
+              >
+                <input
+                  id="shipping-address-checkbox"
+                  type="checkbox"
+                />
+                Использовать адрес по умолчанию
+              </label>
+            </div>
+            <div
+              class="form__inputs-wrapper"
+            >
+              <label
+                class="form__input_checkbox"
+                for="billing-address-default-checkbox"
+              >
+                <input
+                  id="billing-address-default-checkbox"
+                  type="checkbox"
+                />
+                Использовать как адрес выставления счета
+              </label>
+            </div>
+          </fieldset>
+          <fieldset
+            class="form__input-group"
+            style="pointer-events: auto;"
+          >
+            <legend>
+              Адрес выставления счета
+            </legend>
+            <div
+              class="form__input-pair"
+            >
+              <div
+                class="form__inputs-wrapper"
+              >
+                <select
+                  class="form__input"
+                  id="billing-country"
+                >
+                  <option
+                    disabled=""
+                    value="Выберите страну*"
+                  >
+                    Выберите страну*
+                  </option>
+                  <option
+                    value="Россия"
+                  >
+                    Россия
+                  </option>
+                  <option
+                    value="Беларусь"
+                  >
+                    Беларусь
+                  </option>
+                  <option
+                    value="Польша"
+                  >
+                    Польша
+                  </option>
+                </select>
+                <p
+                  class="error-message"
+                />
+              </div>
+              <div
+                class="form__inputs-wrapper"
+              >
+                <label
+                  class="placeholder"
+                  for="billing-address-region"
+                >
+                  <input
+                    class="form__input"
+                    id="billing-address-region"
+                    required=""
+                    type="text"
+                    value=""
+                  />
+                  <div
+                    class="placeholder__input form_big-first-letter"
+                  >
+                    регион
+                    <span>
+                      *
+                    </span>
+                  </div>
+                  <p
+                    class="error-message"
+                  />
+                </label>
+              </div>
+            </div>
+            <div
+              class="form__input-pair"
+            >
+              <div
+                class="form__inputs-wrapper"
+              >
+                <label
+                  class="placeholder"
+                  for="billing-address-city"
+                >
+                  <input
+                    class="form__input"
+                    id="billing-address-city"
+                    required=""
+                    type="text"
+                    value=""
+                  />
+                  <div
+                    class="placeholder__input form_big-first-letter"
+                  >
+                    город
+                    <span>
+                      *
+                    </span>
+                  </div>
+                  <p
+                    class="error-message"
+                  />
+                </label>
+              </div>
+              <div
+                class="form__inputs-wrapper"
+              >
+                <label
+                  class="placeholder"
+                  for="billing-address-index"
+                >
+                  <input
+                    class="form__input"
+                    id="billing-address-index"
+                    required=""
+                    type="text"
+                    value=""
+                  />
+                  <div
+                    class="placeholder__input form_big-first-letter"
+                  >
+                    индекс
+                    <span>
+                      *
+                    </span>
+                  </div>
+                  <p
+                    class="error-message"
+                  />
+                </label>
+              </div>
+            </div>
+            <div
+              class="form__inputs-wrapper"
+            >
+              <label
+                class="placeholder"
+                for="billing-address"
+              >
+                <input
+                  class="form__input"
+                  id="billing-address"
+                  required=""
+                  type="text"
+                  value=""
+                />
+                <div
+                  class="placeholder__input form_big-first-letter"
+                >
+                  адрес
+                  <span>
+                    *
+                  </span>
+                </div>
+                <p
+                  class="error-message"
+                />
+              </label>
+            </div>
+            <div
+              class="form__inputs-wrapper"
+              style="pointer-events: auto;"
+            >
+              <label
+                class="form__input_checkbox"
+                for="billing-address-checkbox"
+              >
+                <input
+                  id="billing-address-checkbox"
+                  type="checkbox"
+                />
+                Использовать адрес по умолчанию
+              </label>
+            </div>
+          </fieldset>
+          <div
+            class="form__input-trio"
+          >
+            <div
+              class="form__inputs-wrapper"
+            >
+              <label
+                class="placeholder"
+                for="birth-day"
+              >
+                <input
+                  class="form__input"
+                  id="birth-day"
+                  required=""
+                  type="text"
+                />
+                <div
+                  class="placeholder__input form_big-first-letter"
+                >
+                  число
+                  <span>
+                    *
+                  </span>
+                </div>
+                <p
+                  class="error-message"
+                />
+              </label>
+            </div>
+            <div
+              class="form__inputs-wrapper"
+            >
+              <label
+                class="placeholder"
+                for="birth-month"
+              >
+                <input
+                  class="form__input"
+                  id="birth-month"
+                  required=""
+                  type="text"
+                />
+                <div
+                  class="placeholder__input form_big-first-letter"
+                >
+                  месяц
+                  <span>
+                    *
+                  </span>
+                </div>
+                <p
+                  class="error-message"
+                />
+              </label>
+            </div>
+            <div
+              class="form__inputs-wrapper"
+            >
+              <label
+                class="placeholder"
+                for="birth-year"
+              >
+                <input
+                  class="form__input"
+                  id="birth-year"
+                  required=""
+                  type="text"
+                />
+                <div
+                  class="placeholder__input form_big-first-letter"
+                >
+                  год
+                  <span>
+                    *
+                  </span>
+                </div>
+                <p
+                  class="error-message"
+                />
+              </label>
+            </div>
+            <p
+              class="error-message error-message--age"
+            />
+          </div>
+          <div
+            class="form__inputs-wrapper form__inputs-wrapper--offset"
+          >
+            <label
+              class="placeholder"
+              for="life-form"
+            >
+              <input
+                class="form__input"
+                id="life-form"
+                required=""
+                type="text"
+              />
+              <div
+                class="placeholder__input form_big-first-letter"
+              >
+                форма жизни
+                <span>
+                  *
+                </span>
+              </div>
+              <p
+                class="error-message"
+              />
+            </label>
+          </div>
+          <div
+            class="form__inputs-wrapper"
+          >
+            <label
+              class="form__input_checkbox"
+              for="multi-passport-submit"
+            >
+              <input
+                id="multi-passport-submit"
+                type="checkbox"
+              />
+              Наличие мультипаспорта
+            </label>
+          </div>
+          <button
+            class="btn_action"
+            type="submit"
+          >
+            Регистрация
+          </button>
+        </form>
+      </div>
+    </section>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;

@@ -1,0 +1,294 @@
+@use '../abstracts/mixins';
+
+#about {
+    position: relative;
+
+    background-image: url('../assets/images/about-bg.jpg');
+    background-repeat: no-repeat;
+    background-position: top;
+
+    @media (max-width: 73.19em) {
+        background-size: cover;
+    }
+
+    & .about-us__container {
+        padding: 2rem 5vw 2rem 5vw;
+
+        @include mixins.respond-to('desktop') {
+            padding: 2rem 5vw 6rem 5vw;
+        }
+    }
+}
+
+.about-us {
+    color: var(--color-white);
+
+    @media (min-width: 73.19em) {
+        background-image: url('../assets/images/about-bg2.png');
+
+        background-repeat: no-repeat;
+        background-position: bottom center;
+        background-size: contain;
+    }
+
+    &__container {
+        & > * + * {
+            padding-top: 2rem;
+
+            @include mixins.respond-to('desktop') {
+                padding-top: 6rem;
+            }
+        }
+
+        & .bread-crumbs {
+            padding-top: 5rem;
+            padding-bottom: 1rem;
+        }
+    }
+
+    &__back {
+        padding-top: 0;
+    }
+
+    &__logo {
+        img {
+            width: 22rem;
+            filter: invert(1);
+        }
+    }
+
+    &__description {
+        --gap: 0;
+        @include mixins.flex(null, flex-start, stretch);
+        flex-wrap: wrap;
+
+        & > * + * {
+            padding-top: 2rem;
+        }
+
+        @include mixins.respond-to('desktop') {
+            --gap: 1rem;
+            flex-wrap: nowrap;
+        }
+    }
+
+    &__school {
+        --gap: 3rem;
+        @include mixins.flex(column, center, center);
+
+        @include mixins.respond-to('tablet') {
+            flex: 1 0 40rem;
+            flex-direction: row;
+        }
+
+        &-title {
+            max-width: 25ch;
+        }
+
+        @include mixins.respond-to('desktop') {
+            @include mixins.flex(column, flex-start, flex-start);
+            margin-left: 15rem;
+        }
+    }
+
+    &__text {
+        @include mixins.respond-to('desktop') {
+            padding-top: 0;
+        }
+
+        &:has(p) {
+            max-width: 60ch;
+        }
+
+        & > * + * {
+            margin-top: 2rem;
+        }
+
+        &-title {
+            max-width: 20ch;
+        }
+
+        &-subtitle {
+            color: var(--color-primary);
+
+            span {
+                color: var(--color-white);
+            }
+        }
+
+        &-detail {
+            margin-top: 4rem;
+
+            span {
+                color: var(--color-primary);
+            }
+        }
+    }
+
+    &__line {
+        --gap: 0;
+        @include mixins.flex(column, center, center);
+
+        display: none;
+
+        @include mixins.respond-to('desktop') {
+            display: flex;
+        }
+
+        .circle {
+            display: block;
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 50%;
+            background-color: var(--color-white);
+        }
+
+        .line {
+            display: block;
+            width: 0.2rem;
+            height: 100%;
+
+            background-color: var(--color-white);
+        }
+    }
+
+    &__slider {
+        overflow: hidden;
+
+        .swiper-slide {
+            background-position: center;
+            background-size: cover;
+            max-width: 30rem;
+        }
+    }
+
+    &__foundation {
+        --gap: 1rem;
+        @include mixins.flex(column, flex-end, center);
+
+        max-width: 80ch;
+
+        margin-left: auto;
+        padding-top: 0;
+
+        & img {
+            height: 10rem;
+        }
+
+        @include mixins.respond-to('desktop') {
+            --gap: 2rem;
+            align-items: flex-start;
+        }
+
+        &-title {
+            color: var(--color-primary);
+        }
+    }
+
+    &__cards {
+        --gap: 3rem;
+        @include mixins.flex(column, center, center);
+
+        @include mixins.respond-to('desktop') {
+            --gap: 8rem;
+        }
+    }
+
+    &__card {
+        --gap: 1rem;
+        @include mixins.flex(null, center, flex-start);
+        flex-wrap: wrap;
+
+        margin-inline: auto;
+
+        border: 1px solid var(--color-primary);
+
+        background-color: var(--color-header);
+        backdrop-filter: blur(0.2rem);
+        box-shadow: inset var(--drop-shadow-light);
+
+        @include mixins.respond-to('desktop') {
+            width: 80%;
+            flex-wrap: nowrap;
+        }
+
+        &:nth-child(even) {
+            flex-direction: row-reverse;
+
+            & > * {
+                @include mixins.respond-to('desktop') {
+                    text-align: right;
+                }
+            }
+
+            & .about-us__card-text {
+                margin-left: 0;
+                margin-right: auto;
+
+                @include mixins.respond-to('desktop') {
+                    margin-left: auto;
+                    margin-right: 0;
+                }
+            }
+        }
+
+        @include mixins.respond-to('desktop') {
+            --gap: 3rem;
+        }
+
+        &-img {
+            width: 100%;
+            align-self: stretch;
+
+            @include mixins.respond-to('tablet') {
+                width: auto;
+            }
+
+            img {
+                display: block;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+        }
+
+        &-info {
+            flex: 1 1 75%;
+            padding-block: 1rem;
+            padding-inline: 2rem;
+
+            @include mixins.respond-to('desktop') {
+                padding-inline: 0;
+                padding-block: 3rem;
+            }
+        }
+
+        &-title {
+            color: var(--color-primary);
+        }
+
+        &-text {
+            width: 95%;
+
+            margin-top: 2rem;
+            margin-right: auto;
+
+            span {
+                color: var(--color-primary);
+            }
+        }
+    }
+
+    &__postscript {
+        max-width: 20ch;
+        align-self: flex-end;
+
+        padding-top: 3rem;
+
+        text-shadow: 1px 1px 2px var(--color-black);
+
+        @include mixins.respond-to('desktop') {
+            padding-top: 30rem;
+        }
+    }
+}

@@ -1,0 +1,40 @@
+@use '../abstracts/mixins';
+
+.error-message {
+    position: absolute;
+
+    padding-top: 0.5rem;
+
+    font-family: var(--ff-errors);
+    font-size: 1.3rem;
+    text-align: left;
+    text-transform: lowercase;
+
+    color: var(--color-danger);
+
+    @include mixins.respond-to('tablet') {
+        padding-top: 1rem;
+    }
+
+    &--age {
+        top: -15%;
+        left: 50%;
+        transform: translateX(-50%);
+
+        @include mixins.respond-to('tablet') {
+            top: -75%;
+        }
+    }
+    &_static {
+        position: static;
+    }
+}
+
+.error-connection {
+    @include mixins.flex(row, center, center);
+
+    height: 100vh;
+    text-align: center;
+    font-size: var(--fs-big);
+    color: var(--color-white);
+}
